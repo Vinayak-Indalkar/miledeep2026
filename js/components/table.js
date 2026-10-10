@@ -15,7 +15,7 @@ export class DataTable {
     actions = [],
     bulkActions = [],
     exportable = true,
-    showCopy = true,
+    showCopy = false,
     tableTitle = '',
     topFilterTitle = '',
     hideTopFilterBar = true,
@@ -257,25 +257,29 @@ export class DataTable {
             </div>
 
             <div class="flex items-center gap-2 flex-wrap">
-              <!-- Copy Button -->
-              ${this.showCopy ? `
-              <button type="button" id="dt-copy-btn" class="btn-secondary px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 hover:bg-[#EBECF0] transition-colors cursor-pointer shadow-2xs" title="Copy table data to clipboard">
-                <svg class="w-3.5 h-3.5 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                <span>Copy</span>
-              </button>
-              ` : ''}
+              <!-- Unified Download Button with Dropdown (Excel, CSV, PDF) -->
+              <div class="relative">
+                <button type="button" id="dt-download-btn" class="btn-secondary px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 hover:bg-[#EBECF0] transition-colors cursor-pointer shadow-2xs" title="Download Table Data">
+                  <svg class="w-3.5 h-3.5 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                  <span>Download</span>
+                  <svg id="dt-download-chevron" class="w-3 h-3 text-[#5E6C84] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
 
-              <!-- Excel Download Button -->
-              <button type="button" id="dt-export-btn" class="btn-secondary px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 hover:bg-[#EBECF0] transition-colors cursor-pointer shadow-2xs" title="Download Excel / CSV">
-                <svg class="w-3.5 h-3.5 text-[#006644]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                <span>Excel</span>
-              </button>
-
-              <!-- PDF Download Button -->
-              <button type="button" id="dt-pdf-btn" class="btn-secondary px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 hover:bg-[#EBECF0] transition-colors cursor-pointer shadow-2xs" title="Download / Print PDF Document">
-                <svg class="w-3.5 h-3.5 text-[#BF2600]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                <span>PDF</span>
-              </button>
+                <div id="dt-download-dropdown" class="hidden absolute right-0 mt-1.5 w-36 bg-white rounded-lg shadow-xl border border-[#DFE1E6] py-1 z-50 text-xs select-none">
+                  <button type="button" id="dt-opt-excel" class="w-full text-left px-3 py-2 hover:bg-[#F4F5F7] flex items-center gap-2.5 text-[#172B4D] transition-colors cursor-pointer">
+                    <svg class="w-4 h-4 text-[#107C41] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span class="font-semibold text-xs text-[#172B4D]">Excel</span>
+                  </button>
+                  <button type="button" id="dt-opt-csv" class="w-full text-left px-3 py-2 hover:bg-[#F4F5F7] flex items-center gap-2.5 text-[#172B4D] transition-colors cursor-pointer border-t border-[#EBECF0]">
+                    <svg class="w-4 h-4 text-[#0369A1] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span class="font-semibold text-xs text-[#172B4D]">CSV</span>
+                  </button>
+                  <button type="button" id="dt-opt-pdf" class="w-full text-left px-3 py-2 hover:bg-[#F4F5F7] flex items-center gap-2.5 text-[#172B4D] transition-colors cursor-pointer border-t border-[#EBECF0]">
+                    <svg class="w-4 h-4 text-[#D32F2F] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span class="font-semibold text-xs text-[#172B4D]">PDF</span>
+                  </button>
+                </div>
+              </div>
 
               <!-- Column Section / Visibility Dropdown -->
               <div class="relative">
@@ -431,9 +435,11 @@ export class DataTable {
       if (this.actions.length > 0) {
         rowsHtml += `<td class="text-right whitespace-nowrap sticky-action-col">`;
         this.actions.forEach((act, actIdx) => {
+          const actLabel = typeof act.label === 'function' ? act.label(row) : (act.label || '');
+          const actIcon = typeof act.icon === 'function' ? act.icon(row) : (act.icon || actLabel);
           rowsHtml += `
-            <button data-action-idx="${actIdx}" data-key="${keyVal}" class="dt-action-btn p-1 text-[#5E6C84] hover:text-[#0284C7] hover:bg-[#EBECF0] rounded text-xs font-medium mr-1 transition-colors" title="${act.label}">
-              ${act.icon || act.label}
+            <button data-action-idx="${actIdx}" data-key="${keyVal}" class="dt-action-btn p-1 text-[#5E6C84] hover:text-[#0284C7] hover:bg-[#EBECF0] rounded text-xs font-medium mr-1 transition-colors" title="${actLabel}">
+              ${actIcon}
             </button>
           `;
         });
@@ -652,16 +658,43 @@ export class DataTable {
       copyBtn.addEventListener('click', () => this.copyToClipboard());
     }
 
-    const exportBtn = this.container.querySelector('#dt-export-btn');
-    if (exportBtn) {
-      exportBtn.addEventListener('click', () => this.exportToCSV());
+    // Download Dropdown Toggle
+    const downloadBtn = this.container.querySelector('#dt-download-btn');
+    const downloadDropdown = this.container.querySelector('#dt-download-dropdown');
+    if (downloadBtn && downloadDropdown) {
+      downloadBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        downloadDropdown.classList.toggle('hidden');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!downloadDropdown.contains(e.target) && e.target !== downloadBtn && !downloadBtn.contains(e.target)) {
+          downloadDropdown.classList.add('hidden');
+        }
+      });
     }
 
-    const pdfBtn = this.container.querySelector('#dt-pdf-btn');
-    if (pdfBtn) {
-      pdfBtn.addEventListener('click', () => {
-        Toast.show('Preparing printable document format...', 'info');
-        window.print();
+    const optExcel = this.container.querySelector('#dt-opt-excel');
+    if (optExcel) {
+      optExcel.addEventListener('click', () => {
+        if (downloadDropdown) downloadDropdown.classList.add('hidden');
+        this.exportToExcel();
+      });
+    }
+
+    const optCsv = this.container.querySelector('#dt-opt-csv');
+    if (optCsv) {
+      optCsv.addEventListener('click', () => {
+        if (downloadDropdown) downloadDropdown.classList.add('hidden');
+        this.exportToCSV();
+      });
+    }
+
+    const optPdf = this.container.querySelector('#dt-opt-pdf');
+    if (optPdf) {
+      optPdf.addEventListener('click', () => {
+        if (downloadDropdown) downloadDropdown.classList.add('hidden');
+        this.exportToPDF();
       });
     }
 
@@ -785,24 +818,146 @@ export class DataTable {
   }
 
   exportToCSV() {
-    if (this.filteredData.length === 0) return;
+    if (this.filteredData.length === 0) {
+      Toast.show('No data available to download.', 'warning');
+      return;
+    }
 
-    const headers = this.columns.map(c => `"${c.header}"`).join(',');
+    const visibleCols = this.columns.filter(c => !this.hiddenColumns.has(c.field));
+    const headers = visibleCols.map(c => `"${c.header}"`).join(',');
     const rows = this.filteredData.map(row => {
-      return this.columns.map(c => {
+      return visibleCols.map(c => {
         let val = row[c.field];
         if (val === undefined || val === null) val = '';
         return `"${String(val).replace(/"/g, '""')}"`;
       }).join(',');
     });
 
-    const csvContent = 'data:text/csv;charset=utf-8,' + [headers, ...rows].join('\n');
-    const encodedUri = encodeURI(csvContent);
+    // Use BOM for UTF-8 compatibility
+    const csvContent = '\uFEFF' + [headers, ...rows].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
+    link.setAttribute('href', url);
     link.setAttribute('download', `${(this.tableTitle || 'export').toLowerCase().replace(/\s+/g, '_')}_${Date.now()}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    Toast.show('CSV file downloaded successfully', 'success', 'Export Complete');
+  }
+
+  exportToExcel() {
+    if (this.filteredData.length === 0) {
+      Toast.show('No data available to download.', 'warning');
+      return;
+    }
+
+    const visibleCols = this.columns.filter(c => !this.hiddenColumns.has(c.field));
+    let tableHtml = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">`;
+    tableHtml += `<head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Sheet1</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body>`;
+    tableHtml += `<table border="1"><thead><tr style="background:#0284C7;color:#FFFFFF;font-weight:bold;">`;
+    visibleCols.forEach(c => {
+      tableHtml += `<th>${c.header}</th>`;
+    });
+    tableHtml += `</tr></thead><tbody>`;
+    this.filteredData.forEach(row => {
+      tableHtml += `<tr>`;
+      visibleCols.forEach(c => {
+        let val = row[c.field];
+        if (val === undefined || val === null) val = '';
+        tableHtml += `<td>${String(val).replace(/</g, '&lt;').replace(/>/g, '&gt;')}</td>`;
+      });
+      tableHtml += `</tr>`;
+    });
+    tableHtml += `</tbody></table></body></html>`;
+
+    const blob = new Blob([tableHtml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `${(this.tableTitle || 'export').toLowerCase().replace(/\s+/g, '_')}_${Date.now()}.xls`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    Toast.show('Excel spreadsheet downloaded successfully', 'success', 'Export Complete');
+  }
+
+  exportToPDF() {
+    if (this.filteredData.length === 0) {
+      Toast.show('No data available to print.', 'warning');
+      return;
+    }
+
+    const visibleCols = this.columns.filter(c => !this.hiddenColumns.has(c.field));
+    const title = this.tableTitle || 'Data Export';
+    const printWin = window.open('', '_blank', 'width=950,height=700');
+    if (!printWin) {
+      Toast.show('Preparing printable view...', 'info');
+      window.print();
+      return;
+    }
+
+    const rowsHtml = this.filteredData.map((row, idx) => `
+      <tr>
+        <td style="text-align:center;color:#666;font-size:11px;">${idx + 1}</td>
+        ${visibleCols.map(c => {
+          let val = row[c.field];
+          if (val === undefined || val === null) val = '—';
+          return `<td>${String(val).replace(/</g, '&lt;').replace(/>/g, '&gt;')}</td>`;
+        }).join('')}
+      </tr>
+    `).join('');
+
+    printWin.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>${title}</title>
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 24px; color: #172B4D; font-size: 12px; }
+          .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0284C7; padding-bottom: 12px; margin-bottom: 16px; }
+          h1 { font-size: 18px; margin: 0; color: #0284C7; font-weight: 800; }
+          .meta { font-size: 11px; color: #5E6C84; }
+          table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+          th, td { border: 1px solid #DFE1E6; padding: 6px 10px; text-align: left; }
+          th { background-color: #F4F5F7; font-weight: 700; font-size: 11px; text-transform: uppercase; color: #42526E; }
+          tr:nth-child(even) { background-color: #FAFBFC; }
+          @media print {
+            body { padding: 0; }
+            @page { margin: 1cm; size: landscape; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div>
+            <h1>${title}</h1>
+            <div class="meta">Devi Fisheries ERP • Exported: ${new Date().toLocaleString()}</div>
+          </div>
+          <div class="meta" style="text-align:right;">
+            <div>Total Records: <strong>${this.filteredData.length}</strong></div>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width:36px;text-align:center;">#</th>
+              ${visibleCols.map(c => `<th>${c.header}</th>`).join('')}
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml}
+          </tbody>
+        </table>
+        <script>
+          window.onload = function() { window.print(); }
+        <\/script>
+      </body>
+      </html>
+    `);
+    printWin.document.close();
+    Toast.show('Print & PDF dialog opened', 'info', 'Export PDF');
   }
 }

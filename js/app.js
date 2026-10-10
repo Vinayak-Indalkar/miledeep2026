@@ -6,7 +6,6 @@ import { Modal } from './components/modal.js';
 import { Header } from './components/header.js';
 import { Sidebar, NAV_HIERARCHY } from './components/sidebar.js';
 import { Breadcrumbs } from './components/breadcrumbs.js';
-import { TourGuide } from './components/tourGuide.js';
 
 // Views
 import { LoginView } from './views/loginView.js';
@@ -65,17 +64,24 @@ export const App = {
         return;
       }
 
-      // Section Navigation: Alt+1 through Alt+8
+      // Section Navigation: Alt+1 through Alt+7 (Role-aware atomic navigation)
       if (e.altKey && !e.ctrlKey && !e.metaKey) {
-        const keyMap = {
+        const isSuper = ERP_DATA.currentUser?.role === 'Super Admin';
+        const keyMap = isSuper ? {
+          '1': '#/dashboard/overview/system-overview',
+          '2': '#/general/configuration/clients',
+          '3': '#/general/configuration/users',
+          '4': '#/general/configuration/roles',
+          '5': '#/master/master-data/masters',
+          '6': '#/super-reports/audit-logs/audit-trail'
+        } : {
           '1': '#/purchase/dashboard/rm-dashboard',
           '2': '#/preprocessing/dashboard/floor-overview',
           '3': '#/quality/dashboard/qc-overview',
           '4': '#/production/dashboard/overview',
           '5': '#/coldstore/dashboard/overview',
           '6': '#/sales/dashboard/overview',
-          '7': '#/reports/production-analytics/yield-reports',
-          '8': '#/setup/client-master-setup/company-setup'
+          '7': '#/reports/production-analytics/yield-reports'
         };
         if (keyMap[e.key]) {
           e.preventDefault();
@@ -240,14 +246,6 @@ export const App = {
     // Scroll to top of main content
     const mainEl = document.getElementById(mainContainer);
     if (mainEl) mainEl.scrollTop = 0;
-
-    // Check if Onboarding Tour should start (e.g. after login)
-    if (sessionStorage.getItem('trigger_tour_on_login') === 'true') {
-      sessionStorage.removeItem('trigger_tour_on_login');
-      setTimeout(() => {
-        TourGuide.start();
-      }, 500);
-    }
   },
 
   ensureShellMounted() {

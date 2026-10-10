@@ -463,8 +463,9 @@ export const SUPER_ADMIN_NAV_HIERARCHY = [
         defaultTab: "clients",
         tabs: [
           { id: "clients", label: "Clients", hash: "#/general/configuration/clients" },
+          { id: "users", label: "Users", hash: "#/general/configuration/users" },
+          { id: "roles", label: "Roles", hash: "#/general/configuration/roles" },
           { id: "menus", label: "Menus", hash: "#/general/configuration/menus" },
-          { id: "submenus", label: "Submenus", hash: "#/general/configuration/submenus" },
           { id: "audit-history", label: "Audit History", hash: "#/general/configuration/audit-history" }
         ]
       }
@@ -505,136 +506,8 @@ export const SUPER_ADMIN_NAV_HIERARCHY = [
   }
 ];
 
-export const SETUP_NAV_MODULE = {
-  id: "setup",
-  title: "Settings",
-  icon: `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>`,
-  submenus: [
-    {
-      id: "general",
-      title: "General",
-      defaultTab: "profile",
-      tabs: [
-        { id: "profile", label: "Profile", hash: "#/setup/general/profile" },
-        { id: "notification", label: "Notification", hash: "#/setup/general/notification" },
-        { id: "security", label: "Security", hash: "#/setup/general/security" }
-      ]
-    },
-    {
-      id: "client",
-      title: "Client",
-      defaultTab: "clients",
-      tabs: [
-        { id: "clients", label: "Clients", hash: "#/setup/client/clients" },
-        { id: "user", label: "User", hash: "#/setup/client/user" },
-        { id: "manage-roles", label: "Manage Roles", hash: "#/setup/client/manage-roles" }
-      ]
-    },
-    {
-      id: "application",
-      title: "Application",
-      defaultTab: "modules",
-      tabs: [
-        { id: "modules", label: "Modules", hash: "#/setup/application/modules" },
-        { id: "masters", label: "Masters", hash: "#/setup/application/masters" }
-      ]
-    }
-  ]
-};
+export const NAV_HIERARCHY = [...ADMIN_NAV_HIERARCHY, ...SUPER_ADMIN_NAV_HIERARCHY];
 
-export const NAV_HIERARCHY = [...ADMIN_NAV_HIERARCHY, ...SUPER_ADMIN_NAV_HIERARCHY, SETUP_NAV_MODULE];
-
-export function openSettingsSubmenuModal() {
-  const isSuperAdmin = ERP_DATA.currentUser?.role === 'Super Admin';
-
-  const clientCard = isSuperAdmin ? `
-        <!-- Client -->
-        <div class="settings-modal-card p-4 rounded-xl border border-[#DFE1E6] hover:border-[#0284C7] hover:bg-[#F0F9FF] transition-all cursor-pointer bg-white flex flex-col justify-between group" data-url="#/setup/client/clients">
-          <div>
-            <div class="w-9 h-9 rounded-lg bg-[#E0F2FE] text-[#0369A1] flex items-center justify-center font-bold mb-2.5 group-hover:scale-105 transition-transform">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-            </div>
-            <div class="text-sm font-bold text-[#172B4D] group-hover:text-[#0369A1]">Client</div>
-            <p class="text-xs text-[#5E6C84] mt-1 mb-3">Multi-company registry, users directory & roles management.</p>
-          </div>
-          <div class="flex flex-wrap gap-1 pt-2 border-t border-[#EBECF0]">
-            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#F4F5F7] text-[#42526E] border border-[#DFE1E6]">Clients</span>
-            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#F4F5F7] text-[#42526E] border border-[#DFE1E6]">User</span>
-            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#F4F5F7] text-[#42526E] border border-[#DFE1E6]">Manage Roles</span>
-          </div>
-        </div>
-  ` : '';
-
-  const applicationCard = isSuperAdmin ? `
-        <!-- Application -->
-        <div class="settings-modal-card p-4 rounded-xl border border-[#DFE1E6] hover:border-[#0284C7] hover:bg-[#F0F9FF] transition-all cursor-pointer bg-white flex flex-col justify-between group" data-url="#/setup/application/modules">
-          <div>
-            <div class="w-9 h-9 rounded-lg bg-[#E0F2FE] text-[#0369A1] flex items-center justify-center font-bold mb-2.5 group-hover:scale-105 transition-transform">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
-            </div>
-            <div class="text-sm font-bold text-[#172B4D] group-hover:text-[#0369A1]">Application</div>
-            <p class="text-xs text-[#5E6C84] mt-1 mb-3">Dynamic ERP module studio & master data registries.</p>
-          </div>
-          <div class="flex flex-wrap gap-1 pt-2 border-t border-[#EBECF0]">
-            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#F4F5F7] text-[#42526E] border border-[#DFE1E6]">Modules</span>
-            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#F4F5F7] text-[#42526E] border border-[#DFE1E6]">Masters</span>
-          </div>
-        </div>
-  ` : '';
-
-  const gridClass = isSuperAdmin ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-1 max-w-sm mx-auto';
-
-  const content = `
-    <div class="space-y-4">
-      <div class="text-xs text-[#5E6C84]">Choose a Settings submenu to access configuration tabs:</div>
-      <div class="grid ${gridClass} gap-3">
-        <!-- General -->
-        <div class="settings-modal-card p-4 rounded-xl border border-[#DFE1E6] hover:border-[#0284C7] hover:bg-[#F0F9FF] transition-all cursor-pointer bg-white flex flex-col justify-between group" data-url="#/setup/general/profile">
-          <div>
-            <div class="w-9 h-9 rounded-lg bg-[#E0F2FE] text-[#0369A1] flex items-center justify-center font-bold mb-2.5 group-hover:scale-105 transition-transform">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-            </div>
-            <div class="text-sm font-bold text-[#172B4D] group-hover:text-[#0369A1]">General</div>
-            <p class="text-xs text-[#5E6C84] mt-1 mb-3">User profile, notification preferences & security policies.</p>
-          </div>
-          <div class="flex flex-wrap gap-1 pt-2 border-t border-[#EBECF0]">
-            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#F4F5F7] text-[#42526E] border border-[#DFE1E6]">Profile</span>
-            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#F4F5F7] text-[#42526E] border border-[#DFE1E6]">Notification</span>
-            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#F4F5F7] text-[#42526E] border border-[#DFE1E6]">Security</span>
-          </div>
-        </div>
-
-        ${clientCard}
-        ${applicationCard}
-      </div>
-    </div>
-  `;
-
-  Modal.open({
-    title: 'Settings Submenus',
-    content,
-    size: 'lg',
-    footerButtons: [
-      {
-        label: 'Close',
-        type: 'secondary',
-        onClick: () => Modal.close()
-      }
-    ]
-  });
-
-  setTimeout(() => {
-    document.querySelectorAll('.settings-modal-card').forEach(card => {
-      card.addEventListener('click', () => {
-        const url = card.getAttribute('data-url');
-        Modal.close();
-        if (url) {
-          window.location.hash = url;
-        }
-      });
-    });
-  }, 40);
-}
 
 export const Sidebar = {
   isCollapsed: localStorage.getItem('dfl_sidebar_collapsed') === 'true',
@@ -693,16 +566,22 @@ export const Sidebar = {
     this.activeSubmenuId = subId;
     this.activeTabId = tabId;
 
+    const isSuperAdmin = ERP_DATA.currentUser?.role === 'Super Admin';
+
     if (this.isCollapsed) {
       // Collapsed Icon-Only Floated Sidebar Mode (Width: 68px, Rounded Corners)
       container.innerHTML = `
         <div class="relative h-full w-full">
           <aside id="erp-sidebar" class="bg-[#0F172A] text-[#94A3B8] w-full h-full flex flex-col transition-all duration-300 select-none border border-[#1E293B] rounded-2xl overflow-hidden">
             <!-- Collapsed Logo Icon Header -->
-            <div class="h-14 px-2 py-2 flex items-center justify-center border-b border-[#1E293B] bg-[#0B0F19] shrink-0" title="Camaroo ERP">
-              <div class="w-9 h-9 rounded-lg bg-[#0284C7] border border-[#38BDF8]/30 flex items-center justify-center font-black text-white text-xs">
-                CMR
-              </div>
+            <div class="h-14 px-2 py-2 flex items-center justify-center border-b border-[#1E293B] bg-[#0B0F19] shrink-0" title="${isSuperAdmin ? 'Camaroo ERP' : 'Devi Fisheries Limited'}">
+              ${isSuperAdmin ? `
+                <div class="w-9 h-9 rounded-lg bg-[#0284C7] border border-[#38BDF8]/30 flex items-center justify-center font-black text-white text-xs">
+                  CMR
+                </div>
+              ` : `
+                <img src="${LOGO_WHITE}" alt="Devi Fisheries" class="h-8 w-8 object-contain shrink-0" />
+              `}
             </div>
 
             <!-- Navigation Scrollable Icons Area -->
@@ -729,9 +608,19 @@ export const Sidebar = {
           <aside id="erp-sidebar" class="bg-[#0F172A] text-[#94A3B8] w-full h-full flex flex-col transition-all duration-300 select-none border border-[#1E293B] rounded-2xl overflow-hidden">
             <!-- Logo Branding Header -->
             <div class="h-14 px-4 py-2 flex items-center justify-between border-b border-[#1E293B] bg-[#0B0F19] shrink-0">
-              <div class="flex items-center gap-2.5">
-                <img src="${LOGO_CAMAROO_WHITE}" alt="Camaroo" class="h-7 w-auto max-w-[160px] object-contain shrink-0" />
-              </div>
+              ${isSuperAdmin ? `
+                <div class="flex items-center gap-2.5">
+                  <img src="${LOGO_CAMAROO_WHITE}" alt="Camaroo" class="h-7 w-auto max-w-[160px] object-contain shrink-0" />
+                </div>
+              ` : `
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <img src="${LOGO_WHITE}" alt="Devi Fisheries" class="h-9 w-auto object-contain shrink-0" />
+                  <div class="leading-tight flex flex-col justify-center min-w-0">
+                    <span class="text-sm font-bold text-white tracking-wide truncate">Devi Fisheries Limited</span>
+                    <span class="text-[9.5px] font-bold text-[#00A3BF] tracking-wider uppercase font-mono truncate">POWERED BY CAMAROO</span>
+                  </div>
+                </div>
+              `}
             </div>
 
             <!-- Navigation Scrollable Area -->

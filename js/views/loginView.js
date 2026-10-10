@@ -211,7 +211,7 @@ export const LoginView = {
           const user = setCurrentUserRole(targetRole);
 
           localStorage.setItem('erp_layout_mode', 'option1');
-          sessionStorage.setItem('trigger_tour_on_login', 'true');
+          sessionStorage.removeItem('trigger_tour_on_login');
           
           const existing = document.getElementById('erp-app-shell');
           if (existing) existing.remove();

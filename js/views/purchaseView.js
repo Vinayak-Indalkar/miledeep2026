@@ -2530,7 +2530,7 @@ export const PurchaseView = {
       pageSize: 10,
       hideTopFilterBar: false,
       showCopy: false,
-      tableTitle: 'Center Inward Catch Receipts & Dispatch Register (CRUD)',
+      tableTitle: 'Center Inward Catch Receipts & Dispatch Register',
       onDataChange: (data) => renderArrivalsTotals(data),
       columns: [
         { 
@@ -3737,7 +3737,7 @@ export const PurchaseView = {
       containerId: 'bill-date-payment-table-container',
       data: this.paymentsList,
       keyField: 'voucherNo',
-      tableTitle: 'Vendor Payment Vouchers (CRUD)',
+      tableTitle: 'Vendor Payment Vouchers',
       columns: [
         { field: 'voucherNo', header: 'Voucher No', render: (v) => `<span class="font-bold text-[#172B4D]">${v}</span>` },
         { field: 'paymentDate', header: 'Payment Date' },

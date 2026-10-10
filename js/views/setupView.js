@@ -7,7 +7,6 @@ import { Toast } from '../components/toast.js';
 import { Modal } from '../components/modal.js';
 import { DataTable } from '../components/table.js';
 import { renderEmptyState } from '../components/emptyState.js';
-import { openSettingsSubmenuModal } from '../components/sidebar.js';
 
 const STUDIO_STORAGE_KEY = 'dfl_erp_master_studio_state_v3';
 
@@ -4237,6 +4236,30 @@ function getInitialStudioState() {
     try {
       const parsed = JSON.parse(saved);
       if (parsed.modulesConfig && parsed.modulesConfig.length >= 30) {
+        if (parsed.roles && Array.isArray(parsed.roles)) {
+          const defaultDeptMap = {
+            'ROLE-ADMIN': 'Executive Management',
+            'ROLE-PROCUREMENT': 'Raw Material Procurement',
+            'ROLE-QC': 'Quality Assurance & Lab',
+            'ROLE-PRODUCTION': 'Production & Processing Floor',
+            'ROLE-COLDSTORE': 'Cold Storage & Logistics',
+            'ROLE-SALES': 'Sales, Exports & Documentation'
+          };
+          const defaultMenusMap = {
+            'ROLE-ADMIN': ['*'],
+            'ROLE-PROCUREMENT': ['dashboard', 'procurement', 'inventory'],
+            'ROLE-QC': ['dashboard', 'quality'],
+            'ROLE-PRODUCTION': ['dashboard', 'production', 'inventory'],
+            'ROLE-COLDSTORE': ['dashboard', 'coldstore', 'inventory'],
+            'ROLE-SALES': ['dashboard', 'buyers', 'orders', 'sales']
+          };
+          parsed.roles.forEach(r => {
+            if (!r.department) r.department = defaultDeptMap[r.id] || 'General Operations';
+            if (!r.status) r.status = 'Active';
+            if (!r.assignedMenus || r.assignedMenus.length === 0) r.assignedMenus = defaultMenusMap[r.id] || ['dashboard'];
+            if (!r.assignedSubmenus) r.assignedSubmenus = [];
+          });
+        }
         return parsed;
       }
     } catch (e) {
@@ -4255,8 +4278,10 @@ function getInitialStudioState() {
     companies: [
       {
         id: 'CMP-001',
-        code: 'DFL-IN',
+        code: 'DFL',
+        shortName: 'DFL',
         name: 'Devi Fisheries Limited',
+        joiningYear: 1997,
         legalName: 'Devi Fisheries & Marine Products Ltd.',
         cin: 'L05005AP1997PLC027123',
         taxId: '37AABCD1234E1Z5',
@@ -4270,13 +4295,25 @@ function getInitialStudioState() {
         contactEmail: 'purchase@devifisheries.com',
         contactPhone: '+91 891 256 7890',
         address: 'Harbour Road, Fishing Harbour, Visakhapatnam, AP 530001',
+        dbHost: 'db-cluster-ap-south-1.rds.aws.com',
+        dbName: 'devi_fisheries_prod',
+        dbUser: 'dfl_admin',
+        dbPass: '••••••••',
+        department: 'Executive Management',
+        accessType: 'Full Super Admin Access',
+        credUsername: 'dfl_admin',
+        designation: 'Managing Director',
+        userId: 'USR-DFL-001',
+        credPassword: '••••••••',
         status: 'Active',
         plants: ['Unit-1 VSP (Harbour)', 'Unit-2 Singarayakonda', 'Unit-3 Kakinada Port', 'Unit-4 PND', 'Unit-5 JPT', 'Unit-6 JPT-II']
       },
       {
         id: 'CMP-002',
-        code: 'DSF-US',
+        code: 'DSF',
+        shortName: 'DSF',
         name: 'Devi Sea Foods Americas',
+        joiningYear: 2019,
         legalName: 'Devi Sea Foods Americas Inc.',
         cin: 'DE-CORP-4892019',
         taxId: 'US-EIN-54-1892031',
@@ -4290,13 +4327,25 @@ function getInitialStudioState() {
         contactEmail: 'sales.us@deviseafoods.com',
         contactPhone: '+1 (732) 555-0199',
         address: 'Suite 400, 100 Wood Avenue South, Iselin, NJ 08830',
+        dbHost: 'db-useast-1.rds.aws.com',
+        dbName: 'devi_seafoods_us',
+        dbUser: 'dsf_admin',
+        dbPass: '••••••••',
+        department: 'Sales & Commercial Exports',
+        accessType: 'Operational Administrator',
+        credUsername: 'dsf_admin',
+        designation: 'VP Americas',
+        userId: 'USR-DSF-002',
+        credPassword: '••••••••',
         status: 'Active',
         plants: ['Americas Hub NJ Coldstore', 'West Coast Staging Hub']
       },
       {
         id: 'CMP-003',
-        code: 'CME-SG',
+        code: 'CME',
+        shortName: 'CME',
         name: 'Coastal Marine Exports',
+        joiningYear: 2018,
         legalName: 'Coastal Marine Exports Pte. Ltd.',
         cin: 'UEN-201829104K',
         taxId: 'SG-GST-M90382910',
@@ -4310,6 +4359,16 @@ function getInitialStudioState() {
         contactEmail: 'apac.trade@coastalmarine.sg',
         contactPhone: '+65 6789 0123',
         address: 'Marina Bay Financial Centre Tower 1, Singapore 018981',
+        dbHost: '',
+        dbName: '',
+        dbUser: '',
+        dbPass: '',
+        department: 'Cold Storage & Logistics',
+        accessType: 'Operational Administrator',
+        credUsername: 'cme_admin',
+        designation: 'Managing Director',
+        userId: 'USR-CME-003',
+        credPassword: '••••••••',
         status: 'Active',
         plants: ['Singapore Trade Hub', 'Jurong Cold Chain Depot']
       }
@@ -4317,24 +4376,24 @@ function getInitialStudioState() {
 
     // 2. ERP Users
     users: [
-      { id: 'ADM-001', name: 'Dr. Y.S. Prasad', email: 'ys.prasad@devifisheries.com', phone: '+91 98480 12345', companyId: 'CMP-001', companyName: 'Devi Fisheries Limited', role: 'System Administrator', plantAccess: ['All Plants'], status: 'Active', mfa: 'Enabled', lastLogin: 'Today, 09:45 AM' },
-      { id: 'PRC-002', name: 'P. Rama Krishna', email: 'ramakrishna.p@devifisheries.com', phone: '+91 98481 67890', companyId: 'CMP-001', companyName: 'Devi Fisheries Limited', role: 'Procurement Officer', plantAccess: ['Unit-1 VSP (Harbour)', 'Unit-2 Singarayakonda'], status: 'Active', mfa: 'Enabled', lastLogin: 'Today, 08:30 AM' },
-      { id: 'QCO-003', name: 'K. Venkateswara Rao', email: 'venkatesh.qc@devifisheries.com', phone: '+91 98482 11223', companyId: 'CMP-001', companyName: 'Devi Fisheries Limited', role: 'Quality Lab Inspector', plantAccess: ['Unit-1 VSP (Harbour)', 'Unit-3 Kakinada Port'], status: 'Active', mfa: 'Enabled', lastLogin: 'Yesterday, 05:15 PM' },
-      { id: 'PRD-004', name: 'Ch. Srinivasa Raju', email: 'srinivas.prod@devifisheries.com', phone: '+91 98483 33445', companyId: 'CMP-001', companyName: 'Devi Fisheries Limited', role: 'Production Floor Manager', plantAccess: ['Unit-1 VSP (Harbour)'], status: 'Active', mfa: 'Enabled', lastLogin: 'Yesterday, 04:10 PM' },
-      { id: 'CST-005', name: 'D. Rambabu', email: 'rambabu.cs@devifisheries.com', phone: '+91 98484 55667', companyId: 'CMP-001', companyName: 'Devi Fisheries Limited', role: 'Coldstore Keeper', plantAccess: ['Unit-1 VSP (Harbour)'], status: 'Active', mfa: 'Disabled', lastLogin: '07 Oct 2026' },
-      { id: 'SLS-006', name: 'M. Sitarama Raju', email: 'sitaram.sales@devifisheries.com', phone: '+91 98485 77889', companyId: 'CMP-001', companyName: 'Devi Fisheries Limited', role: 'Sales & Exports Manager', plantAccess: ['All Plants'], status: 'Active', mfa: 'Enabled', lastLogin: 'Today, 10:15 AM' },
-      { id: 'US-007', name: 'Michael Vance', email: 'm.vance@deviseafoods.com', phone: '+1 732 555 4410', companyId: 'CMP-002', companyName: 'Devi Sea Foods Americas', role: 'Sales & Exports Manager', plantAccess: ['Americas Hub NJ Coldstore'], status: 'Active', mfa: 'Enabled', lastLogin: 'Today, 07:15 PM' },
-      { id: 'SG-008', name: 'Kelvin Tan', email: 'kelvin.tan@coastalmarine.sg', phone: '+65 9123 4567', companyId: 'CMP-003', companyName: 'Coastal Marine Exports', role: 'Coldstore Keeper', plantAccess: ['Singapore Trade Hub'], status: 'Active', mfa: 'Enabled', lastLogin: '06 Oct 2026' }
+      { id: 'ADM-001', name: 'Dr. Y.S. Prasad', username: 'dfl_ysprasad', email: 'ys.prasad@devifisheries.com', phone: '+91 98480 12345', companyId: 'CMP-001', companyName: 'Devi Fisheries Limited', department: 'Executive Management', designation: 'Managing Director', accessType: 'Full Access', role: 'System Administrator', plantAccess: ['All Plants'], status: 'Active', mfa: 'Enabled', lastLogin: 'Today, 09:45 AM' },
+      { id: 'PRC-002', name: 'P. Rama Krishna', username: 'dfl_ramakrishna', email: 'ramakrishna.p@devifisheries.com', phone: '+91 98481 67890', companyId: 'CMP-001', companyName: 'Devi Fisheries Limited', department: 'Procurement', designation: 'Procurement Officer', accessType: 'Admin / Manager', role: 'Procurement Officer', plantAccess: ['Unit-1 VSP (Harbour)', 'Unit-2 Singarayakonda'], status: 'Active', mfa: 'Enabled', lastLogin: 'Today, 08:30 AM' },
+      { id: 'QCO-003', name: 'K. Venkateswara Rao', username: 'dfl_venkatesh', email: 'venkatesh.qc@devifisheries.com', phone: '+91 98482 11223', companyId: 'CMP-001', companyName: 'Devi Fisheries Limited', department: 'Quality Assurance', designation: 'Quality Lab Inspector', accessType: 'Standard Access', role: 'Quality Lab Inspector', plantAccess: ['Unit-1 VSP (Harbour)', 'Unit-3 Kakinada Port'], status: 'Active', mfa: 'Enabled', lastLogin: 'Yesterday, 05:15 PM' },
+      { id: 'PRD-004', name: 'Ch. Srinivasa Raju', username: 'dfl_srinivas', email: 'srinivas.prod@devifisheries.com', phone: '+91 98483 33445', companyId: 'CMP-001', companyName: 'Devi Fisheries Limited', department: 'Processing Floor', designation: 'Production Floor Manager', accessType: 'Standard Access', role: 'Production Floor Manager', plantAccess: ['Unit-1 VSP (Harbour)'], status: 'Active', mfa: 'Enabled', lastLogin: 'Yesterday, 04:10 PM' },
+      { id: 'CST-005', name: 'D. Rambabu', username: 'dfl_rambabu', email: 'rambabu.cs@devifisheries.com', phone: '+91 98484 55667', companyId: 'CMP-001', companyName: 'Devi Fisheries Limited', department: 'Cold Storage', designation: 'Coldstore Keeper', accessType: 'Standard Access', role: 'Coldstore Keeper', plantAccess: ['Unit-1 VSP (Harbour)'], status: 'Active', mfa: 'Disabled', lastLogin: '07 Oct 2026' },
+      { id: 'SLS-006', name: 'M. Sitarama Raju', username: 'dfl_sitaram', email: 'sitaram.sales@devifisheries.com', phone: '+91 98485 77889', companyId: 'CMP-001', companyName: 'Devi Fisheries Limited', department: 'Sales & Exports', designation: 'Sales & Exports Manager', accessType: 'Admin / Manager', role: 'Sales & Exports Manager', plantAccess: ['All Plants'], status: 'Active', mfa: 'Enabled', lastLogin: 'Today, 10:15 AM' },
+      { id: 'US-007', name: 'Michael Vance', username: 'dsa_mvance', email: 'm.vance@deviseafoods.com', phone: '+1 732 555 4410', companyId: 'CMP-002', companyName: 'Devi Sea Foods Americas', department: 'Overseas Operations', designation: 'Americas Regional Director', accessType: 'Full Access', role: 'Sales & Exports Manager', plantAccess: ['Americas Hub NJ Coldstore'], status: 'Active', mfa: 'Enabled', lastLogin: 'Today, 07:15 PM' },
+      { id: 'SG-008', name: 'Kelvin Tan', username: 'cme_ktan', email: 'kelvin.tan@coastalmarine.sg', phone: '+65 9123 4567', companyId: 'CMP-003', companyName: 'Coastal Marine Exports', department: 'Logistics', designation: 'Singapore Hub Operations Head', accessType: 'Standard Access', role: 'Coldstore Keeper', plantAccess: ['Singapore Trade Hub'], status: 'Active', mfa: 'Enabled', lastLogin: '06 Oct 2026' }
     ],
 
     // 3. Roles
     roles: [
-      { id: 'ROLE-ADMIN', name: 'System Administrator', description: 'Complete system control, plant provisioning, ERP schema governance, and audit management.', isProtected: true, usersCount: 1 },
-      { id: 'ROLE-PROCUREMENT', name: 'Procurement Officer', description: 'Raw material arrival entry, gate weighment, border count checks, and farmer billing.', isProtected: false, usersCount: 2 },
-      { id: 'ROLE-QC', name: 'Quality Lab Inspector', description: 'Antibiotic residue testing (ELISA/LC-MS), organoleptic grading, and lot clearance.', isProtected: false, usersCount: 2 },
-      { id: 'ROLE-PRODUCTION', name: 'Production Floor Manager', description: 'De-heading, peeling, soaking, batch freezing, floor balance, and yields.', isProtected: false, usersCount: 2 },
-      { id: 'ROLE-COLDSTORE', name: 'Coldstore Keeper', description: 'Pallet inward intake, chamber storage allocation, physical count adjustments, and container dispatch.', isProtected: false, usersCount: 2 },
-      { id: 'ROLE-SALES', name: 'Sales & Exports Manager', description: 'Overseas buyer contracts, shipping docs, anti-dumping audit compliance, and bank negotiations.', isProtected: false, usersCount: 2 }
+      { id: 'ROLE-ADMIN', name: 'System Administrator', department: 'Executive Management', description: 'Complete system control, plant provisioning, ERP schema governance, and audit management.', isProtected: true, usersCount: 1, status: 'Active', assignedMenus: ['*'], assignedSubmenus: [] },
+      { id: 'ROLE-PROCUREMENT', name: 'Procurement Officer', department: 'Raw Material Procurement', description: 'Raw material arrival entry, gate weighment, border count checks, and farmer billing.', isProtected: false, usersCount: 2, status: 'Active', assignedMenus: ['dashboard', 'procurement', 'inventory'], assignedSubmenus: [] },
+      { id: 'ROLE-QC', name: 'Quality Lab Inspector', department: 'Quality Assurance & Lab', description: 'Antibiotic residue testing (ELISA/LC-MS), organoleptic grading, and lot clearance.', isProtected: false, usersCount: 2, status: 'Active', assignedMenus: ['dashboard', 'quality'], assignedSubmenus: [] },
+      { id: 'ROLE-PRODUCTION', name: 'Production Floor Manager', department: 'Production & Processing Floor', description: 'De-heading, peeling, soaking, batch freezing, floor balance, and yields.', isProtected: false, usersCount: 2, status: 'Active', assignedMenus: ['dashboard', 'production', 'inventory'], assignedSubmenus: [] },
+      { id: 'ROLE-COLDSTORE', name: 'Coldstore Keeper', department: 'Cold Storage & Logistics', description: 'Pallet inward intake, chamber storage allocation, physical count adjustments, and container dispatch.', isProtected: false, usersCount: 2, status: 'Active', assignedMenus: ['dashboard', 'coldstore', 'inventory'], assignedSubmenus: [] },
+      { id: 'ROLE-SALES', name: 'Sales & Exports Manager', department: 'Sales, Exports & Documentation', description: 'Overseas buyer contracts, shipping docs, anti-dumping audit compliance, and bank negotiations.', isProtected: false, usersCount: 2, status: 'Active', assignedMenus: ['dashboard', 'buyers', 'orders', 'sales'], assignedSubmenus: [] }
     ],
 
     // 4. Authentic ERP Modules
@@ -4688,9 +4747,9 @@ export const SetupView = {
     if (subId === 'client-master-setup' || subId === 'company-setup') {
       subId = 'client';
       tabId = 'clients';
-    } else if (subId === 'user-management') {
+    } else if (subId === 'user-management' || subId === 'users' || subId === 'user') {
       subId = 'client';
-      tabId = 'user';
+      tabId = 'users';
     } else if (subId === 'roles-permissions') {
       subId = 'client';
       tabId = 'manage-roles';
@@ -4742,10 +4801,20 @@ export const SetupView = {
   renderTabContent(container, tabId) {
     if (!container) return;
     switch (tabId) {
-      // General Submenu Tabs: Clients, Menus, Submenus, Audit History
+      // General Submenu Tabs: Clients, Users, Menus, Submenus, Audit History
       case 'clients':
       case 'company-setup':
         this.renderCompanySetupTab(container);
+        break;
+
+      case 'users':
+      case 'user':
+      case 'user-management':
+        this.renderUserManagementTab(container);
+        break;
+
+      case 'roles':
+        this.renderRolesTab(container);
         break;
 
       case 'menus':
@@ -4756,7 +4825,7 @@ export const SetupView = {
 
       case 'submenus':
       case 'submenu-tab-studio':
-        this.renderSubmenuTabStudioTab(container);
+        this.renderModuleStudioTab(container);
         break;
 
       case 'audit-history':
@@ -4768,6 +4837,9 @@ export const SetupView = {
       case 'user':
       case 'user-management':
         this.renderUserManagementTab(container);
+        break;
+      case 'roles':
+        this.renderRolesTab(container);
         break;
       case 'manage-roles':
       case 'roles-permissions':
@@ -5224,7 +5296,41 @@ export const SetupView = {
   // =========================================================================
   // APPLICATION SUBMENU: MASTERS STUDIO
   // =========================================================================
+  renderUnderConstruction(container) {
+    if (!container) return;
+    container.innerHTML = `
+      <div class="space-y-4 animate-fade-in">
+        <!-- Under Construction Card -->
+        <div class="bg-white rounded-2xl border border-[#DFE1E6] p-10 sm:p-12 text-center shadow-xs animate-fade-in flex flex-col items-center justify-center max-w-3xl mx-auto my-4 min-h-[420px]">
+          <!-- Prominent Lottie Player -->
+          <div class="relative w-72 h-72 sm:w-80 sm:h-80 flex items-center justify-center">
+            <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_m6cuL6.json" background="transparent" speed="1" style="width: 100%; height: 100%;" loop="" autoplay=""></lottie-player>
+
+            <!-- Smooth SVG Construction Illustration Fallback (Works offline instantly) -->
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 opacity-30">
+              <svg class="w-48 h-48 text-[#FFAB00] animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Clean Minimal Status Badge -->
+          <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#FFF0B3] text-[#8f4d00] font-bold text-xs rounded-full mt-2 mb-2 uppercase tracking-wider">
+            <span class="w-2 h-2 rounded-full bg-[#FFAB00] animate-ping"></span>
+            Under Construction
+          </div>
+
+          <p class="text-sm text-[#5E6C84] max-w-md leading-relaxed mt-1">
+            This module is currently in development and staging.
+          </p>
+        </div>
+      </div>
+    `;
+  },
+
   renderMastersTab(container) {
+    this.renderUnderConstruction(container);
+    return;
     const selectedMaster = this.state.masters.find(m => m.id === this.state.selectedMasterId) || this.state.masters[0];
     const categories = ['All', 'Logistics', 'Processing', 'Commercial', 'Quality', 'Aquaculture', 'Compliance', 'Operations'];
 
@@ -5287,7 +5393,7 @@ export const SetupView = {
             <div class="flex items-center gap-2">
               <button id="btn-add-master-record" class="btn-primary px-3 py-1.5 rounded text-xs flex items-center gap-1.5 shadow-xs cursor-pointer">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                <span>+ Add ${selectedMaster.label}</span>
+                <span>Add ${selectedMaster.label}</span>
               </button>
             </div>
           </div>
@@ -5303,7 +5409,7 @@ export const SetupView = {
       containerId: 'master-records-table-container',
       data: selectedMaster.records,
       keyField: 'code',
-      tableTitle: `${selectedMaster.label} Records (CRUD)`,
+      tableTitle: `${selectedMaster.label} Records`,
       searchable: true,
       exportable: true,
       pageSize: 10,
@@ -5494,12 +5600,11 @@ export const SetupView = {
         <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
           <div>
             <h1 class="text-xl font-extrabold text-[#172B4D]">Clients Management</h1>
-            <p class="text-xs text-[#5E6C84]">Manage multi-tenant corporate clients, legal business entities, plant assignments, and operating licences.</p>
           </div>
           <div class="flex items-center gap-2">
             <button id="btn-add-company" class="btn-primary px-3 py-1.5 rounded text-xs flex items-center gap-1.5 shadow-xs cursor-pointer">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-              <span>+ Add Client</span>
+              <span>Add Client</span>
             </button>
           </div>
         </div>
@@ -5512,65 +5617,152 @@ export const SetupView = {
       containerId: 'company-table-container',
       data: this.state.companies,
       keyField: 'id',
-      tableTitle: 'Corporate Clients & Processing Entities (CRUD)',
+      tableTitle: 'Clients Registry',
       searchable: true,
       exportable: true,
       pageSize: 10,
+      onRowClick: (row) => this.showClientUserDetailsModal(row, companyTable),
       columns: [
-        { field: 'code', header: 'Client Code', render: (v) => `<span class="font-bold text-[#172B4D] font-mono">${v}</span>` },
+        { 
+          field: 'sNo', 
+          header: 'SNO', 
+          render: (v, r, i) => `<span class="font-bold text-[#5E6C84]">${i !== undefined ? i + 1 : 1}</span>` 
+        },
+        { 
+          field: 'code', 
+          header: 'Client Short Name', 
+          render: (v, r) => `<span class="font-bold text-[#0284C7] font-mono">${v || r.shortName || 'DFL'}</span>` 
+        },
         { 
           field: 'name', 
-          header: 'Company Trade Name', 
-          render: (v, r) => `<div><div class="font-bold text-[#172B4D]">${v}</div><div class="text-[11px] text-[#5E6C84]">${r.contactEmail || ''} • ${r.contactPhone || ''}</div></div>` 
+          header: 'Client Name', 
+          render: (v) => `<span class="font-bold text-[#172B4D]">${v}</span>` 
         },
         { 
-          field: 'legalName', 
-          header: 'Legal Entity & Licences', 
-          render: (v, r) => `<div><div class="font-medium text-[#172B4D]">${v}</div><div class="text-[11px] font-mono text-[#5E6C84]">${r.eiaNumber || '—'} • ${r.fdaNumber || '—'}</div></div>` 
+          field: 'address', 
+          header: 'Address', 
+          render: (v) => `<span class="text-xs text-[#5E6C84] truncate max-w-xs block" title="${v || ''}">${v || '—'}</span>` 
         },
         { 
-          field: 'country', 
-          header: 'Jurisdiction', 
-          render: (v, r) => `<span><span class="font-medium text-[#172B4D]">${v}</span> <span class="text-[#5E6C84] text-[11px]">(${r.currency || 'INR'})</span></span>` 
+          field: 'dbHost', 
+          header: 'DB Host', 
+          render: (v) => v ? `<span class="font-mono text-xs text-[#5E6C84]">${v}</span>` : '' 
         },
         { 
-          field: 'plants', 
-          header: 'Assigned Processing Plants', 
-          render: (v) => `<div class="flex flex-wrap gap-1">${(Array.isArray(v) ? v : [v]).map(p => `<span class="lozenge lozenge-default text-[9.5px]">${p}</span>`).join('')}</div>` 
+          field: 'dbName', 
+          header: 'DB Name', 
+          render: (v) => v ? `<span class="font-mono text-xs font-semibold text-[#0284C7]">${v}</span>` : '' 
+        },
+        { 
+          field: 'dbUser', 
+          header: 'User Name', 
+          render: (v) => v ? `<span class="font-mono text-xs text-[#172B4D] font-medium">${v}</span>` : '' 
+        },
+        { 
+          field: 'usersCount', 
+          header: 'Users', 
+          render: (v, r) => {
+            const count = (this.state.users || []).filter(u => u.companyId === r.id || u.companyName === r.name || u.companyName === r.shortName).length;
+            return `
+              <button 
+                type="button" 
+                class="btn-client-view-users inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-[#F0F9FF] text-[#0284C7] border border-[#BAE6FD] hover:bg-[#BAE6FD] transition-colors cursor-pointer" 
+                data-client-id="${r.id}"
+                title="Click to view all users, roles, and assigned modules for ${r.name}"
+              >
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                <span>${count} Users</span>
+              </button>
+            `;
+          } 
         },
         { field: 'status', header: 'Status', type: 'status' }
       ],
       actions: [
+        {
+          label: 'Assign DB',
+          icon: `<svg class="w-4 h-4 text-[#00875A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3V7M4 7c0-2 1.5-3 3.5-3h9c2 0 3.5 1 3.5 3M4 7h16m-8 4v6m-4-3h8"/></svg>`,
+          onClick: (row) => this.showAssignDatabaseModal(row, companyTable)
+        },
         {
           label: 'Edit',
           icon: `<svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>`,
           onClick: (row) => this.showEditCompanyModal(row, companyTable)
         },
         {
-          label: 'Delete',
-          icon: `<svg class="w-4 h-4 text-[#FF5630]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>`,
+          label: (row) => row.status === 'Active' ? 'Deactivate' : 'Activate',
+          icon: (row) => row.status === 'Active'
+            ? `<svg class="w-4 h-4 text-[#FF5630]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" y1="8" x2="22" y2="13" stroke-width="2" stroke-linecap="round"/><line x1="22" y1="8" x2="17" y2="13" stroke-width="2" stroke-linecap="round"/></svg>`
+            : `<svg class="w-4 h-4 text-[#00875A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
           onClick: (row) => {
-            Modal.confirm({
-              title: `Delete Client ${row.name}`,
-              message: `Are you sure you want to permanently remove corporate client <strong>${row.name}</strong> (${row.code})? This will unassign associated processing facilities and cannot be undone.`,
-              confirmText: 'Delete Client',
-              cancelText: 'Cancel',
-              isDestructive: true,
-              onConfirm: () => {
-                const idx = this.state.companies.findIndex(c => c.id === row.id);
-                if (idx > -1) {
-                  this.state.companies.splice(idx, 1);
+            const isCurrentlyActive = (row.status || 'Active').toLowerCase() === 'active';
+            if (isCurrentlyActive) {
+              Modal.confirm({
+                title: `Deactivate Client ${row.name}`,
+                message: `Are you sure you want to deactivate corporate client <strong>${row.name}</strong> (${row.code})? The client and its associated user accounts will become inactive.`,
+                confirmText: 'Deactivate',
+                cancelText: 'Cancel',
+                isDestructive: true,
+                onConfirm: () => {
+                  row.status = 'Inactive';
                   companyTable.setData(this.state.companies);
                   this.saveState();
-                  this.logAudit('Company Setup', `Deleted client ${row.name} (${row.code})`);
-                  Toast.show(`Client ${row.name} deleted successfully`, 'success', 'Client Removed');
+                  this.logAudit('Company Setup', `Deactivated client ${row.name} (${row.code})`);
+                  Modal.success({
+                    title: 'Client Deactivated',
+                    message: `Corporate client <strong>${row.name}</strong> has been successfully deactivated.`,
+                    details: [
+                      { label: 'Client Name', value: row.name },
+                      { label: 'Code', value: row.code },
+                      { label: 'Status', value: 'Inactive' }
+                    ]
+                  });
                 }
-              }
-            });
+              });
+            } else {
+              Modal.confirm({
+                title: `Activate Client ${row.name}`,
+                message: `Are you sure you want to activate corporate client <strong>${row.name}</strong> (${row.code})?`,
+                confirmText: 'Activate',
+                cancelText: 'Cancel',
+                isDestructive: false,
+                onConfirm: () => {
+                  row.status = 'Active';
+                  companyTable.setData(this.state.companies);
+                  this.saveState();
+                  this.logAudit('Company Setup', `Activated client ${row.name} (${row.code})`);
+                  Modal.success({
+                    title: 'Client Activated',
+                    message: `Corporate client <strong>${row.name}</strong> is now Active.`,
+                    details: [
+                      { label: 'Client Name', value: row.name },
+                      { label: 'Code', value: row.code },
+                      { label: 'Status', value: 'Active' }
+                    ]
+                  });
+                }
+              });
+            }
           }
         }
       ]
     });
+
+    const cmpContainer = document.getElementById('company-table-container');
+    if (cmpContainer) {
+      cmpContainer.onclick = (e) => {
+        const userBtn = e.target.closest('.btn-client-view-users');
+        if (userBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          const clientId = userBtn.dataset.clientId;
+          const comp = this.state.companies.find(c => c.id === clientId);
+          if (comp) {
+            this.showClientUserDetailsModal(comp, companyTable);
+          }
+        }
+      };
+    }
 
     const addBtn = document.getElementById('btn-add-company');
     if (addBtn) {
@@ -5578,238 +5770,132 @@ export const SetupView = {
     }
   },
 
-  showAddCompanyModal(companyTable) {
-    this.showCompanyFormModal({
-      id: `CMP-00${this.state.companies.length + 1}`,
-      code: '',
-      name: '',
-      legalName: '',
-      cin: '',
-      taxId: '',
-      eiaNumber: '',
-      fdaNumber: '',
-      bapNumber: '',
-      country: 'India',
-      currency: 'INR / USD',
-      timezone: 'Asia/Kolkata (IST)',
-      dateFormat: 'DD/MM/YYYY',
-      contactEmail: '',
-      contactPhone: '',
-      address: '',
-      status: 'Active',
-      plants: ['Unit-1 VSP (Harbour)']
-    }, false, companyTable);
-  },
+  showClientUserDetailsModal(company, companyTable = null) {
+    if (!company) return;
+    const clientUsers = (this.state.users || []).filter(u => 
+      u.companyId === company.id || 
+      u.companyName === company.name || 
+      u.companyName === company.shortName || 
+      u.companyName === company.code
+    );
 
-  showEditCompanyModal(company, companyTable) {
-    this.showCompanyFormModal(company, true, companyTable);
-  },
+    const clientCode = company.code || company.shortName || 'DFL';
+    const plantsList = (company.plants && company.plants.length > 0) ? company.plants : ['Unit-1 VSP'];
 
-  showCompanyFormModal(company, isEdit = false, companyTable = null) {
-    Modal.open({
-      title: isEdit ? `Edit Client: ${company.name}` : 'Register New Corporate Client',
-      size: 'lg',
-      content: `
-        <form class="space-y-3" onsubmit="return false;">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Company Trade Name <span class="text-rose-500">*</span></label>
-              <input type="text" id="cmp-name" required value="${company.name}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" placeholder="e.g. Devi Fisheries Limited" />
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Company Code <span class="text-rose-500">*</span></label>
-              <input type="text" id="cmp-code" required value="${company.code}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7] font-mono uppercase" placeholder="e.g. DFL-IN" />
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Legal Entity Registered Name <span class="text-rose-500">*</span></label>
-              <input type="text" id="cmp-legal-name" required value="${company.legalName}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" />
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Status</label>
-              <select id="cmp-status" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
-                <option value="Active" ${company.status === 'Active' ? 'selected' : ''}>Active</option>
-                <option value="Inactive" ${company.status === 'Inactive' ? 'selected' : ''}>Inactive</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">EIA Approval No.</label>
-              <input type="text" id="cmp-eia" value="${company.eiaNumber || ''}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono focus:outline-none focus:border-[#0284C7]" placeholder="EIA/AP/0458" />
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">US FDA Reg No.</label>
-              <input type="text" id="cmp-fda" value="${company.fdaNumber || ''}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono focus:outline-none focus:border-[#0284C7]" placeholder="FDA-REG-10928374" />
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">BAP 4-Star License</label>
-              <input type="text" id="cmp-bap" value="${company.bapNumber || ''}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono focus:outline-none focus:border-[#0284C7]" placeholder="BAP-P-4492" />
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Jurisdiction / Country</label>
-              <input type="text" id="cmp-country" value="${company.country}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" />
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Operating Currency</label>
-              <input type="text" id="cmp-currency" value="${company.currency}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" />
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-[#172B4D] mb-1">Processing Plants (Comma-separated)</label>
-            <input type="text" id="cmp-plants" value="${(company.plants || []).join(', ')}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" placeholder="Unit-1 VSP, Unit-2 Singarayakonda" />
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Official Contact Email</label>
-              <input type="email" id="cmp-email" value="${company.contactEmail || ''}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" placeholder="admin@domain.com" />
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Phone Number</label>
-              <input type="text" id="cmp-phone" value="${company.contactPhone || ''}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" placeholder="+91 891 256 4789" />
-            </div>
-          </div>
-        </form>
-      `,
-      footerButtons: [
-        { label: 'Cancel', type: 'secondary', onClick: (m) => m.close() },
-        {
-          label: isEdit ? 'Save Changes' : 'Create Client',
-          type: 'primary',
-          onClick: (m) => {
-            const name = document.getElementById('cmp-name')?.value.trim();
-            const code = document.getElementById('cmp-code')?.value.trim().toUpperCase();
-            const legalName = document.getElementById('cmp-legal-name')?.value.trim();
-            const status = document.getElementById('cmp-status')?.value || 'Active';
-            const eia = document.getElementById('cmp-eia')?.value.trim();
-            const fda = document.getElementById('cmp-fda')?.value.trim();
-            const bap = document.getElementById('cmp-bap')?.value.trim();
-            const country = document.getElementById('cmp-country')?.value.trim() || 'India';
-            const currency = document.getElementById('cmp-currency')?.value.trim() || 'INR / USD';
-            const email = document.getElementById('cmp-email')?.value.trim();
-            const phone = document.getElementById('cmp-phone')?.value.trim();
-            const rawPlants = document.getElementById('cmp-plants')?.value;
-
-            if (!name || !code) {
-              Toast.show('Please provide both Company Name and Code', 'warning', 'Required Fields');
-              return;
-            }
-
-            company.name = name;
-            company.code = code;
-            company.legalName = legalName || name;
-            company.status = status;
-            company.eiaNumber = eia;
-            company.fdaNumber = fda;
-            company.bapNumber = bap;
-            company.country = country;
-            company.currency = currency;
-            company.contactEmail = email;
-            company.contactPhone = phone;
-            company.plants = rawPlants ? rawPlants.split(',').map(p => p.trim()).filter(Boolean) : ['Unit-1 VSP'];
-
-            if (!isEdit) {
-              this.state.companies.push(company);
-              this.logAudit('Company Setup', `Created client: ${company.name} (${company.code})`);
-            } else {
-              this.logAudit('Company Setup', `Updated client: ${company.name}`);
-            }
-
-            this.saveState();
-            m.close();
-            Toast.show(isEdit ? `Client ${company.name} updated successfully` : `Client ${company.name} created successfully`, 'success', 'Saved');
-            if (companyTable) {
-              companyTable.setData(this.state.companies);
-            } else {
-              const c = document.getElementById('setup-subpage-content');
-              if (c) this.renderCompanySetupTab(c);
-            }
-          }
-        }
-      ]
-    });
-  },
-
-  // =========================================================================
-  // 2. USER MANAGEMENT TAB (ERP Users & Personas)
-  // =========================================================================
-  renderUserManagementTab(container) {
-    const activeCompId = this.state.activeCompanyId;
-    const scopedUsers = this.state.users.filter(u => u.companyId === activeCompId);
-
-    container.innerHTML = `
+    const contentHtml = `
       <div class="space-y-4">
-        <!-- Table Card -->
-        <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-none overflow-hidden">
-          <div class="p-3 border-b border-[#EBECF0] flex items-center justify-between flex-wrap gap-2">
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-bold text-[#172B4D]">ERP User Directory</span>
-              <span class="lozenge lozenge-inprogress text-[10px]">${scopedUsers.length} Records</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <button id="usr-copy-btn" class="px-2.5 py-1 border border-[#DFE1E6] hover:bg-[#FAFBFC] rounded text-xs font-semibold text-[#42526E] cursor-pointer">Copy</button>
-              <button id="usr-excel-btn" class="px-2.5 py-1 border border-[#DFE1E6] hover:bg-[#FAFBFC] rounded text-xs font-semibold text-[#42526E] cursor-pointer">Excel</button>
-              <button id="btn-add-user" class="btn-primary px-3 py-1 rounded text-xs font-bold flex items-center gap-1.5 cursor-pointer">
-                <span>+ Register ERP User</span>
-              </button>
+        <!-- 1. Client Details Section -->
+        <div class="bg-[#FAFBFC] rounded-xl border border-[#DFE1E6] p-4 space-y-3 shadow-2xs">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#EBECF0] pb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-[#0284C7] text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
+                ${clientCode.slice(0, 3)}
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-sm font-bold text-[#172B4D]">${company.name}</h3>
+                  <span class="text-[10.5px] font-mono px-2 py-0.5 rounded bg-white border border-[#DFE1E6] text-[#0284C7] font-semibold">${clientCode}</span>
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                    company.status === 'Active' ? 'bg-[#E3FCEF] text-[#006644]' : 'bg-[#FFEBE6] text-[#BF2600]'
+                  }">
+                    <span class="w-1.5 h-1.5 rounded-full ${company.status === 'Active' ? 'bg-[#36B37E]' : 'bg-[#FF5630]'}"></span>
+                    ${company.status || 'Active'}
+                  </span>
+                </div>
+                <p class="text-[11px] text-[#5E6C84] mt-0.5">${company.address || 'Corporate Headquarters'}</p>
+              </div>
             </div>
           </div>
 
-          <div class="overflow-x-auto">
-            <table class="erp-table text-xs w-full">
-              <thead>
+          <!-- Client Details Grid -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs bg-white p-3 rounded-lg border border-[#EBECF0]">
+            <div>
+              <span class="block text-[10px] font-bold text-[#5E6C84] uppercase">Database Name</span>
+              <span class="font-mono text-xs font-bold text-[#0284C7] block mt-0.5">${company.dbName || 'devi_erp'}</span>
+            </div>
+            <div>
+              <span class="block text-[10px] font-bold text-[#5E6C84] uppercase">DB Host</span>
+              <span class="font-mono text-xs text-[#172B4D] block mt-0.5">${company.dbHost || 'localhost:3306'}</span>
+            </div>
+            <div>
+              <span class="block text-[10px] font-bold text-[#5E6C84] uppercase">DB User</span>
+              <span class="font-mono text-xs text-[#172B4D] block mt-0.5">${company.dbUser || 'root'}</span>
+            </div>
+            <div>
+              <span class="block text-[10px] font-bold text-[#5E6C84] uppercase">Country / Currency</span>
+              <span class="text-xs text-[#172B4D] block mt-0.5 font-medium">${company.country || 'India'} (${company.currency || 'INR'})</span>
+            </div>
+            <div class="col-span-2 sm:col-span-4 pt-1 border-t border-[#EBECF0]">
+              <span class="block text-[10px] font-bold text-[#5E6C84] uppercase">Configured Production Plants</span>
+              <div class="flex flex-wrap gap-1.5 mt-1">
+                ${plantsList.map(p => `
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-[#F0F9FF] border border-[#BAE6FD] text-[#0284C7]">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#0284C7]"></span>
+                    <span>${p}</span>
+                  </span>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Users List Section -->
+        <div class="space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                Users List
+              </h4>
+              <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-[#EBF8FF] text-[#0284C7] border border-[#BAE6FD] font-mono">
+                ${clientUsers.length} User${clientUsers.length === 1 ? '' : 's'}
+              </span>
+            </div>
+          </div>
+
+          <!-- Users Table -->
+          <div class="border border-[#EBECF0] rounded-xl overflow-hidden shadow-2xs">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-[#FAFBFC] border-b border-[#EBECF0] text-[10px] font-bold text-[#5E6C84] uppercase tracking-wider">
                 <tr>
-                  <th class="w-20">User ID</th>
-                  <th>Full Name & Contact</th>
-                  <th>ERP Persona / Role</th>
-                  <th>Plant & Facility Access</th>
-                  <th>Status</th>
-                  <th>Last Login</th>
-                  <th class="text-center w-28">Actions</th>
+                  <th class="py-2.5 px-3">#</th>
+                  <th class="py-2.5 px-3">User Name</th>
+                  <th class="py-2.5 px-3">Full Name</th>
+                  <th class="py-2.5 px-3">User ID</th>
+                  <th class="py-2.5 px-3">Role</th>
+                  <th class="py-2.5 px-3">Department</th>
+                  <th class="py-2.5 px-3">Plant</th>
+                  <th class="py-2.5 px-3 text-center">Status</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-[#EBECF0]">
-                ${scopedUsers.map(u => `
-                  <tr class="hover:bg-[#FAFBFC]">
-                    <td class="font-bold text-[#17191c] font-mono">${u.id}</td>
-                    <td>
-                      <div class="font-bold text-[#172B4D]">${u.name}</div>
-                      <div class="text-[11px] text-[#5E6C84]">${u.email} • ${u.phone}</div>
+              <tbody class="divide-y divide-[#EBECF0] bg-white">
+                ${clientUsers.length === 0 ? `
+                  <tr>
+                    <td colspan="8" class="py-8 text-center text-xs text-[#8993A4] italic">
+                      No users configured for this client yet.
                     </td>
-                    <td>
-                      <span class="lozenge ${u.role === 'System Administrator' ? 'lozenge-inprogress' : u.role === 'Quality Lab Inspector' ? 'lozenge-success' : u.role === 'Production Floor Manager' ? 'lozenge-purple' : 'lozenge-default'} text-[10px]">
-                        ${u.role}
+                  </tr>
+                ` : clientUsers.map((u, idx) => `
+                  <tr class="hover:bg-[#F9FAFB] transition-colors cursor-pointer client-user-row" data-user-id="${u.id}" title="Click to view full user details, role & assigned modules">
+                    <td class="py-2.5 px-3 text-[#8993A4] font-mono text-[11px]">${idx + 1}</td>
+                    <td class="py-2.5 px-3 font-mono font-bold text-[#0284C7]">${u.username || u.id.toLowerCase()}</td>
+                    <td class="py-2.5 px-3 font-semibold text-[#172B4D]">${u.name || u.username || '—'}</td>
+                    <td class="py-2.5 px-3 font-mono text-[11px] text-[#5E6C84]">${u.id}</td>
+                    <td class="py-2.5 px-3">
+                      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-[#F0F9FF] text-[#0284C7] border border-[#BAE6FD]">
+                        <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        <span>${u.role || '—'}</span>
                       </span>
                     </td>
-                    <td>
-                      <div class="flex flex-wrap gap-1">
-                        ${u.plantAccess.map(p => `<span class="lozenge lozenge-default text-[9.5px]">${p}</span>`).join('')}
-                      </div>
-                    </td>
-                    <td>
-                      <span class="lozenge ${u.status === 'Active' ? 'lozenge-success' : 'lozenge-danger'} text-[10px]">${u.status}</span>
-                    </td>
-                    <td class="text-[#5E6C84] text-[11px]">${u.lastLogin}</td>
-                    <td class="text-center">
-                      <div class="flex items-center justify-center gap-1">
-                        <button data-action="edit-user" data-id="${u.id}" class="p-1 hover:bg-[#EBECF0] rounded text-[#0369A1] cursor-pointer" title="Edit User">
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                        </button>
-                        <button data-action="reset-pwd" data-id="${u.id}" class="p-1 hover:bg-[#EBECF0] rounded text-[#42526E] cursor-pointer" title="Reset Password">
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
-                        </button>
-                        <button data-action="toggle-user-status" data-id="${u.id}" class="p-1 hover:bg-[#EBECF0] rounded text-[#BF2600] cursor-pointer" title="Toggle Status">
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
-                        </button>
-                      </div>
+                    <td class="py-2.5 px-3 text-[#42526E] font-medium">${u.department || '—'}</td>
+                    <td class="py-2.5 px-3 text-[#5E6C84] text-[11px]">${u.productionPlant || (u.plantAccess ? u.plantAccess[0] : 'All Plants')}</td>
+                    <td class="py-2.5 px-3 text-center">
+                      <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                        u.status === 'Active' ? 'bg-[#E3FCEF] text-[#006644]' : 'bg-[#FFEBE6] text-[#BF2600]'
+                      }">
+                        <span class="w-1.5 h-1.5 rounded-full ${u.status === 'Active' ? 'bg-[#36B37E]' : 'bg-[#FF5630]'}"></span>
+                        ${u.status || 'Active'}
+                      </span>
                     </td>
                   </tr>
                 `).join('')}
@@ -5820,133 +5906,1742 @@ export const SetupView = {
       </div>
     `;
 
-    document.querySelectorAll('[data-action="edit-user"]').forEach(btn => {
-      btn.onclick = () => {
-        const u = this.state.users.find(x => x.id === btn.dataset.id);
-        if (u) this.showEditUserModal(u);
-      };
+    Modal.open({
+      title: `Client Details & Users: ${company.name}`,
+      size: 'xl',
+      content: contentHtml,
+      footerButtons: [
+        { label: 'Close', type: 'secondary', onClick: () => Modal.close() }
+      ]
     });
 
-    document.querySelectorAll('[data-action="reset-pwd"]').forEach(btn => {
-      btn.onclick = () => {
-        const u = this.state.users.find(x => x.id === btn.dataset.id);
-        if (u) {
-          Toast.show(`Password reset link dispatched to ${u.email}`, 'info', 'Password Reset Dispatched');
-          this.logAudit('User Setup', `Generated password reset link for ${u.name}`);
-        }
-      };
-    });
-
-    document.querySelectorAll('[data-action="toggle-user-status"]').forEach(btn => {
-      btn.onclick = () => {
-        const u = this.state.users.find(x => x.id === btn.dataset.id);
-        if (u) {
-          u.status = u.status === 'Active' ? 'Suspended' : 'Active';
-          this.logAudit('User Setup', `Changed user status of ${u.name} to ${u.status}`);
-          this.saveState();
-          Toast.show(`User ${u.name} is now ${u.status}`, 'success', 'Status Updated');
-          this.renderUserManagementTab(container);
-        }
-      };
-    });
-
-    const addBtn = document.getElementById('btn-add-user');
-    if (addBtn) addBtn.onclick = () => this.showAddUserModal();
-
-    const copyBtn = document.getElementById('usr-copy-btn');
-    if (copyBtn) copyBtn.onclick = () => Toast.show('User Directory copied to clipboard', 'info', 'Clipboard Export');
-
-    const excelBtn = document.getElementById('usr-excel-btn');
-    if (excelBtn) excelBtn.onclick = () => Toast.show('Generating Devi_Fisheries_Users.xlsx...', 'success', 'Excel Export Ready');
+    // Wire up events inside the modal
+    setTimeout(() => {
+      // Clicking any user row in the table opens user details & role access modal
+      document.querySelectorAll('.client-user-row').forEach(row => {
+        row.onclick = () => {
+          const u = this.state.users.find(x => x.id === row.dataset.userId);
+          if (u) {
+            this.showUserDetailsAndRoleAccessModal(u);
+          }
+        };
+      });
+    }, 40);
   },
 
-  showAddUserModal() {
-    this.showUserFormModal({
-      id: `USR-${Math.floor(100 + Math.random() * 900)}`,
+  showUserDetailsAndRoleAccessModal(user) {
+    if (!user) return;
+    const roleObj = (this.state.roles || []).find(r => r.name === user.role || r.id === user.role);
+    const assignedMenus = roleObj ? (roleObj.assignedMenus || []) : [];
+    const assignedSubmenus = roleObj ? (roleObj.assignedSubmenus || []) : [];
+    const isFullAccess = assignedMenus.includes('*') || (roleObj && roleObj.id === 'ROLE-ADMIN');
+
+    // Find matching modules
+    const matchedModules = isFullAccess
+      ? this.state.modulesConfig
+      : this.state.modulesConfig.filter(m => assignedMenus.includes(m.key) || assignedMenus.includes(m.id));
+
+    const initials = (user.name || user.username || user.id).split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'US';
+
+    const contentHtml = `
+      <div class="space-y-4">
+        <!-- 1. User Header Banner -->
+        <div class="p-3.5 bg-[#F4F5F7] rounded-xl border border-[#DFE1E6] flex flex-wrap items-center justify-between gap-3 shadow-2xs">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-full bg-[#E0F2FE] text-[#0369A1] font-extrabold flex items-center justify-center text-sm border border-[#BAE6FD] shrink-0">
+              ${initials}
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-sm font-bold text-[#172B4D]">${user.name || user.username || 'User'}</h3>
+                <span class="text-xs font-mono text-[#5E6C84]">@${user.username || user.id.toLowerCase()}</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white border border-[#DFE1E6] text-[#42526E] font-semibold">${user.id}</span>
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                  user.status === 'Active' ? 'bg-[#E3FCEF] text-[#006644]' : 'bg-[#FFEBE6] text-[#BF2600]'
+                }">
+                  <span class="w-1.5 h-1.5 rounded-full ${user.status === 'Active' ? 'bg-[#36B37E]' : 'bg-[#FF5630]'}"></span>
+                  ${user.status || 'Active'}
+                </span>
+              </div>
+              <p class="text-[11px] text-[#5E6C84] mt-0.5">
+                Client: <strong>${user.companyName || 'Devi Fisheries Limited'}</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. User Details Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs bg-[#FAFBFC] p-3 rounded-xl border border-[#DFE1E6]">
+          <div>
+            <span class="block text-[10px] font-bold text-[#5E6C84] uppercase">Department</span>
+            <span class="font-medium text-[#172B4D] block mt-0.5">${user.department || '—'}</span>
+          </div>
+          <div>
+            <span class="block text-[10px] font-bold text-[#5E6C84] uppercase">Designation</span>
+            <span class="font-medium text-[#172B4D] block mt-0.5">${user.designation || '—'}</span>
+          </div>
+          <div>
+            <span class="block text-[10px] font-bold text-[#5E6C84] uppercase">Production Plant</span>
+            <span class="font-medium text-[#172B4D] block mt-0.5">${user.productionPlant || (user.plantAccess ? user.plantAccess.join(', ') : 'All Plants')}</span>
+          </div>
+          <div>
+            <span class="block text-[10px] font-bold text-[#5E6C84] uppercase">Access IPs</span>
+            <span class="font-mono text-xs text-[#172B4D] block mt-0.5 truncate" title="${user.accessIps || 'Any IP'}">${user.accessIps || 'Any IP'}</span>
+          </div>
+          <div>
+            <span class="block text-[10px] font-bold text-[#5E6C84] uppercase">Access Type</span>
+            <span class="text-xs text-[#172B4D] block mt-0.5">${user.accessType || 'Standard Access'}</span>
+          </div>
+          <div>
+            <span class="block text-[10px] font-bold text-[#5E6C84] uppercase">Last Login</span>
+            <span class="text-xs text-[#5E6C84] block mt-0.5">${user.lastLogin || 'Never'}</span>
+          </div>
+          <div>
+            <span class="block text-[10px] font-bold text-[#5E6C84] uppercase">Email</span>
+            <span class="font-mono text-xs text-[#172B4D] block mt-0.5 truncate" title="${user.email || '—'}">${user.email || '—'}</span>
+          </div>
+          <div>
+            <span class="block text-[10px] font-bold text-[#5E6C84] uppercase">Phone</span>
+            <span class="font-mono text-xs text-[#172B4D] block mt-0.5">${user.phone || '—'}</span>
+          </div>
+        </div>
+
+        <!-- 3. User's Role & Assigned Modules & Submodules -->
+        <div class="space-y-3 pt-1">
+          <div class="flex flex-wrap items-center justify-between gap-2 p-3 bg-[#F0F9FF] rounded-xl border border-[#BAE6FD]">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-lg bg-white text-[#0284C7] border border-[#BAE6FD] flex items-center justify-center font-bold text-xs shrink-0 shadow-2xs">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold text-[#172B4D]">Role: ${user.role || '—'}</span>
+                  ${roleObj ? `<span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white text-[#0284C7] border border-[#BAE6FD] font-semibold">${roleObj.id}</span>` : ''}
+                </div>
+                <p class="text-[11px] text-[#5E6C84]">Department: <strong>${roleObj?.department || user.department || 'Operations'}</strong></p>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold ${isFullAccess ? 'bg-[#E3FCEF] text-[#006644] border border-[#ABF5D1]' : 'bg-white text-[#0284C7] border border-[#BAE6FD]'} shadow-2xs">
+              ${isFullAccess ? 'Full System Access' : `${matchedModules.length} Modules Accessible`}
+            </span>
+          </div>
+
+          <!-- Modules & Submodules Breakdown -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+              Assigned Modules & Submenus
+            </h4>
+
+            ${matchedModules.length === 0 ? `
+              <div class="text-[11px] text-[#8993A4] italic p-4 bg-[#FAFBFC] rounded-xl border border-[#EBECF0] text-center">
+                No active modules or submenus assigned to this role.
+              </div>
+            ` : `
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-[300px] overflow-y-auto pr-1">
+                ${matchedModules.map(m => {
+                  const allSubs = this.state.submenusConfig[m.id] || this.state.submenusConfig[m.key] || [];
+                  const roleSubs = isFullAccess
+                    ? allSubs
+                    : (assignedSubmenus.length > 0 
+                        ? allSubs.filter(s => assignedSubmenus.includes(s.id) || assignedSubmenus.includes(s.title) || assignedSubmenus.includes(s.name) || assignedSubmenus.includes(s.url))
+                        : allSubs);
+
+                  return `
+                    <div class="p-3 rounded-xl border border-[#EBECF0] bg-[#FAFBFC] space-y-2">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-xs text-[#172B4D] flex items-center gap-1.5">
+                          <span class="w-2 h-2 rounded-full bg-[#00875A]"></span>
+                          ${m.label}
+                        </span>
+                        <span class="text-[10px] font-mono text-[#5E6C84]">(${m.key || m.id})</span>
+                      </div>
+                      <div class="flex flex-wrap gap-1.5 pt-1.5 border-t border-[#EBECF0]">
+                        ${roleSubs.length === 0 ? `
+                          <span class="text-[10.5px] text-[#8993A4] italic">Full module access</span>
+                        ` : roleSubs.map(s => `
+                          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10.5px] font-medium bg-white border border-[#DFE1E6] text-[#172B4D]" title="${s.url || ''}">
+                            <span class="w-1.5 h-1.5 rounded-full ${s.status === 'Inactive' ? 'bg-[#FF5630]' : 'bg-[#00875A]'}"></span>
+                            <span>${s.title || s.name}</span>
+                          </span>
+                        `).join('')}
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            `}
+          </div>
+        </div>
+      </div>
+    `;
+
+    Modal.open({
+      title: `User Details & Permissions: ${user.name || user.username}`,
+      size: 'lg',
+      content: contentHtml,
+      footerButtons: [
+        { label: 'Close', type: 'secondary', onClick: () => Modal.close() }
+      ]
+    });
+  },
+
+  showAddCompanyModal(companyTable) {
+    this.showCompanyFormModal({
+      id: `CMP-00${this.state.companies.length + 1}`,
       name: '',
+      code: '',
+      shortName: '',
+      address: '',
+      dbHost: '',
+      dbName: '',
+      dbUser: '',
+      dbPass: '',
+      status: 'Active',
+      country: 'India',
+      currency: 'INR / USD',
+      plants: ['Unit-1 VSP']
+    }, false, companyTable);
+  },
+
+  showEditCompanyModal(company, companyTable) {
+    this.showCompanyFormModal(company, true, companyTable);
+  },
+
+  showCompanyFormModal(company, isEdit = false, companyTable = null) {
+    Modal.open({
+      title: isEdit ? `Edit Client: ${company.name}` : 'Add Client',
+      size: 'xl',
+      content: `
+        <form id="company-client-form" class="space-y-4 text-xs">
+          <!-- Client Information Card (3 Columns with Full-Width Address Row) -->
+          <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-4">
+            <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
+              <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Client Information</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <!-- Row 1, Col 1: Client Name -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  Client Name
+                </label>
+                <input type="text" id="cmp-name" value="${company.name || ''}" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]" placeholder="e.g. Devi Fisheries Limited" />
+              </div>
+
+              <!-- Row 1, Col 2: Client Short Name -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  Client Short Name
+                </label>
+                <input type="text" id="cmp-short-name" value="${company.code || company.shortName || ''}" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] font-mono uppercase" placeholder="e.g. DFL" />
+              </div>
+
+              <!-- Row 1, Col 3: Status -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  Status
+                </label>
+                <select id="cmp-status" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]">
+                  <option value="Active" ${company.status === 'Active' ? 'selected' : ''}>Active</option>
+                  <option value="Inactive" ${company.status === 'Inactive' ? 'selected' : ''}>Inactive</option>
+                </select>
+              </div>
+
+              <!-- Row 2: Address in Full Width (Across all 3 columns) -->
+              <div class="col-span-1 sm:col-span-2 lg:col-span-3">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  Address
+                </label>
+                <textarea id="cmp-address" rows="3" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]" placeholder="Enter complete corporate entity address, plant location, city, pin code...">${company.address || ''}</textarea>
+              </div>
+            </div>
+          </div>
+        </form>
+      `,
+      footerButtons: [
+        { label: 'Cancel', type: 'secondary', onClick: (m) => m.close() },
+        {
+          label: isEdit ? 'Save Changes' : 'Save',
+          type: 'primary',
+          onClick: (m) => {
+            const name = document.getElementById('cmp-name')?.value.trim() || 'New Client';
+            const shortName = document.getElementById('cmp-short-name')?.value.trim().toUpperCase() || 'CLI';
+            const address = document.getElementById('cmp-address')?.value.trim();
+            const status = document.getElementById('cmp-status')?.value || 'Active';
+
+            company.name = name;
+            company.code = shortName;
+            company.shortName = shortName;
+            company.address = address;
+            company.status = status;
+
+            if (!isEdit) {
+              this.state.companies.push(company);
+              this.logAudit('Company Setup', `Created client: ${company.name} (${company.code})`);
+            } else {
+              this.logAudit('Company Setup', `Updated client: ${company.name} (${company.code})`);
+            }
+
+            this.saveState();
+            m.close();
+            if (companyTable) {
+              companyTable.setData(this.state.companies);
+            } else {
+              const c = document.getElementById('setup-subpage-content');
+              if (c) this.renderCompanySetupTab(c);
+            }
+
+            // Confirmation Message Popup (same as Purchase module)
+            Modal.success({
+              title: isEdit ? 'Client Updated Successfully' : 'Client Registered Successfully',
+              message: `Corporate client <strong>${company.name}</strong> (${company.code}) has been registered and updated in the system.`,
+              details: [
+                { label: 'Client Name', value: company.name },
+                { label: 'Client Short Name', value: company.code },
+                { label: 'Status', value: company.status },
+                { label: 'Address', value: company.address || '—' }
+              ]
+            });
+            Toast.show(isEdit ? `Client ${company.name} updated successfully` : `Client ${company.name} registered successfully!`, 'success', 'Saved');
+          }
+        }
+      ]
+    });
+  },
+
+  showAssignDatabaseModal(company, companyTable) {
+    Modal.open({
+      title: `Assign Database: ${company.name}`,
+      size: 'xl',
+      content: `
+        <form id="assign-db-form" class="space-y-4 text-xs">
+          <!-- Database Configuration Section (4 Columns) -->
+          <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-4">
+            <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
+              <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Database Configuration</span>
+              <span class="text-[10px] font-bold text-[#0284C7] bg-[#F0F9FF] px-2.5 py-1 rounded border border-[#BAE6FD] font-mono">${company.code || company.shortName || 'DFL'}</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <!-- 1. DB Host -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  DB Host
+                </label>
+                <input type="text" id="asgn-db-host" value="${company.dbHost || ''}" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono focus:outline-none focus:border-[#0284C7]" placeholder="e.g. db-cluster-primary.rds.aws.com" />
+              </div>
+
+              <!-- 2. DB Name -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  DB Name
+                </label>
+                <input type="text" id="asgn-db-name" value="${company.dbName || ''}" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono focus:outline-none focus:border-[#0284C7]" placeholder="e.g. devi_fisheries_db" />
+              </div>
+
+              <!-- 3. User Name -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  User Name
+                </label>
+                <input type="text" id="asgn-db-user" value="${company.dbUser || ''}" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono focus:outline-none focus:border-[#0284C7]" placeholder="e.g. dfl_db_admin" />
+              </div>
+
+              <!-- 4. Password -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  Password
+                </label>
+                <div class="relative">
+                  <input type="password" id="asgn-db-pass" value="${company.dbPass || ''}" class="w-full text-xs pl-3 pr-10 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono focus:outline-none focus:border-[#0284C7]" placeholder="••••••••••••" />
+                  <button type="button" id="toggle-asgn-db-pass-btn" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#6B778C] hover:text-[#172B4D] transition-colors cursor-pointer p-1" title="Toggle password visibility" onclick="(function(btn){ const inp = document.getElementById('asgn-db-pass'); if (!inp) return; const isPwd = inp.type === 'password'; inp.type = isPwd ? 'text' : 'password'; const openI = btn.querySelector('#asgn-eye-open-icon'); const closeI = btn.querySelector('#asgn-eye-closed-icon'); if (openI && closeI) { if (isPwd) { openI.classList.add('hidden'); closeI.classList.remove('hidden'); } else { openI.classList.remove('hidden'); closeI.classList.add('hidden'); } } })(this)">
+                    <svg id="asgn-eye-open-icon" class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    <svg id="asgn-eye-closed-icon" class="w-4 h-4 pointer-events-none hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      `,
+      footerButtons: [
+        { label: 'Cancel', type: 'secondary', onClick: (m) => m.close() },
+        {
+          label: 'Save',
+          type: 'primary',
+          onClick: (m) => {
+            const dbHost = document.getElementById('asgn-db-host')?.value.trim();
+            const dbName = document.getElementById('asgn-db-name')?.value.trim();
+            const dbUser = document.getElementById('asgn-db-user')?.value.trim();
+            const dbPass = document.getElementById('asgn-db-pass')?.value;
+
+            company.dbHost = dbHost;
+            company.dbName = dbName;
+            company.dbUser = dbUser;
+            company.dbPass = dbPass;
+
+            this.saveState();
+            m.close();
+            this.logAudit('Company Setup', `Configured database for client: ${company.name} (${dbName || 'unassigned'})`);
+            if (companyTable) {
+              companyTable.setData(this.state.companies);
+            } else {
+              const c = document.getElementById('setup-subpage-content');
+              if (c) this.renderCompanySetupTab(c);
+            }
+
+            // Confirmation Message Popup (same as Purchase module)
+            Modal.success({
+              title: 'Database Assigned Successfully',
+              message: `Multi-tenant database configuration for corporate client <strong>${company.name}</strong> has been saved.`,
+              details: [
+                { label: 'Client', value: `${company.name} (${company.code || company.shortName || 'DFL'})` },
+                { label: 'DB Host', value: company.dbHost || '—' },
+                { label: 'DB Name', value: company.dbName || '—' },
+                { label: 'User Name', value: company.dbUser || '—' }
+              ]
+            });
+            Toast.show(`Database configured for ${company.name} successfully!`, 'success', 'DB Assigned');
+          }
+        }
+      ]
+    });
+
+    setTimeout(() => {
+      const toggleBtn = document.getElementById('toggle-asgn-db-pass-btn');
+      const passInput = document.getElementById('asgn-db-pass');
+      if (toggleBtn && passInput) {
+        toggleBtn.onclick = () => {
+          const isPwd = passInput.type === 'password';
+          passInput.type = isPwd ? 'text' : 'password';
+          const openI = toggleBtn.querySelector('#asgn-eye-open-icon');
+          const closeI = toggleBtn.querySelector('#asgn-eye-closed-icon');
+          if (openI && closeI) {
+            if (isPwd) {
+              openI.classList.add('hidden');
+              closeI.classList.remove('hidden');
+            } else {
+              openI.classList.remove('hidden');
+              closeI.classList.add('hidden');
+            }
+          }
+        };
+      }
+    }, 40);
+  },
+
+  // =========================================================================
+  // 2. USER MANAGEMENT TAB (ERP Users & Personas)
+  // =========================================================================
+  renderUserManagementTab(container) {
+    if (!this.state.userFilterCompany) this.state.userFilterCompany = 'ALL';
+
+    const getFilteredUsers = () => {
+      let filtered = [...this.state.users];
+      const filterId = this.state.userFilterCompany || 'ALL';
+      if (filterId !== 'ALL') {
+        const matchedComp = this.state.companies.find(c => c.id === filterId);
+        filtered = filtered.filter(u => u.companyId === filterId || (matchedComp && (u.companyName === matchedComp.name || u.companyName === matchedComp.shortName)));
+      }
+      if (this.state.userSearchRole) {
+        filtered = filtered.filter(u => u.role === this.state.userSearchRole || u.designation === this.state.userSearchRole);
+      }
+      return filtered;
+    };
+
+    container.innerHTML = `
+      <div class="space-y-4 animate-fade-in">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+          <div class="flex items-center gap-3">
+            <h1 class="text-xl font-extrabold text-[#172B4D]">Users Management</h1>
+            ${this.state.userSearchRole ? `
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#F0F9FF] border border-[#BAE6FD] text-[#0284C7] rounded-lg text-xs font-semibold">
+                <span>Role: <strong>${this.state.userSearchRole}</strong></span>
+                <button type="button" id="btn-clear-role-filter" class="text-[#0284C7] hover:text-[#0369A1] font-bold text-sm leading-none ml-1 cursor-pointer" title="Clear role filter">×</button>
+              </div>
+            ` : ''}
+          </div>
+          <div class="flex items-center gap-3 flex-wrap">
+            <div class="flex items-center gap-2">
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                Select Client:
+              </span>
+              <select id="usr-client-filter" class="text-xs font-semibold text-[#172B4D] bg-transparent focus:outline-none cursor-pointer">
+                <option value="ALL">All Clients (${this.state.users.length})</option>
+                ${this.state.companies.map(c => {
+                  const count = this.state.users.filter(u => u.companyId === c.id || u.companyName === c.name || u.companyName === c.shortName).length;
+                  return `<option value="${c.id}" ${this.state.userFilterCompany === c.id ? 'selected' : ''}>${c.name} (${count})</option>`;
+                }).join('')}
+              </select>
+            </div>
+
+            <button id="btn-add-user" class="btn-primary px-3 py-1.5 rounded text-xs flex items-center gap-1.5 shadow-xs cursor-pointer">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              <span>Add User</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="users-table-container"></div>
+      </div>
+    `;
+
+    const usersTable = new DataTable({
+      containerId: 'users-table-container',
+      data: getFilteredUsers(),
+      keyField: 'id',
+      tableTitle: 'Users Registry',
+      searchable: true,
+      exportable: true,
+      pageSize: 10,
+      onRowClick: (row) => this.showUserDetailsAndRoleAccessModal(row),
+      columns: [
+        { 
+          field: 'sNo', 
+          header: 'SNO', 
+          render: (v, r, i) => `<span class="font-bold text-[#5E6C84]">${i !== undefined ? i + 1 : 1}</span>` 
+        },
+        { 
+          field: 'companyName', 
+          header: 'Client Name', 
+          render: (v) => `<span class="font-bold text-[#172B4D]">${v || 'Devi Fisheries Limited'}</span>` 
+        },
+        { 
+          field: 'id', 
+          header: 'User ID', 
+          render: (v) => `<span class="font-bold text-[#172B4D] font-mono">${v}</span>` 
+        },
+        { 
+          field: 'username', 
+          header: 'User Name', 
+          render: (v) => `<span class="font-mono text-xs text-[#0284C7] font-semibold">${v || '—'}</span>` 
+        },
+        { 
+          field: 'role', 
+          header: 'Role', 
+          render: (v) => `
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-bold bg-[#F0F9FF] text-[#0284C7] border border-[#BAE6FD]">
+              <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              <span>${v || '—'}</span>
+            </span>
+          ` 
+        },
+        { 
+          field: 'productionPlant', 
+          header: 'Production Plant', 
+          render: (v, r) => {
+            const p = v || (Array.isArray(r.plantAccess) ? r.plantAccess.join(', ') : r.plantAccess) || 'All Plants';
+            return `<span class="text-xs text-[#42526E] font-medium">${p}</span>`;
+          }
+        },
+        { 
+          field: 'department', 
+          header: 'Department', 
+          render: (v) => `<span class="text-xs text-[#42526E] font-medium">${v || '—'}</span>` 
+        },
+        { 
+          field: 'designation', 
+          header: 'Designation', 
+          render: (v, r) => `<span class="text-xs text-[#172B4D] font-medium">${v || r.role || '—'}</span>` 
+        },
+        { 
+          field: 'accessType', 
+          header: 'Access Type', 
+          render: (v) => `<span class="lozenge ${v === 'Full Access' ? 'lozenge-purple' : v === 'Admin / Manager' ? 'lozenge-inprogress' : 'lozenge-default'} text-[10px]">${v || 'Standard Access'}</span>` 
+        },
+        { field: 'status', header: 'Status', type: 'status' }
+      ],
+      actions: [
+        {
+          label: 'Login',
+          icon: `<svg class="w-4 h-4 text-[#00875A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>`,
+          onClick: (row) => this.handleUserImpersonateLogin(row)
+        },
+        {
+          label: 'Edit',
+          icon: `<svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>`,
+          onClick: (row) => this.showEditUserModal(row, usersTable)
+        },
+        {
+          label: 'Change Password',
+          icon: `<svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>`,
+          onClick: (row) => this.showChangePasswordModal(row)
+        },
+        {
+          label: (row) => row.status === 'Active' ? 'Deactivate' : 'Activate',
+          icon: (row) => row.status === 'Active'
+            ? `<svg class="w-4 h-4 text-[#FF5630]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" y1="8" x2="22" y2="13" stroke-width="2" stroke-linecap="round"/><line x1="22" y1="8" x2="17" y2="13" stroke-width="2" stroke-linecap="round"/></svg>`
+            : `<svg class="w-4 h-4 text-[#00875A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+          onClick: (row) => {
+            const isCurrentlyActive = (row.status || 'Active').toLowerCase() === 'active';
+            if (isCurrentlyActive) {
+              Modal.confirm({
+                title: `Deactivate User ${row.username || row.name || row.id}`,
+                message: `Are you sure you want to deactivate user <strong>${row.username || row.name || row.id}</strong> (${row.id})? They will not be able to log in until reactivated.`,
+                confirmText: 'Deactivate',
+                cancelText: 'Cancel',
+                isDestructive: true,
+                onConfirm: () => {
+                  row.status = 'Inactive';
+                  usersTable.setData(getFilteredUsers());
+                  this.saveState();
+                  this.logAudit('User Setup', `Deactivated user ${row.username || row.id}`);
+                  Modal.success({
+                    title: 'User Deactivated',
+                    message: `User <strong>${row.username || row.id}</strong> has been successfully deactivated.`,
+                    details: [
+                      { label: 'Client', value: row.companyName || '—' },
+                      { label: 'User ID', value: row.id },
+                      { label: 'User Name', value: row.username || '—' },
+                      { label: 'Status', value: 'Inactive' }
+                    ]
+                  });
+                }
+              });
+            } else {
+              Modal.confirm({
+                title: `Activate User ${row.username || row.name || row.id}`,
+                message: `Are you sure you want to activate user <strong>${row.username || row.name || row.id}</strong> (${row.id})?`,
+                confirmText: 'Activate',
+                cancelText: 'Cancel',
+                isDestructive: false,
+                onConfirm: () => {
+                  row.status = 'Active';
+                  usersTable.setData(getFilteredUsers());
+                  this.saveState();
+                  this.logAudit('User Setup', `Activated user ${row.username || row.id}`);
+                  Modal.success({
+                    title: 'User Activated',
+                    message: `User <strong>${row.username || row.id}</strong> is now Active.`,
+                    details: [
+                      { label: 'Client', value: row.companyName || '—' },
+                      { label: 'User ID', value: row.id },
+                      { label: 'User Name', value: row.username || '—' },
+                      { label: 'Status', value: 'Active' }
+                    ]
+                  });
+                }
+              });
+            }
+          }
+        }
+      ]
+    });
+
+    const clientFilter = document.getElementById('usr-client-filter');
+    if (clientFilter) {
+      clientFilter.onchange = (e) => {
+        this.state.userFilterCompany = e.target.value;
+        this.saveState();
+        usersTable.setData(getFilteredUsers());
+      };
+    }
+
+    const clearRoleBtn = document.getElementById('btn-clear-role-filter');
+    if (clearRoleBtn) {
+      clearRoleBtn.onclick = () => {
+        delete this.state.userSearchRole;
+        this.saveState();
+        const containerEl = document.getElementById('setup-subpage-content');
+        if (containerEl) this.renderUserManagementTab(containerEl);
+      };
+    }
+
+    const addBtn = document.getElementById('btn-add-user');
+    if (addBtn) {
+      addBtn.onclick = () => this.showAddUserModal(usersTable, this.state.userFilterCompany);
+    }
+  },
+
+  showAddUserModal(usersTable = null, preselectedCompanyId = null) {
+    const nextNum = Math.floor(100 + Math.random() * 900);
+    let defaultComp = this.state.companies[0] || { id: 'CMP-001', name: 'Devi Fisheries Limited', code: 'DFL' };
+    if (preselectedCompanyId && preselectedCompanyId !== 'ALL') {
+      const found = this.state.companies.find(c => c.id === preselectedCompanyId);
+      if (found) defaultComp = found;
+    }
+
+    this.showUserFormModal({
+      id: `USR-${nextNum}`,
+      name: '',
+      username: '',
       email: '',
       phone: '',
-      companyId: this.state.activeCompanyId,
-      companyName: this.state.companies.find(c => c.id === this.state.activeCompanyId)?.name || 'Devi Fisheries Limited',
+      companyId: defaultComp.id,
+      companyName: defaultComp.name,
+      department: 'Procurement',
+      designation: 'Procurement Officer',
+      accessType: 'Standard Access',
+      password: '',
       role: 'Procurement Officer',
       status: 'Active',
       mfa: 'Enabled',
       plantAccess: ['Unit-1 VSP (Harbour)'],
       lastLogin: 'Never'
-    }, false);
+    }, false, usersTable);
   },
 
-  showEditUserModal(user) {
-    this.showUserFormModal(user, true);
+  showEditUserModal(user, usersTable = null) {
+    this.showUserFormModal(user, true, usersTable);
   },
 
-  showUserFormModal(user, isEdit = false) {
-    const modalContent = `
-      <form id="user-form" class="space-y-3 text-xs">
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block font-bold text-[#172B4D] mb-1">Full Name *</label>
-            <input type="text" id="usr-name" required value="${user.name}" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0369A1]" placeholder="e.g. Ramesh Varma" />
+  showUserFormModal(user, isEdit = false, usersTable = null) {
+    const defaultComp = this.state.companies[0] || { id: 'CMP-001', name: 'Devi Fisheries Limited', code: 'DFL' };
+    const currentComp = this.state.companies.find(c => c.id === (user.companyId || defaultComp.id) || c.name === user.companyName) || defaultComp;
+    const allPlants = ['All Plants', ...new Set(this.state.companies.flatMap(c => c.plants || []))];
+    const initialPlants = currentComp?.plants && currentComp.plants.length > 0 ? ['All Plants', ...currentComp.plants] : allPlants;
+    const currentPlant = user.productionPlant || (Array.isArray(user.plantAccess) ? user.plantAccess[0] : user.plantAccess) || 'All Plants';
+    const allRoles = (this.state.roles && this.state.roles.length > 0)
+      ? this.state.roles.map(r => r.name)
+      : [
+        'System Administrator',
+        'Super Administrator',
+        'Procurement Officer',
+        'Quality Lab Inspector',
+        'Production Floor Manager',
+        'Coldstore Keeper',
+        'Sales & Exports Manager'
+      ];
+    const currentRole = user.role || user.designation || 'Procurement Officer';
+    const accessIps = user.accessIps || user.allowedIps || '';
+
+    Modal.open({
+      title: isEdit ? `Edit User: ${user.username || user.name || user.id}` : 'Add User',
+      size: 'xl',
+      content: `
+        <form id="user-setup-form" class="space-y-4 text-xs">
+          <!-- User Information Card (4 Columns Layout) -->
+          <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-4">
+            <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
+              <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">User Information</span>
+              ${isEdit ? `<span class="text-[10px] font-bold text-[#0284C7] bg-[#F0F9FF] px-2.5 py-1 rounded border border-[#BAE6FD] font-mono">${user.id}</span>` : ''}
+            </div>
+
+            <!-- 4 Columns Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <!-- 1. Client Name (Dropdown field) -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  Client Name
+                </label>
+                <select id="usr-modal-company" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] font-medium text-[#172B4D]">
+                  ${this.state.companies.map(c => `
+                    <option value="${c.id}" ${c.id === (user.companyId || defaultComp.id) || c.name === user.companyName ? 'selected' : ''}>
+                      ${c.name}
+                    </option>
+                  `).join('')}
+                </select>
+              </div>
+
+              <!-- 2. User ID -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  User ID
+                </label>
+                <input type="text" id="usr-modal-id" value="${user.id || ''}" placeholder="e.g. USR-009" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono text-[#172B4D] focus:outline-none focus:border-[#0284C7]" />
+              </div>
+
+              <!-- 3. User Name (Free Text field) -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  User Name
+                </label>
+                <input type="text" id="usr-modal-username" value="${user.username || ''}" placeholder="e.g. ramesh_varma" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono text-[#172B4D] focus:outline-none focus:border-[#0284C7]" />
+              </div>
+
+              <!-- 4. Password (Only displayed on Add User; on Edit, no password field is shown) -->
+              ${!isEdit ? `
+              <div>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  Password <span class="text-rose-500">*</span>
+                </label>
+                <div class="relative">
+                  <input type="password" id="usr-modal-password" value="${user.password || ''}" placeholder="••••••••••••" class="w-full text-xs pl-3 pr-10 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono focus:outline-none focus:border-[#0284C7]" />
+                  <button type="button" id="toggle-usr-modal-password-btn" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#6B778C] hover:text-[#172B4D] transition-colors cursor-pointer p-1" title="Toggle password visibility">
+                    <svg id="usr-eye-open-icon" class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    <svg id="usr-eye-closed-icon" class="w-4 h-4 pointer-events-none hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"/></svg>
+                  </button>
+                </div>
+              </div>
+              ` : ''}
+
+              <!-- 5. Role -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  Role
+                </label>
+                <select id="usr-modal-role" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] font-medium text-[#172B4D]">
+                  ${allRoles.map(r => `
+                    <option value="${r}" ${currentRole === r ? 'selected' : ''}>
+                      ${r}
+                    </option>
+                  `).join('')}
+                  ${(!allRoles.includes(currentRole) && currentRole) ? `<option value="${currentRole}" selected>${currentRole}</option>` : ''}
+                </select>
+              </div>
+
+              <!-- 6. Production Plant -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  Production Plant
+                </label>
+                <select id="usr-modal-plant" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] font-medium text-[#172B4D]">
+                  ${initialPlants.map(p => `
+                    <option value="${p}" ${currentPlant === p ? 'selected' : ''}>
+                      ${p}
+                    </option>
+                  `).join('')}
+                </select>
+              </div>
+
+              <!-- 7. Department -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  Department
+                </label>
+                <input type="text" id="usr-modal-dept" list="usr-modal-dept-list" value="${user.department || ''}" placeholder="e.g. Procurement" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] text-[#172B4D]" />
+                <datalist id="usr-modal-dept-list">
+                  <option value="Procurement">
+                  <option value="Processing Floor">
+                  <option value="Quality Assurance">
+                  <option value="Cold Storage">
+                  <option value="Logistics & Fleet">
+                  <option value="Sales & Exports">
+                  <option value="Finance & Accounts">
+                  <option value="Administration">
+                  <option value="IT & Systems">
+                </datalist>
+              </div>
+
+              <!-- 8. Designation -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  Designation
+                </label>
+                <input type="text" id="usr-modal-desig" value="${user.designation || ''}" placeholder="e.g. Procurement Manager" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] text-[#172B4D]" />
+              </div>
+
+              <!-- 9. Access Type -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  Access Type
+                </label>
+                <select id="usr-modal-access" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] font-medium text-[#172B4D]">
+                  <option value="Full Access" ${user.accessType === 'Full Access' ? 'selected' : ''}>Full Access</option>
+                  <option value="Admin / Manager" ${user.accessType === 'Admin / Manager' ? 'selected' : ''}>Admin / Manager</option>
+                  <option value="Standard Access" ${(!user.accessType || user.accessType === 'Standard Access') ? 'selected' : ''}>Standard Access</option>
+                  <option value="View Only" ${user.accessType === 'View Only' ? 'selected' : ''}>View Only / Read Only</option>
+                  <option value="Operator" ${user.accessType === 'Operator' ? 'selected' : ''}>Operator</option>
+                </select>
+              </div>
+
+              <!-- 10. Access IPs (Only shown on Edit User) -->
+              ${isEdit ? `
+              <div class="col-span-1 sm:col-span-2">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                  <span>Access IPs</span>
+                  <span class="text-[10px] text-[#5E6C84] font-normal font-sans">Comma-separated or leave blank for Any</span>
+                </label>
+                <input type="text" id="usr-modal-access-ips" value="${accessIps}" placeholder="e.g. 182.72.65.10, 192.168.1.*, 10.0.0.0/24 (or Any IP)" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono text-[#172B4D] focus:outline-none focus:border-[#0284C7]" />
+              </div>
+              ` : ''}
+
+              <!-- 11. Status -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  Status
+                </label>
+                <select id="usr-modal-status" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] font-medium text-[#172B4D]">
+                  <option value="Active" ${user.status === 'Active' ? 'selected' : ''}>Active</option>
+                  <option value="Inactive" ${user.status === 'Inactive' ? 'selected' : ''}>Inactive</option>
+                </select>
+              </div>
+            </div>
           </div>
-          <div>
-            <label class="block font-bold text-[#172B4D] mb-1">Corporate Email *</label>
-            <input type="email" id="usr-email" required value="${user.email}" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0369A1]" placeholder="ramesh@devifisheries.com" />
-          </div>
-        </div>
+        </form>
+      `,
+      footerButtons: [
+        { label: 'Cancel', type: 'secondary', onClick: (m) => m.close() },
+        {
+          label: isEdit ? 'Save Changes' : 'Save User',
+          type: 'primary',
+          onClick: (m) => {
+            const compSelect = document.getElementById('usr-modal-company');
+            const compId = compSelect?.value || defaultComp.id;
+            const matchedComp = this.state.companies.find(c => c.id === compId) || this.state.companies[0];
+            const compName = matchedComp?.name || user.companyName || 'Devi Fisheries Limited';
+            const dept = document.getElementById('usr-modal-dept')?.value.trim();
+            const access = document.getElementById('usr-modal-access')?.value;
+            const desig = document.getElementById('usr-modal-desig')?.value.trim();
+            const uid = document.getElementById('usr-modal-id')?.value.trim() || user.id;
+            const uname = document.getElementById('usr-modal-username')?.value.trim();
+            const pwd = !isEdit 
+              ? (document.getElementById('usr-modal-password')?.value || user.password || 'Devi@123')
+              : (user.password || 'Devi@123');
+            const status = document.getElementById('usr-modal-status')?.value || 'Active';
+            const role = document.getElementById('usr-modal-role')?.value || user.role || 'Procurement Officer';
+            const plant = document.getElementById('usr-modal-plant')?.value || 'All Plants';
+            const inputIps = isEdit 
+              ? (document.getElementById('usr-modal-access-ips')?.value.trim() || user.accessIps || 'Any IP')
+              : (user.accessIps || 'Any IP');
 
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block font-bold text-[#172B4D] mb-1">Mobile Phone</label>
-            <input type="text" id="usr-phone" value="${user.phone}" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg" placeholder="+91 98480 00000" />
-          </div>
-          <div>
-            <label class="block font-bold text-[#172B4D] mb-1">ERP Persona / Role *</label>
-            <select id="usr-role" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg">
-              ${this.state.roles.map(r => `
-                <option value="${r.name}" ${r.name === user.role ? 'selected' : ''}>${r.name}</option>
-              `).join('')}
-            </select>
-          </div>
-        </div>
+            user.id = uid;
+            user.companyId = compId;
+            user.companyName = compName;
+            user.department = dept;
+            user.accessType = access;
+            user.designation = desig;
+            user.username = uname || uid.toLowerCase();
+            user.name = user.name || uname || desig || uid;
+            user.password = pwd;
+            user.status = status;
+            user.role = role;
+            user.productionPlant = plant;
+            user.plantAccess = [plant];
+            user.accessIps = inputIps;
+            user.allowedIps = inputIps;
 
-        <div>
-          <label class="block font-bold text-[#172B4D] mb-1">Plant Access (Comma-separated)</label>
-          <input type="text" id="usr-plants" value="${user.plantAccess.join(', ')}" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg" placeholder="Unit-1 VSP (Harbour), Unit-2 Singarayakonda" />
-        </div>
+            if (!isEdit) {
+              this.state.users.push(user);
+              this.logAudit('User Setup', `Registered user: ${user.username || user.id} for ${user.companyName}`);
+            } else {
+              this.logAudit('User Setup', `Updated user: ${user.username || user.id}`);
+            }
 
-        <div class="flex items-center justify-end gap-2 pt-3 border-t border-[#EBECF0]">
-          <button type="button" id="modal-usr-cancel" class="px-3.5 py-1.5 border border-[#DFE1E6] rounded-lg text-xs font-semibold text-[#42526E] hover:bg-[#FAFBFC] cursor-pointer">Cancel</button>
-          <button type="submit" class="btn-primary px-4 py-1.5 rounded-lg text-xs font-bold cursor-pointer">${isEdit ? 'Save User' : 'Register User'}</button>
-        </div>
-      </form>
-    `;
+            // Sync user counts across all configured roles
+            if (this.state.roles && Array.isArray(this.state.roles)) {
+              this.state.roles.forEach(r => {
+                r.usersCount = this.state.users.filter(u => u.role === r.name || u.role === r.id).length;
+              });
+            }
 
-    Modal.show(isEdit ? `Edit User: ${user.name}` : 'Register New ERP User', modalContent);
+            this.saveState();
+            m.close();
 
-    document.getElementById('modal-usr-cancel').onclick = () => Modal.close();
+            if (usersTable) {
+              const filterId = this.state.userFilterCompany || 'ALL';
+              const matchedComp = this.state.companies.find(c => c.id === filterId);
+              let filteredData = filterId === 'ALL'
+                ? this.state.users
+                : this.state.users.filter(u => u.companyId === filterId || (matchedComp && (u.companyName === matchedComp.name || u.companyName === matchedComp.shortName)));
+              if (this.state.userSearchRole) {
+                filteredData = filteredData.filter(u => u.role === this.state.userSearchRole);
+              }
+              usersTable.setData(filteredData);
 
-    document.getElementById('user-form').onsubmit = (e) => {
-      e.preventDefault();
-      user.name = document.getElementById('usr-name').value.trim();
-      user.email = document.getElementById('usr-email').value.trim();
-      user.phone = document.getElementById('usr-phone').value.trim();
-      user.role = document.getElementById('usr-role').value;
-      const rawPlants = document.getElementById('usr-plants').value;
-      user.plantAccess = rawPlants ? rawPlants.split(',').map(p => p.trim()).filter(Boolean) : ['Unit-1 VSP (Harbour)'];
+              const filterEl = document.getElementById('usr-client-filter');
+              if (filterEl) {
+                filterEl.innerHTML = `
+                  <option value="ALL">All Clients (${this.state.users.length})</option>
+                  ${this.state.companies.map(c => {
+                    const count = this.state.users.filter(u => u.companyId === c.id || u.companyName === c.name || u.companyName === c.shortName).length;
+                    return `<option value="${c.id}" ${this.state.userFilterCompany === c.id ? 'selected' : ''}>${c.name} (${count})</option>`;
+                  }).join('')}
+                `;
+                filterEl.value = this.state.userFilterCompany || 'ALL';
+              }
+            } else {
+              const c = document.getElementById('setup-subpage-content');
+              if (c) this.renderUserManagementTab(c);
+            }
 
-      if (!isEdit) {
-        this.state.users.push(user);
-        this.logAudit('User Setup', `Registered user: ${user.name} (${user.email})`);
-      } else {
-        this.logAudit('User Setup', `Updated user: ${user.name}`);
+            // Confirmation Message Popup (same as Purchase module)
+            Modal.success({
+              title: isEdit ? 'User Updated Successfully' : 'User Registered Successfully',
+              message: `User <strong>${user.username || user.id}</strong> has been configured for corporate client <strong>${user.companyName}</strong>.`,
+              details: [
+                { label: 'Client Name', value: user.companyName },
+                { label: 'User ID', value: user.id },
+                { label: 'User Name', value: user.username || '—' },
+                { label: 'Role', value: user.role || '—' },
+                { label: 'Production Plant', value: user.productionPlant || (user.plantAccess ? user.plantAccess.join(', ') : 'All Plants') },
+                { label: 'Access IPs', value: user.accessIps || 'Any IP' },
+                { label: 'Department', value: user.department || '—' },
+                { label: 'Designation', value: user.designation || '—' },
+                { label: 'Access Type', value: user.accessType || 'Standard Access' },
+                { label: 'Status', value: user.status || 'Active' }
+              ]
+            });
+
+            Toast.show(isEdit ? `User ${user.username || user.id} updated successfully` : `User ${user.username || user.id} registered successfully!`, 'success', 'Saved');
+          }
+        }
+      ]
+    });
+
+    // Modal field interaction listeners: Password toggle, dynamic plant list based on client, role dept auto-suggestion, change password trigger
+    setTimeout(() => {
+      const toggleBtn = document.getElementById('toggle-usr-modal-password-btn');
+      const pwdInput = document.getElementById('usr-modal-password');
+      if (toggleBtn && pwdInput) {
+        toggleBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const isPwd = pwdInput.type === 'password';
+          pwdInput.type = isPwd ? 'text' : 'password';
+          const openI = toggleBtn.querySelector('#usr-eye-open-icon');
+          const closeI = toggleBtn.querySelector('#usr-eye-closed-icon');
+          if (openI && closeI) {
+            if (isPwd) {
+              openI.classList.add('hidden');
+              closeI.classList.remove('hidden');
+            } else {
+              openI.classList.remove('hidden');
+              closeI.classList.add('hidden');
+            }
+          }
+        };
       }
 
-      this.saveState();
-      Modal.close();
-      Toast.show(isEdit ? `User ${user.name} updated` : `User ${user.name} registered`, 'success', 'Saved');
-      const c = document.getElementById('setup-subpage-content');
-      if (c) this.renderClientMasterStudio(c, 'user-management');
-    };
+      // Change Password button inside Edit User modal
+      const editChangePwdBtn = document.getElementById('btn-usr-modal-change-pwd');
+      if (editChangePwdBtn) {
+        editChangePwdBtn.onclick = () => {
+          this.showChangePasswordModal(user);
+        };
+      }
+
+      // Dynamic Plant dropdown based on selected Client
+      const compSelect = document.getElementById('usr-modal-company');
+      const plantSelect = document.getElementById('usr-modal-plant');
+      if (compSelect && plantSelect) {
+        compSelect.onchange = () => {
+          const selectedComp = this.state.companies.find(c => c.id === compSelect.value);
+          const plants = (selectedComp && Array.isArray(selectedComp.plants) && selectedComp.plants.length > 0)
+            ? selectedComp.plants
+            : ['All Plants', 'Plant 1', 'Plant 2'];
+          plantSelect.innerHTML = plants.map(p => `<option value="${p}">${p}</option>`).join('');
+        };
+      }
+
+      // Auto-suggest Department when Role is selected
+      const roleSelect = document.getElementById('usr-modal-role');
+      const deptInput = document.getElementById('usr-modal-dept');
+      if (roleSelect && deptInput) {
+        roleSelect.onchange = () => {
+          const matchedRole = this.state.roles.find(r => r.name === roleSelect.value || r.id === roleSelect.value);
+          if (matchedRole && matchedRole.department) {
+            deptInput.value = matchedRole.department;
+          }
+        };
+      }
+    }, 40);
+  },
+
+  showChangePasswordModal(user) {
+    if (!user) return;
+
+    Modal.open({
+      title: `Change Password: ${user.username || user.name || user.id}`,
+      size: 'sm',
+      content: `
+        <form id="change-pwd-modal-form" class="space-y-3.5 text-xs" onsubmit="return false;">
+          <div>
+            <label class="block text-xs font-semibold text-[#172B4D] mb-1">
+              New Password <span class="text-rose-500">*</span>
+            </label>
+            <div class="relative">
+              <input 
+                type="password" 
+                id="cpwd-modal-new" 
+                placeholder="Enter new password" 
+                class="w-full text-xs pl-3 pr-10 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono focus:outline-none focus:border-[#0284C7]" 
+                required 
+              />
+              <button type="button" class="btn-toggle-cpwd absolute right-2.5 top-1/2 -translate-y-1/2 text-[#6B778C] hover:text-[#172B4D] p-1 cursor-pointer" data-target="cpwd-modal-new" title="Toggle password visibility">
+                <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-[#172B4D] mb-1">
+              Confirm New Password <span class="text-rose-500">*</span>
+            </label>
+            <div class="relative">
+              <input 
+                type="password" 
+                id="cpwd-modal-confirm" 
+                placeholder="Confirm new password" 
+                class="w-full text-xs pl-3 pr-10 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono focus:outline-none focus:border-[#0284C7]" 
+                required 
+              />
+              <button type="button" class="btn-toggle-cpwd absolute right-2.5 top-1/2 -translate-y-1/2 text-[#6B778C] hover:text-[#172B4D] p-1 cursor-pointer" data-target="cpwd-modal-confirm" title="Toggle password visibility">
+                <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+              </button>
+            </div>
+          </div>
+        </form>
+      `,
+      footerButtons: [
+        { label: 'Cancel', type: 'secondary', onClick: (m) => m.close() },
+        {
+          label: 'Change Password',
+          type: 'primary',
+          onClick: (m) => {
+            const newPwd = document.getElementById('cpwd-modal-new')?.value;
+            const confirmPwd = document.getElementById('cpwd-modal-confirm')?.value;
+
+            if (!newPwd) {
+              Toast.show('Please enter a new password', 'warning', 'Required');
+              document.getElementById('cpwd-modal-new')?.focus();
+              return;
+            }
+
+            if (newPwd !== confirmPwd) {
+              Toast.show('Passwords do not match. Please try again.', 'error', 'Mismatch');
+              document.getElementById('cpwd-modal-confirm')?.focus();
+              return;
+            }
+
+            user.password = newPwd;
+            this.saveState();
+            this.logAudit('User Setup', `Updated password for user ${user.username || user.id}`);
+            m.close();
+
+            // Confirmation Popup
+            Modal.success({
+              title: 'Password Changed Successfully',
+              message: `The password for user <strong>${user.username || user.id}</strong> has been updated successfully.`,
+              details: [
+                { label: 'Client', value: user.companyName || '—' },
+                { label: 'User ID', value: user.id },
+                { label: 'User Name', value: user.username || user.name || '—' },
+                { label: 'Role', value: user.role || '—' },
+                { label: 'Status', value: user.status || 'Active' }
+              ]
+            });
+
+            Toast.show(`Password updated for ${user.username || user.id}`, 'success', 'Password Changed');
+          }
+        }
+      ]
+    });
+
+    setTimeout(() => {
+      document.querySelectorAll('.btn-toggle-cpwd').forEach(btn => {
+        btn.onclick = () => {
+          const inp = document.getElementById(btn.dataset.target);
+          if (inp) {
+            inp.type = inp.type === 'password' ? 'text' : 'password';
+          }
+        };
+      });
+    }, 40);
+  },
+
+  handleUserImpersonateLogin(user) {
+    if (!user) return;
+    Modal.confirm({
+      title: `Login as ${user.username || user.name || user.id}`,
+      message: `Are you sure you want to log in and switch session to <strong>${user.username || user.name}</strong> (${user.role}) for corporate client <strong>${user.companyName}</strong>?`,
+      confirmText: 'Log In as User',
+      cancelText: 'Cancel',
+      isDestructive: false,
+      onConfirm: () => {
+        this.logAudit('User Session', `Switched login session to ${user.username || user.id} (${user.role})`);
+        Modal.success({
+          title: 'Logged In Successfully',
+          message: `You are now logged in as <strong>${user.username || user.name}</strong> (${user.role}).`,
+          details: [
+            { label: 'Client', value: user.companyName || 'Devi Fisheries Limited' },
+            { label: 'User ID', value: user.id },
+            { label: 'User Name', value: user.username || '—' },
+            { label: 'Role', value: user.role || '—' },
+            { label: 'Production Plant', value: user.productionPlant || (user.plantAccess ? user.plantAccess.join(', ') : 'All Plants') }
+          ],
+          onClose: () => {
+            location.hash = '#/dashboard';
+          }
+        });
+      }
+    });
+  },
+
+  // =========================================================================
+  // 2b. ROLES MANAGEMENT TAB
+  // =========================================================================
+  renderRolesTab(container) {
+    container.innerHTML = `
+      <div class="space-y-4 animate-fade-in">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+          <div>
+            <h1 class="text-xl font-extrabold text-[#172B4D]">Roles Management</h1>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="btn-add-role" class="btn-primary px-3 py-1.5 rounded text-xs flex items-center gap-1.5 shadow-xs cursor-pointer">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              <span>Add Role</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="roles-table-container"></div>
+      </div>
+    `;
+
+    const rolesTable = new DataTable({
+      containerId: 'roles-table-container',
+      data: this.state.roles,
+      keyField: 'id',
+      tableTitle: 'Roles Registry',
+      searchable: true,
+      exportable: true,
+      pageSize: 10,
+      columns: [
+        { 
+          field: 'sNo', 
+          header: 'SNO', 
+          render: (v, r, i) => `<span class="font-bold text-[#5E6C84]">${i !== undefined ? i + 1 : 1}</span>` 
+        },
+        { 
+          field: 'name', 
+          header: 'Role Name', 
+          render: (v, r) => `
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-lg bg-[#F0F9FF] text-[#0284C7] border border-[#BAE6FD] flex items-center justify-center font-bold text-xs shrink-0">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              </div>
+              <div>
+                <span class="font-bold text-[#172B4D] text-xs">${v}</span>
+                ${r.isProtected ? '<span class="ml-1.5 text-[9.5px] font-bold text-[#8993A4] bg-[#F4F5F7] px-1.5 py-0.5 rounded border border-[#DFE1E6]">🔒 System</span>' : ''}
+              </div>
+            </div>
+          ` 
+        },
+        { 
+          field: 'id', 
+          header: 'Role ID', 
+          render: (v) => `<span class="font-mono text-xs font-semibold text-[#0284C7]">${v}</span>` 
+        },
+        { 
+          field: 'department', 
+          header: 'Department', 
+          render: (v) => `<span class="text-xs text-[#42526E] font-medium">${v || 'General Operations'}</span>` 
+        },
+        { 
+          field: 'assignedMenus', 
+          header: 'Assigned Menus', 
+          render: (v, r) => {
+            const assigned = Array.isArray(v) ? v : [];
+            const isAll = assigned.includes('*') || assigned.length >= this.state.modulesConfig.length;
+            if (isAll) {
+              return `<span class="lozenge lozenge-purple text-[10px]">All Menus (Full Access)</span>`;
+            }
+            if (assigned.length === 0) {
+              return `<span class="text-xs text-[#8993A4] italic">No menus assigned</span>`;
+            }
+            const matchedMods = this.state.modulesConfig.filter(m => assigned.includes(m.key) || assigned.includes(m.id));
+            const maxVisible = 3;
+            const hasMore = matchedMods.length > maxVisible;
+            const displayList = hasMore ? matchedMods.slice(0, maxVisible) : matchedMods;
+            const remainingCount = matchedMods.length - maxVisible;
+
+            return `
+              <div class="flex flex-wrap gap-1.5 items-center max-w-md">
+                ${displayList.map(m => {
+                  const subs = this.state.submenusConfig[m.id] || this.state.submenusConfig[m.key] || [];
+                  return `
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-[#F0F9FF] border border-[#BAE6FD] text-[#0284C7] whitespace-nowrap">
+                      <span>${m.label}</span>
+                      ${subs.length > 0 ? `<span class="text-[9.5px] px-1 bg-[#E0F2FE] text-[#0369A1] rounded-full font-bold">${subs.length}</span>` : ''}
+                    </span>
+                  `;
+                }).join('')}
+                ${hasMore ? `
+                  <button type="button" class="btn-role-show-more-menus px-2 py-0.5 rounded text-[11px] font-bold bg-[#F4F5F7] border border-[#DFE1E6] text-[#42526E] hover:bg-[#EBECF0] hover:text-[#172B4D] transition-colors cursor-pointer" data-role-id="${r.id}">
+                    +${remainingCount} more
+                  </button>
+                ` : ''}
+              </div>
+            `;
+          } 
+        },
+        { 
+          field: 'usersCount', 
+          header: 'Users', 
+          render: (v, r) => {
+            const count = this.state.users.filter(u => u.role === r.name || u.role === r.id).length;
+            return `
+              <button type="button" class="btn-role-view-users inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold ${count > 0 ? 'bg-[#EBF8FF] text-[#0284C7] hover:bg-[#BAE6FD] border border-[#BAE6FD]' : 'bg-[#F4F5F7] text-[#8993A4] border border-[#DFE1E6]'} transition-colors cursor-pointer" data-role-name="${r.name}" title="Click to view all users with this role">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                <span>${count} User${count === 1 ? '' : 's'}</span>
+              </button>
+            `;
+          } 
+        },
+        { field: 'status', header: 'Status', type: 'status' }
+      ],
+      actions: [
+        {
+          label: 'Edit',
+          icon: `<svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>`,
+          onClick: (row) => this.showRoleFormModal(row, true, rolesTable)
+        },
+        {
+          label: 'Delete',
+          icon: `<svg class="w-4 h-4 text-[#FF5630]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>`,
+          onClick: (row) => {
+            if (row.isProtected) {
+              Modal.alert({
+                title: 'Protected System Role',
+                message: `The <strong>${row.name}</strong> role is a protected system role and cannot be deleted.`
+              });
+              return;
+            }
+            Modal.confirm({
+              title: `Delete Role: ${row.name}`,
+              message: `Are you sure you want to delete role <strong>${row.name}</strong> (${row.id})? Users assigned to this role will lose their custom menu permissions.`,
+              confirmText: 'Delete Role',
+              cancelText: 'Cancel',
+              isDestructive: true,
+              onConfirm: () => {
+                this.state.roles = this.state.roles.filter(r => r.id !== row.id);
+                this.saveState();
+                this.logAudit('Role Setup', `Deleted role ${row.name} (${row.id})`);
+                rolesTable.setData(this.state.roles);
+                Toast.show(`Role "${row.name}" deleted`, 'info', 'Deleted');
+              }
+            });
+          }
+        }
+      ]
+    });
+
+    const addBtn = document.getElementById('btn-add-role');
+    if (addBtn) {
+      addBtn.onclick = () => this.showRoleFormModal(null, false, rolesTable);
+    }
+
+    // Delegate clicks for assigned menus "+N more" and "View Users" button
+    const containerEl = document.getElementById('roles-table-container');
+    if (containerEl) {
+      containerEl.onclick = (e) => {
+        const viewUsersBtn = e.target.closest('.btn-role-view-users');
+        if (viewUsersBtn) {
+          const roleName = viewUsersBtn.dataset.roleName;
+          this.state.userSearchRole = roleName;
+          this.saveState();
+          location.hash = '#/general/configuration/users';
+          return;
+        }
+
+        const moreBtn = e.target.closest('.btn-role-show-more-menus');
+        if (!moreBtn) return;
+        const roleId = moreBtn.dataset.roleId;
+        const role = this.state.roles.find(r => r.id === roleId);
+        if (role) this.showRoleAssignedMenusModal(role);
+      };
+    }
+  },
+
+  showRoleAssignedMenusModal(role) {
+    const assigned = Array.isArray(role.assignedMenus) ? role.assignedMenus : [];
+    const isAll = assigned.includes('*') || assigned.length >= this.state.modulesConfig.length;
+    const mods = isAll 
+      ? this.state.modulesConfig 
+      : this.state.modulesConfig.filter(m => assigned.includes(m.key) || assigned.includes(m.id));
+
+    Modal.open({
+      title: `Assigned Menus: ${role.name}`,
+      size: 'lg',
+      content: `
+        <div class="space-y-3">
+          <div class="flex items-center justify-between p-3 bg-[#FAFBFC] rounded-lg border border-[#DFE1E6]">
+            <div>
+              <span class="text-xs font-bold text-[#172B4D]">${role.name}</span>
+              <span class="text-[10px] font-mono text-[#0284C7] ml-1.5 font-bold">(${role.id})</span>
+              <div class="text-[11px] text-[#5E6C84]">Department: <strong>${role.department || 'General Operations'}</strong></div>
+            </div>
+            <span class="lozenge lozenge-purple text-[10px]">${mods.length} Menus Assigned</span>
+          </div>
+
+          <div class="space-y-2 max-h-[380px] overflow-y-auto pr-1">
+            ${mods.map(m => {
+              const subs = this.state.submenusConfig[m.id] || this.state.submenusConfig[m.key] || [];
+              const assignedSubs = subs.filter(s => {
+                const subId = s.id || s.name || s.title;
+                return !role.assignedSubmenus || role.assignedSubmenus.length === 0 || role.assignedSubmenus.includes(subId) || role.assignedSubmenus.includes(s.title);
+              });
+              return `
+                <div class="p-3 bg-white rounded-lg border border-[#EBECF0] space-y-2">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <div class="w-6 h-6 rounded bg-[#F0F9FF] text-[#0284C7] flex items-center justify-center">${this.getModuleIconSvg(m)}</div>
+                      <span class="font-bold text-xs text-[#172B4D]">${m.label}</span>
+                      <span class="text-[10px] font-mono text-[#5E6C84]">(${m.key || m.id})</span>
+                    </div>
+                    <span class="text-[10px] font-semibold text-[#0284C7] bg-[#F0F9FF] px-2 py-0.5 rounded border border-[#BAE6FD]">${assignedSubs.length} of ${subs.length} Submenus</span>
+                  </div>
+                  ${assignedSubs.length > 0 ? `
+                    <div class="flex flex-wrap gap-1.5 pt-1 border-t border-[#F4F5F7]">
+                      ${assignedSubs.map(s => `
+                        <span class="px-2 py-0.5 rounded text-[10.5px] font-medium bg-[#FAFBFC] border border-[#DFE1E6] text-[#172B4D]">
+                          ${s.title || s.name}
+                        </span>
+                      `).join('')}
+                    </div>
+                  ` : ''}
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `,
+      footerButtons: [
+        { label: 'Close', type: 'secondary', onClick: () => Modal.close() }
+      ]
+    });
+  },
+
+  showRoleFormModal(role = null, isEdit = false, rolesTable = null) {
+    const roleName = role?.name || '';
+    const roleId = role?.id || '';
+    const currentDept = role?.department || 'Raw Material Procurement';
+    const status = role?.status || 'Active';
+    const isProtected = role?.isProtected || false;
+    const assignedMenus = Array.isArray(role?.assignedMenus) ? role.assignedMenus : [];
+    const assignedSubmenus = Array.isArray(role?.assignedSubmenus) ? role.assignedSubmenus : [];
+
+    const departments = [
+      'Raw Material Procurement',
+      'Quality Assurance & Lab',
+      'Production & Processing Floor',
+      'Cold Storage & Logistics',
+      'Sales, Exports & Documentation',
+      'Executive Management',
+      'Finance & Accounts',
+      'IT & Systems Administration',
+      'Engineering & Maintenance',
+      'General Operations'
+    ];
+
+    Modal.open({
+      title: isEdit ? `Edit Role: ${roleName}` : 'Add New Role',
+      size: 'xl',
+      content: `
+        <form id="role-setup-form" class="space-y-4 text-xs" onsubmit="return false;">
+          <!-- Top Row: Role Name, Role ID, Department, Status -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-[#FAFBFC] p-3.5 rounded-xl border border-[#DFE1E6]">
+            <div>
+              <label class="block text-xs font-semibold text-[#172B4D] mb-1">
+                Role Name <span class="text-rose-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="role-form-name" 
+                class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded-md focus:outline-none focus:border-[#0284C7] font-semibold text-[#172B4D]" 
+                placeholder="e.g. Quality Supervisor" 
+                value="${roleName}" 
+                required 
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-[#172B4D] mb-1">
+                Role ID <span class="text-rose-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="role-form-id" 
+                class="w-full text-xs px-2.5 py-1.5 border border-[#DFE1E6] rounded-md focus:outline-none focus:border-[#0284C7] font-mono text-xs font-semibold ${isEdit ? 'bg-[#EBECF0] text-[#5E6C84] cursor-not-allowed' : 'bg-white text-[#0284C7]'}" 
+                placeholder="e.g. ROLE-QUALITY-SUPERVISOR" 
+                value="${roleId}" 
+                ${isEdit ? 'readonly' : 'required'} 
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-[#172B4D] mb-1">
+                Department <span class="text-rose-500">*</span>
+              </label>
+              <select 
+                id="role-form-dept" 
+                class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded-md focus:outline-none focus:border-[#0284C7] font-medium text-[#172B4D]"
+              >
+                ${departments.map(d => `<option value="${d}" ${d === currentDept ? 'selected' : ''}>${d}</option>`).join('')}
+              </select>
+            </div>
+
+            <div class="flex items-center">
+              <label class="flex items-center gap-2 cursor-pointer select-none pt-4">
+                <input 
+                  type="checkbox" 
+                  id="role-form-status-cb" 
+                  class="w-4 h-4 rounded text-[#0284C7] accent-[#0284C7] cursor-pointer" 
+                  ${status === 'Active' ? 'checked' : ''} 
+                />
+                <span class="text-xs font-semibold text-[#172B4D]">Active Role</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Assign Menu Section -->
+          <div class="space-y-3 pt-2">
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-[#EBECF0]">
+              <div>
+                <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-2">
+                  <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                  Assign Menu Access
+                </h4>
+              </div>
+              <div class="flex items-center gap-2">
+                <button type="button" id="btn-role-select-all" class="px-2.5 py-1 text-[11px] font-semibold text-[#0284C7] bg-[#F0F9FF] hover:bg-[#E0F2FE] border border-[#BAE6FD] rounded cursor-pointer transition-colors">
+                  Select All
+                </button>
+                <button type="button" id="btn-role-deselect-all" class="px-2.5 py-1 text-[11px] font-semibold text-[#5E6C84] bg-[#FAFBFC] hover:bg-[#EBECF0] border border-[#DFE1E6] rounded cursor-pointer transition-colors">
+                  Deselect All
+                </button>
+              </div>
+            </div>
+
+            <!-- List of All Menus & Submenus -->
+            <div class="space-y-3 max-h-[380px] overflow-y-auto pr-1" id="role-menus-assign-container">
+              ${this.state.modulesConfig.map(mod => {
+                const modKey = mod.key || mod.id;
+                const subList = this.state.submenusConfig[mod.id] || this.state.submenusConfig[mod.key] || [];
+                const isMenuChecked = assignedMenus.includes('*') || assignedMenus.includes(modKey) || assignedMenus.includes(mod.id);
+
+                return `
+                  <div class="role-menu-card rounded-lg border border-[#DFE1E6] bg-white overflow-hidden shadow-2xs" data-menu-key="${modKey}">
+                    <!-- Parent Menu Header -->
+                    <div class="p-2.5 bg-[#FAFBFC] border-b border-[#EBECF0] flex items-center justify-between flex-wrap gap-2">
+                      <label class="flex items-center gap-2.5 cursor-pointer select-none" style="display: flex !important; align-items: center !important; margin-bottom: 0 !important;">
+                        <input 
+                          type="checkbox" 
+                          class="role-parent-menu-cb w-4 h-4 rounded text-[#0284C7] accent-[#0284C7] cursor-pointer shrink-0" 
+                          data-menu-key="${modKey}" 
+                          ${isMenuChecked ? 'checked' : ''} 
+                        />
+                        <div class="w-6 h-6 rounded bg-[#F0F9FF] border border-[#BAE6FD] flex items-center justify-center text-[#0284C7] shrink-0">
+                          ${this.getModuleIconSvg(mod)}
+                        </div>
+                        <span class="text-xs font-bold text-[#172B4D] whitespace-nowrap">${mod.label}</span>
+                        <span class="text-[10px] font-mono text-[#5E6C84] whitespace-nowrap">(${modKey})</span>
+                      </label>
+                      <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-semibold text-[#0284C7] bg-[#F0F9FF] border border-[#BAE6FD] px-2 py-0.5 rounded">
+                          ${subList.length} Submenu${subList.length === 1 ? '' : 's'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <!-- Submenus Grid (5 columns, inline checkbox and text, no padding/border/bg) -->
+                    ${subList.length > 0 ? `
+                      <div class="p-2.5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 bg-white">
+                        ${subList.map(sub => {
+                          const subId = sub.id || sub.name || sub.title;
+                          const isSubChecked = isMenuChecked && (
+                            assignedMenus.includes('*') ||
+                            assignedSubmenus.length === 0 ||
+                            assignedSubmenus.includes(subId) ||
+                            assignedSubmenus.includes(sub.id) ||
+                            assignedSubmenus.includes(sub.name) ||
+                            assignedSubmenus.includes(sub.title)
+                          );
+                          return `
+                            <label class="flex items-center gap-2.5 cursor-pointer select-none py-1 hover:text-[#0284C7] transition-colors" style="display: flex !important; align-items: center !important; margin-bottom: 0 !important;">
+                              <input 
+                                type="checkbox" 
+                                class="role-sub-cb w-3.5 h-3.5 rounded text-[#0284C7] accent-[#0284C7] cursor-pointer shrink-0" 
+                                data-parent-key="${modKey}" 
+                                data-sub-id="${subId}" 
+                                ${isSubChecked ? 'checked' : ''} 
+                              />
+                              <span class="text-xs font-medium text-[#172B4D] truncate pl-1" title="${sub.title || sub.name}">
+                                ${sub.title || sub.name}
+                              </span>
+                            </label>
+                          `;
+                        }).join('')}
+                      </div>
+                    ` : `
+                      <div class="p-2 text-center text-[11px] text-[#8993A4] italic bg-white">
+                        No submenus configured
+                      </div>
+                    `}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        </form>
+      `,
+      footerButtons: [
+        {
+          label: 'Cancel',
+          type: 'secondary',
+          onClick: () => Modal.close()
+        },
+        {
+          label: isEdit ? 'Save Changes' : 'Create Role',
+          type: 'primary',
+          onClick: (m) => {
+            const nameEl = document.getElementById('role-form-name');
+            const idEl = document.getElementById('role-form-id');
+            const deptEl = document.getElementById('role-form-dept');
+            const statusCb = document.getElementById('role-form-status-cb');
+
+            const name = (nameEl?.value || '').trim();
+            let id = (idEl?.value || '').trim();
+            const department = deptEl?.value || 'General Operations';
+            const roleStatus = statusCb?.checked ? 'Active' : 'Inactive';
+
+            if (!name) {
+              Toast.show('Please enter a role name', 'warning', 'Required');
+              nameEl?.focus();
+              return;
+            }
+
+            if (!isEdit && !id) {
+              id = 'ROLE-' + name.toUpperCase().replace(/[^A-Z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+            }
+
+            if (!id) {
+              Toast.show('Please enter a role ID', 'warning', 'Required');
+              idEl?.focus();
+              return;
+            }
+
+            if (!isEdit && this.state.roles.some(r => r.id.toLowerCase() === id.toLowerCase())) {
+              Toast.show(`Role ID "${id}" already exists. Please choose a unique ID.`, 'error', 'Duplicate');
+              idEl?.focus();
+              return;
+            }
+
+            // Collect assigned menus & submenus
+            const checkedMenuCbs = Array.from(document.querySelectorAll('.role-parent-menu-cb:checked'));
+            const selectedMenus = checkedMenuCbs.map(cb => cb.dataset.menuKey);
+
+            const checkedSubCbs = Array.from(document.querySelectorAll('.role-sub-cb:checked'));
+            const selectedSubmenus = checkedSubCbs.map(cb => cb.dataset.subId);
+
+            if (isEdit) {
+              role.name = name;
+              role.department = department;
+              role.status = roleStatus;
+              role.assignedMenus = selectedMenus;
+              role.assignedSubmenus = selectedSubmenus;
+              this.logAudit('Role Setup', `Updated role: ${name} (${role.id}) with ${selectedMenus.length} assigned menus`);
+            } else {
+              const newRole = {
+                id,
+                name,
+                department,
+                status: roleStatus,
+                isProtected: false,
+                usersCount: 0,
+                assignedMenus: selectedMenus,
+                assignedSubmenus: selectedSubmenus
+              };
+              this.state.roles.push(newRole);
+              this.logAudit('Role Setup', `Created role: ${name} (${id}) with ${selectedMenus.length} assigned menus`);
+            }
+
+            this.saveState();
+            m.close();
+
+            if (rolesTable) {
+              rolesTable.setData(this.state.roles);
+            } else {
+              const c = document.getElementById('setup-subpage-content');
+              if (c) this.renderRolesTab(c);
+            }
+
+            // Success confirmation modal
+            Modal.success({
+              title: isEdit ? 'Role Updated Successfully' : 'Role Created Successfully',
+              message: `Role <strong>${name}</strong> (${id}) has been configured with <strong>${selectedMenus.length}</strong> assigned menu(s) and <strong>${selectedSubmenus.length}</strong> submenu access permission(s).`,
+              details: [
+                { label: 'Role Name', value: name },
+                { label: 'Role ID', value: id },
+                { label: 'Department', value: department },
+                { label: 'Status', value: roleStatus },
+                { label: 'Assigned Menus Count', value: `${selectedMenus.length} Menus` },
+                { 
+                  label: 'Assigned Menus', 
+                  value: selectedMenus.length > 0 
+                    ? selectedMenus.map(k => {
+                        const found = this.state.modulesConfig.find(m => (m.key || m.id) === k);
+                        return found ? found.label : k;
+                      }).join(', ') 
+                    : 'None' 
+                },
+                { label: 'Assigned Submenus Count', value: `${selectedSubmenus.length} Submenus` }
+              ]
+            });
+          }
+        }
+      ]
+    });
+
+    // Auto-generate role ID when role name is typed in Add mode
+    if (!isEdit) {
+      const nameInput = document.getElementById('role-form-name');
+      const idInput = document.getElementById('role-form-id');
+      if (nameInput && idInput) {
+        nameInput.oninput = () => {
+          if (!idInput.dataset.manualEdit) {
+            const slug = nameInput.value.trim().toUpperCase().replace(/[^A-Z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+            idInput.value = slug ? `ROLE-${slug}` : '';
+          }
+        };
+        idInput.oninput = () => {
+          idInput.dataset.manualEdit = 'true';
+        };
+      }
+    }
+
+    // Bind Select All / Deselect All
+    const selectAllBtn = document.getElementById('btn-role-select-all');
+    const deselectAllBtn = document.getElementById('btn-role-deselect-all');
+
+    if (selectAllBtn) {
+      selectAllBtn.onclick = () => {
+        document.querySelectorAll('.role-parent-menu-cb, .role-sub-cb').forEach(cb => {
+          cb.checked = true;
+        });
+      };
+    }
+
+    if (deselectAllBtn) {
+      deselectAllBtn.onclick = () => {
+        document.querySelectorAll('.role-parent-menu-cb, .role-sub-cb').forEach(cb => {
+          cb.checked = false;
+        });
+      };
+    }
+
+    // Bind parent menu checkbox change -> toggle its submenus
+    document.querySelectorAll('.role-parent-menu-cb').forEach(parentCb => {
+      parentCb.onchange = () => {
+        const key = parentCb.dataset.menuKey;
+        const subCbs = document.querySelectorAll(`.role-sub-cb[data-parent-key="${key}"]`);
+        subCbs.forEach(subCb => {
+          subCb.checked = parentCb.checked;
+        });
+      };
+    });
+
+    // Bind child submenu checkbox change -> if checked, ensure parent is checked
+    document.querySelectorAll('.role-sub-cb').forEach(subCb => {
+      subCb.onchange = () => {
+        const parentKey = subCb.dataset.parentKey;
+        const parentCb = document.querySelector(`.role-parent-menu-cb[data-menu-key="${parentKey}"]`);
+        if (subCb.checked) {
+          if (parentCb) parentCb.checked = true;
+        } else {
+          // If all submenus for this parent are unchecked, uncheck the parent menu
+          const siblingSubs = document.querySelectorAll(`.role-sub-cb[data-parent-key="${parentKey}"]`);
+          const anyChecked = Array.from(siblingSubs).some(s => s.checked);
+          if (!anyChecked && parentCb) {
+            parentCb.checked = false;
+          }
+        }
+      };
+    });
   },
 
   // =========================================================================
@@ -6071,22 +7766,138 @@ export const SetupView = {
   },
 
   // =========================================================================
-  // 4. DYNAMIC MODULE STUDIO TAB (33 Modules)
+  // 4. DYNAMIC MODULE / MENUS STUDIO TAB (FULL CRUD WITH DATATABLE & LUCIDE ICONS)
   // =========================================================================
-  // 4. MODULE STUDIO TAB (FULL CRUD WITH DATATABLE)
-  // =========================================================================
+  getLucideIconLibrary() {
+    if (this._lucideIconsCache && this._lucideIconsCache.length > 100) {
+      return this._lucideIconsCache;
+    }
+
+    // Operations, Commerce, Logistics, Quality, System fallback list
+    const fallbackList = [
+      { id: 'fish', name: 'fish', label: 'Fish (Raw Material)', category: 'Operations', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6.5 12c.94-3.46 4.94-6 8.5-6 3.56 0 6.06 2.54 7 6-.94 3.47-4.44 6-8 6s-7.56-2.53-7.5-6Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12v.5"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 17.93a1 1 0 0 1-.77-.36L12 14"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 10.67C7 8 5.58 5.97 2.73 4a1 1 0 0 0-1.42 1.25L3 8.78"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 13.33C7 16 5.58 18.03 2.73 20a1 1 0 0 1-1.42-1.25L3 15.22"/></svg>' },
+      { id: 'scale', name: 'scale', label: 'Scale (Weighment)', category: 'Operations', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v18"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>' },
+      { id: 'factory', name: 'factory', label: 'Factory (Processing)', category: 'Operations', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 18h1"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h1"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 18h1"/></svg>' },
+      { id: 'boxes', name: 'boxes', label: 'Boxes (Cold Storage)', category: 'Operations', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7 16.5-4.74-2.85"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7 16.5 5-3"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16.5v5.17"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m17 16.5-5-3"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m17 16.5 4.74-2.85"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16.5v5.17"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8 7.26 5.15"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8 4.74-2.85"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13.5V8"/></svg>' },
+      { id: 'package', name: 'package', label: 'Package (Finished Stock)', category: 'Operations', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7.5 4.27 9 5.15"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m3.3 7 8.7 5 8.7-5"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22V12"/></svg>' },
+      { id: 'thermometer-snowflake', name: 'thermometer-snowflake', label: 'Freezer Temp', category: 'Operations', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 12h10"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 4v16"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m3 9 3 3-3 3"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6 9 9 6 6"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 18 3-3 3 3"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 4a2 2 0 0 1 2 2v9.54a3.5 3.5 0 1 1-4 0V6a2 2 0 0 1 2-2Z"/></svg>' },
+      { id: 'anchor', name: 'anchor', label: 'Anchor (Harbour Intake)', category: 'Operations', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><line x1="12" x2="12" y1="22" y2="8"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12H2a10 10 0 0 0 20 0h-3"/></svg>' },
+      { id: 'shopping-cart', name: 'shopping-cart', label: 'Shopping Cart (Purchase)', category: 'Commerce', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>' },
+      { id: 'shopping-bag', name: 'shopping-bag', label: 'Shopping Bag (Buyers)', category: 'Commerce', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 10a4 4 0 0 1-8 0"/></svg>' },
+      { id: 'receipt', name: 'receipt', label: 'Receipt (Farmer Billing)', category: 'Commerce', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17.5v-11"/></svg>' },
+      { id: 'dollar-sign', name: 'dollar-sign', label: 'Dollar (Payments)', category: 'Commerce', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="12" x2="12" y1="22"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>' },
+      { id: 'credit-card', name: 'credit-card', label: 'Credit Card', category: 'Commerce', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>' },
+      { id: 'tag', name: 'tag', label: 'Tag (SKU / Variety)', category: 'Commerce', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>' },
+      { id: 'truck', name: 'truck', label: 'Truck (Logistics)', category: 'Logistics', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 18H9"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18.5" r="2.5"/><circle cx="7" cy="18.5" r="2.5"/></svg>' },
+      { id: 'globe', name: 'globe', label: 'Globe (Export Market)', category: 'Logistics', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 12h20"/></svg>' },
+      { id: 'send', name: 'send', label: 'Send (Dispatch / IBT)', category: 'Logistics', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m22 2-7 20-4-9-9-4Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 2 11 13"/></svg>' },
+      { id: 'shield-check', name: 'shield-check', label: 'Shield Check (QC)', category: 'Quality', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 12 2 2 4-4"/></svg>' },
+      { id: 'flask-conical', name: 'flask-conical', label: 'Flask (Antibiotics / Lab)', category: 'Quality', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 2v7.31"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9.3V1.99"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 2h7"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.52 16h12.96"/></svg>' },
+      { id: 'clipboard-list', name: 'clipboard-list', label: 'Audit Checklist', category: 'Quality', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11h4"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16h4"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11h.01"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16h.01"/></svg>' },
+      { id: 'check-circle', name: 'check-circle', label: 'Check Circle (Approvals)', category: 'Quality', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
+      { id: 'bar-chart-3', name: 'bar-chart-3', label: 'Bar Chart (KPIs)', category: 'Analytics', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3v18h18"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 17V9"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17V5"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 17v-3"/></svg>' },
+      { id: 'line-chart', name: 'line-chart', label: 'Line Chart (Yield Trend)', category: 'Analytics', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3v18h18"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-5 5-4-4-3 3"/></svg>' },
+      { id: 'pie-chart', name: 'pie-chart', label: 'Pie Chart (Breakups)', category: 'Analytics', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 12A10 10 0 0 0 12 2v10z"/></svg>' },
+      { id: 'file-text', name: 'file-text', label: 'File Text (Invoices)', category: 'Analytics', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 2v4a2 2 0 0 0 2 2h4"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9H8"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 13H8"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 17H8"/></svg>' },
+      { id: 'layout-dashboard', name: 'layout-dashboard', label: 'Dashboard', category: 'System', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>' },
+      { id: 'users', name: 'users', label: 'Users (Workforce)', category: 'System', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 21v-2a4 4 0 0 0-3-3.87"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
+      { id: 'user-check', name: 'user-check', label: 'User Roles & Access', category: 'System', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
+      { id: 'settings', name: 'settings', label: 'Settings', category: 'System', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>' },
+      { id: 'sliders', name: 'sliders', label: 'System Parameters', category: 'System', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="1" x2="7" y1="14" y2="14"/><line x1="9" x2="15" y1="8" y2="8"/><line x1="17" x2="23" y1="16" y2="16"/></svg>' },
+      { id: 'database', name: 'database', label: 'Database & SQL', category: 'System', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5V19A9 3 0 0 0 21 19V5"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12A9 3 0 0 0 21 12"/></svg>' },
+      { id: 'layers', name: 'layers', label: 'Layers & Modules', category: 'System', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m22 12.5-8.58 3.91a2 2 0 0 1-1.66 0L3.18 12.5"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m22 17.5-8.58 3.91a2 2 0 0 1-1.66 0L3.18 17.5"/></svg>' },
+      { id: 'folder', name: 'folder', label: 'Folder (Directory)', category: 'System', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>' },
+      { id: 'printer', name: 'printer', label: 'Printer (Gate Pass)', category: 'System', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect width="12" height="8" x="6" y="14" rx="1"/></svg>' },
+      { id: 'clock', name: 'clock', label: 'Clock (Shift Timings)', category: 'System', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
+      { id: 'calendar', name: 'calendar', label: 'Calendar (Bookings)', category: 'System', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 2v4"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18"/></svg>' },
+      { id: 'archive', name: 'archive', label: 'Archive (Records)', category: 'System', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect width="20" height="5" x="2" y="3" rx="1"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 12h4"/></svg>' },
+      { id: 'lock', name: 'lock', label: 'Lock (Security)', category: 'System', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' },
+      { id: 'key', name: 'key', label: 'Key (API & Credentials)', category: 'System', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></svg>' },
+      { id: 'bell', name: 'bell', label: 'Bell (Notifications)', category: 'System', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>' },
+      { id: 'briefcase', name: 'briefcase', label: 'Briefcase (Corporate)', category: 'System', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>' },
+      { id: 'wrench', name: 'wrench', label: 'Wrench (Maintenance)', category: 'System', svg: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>' }
+    ];
+
+    // Check if full window.lucide icons are available (2,000+ icons)
+    if (typeof window !== 'undefined' && window.lucide && window.lucide.icons) {
+      try {
+        const fullIcons = [];
+        for (const [pascalName, iconNode] of Object.entries(window.lucide.icons)) {
+          const id = pascalName.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+          let svgString = '';
+          if (Array.isArray(iconNode)) {
+            const children = iconNode.map(([tag, attrs]) => {
+              const attrStr = Object.entries(attrs).map(([k, v]) => `${k}="${v}"`).join(' ');
+              return `<${tag} ${attrStr}></${tag}>`;
+            }).join('');
+            svgString = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">${children}</svg>`;
+          }
+          if (svgString) {
+            fullIcons.push({
+              id,
+              name: id,
+              label: pascalName.replace(/([a-z0-9])([A-Z])/g, '$1 $2'),
+              svg: svgString
+            });
+          }
+        }
+        if (fullIcons.length > 50) {
+          fullIcons.sort((a, b) => a.name.localeCompare(b.name));
+          this._lucideIconsCache = fullIcons;
+          return fullIcons;
+        }
+      } catch (err) {
+        console.warn('Lucide icon extraction error:', err);
+      }
+    }
+
+    this._lucideIconsCache = fallbackList;
+    return fallbackList;
+  },
+
+  getModuleIconId(mod) {
+    if (!mod) return 'layers';
+    if (mod.iconKey) return mod.iconKey;
+    const lib = this.getLucideIconLibrary();
+    const found = lib.find(i => i.id === mod.icon);
+    if (found) return found.id;
+    const k = (mod.key || mod.id || mod.label || '').toLowerCase();
+    if (k.includes('purchase') || k.includes('buyer') || k.includes('order')) return 'shopping-cart';
+    if (k.includes('fish') || k.includes('marine') || k.includes('aqua')) return 'fish';
+    if (k.includes('weigh') || k.includes('scale')) return 'scale';
+    if (k.includes('prod') || k.includes('process') || k.includes('soak')) return 'factory';
+    if (k.includes('cold') || k.includes('stock') || k.includes('store') || k.includes('inventory')) return 'boxes';
+    if (k.includes('qual') || k.includes('qc') || k.includes('audit')) return 'shield-check';
+    if (k.includes('lab') || k.includes('chem')) return 'flask-conical';
+    if (k.includes('ship') || k.includes('logis') || k.includes('transport')) return 'truck';
+    if (k.includes('sale') || k.includes('report') || k.includes('ledger')) return 'bar-chart-3';
+    if (k.includes('dash')) return 'layout-dashboard';
+    if (k.includes('user') || k.includes('role') || k.includes('persona')) return 'users';
+    if (k.includes('master') || k.includes('config') || k.includes('setup')) return 'settings';
+    return 'layers';
+  },
+
+  getModuleIconSvg(mod) {
+    if (mod && mod.icon && typeof mod.icon === 'string' && mod.icon.includes('<svg')) {
+      return mod.icon;
+    }
+    const iconId = this.getModuleIconId(mod);
+    const lib = this.getLucideIconLibrary();
+    const item = lib.find(i => i.id === iconId) || lib.find(i => i.id === 'layers');
+    return item ? item.svg : lib[0].svg;
+  },
+
   renderModuleStudioTab(container) {
     container.innerHTML = `
       <div class="space-y-4 animate-fade-in">
         <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
           <div>
-            <h1 class="text-xl font-extrabold text-[#172B4D]">Navigation & Menus Studio</h1>
-            <p class="text-xs text-[#5E6C84]">Configure top-level system navigation menus, persona access permissions, display order, and landing routes.</p>
+            <h1 class="text-xl font-extrabold text-[#172B4D]">Menus Management</h1>
           </div>
           <div class="flex items-center gap-2">
             <button id="btn-add-module" class="btn-primary px-3 py-1.5 rounded text-xs flex items-center gap-1.5 shadow-xs cursor-pointer">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-              <span>+ Add Menu</span>
+              <span>Add Menu</span>
             </button>
           </div>
         </div>
@@ -6099,28 +7910,144 @@ export const SetupView = {
       containerId: 'modules-table-container',
       data: this.state.modulesConfig,
       keyField: 'id',
-      tableTitle: 'Top-Level ERP Navigation Menus (CRUD)',
+      tableTitle: 'Menus Registry',
       searchable: true,
       exportable: true,
       pageSize: 10,
       columns: [
-        { field: 'order', header: 'Order', render: (v) => `<span class="font-bold text-[#5E6C84]">${v}</span>` },
-        { field: 'label', header: 'Menu Display Label', render: (v) => `<span class="font-bold text-[#172B4D]">${v}</span>` },
-        { field: 'key', header: 'Module Key', render: (v) => `<span class="font-mono text-xs text-[#5E6C84]">${v}</span>` },
-        { field: 'submenusCount', header: 'Submenus', render: (v) => `<span class="lozenge lozenge-default text-[9.5px] font-mono">${v || 0} Submenus</span>` },
         { 
-          field: 'roles', 
-          header: 'Authorized Personas', 
-          render: (v) => `<div class="flex flex-wrap gap-1 max-w-xs">${(v || []).slice(0, 2).map(r => `<span class="lozenge lozenge-default text-[9px]">${r}</span>`).join('')}${(v || []).length > 2 ? `<span class="lozenge lozenge-default text-[9px]">+${v.length - 2}</span>` : ''}</div>` 
+          field: 'sNo', 
+          header: 'SNO', 
+          render: (v, r, i) => `<span class="font-bold text-[#5E6C84]">${i !== undefined ? i + 1 : 1}</span>` 
         },
-        { field: 'route', header: 'Landing Route', render: (v) => `<span class="font-mono text-[11px] text-[#0284C7] truncate max-w-[140px] block">${v}</span>` },
-        { field: 'visible', header: 'Status', render: (v) => `<span class="status-badge ${v ? 'status-confirmed' : 'status-inactive'}">${v ? 'VISIBLE' : 'HIDDEN'}</span>` }
+        { 
+          field: 'icon', 
+          header: 'Menu Icon', 
+          render: (v, r) => {
+            const svg = this.getModuleIconSvg(r);
+            return `
+              <div class="flex items-center">
+                <div class="w-8 h-8 rounded-lg bg-[#F0F9FF] border border-[#BAE6FD] flex items-center justify-center text-[#0284C7] shadow-2xs shrink-0">
+                  ${svg}
+                </div>
+              </div>
+            `;
+          }
+        },
+        { 
+          field: 'label', 
+          header: 'Menu Name', 
+          render: (v, r) => `<div><span class="font-bold text-[#172B4D] text-xs">${v}</span><div class="text-[10px] font-mono text-[#5E6C84]">${r.key || r.id}</div></div>` 
+        },
+        { 
+          field: 'submenus', 
+          header: 'Sub Menus', 
+          render: (v, r) => {
+            const list = this.state.submenusConfig[r.id] || this.state.submenusConfig[r.key] || [];
+            if (!list || list.length === 0) {
+              return `<span class="text-xs text-[#8993A4] italic">No Sub Menus</span>`;
+            }
+            const maxVisible = 3;
+            const hasMore = list.length > maxVisible;
+            const displayList = hasMore ? list.slice(0, maxVisible) : list;
+            const remainingCount = list.length - maxVisible;
+
+            return `
+              <div class="flex flex-wrap gap-1.5 max-w-md max-h-[58px] overflow-hidden items-center">
+                ${displayList.map(sm => {
+                  const urlText = sm.url || sm.hash || sm.route;
+                  return `
+                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-[#FAFBFC] border border-[#DFE1E6] text-[#172B4D] whitespace-nowrap">
+                      <span class="w-1.5 h-1.5 rounded-full ${sm.status === 'Inactive' ? 'bg-[#FF5630]' : 'bg-[#00875A]'}"></span>
+                      <span class="font-semibold">${sm.title || sm.name}</span>
+                      ${urlText ? `<span class="text-[10px] text-[#5E6C84] font-mono">(${urlText})</span>` : ''}
+                    </span>
+                  `;
+                }).join('')}
+                ${hasMore ? `
+                  <button type="button" class="btn-show-all-submenus inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#EBF8FF] hover:bg-[#BAE6FD] text-[#0284C7] border border-[#BAE6FD] transition-all cursor-pointer shadow-2xs shrink-0" data-menu-id="${r.id}" title="Click to view all ${list.length} submenus in popup">
+                    <span>+${remainingCount} more</span>
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                  </button>
+                ` : ''}
+              </div>
+            `;
+          } 
+        },
+        { 
+          field: 'status', 
+          header: 'Status', 
+          render: (v, r) => {
+            const isActive = v === 'Active' || (v === undefined && r.visible);
+            return `
+              <div class="flex items-center">
+                <input type="checkbox" class="menu-table-status-cb w-4.5 h-4.5 rounded border-[#DFE1E6] text-[#0284C7] accent-[#0284C7] cursor-pointer" data-menu-id="${r.id}" ${isActive ? 'checked' : ''} title="Click to ${isActive ? 'Deactivate' : 'Activate'}" />
+              </div>
+            `;
+          } 
+        }
       ],
       actions: [
         {
           label: 'Edit',
           icon: `<svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>`,
           onClick: (row) => this.showEditModuleModal(row, modulesTable)
+        },
+        {
+          label: (row) => (row.status === 'Active' || (row.status === undefined && row.visible)) ? 'Deactivate' : 'Activate',
+          icon: (row) => (row.status === 'Active' || (row.status === undefined && row.visible))
+            ? `<svg class="w-4 h-4 text-[#FF5630]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>`
+            : `<svg class="w-4 h-4 text-[#00875A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+          onClick: (row) => {
+            const isCurrentlyActive = row.status === 'Active' || (row.status === undefined && row.visible);
+            if (isCurrentlyActive) {
+              Modal.confirm({
+                title: `Deactivate Menu ${row.label}`,
+                message: `Are you sure you want to deactivate menu <strong>${row.label}</strong>? It will be hidden from the active navigation.`,
+                confirmText: 'Deactivate',
+                cancelText: 'Cancel',
+                isDestructive: true,
+                onConfirm: () => {
+                  row.status = 'Inactive';
+                  row.visible = false;
+                  modulesTable.setData(this.state.modulesConfig);
+                  this.saveState();
+                  this.logAudit('Menu Setup', `Deactivated menu ${row.label} (${row.key})`);
+                  Modal.success({
+                    title: 'Menu Deactivated',
+                    message: `Menu <strong>${row.label}</strong> has been deactivated.`,
+                    details: [
+                      { label: 'Menu Name', value: row.label },
+                      { label: 'Status', value: 'Inactive' }
+                    ]
+                  });
+                }
+              });
+            } else {
+              Modal.confirm({
+                title: `Activate Menu ${row.label}`,
+                message: `Are you sure you want to activate menu <strong>${row.label}</strong>?`,
+                confirmText: 'Activate',
+                cancelText: 'Cancel',
+                isDestructive: false,
+                onConfirm: () => {
+                  row.status = 'Active';
+                  row.visible = true;
+                  modulesTable.setData(this.state.modulesConfig);
+                  this.saveState();
+                  this.logAudit('Menu Setup', `Activated menu ${row.label} (${row.key})`);
+                  Modal.success({
+                    title: 'Menu Activated',
+                    message: `Menu <strong>${row.label}</strong> is now Active.`,
+                    details: [
+                      { label: 'Menu Name', value: row.label },
+                      { label: 'Status', value: 'Active' }
+                    ]
+                  });
+                }
+              });
+            }
+          }
         },
         {
           label: 'Delete',
@@ -6140,8 +8067,15 @@ export const SetupView = {
                   this.state.modulesConfig.forEach((m, i) => m.order = i + 1);
                   modulesTable.setData(this.state.modulesConfig);
                   this.saveState();
-                  this.logAudit('Module Studio', `Deleted menu module: ${row.label} (${row.key})`);
-                  Toast.show(`Menu ${row.label} deleted successfully`, 'success', 'Menu Removed');
+                  this.logAudit('Menu Setup', `Deleted menu: ${row.label} (${row.key})`);
+                  Modal.success({
+                    title: 'Menu Deleted',
+                    message: `Menu <strong>${row.label}</strong> and its submenus were successfully deleted.`,
+                    details: [
+                      { label: 'Deleted Menu', value: row.label },
+                      { label: 'Key', value: row.key }
+                    ]
+                  });
                 }
               }
             });
@@ -6150,157 +8084,721 @@ export const SetupView = {
       ]
     });
 
+    // Wire up Status Checkbox click & View All Submenus popup click from the table
+    const tableContainer = document.getElementById('modules-table-container');
+    if (tableContainer) {
+      tableContainer.onclick = (e) => {
+        const moreSubBtn = e.target.closest('.btn-show-all-submenus');
+        if (moreSubBtn) {
+          e.preventDefault();
+          this.showAllSubmenusModal(moreSubBtn.dataset.menuId);
+          return;
+        }
+
+        const statusBox = e.target.closest('.menu-table-status-cb, .menu-table-toggle-btn');
+        if (!statusBox) return;
+        e.preventDefault();
+        const menuId = statusBox.dataset.menuId;
+        const row = this.state.modulesConfig.find(m => m.id === menuId);
+        if (!row) return;
+
+        const isCurrentlyActive = row.status === 'Active' || (row.status === undefined && row.visible);
+        if (isCurrentlyActive) {
+          Modal.confirm({
+            title: `Deactivate Menu ${row.label}`,
+            message: `Are you sure you want to deactivate menu <strong>${row.label}</strong>? It will be hidden from the active navigation.`,
+            confirmText: 'Deactivate',
+            cancelText: 'Cancel',
+            isDestructive: true,
+            onConfirm: () => {
+              row.status = 'Inactive';
+              row.visible = false;
+              modulesTable.setData(this.state.modulesConfig);
+              this.saveState();
+              this.logAudit('Menu Setup', `Deactivated menu ${row.label} (${row.key})`);
+              Modal.success({
+                title: 'Menu Deactivated',
+                message: `Menu <strong>${row.label}</strong> has been deactivated.`,
+                details: [
+                  { label: 'Menu Name', value: row.label },
+                  { label: 'Status', value: 'Inactive' }
+                ]
+              });
+            }
+          });
+        } else {
+          Modal.confirm({
+            title: `Activate Menu ${row.label}`,
+            message: `Are you sure you want to activate menu <strong>${row.label}</strong>?`,
+            confirmText: 'Activate',
+            cancelText: 'Cancel',
+            isDestructive: false,
+            onConfirm: () => {
+              row.status = 'Active';
+              row.visible = true;
+              modulesTable.setData(this.state.modulesConfig);
+              this.saveState();
+              this.logAudit('Menu Setup', `Activated menu ${row.label} (${row.key})`);
+              Modal.success({
+                title: 'Menu Activated',
+                message: `Menu <strong>${row.label}</strong> is now Active.`,
+                details: [
+                  { label: 'Menu Name', value: row.label },
+                  { label: 'Status', value: 'Active' }
+                ]
+              });
+            }
+          });
+        }
+      };
+    }
+
     const addBtn = document.getElementById('btn-add-module');
     if (addBtn) addBtn.onclick = () => this.showAddModuleModal(modulesTable);
   },
 
-  showAddModuleModal(modulesTable) {
-    Modal.open({
-      title: 'Create New Navigation Menu',
-      size: 'md',
-      content: `
-        <form class="space-y-3" onsubmit="return false;">
-          <div>
-            <label class="block text-xs font-semibold text-[#172B4D] mb-1">Menu Display Label <span class="text-rose-500">*</span></label>
-            <input type="text" id="new-mod-label" required class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded uppercase font-bold focus:outline-none focus:border-[#0284C7]" placeholder="e.g. LOGISTICS" />
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Menu Key / Slug <span class="text-rose-500">*</span></label>
-              <input type="text" id="new-mod-key" required class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono lowercase focus:outline-none focus:border-[#0284C7]" placeholder="e.g. logistics" />
+  showAllSubmenusModal(menuId, modulesTable = null) {
+    const mod = this.state.modulesConfig.find(m => m.id === menuId || m.key === menuId);
+    if (!mod) return;
+    let list = this.state.submenusConfig[mod.id] || this.state.submenusConfig[mod.key] || [];
+
+    const getModalContent = () => `
+      <div id="submenus-modal-inner" class="space-y-3.5">
+        <div class="flex flex-wrap items-center justify-between gap-2 p-3 bg-[#F4F5F7] rounded-xl border border-[#DFE1E6]">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-[#EBF8FF] text-[#0284C7] flex items-center justify-center shrink-0">
+              ${mod.icon || '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>'}
             </div>
             <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Landing Route Hash</label>
-              <input type="text" id="new-mod-route" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono focus:outline-none focus:border-[#0284C7]" placeholder="#/logistics/overview" />
+              <h4 class="text-xs font-bold text-[#172B4D]">${mod.label}</h4>
+              <p class="text-[11px] text-[#5E6C84] font-mono">${mod.key || mod.id}</p>
             </div>
           </div>
-          <div>
-            <label class="block text-xs font-semibold text-[#172B4D] mb-1">Authorized Personas (Comma-separated)</label>
-            <input type="text" id="new-mod-roles" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" value="System Administrator, Operations Manager" />
+          <div class="flex items-center gap-2">
+            <span id="submenus-modal-count-badge" class="px-2.5 py-1 rounded-full text-xs font-bold bg-white border border-[#DFE1E6] text-[#0284C7] font-mono shadow-2xs">
+              ${list.length} Submenu${list.length === 1 ? '' : 's'}
+            </span>
+            <button type="button" id="btn-modal-add-sub" class="btn-primary px-2.5 py-1 rounded text-xs font-semibold flex items-center gap-1 cursor-pointer shadow-xs">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              <span>Add Submenu</span>
+            </button>
           </div>
-          <div class="pt-1">
-            <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-semibold text-[#172B4D]">
-              <input type="checkbox" id="new-mod-visible" checked class="rounded text-[#0284C7] focus:ring-0" />
-              <span>Visible in Navigation Sidebar</span>
-            </label>
-          </div>
-        </form>
-      `,
+        </div>
+
+        <div class="border border-[#EBECF0] rounded-xl overflow-hidden shadow-2xs">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-[#FAFBFC] border-b border-[#EBECF0] text-[10px] font-bold text-[#5E6C84] uppercase tracking-wider">
+              <tr>
+                <th class="py-2.5 px-3">#</th>
+                <th class="py-2.5 px-3">Submenu Name</th>
+                <th class="py-2.5 px-3">URL</th>
+                <th class="py-2.5 px-3 text-center">Status</th>
+                <th class="py-2.5 px-3 text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#EBECF0] bg-white">
+              ${list.length === 0 ? `
+                <tr>
+                  <td colspan="5" class="py-6 text-center text-xs text-[#8993A4] italic">
+                    No configured submenus found for this menu. Click "Add Submenu" above to create one.
+                  </td>
+                </tr>
+              ` : list.map((sm, idx) => `
+                <tr class="hover:bg-[#F9FAFB] transition-colors">
+                  <td class="py-2.5 px-3 text-[#8993A4] font-mono text-[11px]">${idx + 1}</td>
+                  <td class="py-2.5 px-3 font-semibold text-[#172B4D]">${sm.title || sm.name}</td>
+                  <td class="py-2.5 px-3 font-mono text-[11px] text-[#0284C7]">${sm.url || sm.hash || sm.route || '—'}</td>
+                  <td class="py-2.5 px-3 text-center">
+                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                      sm.status === 'Inactive' ? 'bg-rose-50 text-[#FF5630] border border-rose-200' : 'bg-emerald-50 text-[#00875A] border border-emerald-200'
+                    }">
+                      <span class="w-1.5 h-1.5 rounded-full ${sm.status === 'Inactive' ? 'bg-[#FF5630]' : 'bg-[#00875A]'}"></span>
+                      ${sm.status || 'Active'}
+                    </span>
+                  </td>
+                  <td class="py-2.5 px-3 text-center">
+                    <div class="inline-flex items-center gap-1 justify-center">
+                      <button type="button" class="btn-sub-edit p-1 rounded hover:bg-[#F0F9FF] text-[#0284C7] transition-colors cursor-pointer" data-idx="${idx}" title="Edit Submenu">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                      </button>
+                      <button type="button" class="btn-sub-toggle p-1 rounded hover:bg-[#F4F5F7] ${sm.status === 'Inactive' ? 'text-[#00875A]' : 'text-[#FF5630]'} transition-colors cursor-pointer" data-idx="${idx}" title="${sm.status === 'Inactive' ? 'Activate Submenu' : 'Deactivate Submenu'}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${sm.status === 'Inactive' ? 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' : 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636'}"/></svg>
+                      </button>
+                      <button type="button" class="btn-sub-del p-1 rounded hover:bg-rose-50 text-[#FF5630] transition-colors cursor-pointer" data-idx="${idx}" title="Delete Submenu">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+
+    const subModal = Modal.open({
+      title: `Submenus in ${mod.label}`,
+      size: 'lg',
+      content: getModalContent(),
       footerButtons: [
-        { label: 'Cancel', type: 'secondary', onClick: (m) => m.close() },
-        {
-          label: 'Create Menu',
-          type: 'primary',
-          onClick: (m) => {
-            const label = document.getElementById('new-mod-label')?.value.trim().toUpperCase();
-            const key = document.getElementById('new-mod-key')?.value.trim().toLowerCase();
-            const route = document.getElementById('new-mod-route')?.value.trim() || `#/${key}/overview`;
-            const rawRoles = document.getElementById('new-mod-roles')?.value;
-            const roles = rawRoles ? rawRoles.split(',').map(r => r.trim()).filter(Boolean) : ['System Administrator'];
-            const visible = document.getElementById('new-mod-visible')?.checked;
-
-            if (!label || !key) {
-              Toast.show('Please provide both Menu Label and Key', 'warning', 'Missing Fields');
-              return;
-            }
-
-            const newMod = {
-              id: key,
-              key: key,
-              label: label,
-              order: this.state.modulesConfig.length + 1,
-              visible: visible,
-              submenusCount: 0,
-              roles: roles,
-              route: route
-            };
-
-            this.state.modulesConfig.push(newMod);
-            this.state.submenusConfig[key] = [];
-            this.logAudit('Module Studio', `Created menu module: ${label} (${key})`);
-            this.saveState();
-            m.close();
-            Toast.show(`Menu "${label}" created successfully`, 'success', 'Menu Added');
-            if (modulesTable) {
-              modulesTable.setData(this.state.modulesConfig);
-            } else {
-              const c = document.getElementById('setup-subpage-content');
-              if (c) this.renderClientMasterStudio(c, 'modules');
-            }
-          }
-        }
+        { label: 'Close', type: 'secondary', onClick: () => Modal.close() }
       ]
     });
+
+    const bindSubmenuModalEvents = () => {
+      const inner = document.getElementById('submenus-modal-inner');
+      if (!inner) return;
+
+      const refreshInner = () => {
+        list = this.state.submenusConfig[mod.id] || this.state.submenusConfig[mod.key] || [];
+        mod.submenusCount = list.length;
+        if (modulesTable) {
+          modulesTable.setData(this.state.modulesConfig);
+        }
+        inner.outerHTML = getModalContent();
+        bindSubmenuModalEvents();
+      };
+
+      const addBtn = document.getElementById('btn-modal-add-sub');
+      if (addBtn) {
+        addBtn.onclick = () => {
+          this.showSubmenuFormModal(mod, null, refreshInner, -1);
+        };
+      }
+
+      inner.querySelectorAll('.btn-sub-edit').forEach(btn => {
+        btn.onclick = () => {
+          const idx = parseInt(btn.dataset.idx, 10);
+          if (list[idx]) {
+            this.showSubmenuFormModal(mod, list[idx], refreshInner, idx);
+          }
+        };
+      });
+
+      inner.querySelectorAll('.btn-sub-toggle').forEach(btn => {
+        btn.onclick = () => {
+          const idx = parseInt(btn.dataset.idx, 10);
+          const sm = list[idx];
+          if (!sm) return;
+          const newStatus = sm.status === 'Inactive' ? 'Active' : 'Inactive';
+          sm.status = newStatus;
+          this.state.submenusConfig[mod.id] = list;
+          this.state.submenusConfig[mod.key] = list;
+          this.saveState();
+          this.logAudit('Menu Setup', `${newStatus === 'Active' ? 'Activated' : 'Deactivated'} submenu: ${sm.title || sm.name} under ${mod.label}`);
+          refreshInner();
+          Toast.show(`Submenu "${sm.title || sm.name}" marked ${newStatus}`, 'info', 'Updated');
+        };
+      });
+
+      inner.querySelectorAll('.btn-sub-del').forEach(btn => {
+        btn.onclick = () => {
+          const idx = parseInt(btn.dataset.idx, 10);
+          const sm = list[idx];
+          if (!sm) return;
+          Modal.confirm({
+            title: `Delete Submenu: ${sm.title || sm.name}`,
+            message: `Are you sure you want to delete submenu <strong>${sm.title || sm.name}</strong> from <strong>${mod.label}</strong>?`,
+            confirmText: 'Delete Submenu',
+            cancelText: 'Cancel',
+            isDestructive: true,
+            onConfirm: () => {
+              list.splice(idx, 1);
+              this.state.submenusConfig[mod.id] = list;
+              this.state.submenusConfig[mod.key] = list;
+              mod.submenusCount = list.length;
+              this.saveState();
+              this.logAudit('Menu Setup', `Deleted submenu: ${sm.title || sm.name} from ${mod.label}`);
+              refreshInner();
+              Toast.show(`Submenu "${sm.title || sm.name}" deleted`, 'info', 'Deleted');
+            }
+          });
+        };
+      });
+    };
+
+    setTimeout(bindSubmenuModalEvents, 40);
   },
 
-  showEditModuleModal(mod, modulesTable) {
+  showSubmenuFormModal(mod, sm = null, onSaved = null, editIndex = -1) {
+    const isEdit = sm !== null && editIndex >= 0;
+    const currentName = sm?.title || sm?.name || '';
+    const currentUrl = sm?.url || sm?.hash || sm?.route || '';
+    const currentStatus = sm?.status || 'Active';
+
     Modal.open({
-      title: `Edit Menu: ${mod.label}`,
+      title: isEdit ? `Edit Submenu: ${currentName}` : `Add Submenu to ${mod.label}`,
       size: 'md',
       content: `
-        <form class="space-y-3" onsubmit="return false;">
+        <form id="submenu-single-form" class="space-y-4 text-xs" onsubmit="return false;">
           <div>
-            <label class="block text-xs font-semibold text-[#172B4D] mb-1">Menu Display Label <span class="text-rose-500">*</span></label>
-            <input type="text" id="edit-mod-label" required value="${mod.label}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded uppercase font-bold focus:outline-none focus:border-[#0284C7]" />
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Menu Key / Slug</label>
-              <input type="text" id="edit-mod-key" value="${mod.key}" class="w-full text-xs px-3 py-1.5 bg-[#EBECF0] border border-[#DFE1E6] rounded font-mono text-[#5E6C84]" readonly />
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Landing Route Hash</label>
-              <input type="text" id="edit-mod-route" value="${mod.route}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono focus:outline-none focus:border-[#0284C7]" />
-            </div>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-[#172B4D] mb-1">Authorized Personas (Comma-separated)</label>
-            <input type="text" id="edit-mod-roles" value="${(mod.roles || []).join(', ')}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" />
-          </div>
-          <div class="pt-1">
-            <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-semibold text-[#172B4D]">
-              <input type="checkbox" id="edit-mod-visible" ${mod.visible ? 'checked' : ''} class="rounded text-[#0284C7] focus:ring-0" />
-              <span>Visible in Navigation Sidebar</span>
+            <label class="block text-xs font-semibold text-[#172B4D] mb-1">
+              Submenu Name <span class="text-rose-500">*</span>
             </label>
+            <input 
+              type="text" 
+              id="sub-modal-name" 
+              class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] font-semibold text-[#172B4D]" 
+              placeholder="e.g. Daily Procurement Summary" 
+              value="${currentName}" 
+              required 
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-[#172B4D] mb-1">
+              URL / Route
+            </label>
+            <input 
+              type="text" 
+              id="sub-modal-url" 
+              class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] font-mono text-[#0284C7]" 
+              placeholder="#/${mod.key || mod.id}/sub-route" 
+              value="${currentUrl}" 
+            />
+            <p class="text-[10px] text-[#5E6C84] mt-1">Leave blank to automatically construct route from submenu name.</p>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-[#172B4D] mb-1">
+              Status
+            </label>
+            <select id="sub-modal-status" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] font-medium text-[#172B4D]">
+              <option value="Active" ${currentStatus === 'Active' ? 'selected' : ''}>Active</option>
+              <option value="Inactive" ${currentStatus === 'Inactive' ? 'selected' : ''}>Inactive</option>
+            </select>
           </div>
         </form>
       `,
       footerButtons: [
         { label: 'Cancel', type: 'secondary', onClick: (m) => m.close() },
         {
-          label: 'Save Changes',
+          label: isEdit ? 'Save Changes' : 'Add Submenu',
           type: 'primary',
           onClick: (m) => {
-            const label = document.getElementById('edit-mod-label')?.value.trim().toUpperCase();
-            const route = document.getElementById('edit-mod-route')?.value.trim();
-            const rawRoles = document.getElementById('edit-mod-roles')?.value;
-            const roles = rawRoles ? rawRoles.split(',').map(r => r.trim()).filter(Boolean) : ['System Administrator'];
-            const visible = document.getElementById('edit-mod-visible')?.checked;
-
-            if (!label) {
-              Toast.show('Menu label cannot be empty', 'warning');
+            const name = document.getElementById('sub-modal-name')?.value.trim();
+            if (!name) {
+              Toast.show('Please enter a submenu name', 'warning', 'Required');
+              document.getElementById('sub-modal-name')?.focus();
               return;
             }
 
-            mod.label = label;
-            mod.route = route;
-            mod.roles = roles;
-            mod.visible = visible;
+            const inputUrl = document.getElementById('sub-modal-url')?.value.trim();
+            const status = document.getElementById('sub-modal-status')?.value || 'Active';
+            const modKey = mod.key || mod.id;
+            const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+            const finalUrl = inputUrl || `#/${modKey}/${slug}`;
 
-            this.logAudit('Module Studio', `Updated menu module: ${mod.label}`);
+            let list = this.state.submenusConfig[mod.id] || this.state.submenusConfig[mod.key] || [];
+
+            if (isEdit) {
+              list[editIndex] = {
+                ...list[editIndex],
+                id: list[editIndex].id || slug,
+                title: name,
+                name: name,
+                url: finalUrl,
+                route: finalUrl,
+                hash: finalUrl,
+                status: status
+              };
+              this.logAudit('Menu Setup', `Updated submenu: ${name} (${finalUrl}) in ${mod.label}`);
+            } else {
+              const newSub = {
+                id: slug,
+                title: name,
+                name: name,
+                url: finalUrl,
+                route: finalUrl,
+                hash: finalUrl,
+                status: status,
+                tabs: [
+                  { id: slug, label: name, route: finalUrl, type: 'custom', badge: '' }
+                ]
+              };
+              list.push(newSub);
+              this.logAudit('Menu Setup', `Added new submenu: ${name} (${finalUrl}) to ${mod.label}`);
+            }
+
+            this.state.submenusConfig[mod.id] = list;
+            this.state.submenusConfig[mod.key] = list;
+            mod.submenusCount = list.length;
             this.saveState();
             m.close();
-            Toast.show(`Menu "${mod.label}" updated successfully`, 'success', 'Saved');
-            if (modulesTable) {
-              modulesTable.setData(this.state.modulesConfig);
-            } else {
-              const c = document.getElementById('setup-subpage-content');
-              if (c) this.renderClientMasterStudio(c, 'modules');
-            }
+            Toast.show(isEdit ? `Submenu "${name}" updated!` : `Submenu "${name}" added!`, 'success', 'Saved');
+
+            if (onSaved) onSaved();
           }
         }
       ]
     });
+
+    // Auto-generate URL when typing name in Add mode
+    if (!isEdit) {
+      setTimeout(() => {
+        const nameInput = document.getElementById('sub-modal-name');
+        const urlInput = document.getElementById('sub-modal-url');
+        if (nameInput && urlInput) {
+          nameInput.oninput = () => {
+            if (!urlInput.dataset.manualEdit) {
+              const slug = nameInput.value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+              urlInput.value = slug ? `#/${mod.key || mod.id}/${slug}` : '';
+            }
+          };
+          urlInput.oninput = () => {
+            urlInput.dataset.manualEdit = 'true';
+          };
+        }
+      }, 40);
+    }
+  },
+
+  showAddModuleModal(modulesTable = null) {
+    this.showMenuFormModal(null, false, modulesTable);
+  },
+
+  showEditModuleModal(mod, modulesTable = null) {
+    this.showMenuFormModal(mod, true, modulesTable);
+  },
+
+  showMenuFormModal(mod = null, isEdit = false, modulesTable = null) {
+    // If cache is small and window.lucide has loaded, refresh cache
+    if ((!this._lucideIconsCache || this._lucideIconsCache.length < 100) && typeof window !== 'undefined' && window.lucide && window.lucide.icons) {
+      this._lucideIconsCache = null;
+    }
+    const lucideIcons = this.getLucideIconLibrary();
+    const currentName = mod?.label || '';
+    let currentIconKey = mod ? this.getModuleIconId(mod) : 'shopping-cart';
+    const currentStatus = mod?.status || (mod?.visible === false ? 'Inactive' : 'Active');
+
+    // Existing submenus
+    let existingSubmenus = [];
+    if (mod) {
+      existingSubmenus = this.state.submenusConfig[mod.id] || this.state.submenusConfig[mod.key] || [];
+    }
+    if (!existingSubmenus || existingSubmenus.length === 0) {
+      existingSubmenus = [{ name: '', url: '', status: 'Active' }];
+    }
+
+    const currentIconItem = lucideIcons.find(i => i.id === currentIconKey) || lucideIcons[0];
+
+    Modal.open({
+      title: isEdit ? `Edit Menu: ${currentName}` : 'Add Menu',
+      size: 'xl',
+      content: `
+        <form id="menu-setup-form" class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start text-xs" onsubmit="return false;">
+          <!-- 1. Main Menu Section -->
+          <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-3.5 flex flex-col h-full">
+            <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
+              <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-2">
+                <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                Main Menu
+              </span>
+              ${isEdit ? `<span class="text-[10px] font-bold text-[#0284C7] bg-[#F0F9FF] px-2.5 py-1 rounded border border-[#BAE6FD] font-mono">${mod.id}</span>` : ''}
+            </div>
+
+            <div class="space-y-3 flex-1 flex flex-col">
+              <!-- Menu Name & Status in 2 columns -->
+              <div class="grid grid-cols-12 gap-3 items-end">
+                <div class="col-span-8 sm:col-span-9">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    Menu Name <span class="text-rose-500">*</span>
+                  </label>
+                  <input type="text" id="menu-modal-name" value="${currentName}" placeholder="e.g. Procurement & Inward" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] font-semibold text-[#172B4D]" />
+                </div>
+
+                <div class="col-span-4 sm:col-span-3">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    Status
+                  </label>
+                  <div class="flex items-center h-[38px]">
+                    <label class="inline-flex items-center cursor-pointer select-none">
+                      <input type="checkbox" id="menu-modal-status-cb" class="w-4.5 h-4.5 rounded border-[#DFE1E6] text-[#0284C7] accent-[#0284C7] cursor-pointer" ${currentStatus === 'Active' ? 'checked' : ''} title="Menu Status (Checked: Active, Unchecked: Inactive)" />
+                    </label>
+                    <input type="hidden" id="menu-modal-status" value="${currentStatus}" />
+                  </div>
+                </div>
+              </div>
+
+              <input type="hidden" id="menu-modal-icon-val" value="${currentIconItem.id}" />
+
+              <!-- Menu Icon -->
+              <div class="flex-1 flex flex-col space-y-2">
+                <div class="flex items-center justify-between">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider">
+                    Menu Icon
+                  </label>
+                  <span id="lucide-count-badge" class="text-[10px] text-[#5E6C84] font-medium font-mono">${lucideIcons.length} icons</span>
+                </div>
+
+                <!-- Visual Grid of Lucide Icons showing all icons -->
+                <div id="lucide-icon-grid" class="grid grid-cols-4 sm:grid-cols-5 gap-2 max-h-[210px] overflow-y-auto p-2 border border-[#DFE1E6] rounded-lg bg-white shadow-2xs">
+                  <!-- Populated by JavaScript below -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Sub Menu Section (Multiple Sub Menus) -->
+          <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-3.5 flex flex-col h-full">
+            <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
+              <div>
+                <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-2">
+                  <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                  Sub Menu
+                </span>
+              </div>
+              <button type="button" id="btn-add-sub-item" class="btn-secondary px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 hover:bg-[#EBECF0] transition-colors cursor-pointer text-[#0284C7] border border-[#DFE1E6]">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                <span>Add Sub Menu</span>
+              </button>
+            </div>
+
+            <!-- Submenus Header & Rows Container -->
+            <div class="space-y-2 flex-1 flex flex-col">
+              <div class="grid grid-cols-12 gap-2 px-1 text-[10px] font-bold text-[#5E6C84] uppercase tracking-wider">
+                <div class="col-span-5">Sub Menu Name</div>
+                <div class="col-span-4">Url</div>
+                <div class="col-span-2 text-center">Status</div>
+                <div class="col-span-1 text-center">Action</div>
+              </div>
+
+              <div id="submenus-list-container" class="space-y-2 max-h-[300px] overflow-y-auto pr-1 flex-1">
+                <!-- Dynamic Rows Inserted Here -->
+              </div>
+            </div>
+          </div>
+        </form>
+      `,
+      footerButtons: [
+        { label: 'Cancel', type: 'secondary', onClick: (m) => m.close() },
+        {
+          label: isEdit ? 'Save Changes' : 'Save Menu',
+          type: 'primary',
+          onClick: (m) => {
+            const menuName = document.getElementById('menu-modal-name')?.value.trim();
+            if (!menuName) {
+              Toast.show('Please enter a Menu Name', 'warning', 'Missing Field');
+              document.getElementById('menu-modal-name')?.focus();
+              return;
+            }
+
+            const iconKey = document.getElementById('menu-modal-icon-val')?.value || 'shopping-cart';
+            const matchedIcon = lucideIcons.find(i => i.id === iconKey) || lucideIcons[0];
+            const iconSvg = matchedIcon.svg;
+            const menuStatus = document.getElementById('menu-modal-status')?.value || 'Active';
+            const isVisible = menuStatus === 'Active';
+
+            // Collect submenus
+            const subRows = document.querySelectorAll('.submenu-item-row');
+            const submenus = [];
+            const modKey = isEdit ? mod.key : menuName.toLowerCase().replace(/[^a-z0-9]/g, '-');
+
+            subRows.forEach(row => {
+              const sName = row.querySelector('.sub-item-name')?.value.trim();
+              const sUrl = row.querySelector('.sub-item-url')?.value.trim();
+              const sStatus = row.querySelector('.sub-item-status')?.value || 'Active';
+              if (sName || sUrl) {
+                const sId = (sName || 'sub').toLowerCase().replace(/[^a-z0-9]/g, '-');
+                const finalUrl = sUrl || `#/${modKey}/${sId}`;
+                submenus.push({
+                  id: sId,
+                  title: sName || sId,
+                  name: sName || sId,
+                  url: finalUrl,
+                  route: finalUrl,
+                  hash: finalUrl,
+                  status: sStatus,
+                  tabs: [
+                    { id: sId, label: sName || sId, route: finalUrl, type: 'custom', badge: '' }
+                  ]
+                });
+              }
+            });
+
+            if (isEdit) {
+              mod.label = menuName;
+              mod.icon = iconSvg;
+              mod.iconKey = iconKey;
+              mod.status = menuStatus;
+              mod.visible = isVisible;
+              mod.submenusCount = submenus.length;
+              if (submenus.length > 0 && submenus[0].url) {
+                mod.route = submenus[0].url;
+              }
+              this.state.submenusConfig[mod.id] = submenus;
+              this.state.submenusConfig[mod.key] = submenus;
+              this.logAudit('Menu Setup', `Updated menu: ${menuName} (${mod.key}) with ${submenus.length} submenus`);
+            } else {
+              const newMod = {
+                id: modKey,
+                key: modKey,
+                label: menuName,
+                icon: iconSvg,
+                iconKey: iconKey,
+                status: menuStatus,
+                visible: isVisible,
+                order: this.state.modulesConfig.length + 1,
+                submenusCount: submenus.length,
+                roles: ['System Administrator', 'Operations Manager'],
+                route: submenus[0]?.url || `#/${modKey}/overview`
+              };
+              this.state.modulesConfig.push(newMod);
+              this.state.submenusConfig[modKey] = submenus;
+              this.logAudit('Menu Setup', `Registered menu: ${menuName} (${modKey}) with ${submenus.length} submenus`);
+            }
+
+            this.saveState();
+            m.close();
+
+            if (modulesTable) {
+              modulesTable.setData(this.state.modulesConfig);
+            } else {
+              const c = document.getElementById('setup-subpage-content');
+              if (c) this.renderModuleStudioTab(c);
+            }
+
+            // Confirmation Message Popup
+            Modal.success({
+              title: isEdit ? 'Menu Updated Successfully' : 'Menu Registered Successfully',
+              message: `Menu <strong>${menuName}</strong> has been configured with Lucide icon <code>lucide:${iconKey}</code> and <strong>${submenus.length}</strong> sub menu(s).`,
+              details: [
+                { label: 'Menu Name', value: menuName },
+                { label: 'Lucide Icon', value: `lucide:${iconKey}` },
+                { label: 'Status', value: menuStatus },
+                { label: 'Sub Menus Count', value: `${submenus.length} Sub Menus` },
+                { label: 'Sub Menus', value: submenus.map(s => `${s.title || s.name}${s.url ? ` (${s.url})` : ''} [${s.status}]`).join('; ') || 'None' }
+              ]
+            });
+          }
+        }
+      ]
+    });
+
+    // 1. Status Checkbox for Main Menu
+    const statusCb = document.getElementById('menu-modal-status-cb');
+    const statusInput = document.getElementById('menu-modal-status');
+
+    if (statusCb && statusInput) {
+      statusCb.onchange = () => {
+        statusInput.value = statusCb.checked ? 'Active' : 'Inactive';
+      };
+    }
+
+    // 2. Populate dynamic Lucide Icon Grid showing all icons + search
+    const iconGrid = document.getElementById('lucide-icon-grid');
+    const selectedHiddenVal = document.getElementById('menu-modal-icon-val');
+    const countBadge = document.getElementById('lucide-count-badge');
+
+    const renderLucideGrid = (filterTerm = '') => {
+      if (!iconGrid) return;
+      const term = filterTerm.trim().toLowerCase();
+      const filtered = term 
+        ? lucideIcons.filter(item => item.id.includes(term) || item.name.includes(term) || (item.label && item.label.toLowerCase().includes(term)))
+        : lucideIcons;
+
+      if (countBadge) {
+        countBadge.textContent = `${filtered.length} icons`;
+      }
+
+      if (filtered.length === 0) {
+        iconGrid.innerHTML = `
+          <div class="col-span-full py-6 text-center text-xs text-[#8993A4]">
+            No icons match "<strong>${filterTerm}</strong>"
+          </div>
+        `;
+        return;
+      }
+
+      iconGrid.innerHTML = filtered.map(item => {
+        const isSelected = item.id === selectedHiddenVal?.value;
+        return `
+          <button type="button" data-icon-id="${item.id}" class="lucide-icon-tile p-2 rounded-lg border text-left flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
+            isSelected 
+              ? 'border-[#0284C7] bg-[#F0F9FF] text-[#0284C7] ring-2 ring-[#0284C7]/20 shadow-2xs font-bold' 
+              : 'border-[#DFE1E6] bg-white hover:border-[#0284C7] hover:bg-[#F4F5F7] text-[#172B4D]'
+          }" title="${item.label || item.name}">
+            <div class="w-5 h-5 flex items-center justify-center shrink-0">
+              ${item.svg}
+            </div>
+            <span class="text-[9.5px] font-mono truncate w-full text-center">${item.name}</span>
+          </button>
+        `;
+      }).join('');
+    };
+
+    if (iconGrid) {
+      iconGrid.onclick = (e) => {
+        const tile = e.target.closest('.lucide-icon-tile');
+        if (!tile) return;
+        const iconId = tile.dataset.iconId;
+        if (selectedHiddenVal) selectedHiddenVal.value = iconId;
+
+        iconGrid.querySelectorAll('.lucide-icon-tile').forEach(t => {
+          if (t.dataset.iconId === iconId) {
+            t.className = 'lucide-icon-tile p-2 rounded-lg border text-left flex flex-col items-center justify-center gap-1 transition-all cursor-pointer border-[#0284C7] bg-[#F0F9FF] text-[#0284C7] ring-2 ring-[#0284C7]/20 shadow-2xs font-bold';
+          } else {
+            t.className = 'lucide-icon-tile p-2 rounded-lg border text-left flex flex-col items-center justify-center gap-1 transition-all cursor-pointer border-[#DFE1E6] bg-white hover:border-[#0284C7] hover:bg-[#F4F5F7] text-[#172B4D]';
+          }
+        });
+      };
+    }
+
+    renderLucideGrid();
+
+    // 3. Populate dynamic Submenu Rows & event listeners
+    const listContainer = document.getElementById('submenus-list-container');
+    const addSubRow = (sub = { name: '', url: '', status: 'Active' }) => {
+      if (!listContainer) return;
+      const isActive = sub.status !== 'Inactive';
+      const rowEl = document.createElement('div');
+      rowEl.className = 'submenu-item-row grid grid-cols-12 gap-2 items-center py-1';
+      rowEl.innerHTML = `
+        <div class="col-span-5">
+          <input type="text" class="sub-item-name w-full text-xs px-2.5 py-1.5 border border-[#DFE1E6] rounded-md focus:outline-none focus:border-[#0284C7] font-semibold text-[#172B4D] bg-white" placeholder="Sub Menu Name" value="${sub.name || sub.title || ''}" />
+        </div>
+        <div class="col-span-4">
+          <input type="text" class="sub-item-url w-full text-xs px-2.5 py-1.5 border border-[#DFE1E6] rounded-md focus:outline-none focus:border-[#0284C7] font-mono text-[#0284C7] bg-white" placeholder="Url" value="${sub.url || sub.hash || sub.route || ''}" />
+        </div>
+        <div class="col-span-2 flex items-center justify-center">
+          <label class="inline-flex items-center cursor-pointer select-none">
+            <input type="checkbox" class="sub-item-status-cb w-4.5 h-4.5 rounded border-[#DFE1E6] text-[#0284C7] accent-[#0284C7] cursor-pointer" ${isActive ? 'checked' : ''} title="Submenu Status (Checked: Active, Unchecked: Inactive)" />
+          </label>
+          <input type="hidden" class="sub-item-status" value="${sub.status || 'Active'}" />
+        </div>
+        <div class="col-span-1 flex items-center justify-center">
+          <button type="button" class="btn-remove-sub p-1.5 text-[#FF5630] hover:bg-rose-50 rounded-md transition-colors cursor-pointer" title="Remove Sub Menu">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          </button>
+        </div>
+      `;
+
+      const subCb = rowEl.querySelector('.sub-item-status-cb');
+      const subInput = rowEl.querySelector('.sub-item-status');
+
+      if (subCb && subInput) {
+        subCb.onchange = () => {
+          subInput.value = subCb.checked ? 'Active' : 'Inactive';
+        };
+      }
+
+      rowEl.querySelector('.btn-remove-sub').onclick = () => {
+        rowEl.remove();
+        if (listContainer.children.length === 0) {
+          addSubRow();
+        }
+      };
+
+      listContainer.appendChild(rowEl);
+    };
+
+    existingSubmenus.forEach(s => addSubRow(s));
+
+    const addSubBtn = document.getElementById('btn-add-sub-item');
+    if (addSubBtn) {
+      addSubBtn.onclick = () => addSubRow({ name: '', url: '', status: 'Active' });
+    }
   },
 
   // =========================================================================
@@ -6316,7 +8814,6 @@ export const SetupView = {
         <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
           <div>
             <h1 class="text-xl font-extrabold text-[#172B4D]">Submenus & Dynamic Tabs Studio</h1>
-            <p class="text-xs text-[#5E6C84]">Configure hierarchical submenus and navigation tabs for each ERP module.</p>
           </div>
           <div class="flex items-center gap-2">
             <div class="flex items-center gap-1.5 mr-2">
@@ -6329,7 +8826,7 @@ export const SetupView = {
             </div>
             <button id="btn-add-submenu" class="btn-primary px-3 py-1.5 rounded text-xs flex items-center gap-1.5 shadow-xs cursor-pointer">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-              <span>+ Add Submenu</span>
+              <span>Add Submenu</span>
             </button>
           </div>
         </div>
@@ -6347,7 +8844,7 @@ export const SetupView = {
           <div class="space-y-3">
             ${submenus.length === 0 ? `
               <div class="bg-white rounded-xl border border-[#DFE1E6] p-8 text-center text-xs text-[#5E6C84]">
-                No submenus found for ${selectedMod?.label || selectedModKey}. Click "+ Add Submenu" to create one.
+                No submenus found for ${selectedMod?.label || selectedModKey}. Click "Add Submenu" to create one.
               </div>
             ` : submenus.map(sm => `
               <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-none p-3.5">
@@ -6425,7 +8922,7 @@ export const SetupView = {
       containerId: 'submenus-table-container',
       data: submenus,
       keyField: 'id',
-      tableTitle: `Submenus in ${selectedMod?.label || selectedModKey} (CRUD)`,
+      tableTitle: `Submenus in ${selectedMod?.label || selectedModKey}`,
       searchable: true,
       exportable: true,
       pageSize: 10,
@@ -6770,6 +9267,8 @@ export const SetupView = {
   // 6. DYNAMIC FIELD & FORM BUILDER TAB
   // =========================================================================
   renderFieldFormBuilderTab(container) {
+    this.renderUnderConstruction(container);
+    return;
     const selectedFormKey = this.selectedFormForBuilder || 'rm-purchase-inward';
     const formConfig = this.state.formsConfig[selectedFormKey] || Object.values(this.state.formsConfig)[0];
     const persona = this.state.previewPersona || 'System Administrator';
@@ -6800,7 +9299,7 @@ export const SetupView = {
             <div class="bg-white border border-[#DFE1E6] rounded-xl p-3 shadow-none">
               <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2 mb-2.5">
                 <span class="text-xs font-bold text-[#172B4D]">Configured Form Fields</span>
-                <button id="btn-add-form-field" class="btn-primary px-2.5 py-0.5 rounded text-xs font-bold cursor-pointer">+ Add Field</button>
+                <button id="btn-add-form-field" class="btn-primary px-2.5 py-0.5 rounded text-xs font-bold cursor-pointer">Add Field</button>
               </div>
 
               <div class="space-y-3 max-h-[580px] overflow-y-auto pr-1">
@@ -7052,6 +9551,91 @@ export const SetupView = {
   // 7. AUDIT & CONFIGURATION LOGS TAB
   // =========================================================================
   renderAuditLogsTab(container) {
+    if (!this.auditViewMode) this.auditViewMode = 'timeline';
+    if (!this.auditSearchQuery) this.auditSearchQuery = '';
+    if (!this.auditEntityFilter) this.auditEntityFilter = 'ALL';
+
+    const getEntityMeta = (entity, action) => {
+      const e = (entity || '').toLowerCase();
+      const a = (action || '').toLowerCase();
+      if (e.includes('company') || e.includes('client')) {
+        return {
+          border: 'border-[#0284C7]',
+          bg: 'bg-[#F0F9FF]',
+          text: 'text-[#0284C7]',
+          badgeBg: 'bg-[#E0F2FE] text-[#0369A1] border-[#BAE6FD]',
+          icon: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>`
+        };
+      }
+      if (e.includes('user') || a.includes('user')) {
+        return {
+          border: 'border-[#00875A]',
+          bg: 'bg-[#E3FCEF]',
+          text: 'text-[#00875A]',
+          badgeBg: 'bg-[#E3FCEF] text-[#006644] border-[#ABF5D1]',
+          icon: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>`
+        };
+      }
+      if (e.includes('role') || e.includes('permission')) {
+        return {
+          border: 'border-[#6554C0]',
+          bg: 'bg-[#EAE6FF]',
+          text: 'text-[#6554C0]',
+          badgeBg: 'bg-[#EAE6FF] text-[#5243AA] border-[#D3C7F8]',
+          icon: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>`
+        };
+      }
+      if (e.includes('form') || e.includes('field') || a.includes('schema')) {
+        return {
+          border: 'border-[#FF991F]',
+          bg: 'bg-[#FFF0B3]',
+          text: 'text-[#974F0C]',
+          badgeBg: 'bg-[#FFF0B3] text-[#8F4D00] border-[#FFE380]',
+          icon: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>`
+        };
+      }
+      if (e.includes('module') || e.includes('menu') || e.includes('sidebar')) {
+        return {
+          border: 'border-[#4C9AFF]',
+          bg: 'bg-[#DEEBFF]',
+          text: 'text-[#0052CC]',
+          badgeBg: 'bg-[#DEEBFF] text-[#0052CC] border-[#B3D4FF]',
+          icon: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>`
+        };
+      }
+      return {
+        border: 'border-[#0284C7]',
+        bg: 'bg-[#F0F9FF]',
+        text: 'text-[#0284C7]',
+        badgeBg: 'bg-[#F4F5F7] text-[#42526E] border-[#DFE1E6]',
+        icon: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`
+      };
+    };
+
+    const getFilteredLogs = () => {
+      let logs = [...(this.state.auditLogs || [])];
+      if (this.auditEntityFilter && this.auditEntityFilter !== 'ALL') {
+        logs = logs.filter(l => l.entity === this.auditEntityFilter);
+      }
+      if (this.auditSearchQuery && this.auditSearchQuery.trim() !== '') {
+        const q = this.auditSearchQuery.toLowerCase().trim();
+        logs = logs.filter(l => 
+          (l.id && l.id.toLowerCase().includes(q)) ||
+          (l.user && l.user.toLowerCase().includes(q)) ||
+          (l.role && l.role.toLowerCase().includes(q)) ||
+          (l.company && l.company.toLowerCase().includes(q)) ||
+          (l.entity && l.entity.toLowerCase().includes(q)) ||
+          (l.action && l.action.toLowerCase().includes(q)) ||
+          (l.diff && l.diff.toLowerCase().includes(q)) ||
+          (l.timestamp && l.timestamp.toLowerCase().includes(q))
+        );
+      }
+      return logs;
+    };
+
+    const entities = ['ALL', ...new Set((this.state.auditLogs || []).map(l => l.entity).filter(Boolean))];
+    const filteredLogs = getFilteredLogs();
+
     container.innerHTML = `
       <div class="space-y-4 animate-fade-in">
         <!-- Status Bar -->
@@ -7074,82 +9658,210 @@ export const SetupView = {
           </div>
         </div>
 
-        <!-- Version Snapshots -->
-        <div class="bg-white border border-[#DFE1E6] rounded-xl p-3 shadow-none">
-          <div class="text-xs font-bold text-[#172B4D] mb-2">Safe Rollback Snapshots</div>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-            ${this.state.versionHistory.map(v => `
-              <div class="border ${v.isCurrent ? 'border-[#0369A1] bg-[#F0F9FF]' : 'border-[#DFE1E6] bg-white'} rounded-lg p-2.5 flex flex-col justify-between">
-                <div>
-                  <div class="flex items-center justify-between">
-                    <span class="font-bold text-xs text-[#172B4D] font-mono">${v.version}</span>
-                    ${v.isCurrent ? `<span class="lozenge lozenge-inprogress text-[9px]">Live</span>` : ''}
-                  </div>
-                  <div class="text-[10px] text-[#5E6C84] mt-0.5">${v.date}</div>
-                  <div class="text-[11px] text-[#172B4D] mt-1 truncate">${v.note}</div>
-                </div>
-                <div class="mt-2 pt-1.5 border-t border-[#EBECF0] flex justify-end">
-                  ${!v.isCurrent ? `
-                    <button data-action="rollback" data-version="${v.version}" class="text-[11px] font-bold text-[#BF2600] hover:underline cursor-pointer">Rollback</button>
-                  ` : `
-                    <span class="text-[10px] font-bold text-[#006644]">Active</span>
-                  `}
-                </div>
+        <!-- Audit History Timeline Container -->
+        <div class="bg-white border border-[#DFE1E6] rounded-xl p-4 shadow-none space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#EBECF0] pb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-[#F0F9FF] border border-[#BAE6FD] flex items-center justify-center text-[#0284C7] shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
               </div>
-            `).join('')}
+              <div>
+                <h3 class="text-sm font-bold text-[#172B4D]">Audit History & Activity Timeline</h3>
+                <p class="text-[11px] text-[#5E6C84]">Chronological trail of configuration updates, role assignments, and governance changes</p>
+              </div>
+            </div>
+
+            <!-- View Toggle & Stats -->
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-[#F4F5F7] text-[#42526E] border border-[#DFE1E6] font-mono">
+                ${filteredLogs.length} Events
+              </span>
+              <div class="inline-flex rounded-lg border border-[#DFE1E6] p-0.5 bg-[#F4F5F7]">
+                <button type="button" id="btn-view-timeline" class="px-2.5 py-1 text-xs font-semibold rounded-md transition-all cursor-pointer ${
+                  this.auditViewMode === 'timeline' 
+                    ? 'bg-white text-[#0284C7] shadow-2xs font-bold' 
+                    : 'text-[#5E6C84] hover:text-[#172B4D]'
+                }">
+                  Timeline
+                </button>
+                <button type="button" id="btn-view-table" class="px-2.5 py-1 text-xs font-semibold rounded-md transition-all cursor-pointer ${
+                  this.auditViewMode === 'table' 
+                    ? 'bg-white text-[#0284C7] shadow-2xs font-bold' 
+                    : 'text-[#5E6C84] hover:text-[#172B4D]'
+                }">
+                  Table
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filters Row -->
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2 flex-1 min-w-[240px] max-w-md">
+              <div class="relative w-full">
+                <input 
+                  type="text" 
+                  id="audit-search-input" 
+                  placeholder="Search timeline by keyword, user, action or entity..." 
+                  value="${this.auditSearchQuery || ''}"
+                  class="w-full text-xs pl-8 pr-3 py-1.5 bg-[#FAFBFC] border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] focus:bg-white text-[#172B4D]" 
+                />
+                <svg class="w-3.5 h-3.5 text-[#8993A4] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 flex-wrap">
+              <div class="flex items-center gap-1.5">
+                <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider">Entity:</span>
+                <select id="audit-entity-filter" class="text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] text-[#172B4D] font-medium cursor-pointer">
+                  ${entities.map(e => `
+                    <option value="${e}" ${this.auditEntityFilter === e ? 'selected' : ''}>
+                      ${e === 'ALL' ? 'All Entities' : e}
+                    </option>
+                  `).join('')}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic View Container (Timeline / Table) -->
+          <div id="audit-view-container" class="pt-2">
+            ${this.auditViewMode === 'timeline' ? `
+              <!-- Timeline Layout -->
+              <div class="relative pl-6 sm:pl-10 space-y-6 before:content-[''] before:absolute before:left-3 sm:before:left-5 before:top-3 before:bottom-3 before:w-0.5 before:bg-[#DFE1E6] py-2">
+                ${filteredLogs.length === 0 ? `
+                  <div class="p-8 text-center bg-[#FAFBFC] rounded-xl border border-[#DFE1E6] text-xs text-[#5E6C84]">
+                    No audit records found matching your filters.
+                  </div>
+                ` : filteredLogs.map(log => {
+                  const meta = getEntityMeta(log.entity, log.action);
+                  const initials = (log.user || 'US').split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+                  return `
+                    <div class="relative group">
+                      <!-- Timeline Node Dot / Icon -->
+                      <div class="absolute -left-[30px] sm:-left-[38px] top-1.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full ${meta.bg} ${meta.border} border-2 flex items-center justify-center ${meta.text} shadow-xs shrink-0 ring-4 ring-white">
+                        ${meta.icon}
+                      </div>
+
+                      <!-- Timeline Event Card -->
+                      <div class="bg-white border border-[#DFE1E6] hover:border-[#BAE6FD] hover:shadow-xs rounded-xl p-3.5 sm:p-4 transition-all space-y-2.5">
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#F4F5F7] pb-2">
+                          <div class="flex items-center gap-2 flex-wrap">
+                            <span class="font-mono text-[11px] font-bold text-[#0284C7] bg-[#F0F9FF] px-2 py-0.5 rounded border border-[#BAE6FD]">${log.id}</span>
+                            <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-[#5E6C84]">
+                              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                              ${log.timestamp}
+                            </span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10.5px] font-bold ${meta.badgeBg} border">
+                              ${log.entity}
+                            </span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10.5px] font-semibold bg-[#F4F5F7] text-[#172B4D] border border-[#EBECF0]">
+                              ${log.action}
+                            </span>
+                          </div>
+                          <div>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644] border border-[#ABF5D1]">
+                              <span class="w-1.5 h-1.5 rounded-full bg-[#36B37E]"></span>
+                              ${log.status || 'Published'}
+                            </span>
+                          </div>
+                        </div>
+
+                        <!-- Diff / Change Note Box -->
+                        <div class="text-xs text-[#172B4D] font-medium leading-relaxed bg-[#FAFBFC] p-2.5 rounded-lg border border-[#EBECF0]">
+                          ${log.diff}
+                        </div>
+
+                        <!-- User & Corporate Client Footer -->
+                        <div class="flex flex-wrap items-center justify-between gap-2 text-xs pt-0.5 text-[#5E6C84]">
+                          <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-[#E0F2FE] text-[#0284C7] font-extrabold text-[10px] flex items-center justify-center border border-[#BAE6FD]">
+                              ${initials}
+                            </div>
+                            <span class="font-bold text-[#172B4D] text-xs">${log.user}</span>
+                            <span class="text-[11px] font-medium text-[#5E6C84]">(${log.role || 'System Administrator'})</span>
+                          </div>
+                          <div class="flex items-center gap-1.5 text-[11px]">
+                            <svg class="w-3.5 h-3.5 text-[#8993A4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                            <span class="font-medium text-[#42526E]">${log.company || 'Devi Fisheries Limited'}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            ` : `
+              <!-- Table Layout -->
+              <div id="audit-logs-table-container"></div>
+            `}
           </div>
         </div>
-
-        <!-- DataTable Container -->
-        <div id="audit-logs-table-container"></div>
       </div>
     `;
 
-    new DataTable({
-      containerId: 'audit-logs-table-container',
-      data: this.state.auditLogs,
-      keyField: 'id',
-      tableTitle: 'Configuration Change Audit Trail',
-      searchable: true,
-      exportable: true,
-      pageSize: 10,
-      columns: [
-        { field: 'id', header: 'Log ID', render: (v) => `<span class="font-mono font-bold text-[#172B4D]">${v}</span>` },
-        { field: 'timestamp', header: 'Timestamp', render: (v) => `<span class="text-[#5E6C84] text-[11px] whitespace-nowrap">${v}</span>` },
-        { 
-          field: 'user', 
-          header: 'User & Role', 
-          render: (v, r) => `<div><span class="font-bold text-[#172B4D]">${v}</span><div class="text-[10px] text-[#5E6C84]">${r.role || ''}</div></div>` 
-        },
-        { field: 'entity', header: 'Entity Affected', render: (v) => `<span class="lozenge lozenge-default text-[9.5px]">${v}</span>` },
-        { field: 'action', header: 'Action', render: (v) => `<span class="font-semibold text-[#172B4D]">${v}</span>` },
-        { field: 'diff', header: 'Change Details', render: (v) => `<span class="text-[#172B4D]">${v}</span>` },
-        { field: 'status', header: 'Status', type: 'status' }
-      ]
-    });
+    if (this.auditViewMode === 'table') {
+      new DataTable({
+        containerId: 'audit-logs-table-container',
+        data: filteredLogs,
+        keyField: 'id',
+        tableTitle: 'Configuration Change Audit Trail',
+        searchable: true,
+        exportable: true,
+        pageSize: 10,
+        columns: [
+          { field: 'id', header: 'Log ID', render: (v) => `<span class="font-mono font-bold text-[#172B4D]">${v}</span>` },
+          { field: 'timestamp', header: 'Timestamp', render: (v) => `<span class="text-[#5E6C84] text-[11px] whitespace-nowrap">${v}</span>` },
+          { 
+            field: 'user', 
+            header: 'User & Role', 
+            render: (v, r) => `<div><span class="font-bold text-[#172B4D]">${v}</span><div class="text-[10px] text-[#5E6C84]">${r.role || ''}</div></div>` 
+          },
+          { field: 'entity', header: 'Entity Affected', render: (v) => `<span class="lozenge lozenge-default text-[9.5px]">${v}</span>` },
+          { field: 'action', header: 'Action', render: (v) => `<span class="font-semibold text-[#172B4D]">${v}</span>` },
+          { field: 'diff', header: 'Change Details', render: (v) => `<span class="text-[#172B4D]">${v}</span>` },
+          { field: 'status', header: 'Status', type: 'status' }
+        ]
+      });
+    }
 
-    document.querySelectorAll('[data-action="rollback"]').forEach(btn => {
-      btn.onclick = () => {
-        const ver = btn.dataset.version;
-        Modal.confirm({
-          title: 'Rollback Configuration Snapshot',
-          message: `Are you sure you want to rollback the active configuration to snapshot <strong>${ver}</strong>? Current unsaved drafts will be superseded.`,
-          confirmText: 'Rollback Snapshot',
-          cancelText: 'Cancel',
-          isDestructive: true,
-          onConfirm: () => {
-            this.state.publishedVersion = ver;
-            this.state.versionHistory.forEach(v => v.isCurrent = (v.version === ver));
-            this.state.hasDraftChanges = false;
-            this.state.draftChangesCount = 0;
-            this.logAudit('Rollback Governance', `Restored snapshot ${ver}`);
-            this.saveState();
-            Toast.show(`Configuration restored to ${ver}`, 'success', 'Rollback Complete');
-            this.renderAuditLogsTab(container);
-          }
-        });
+    // Event Wire-up
+    const timelineBtn = document.getElementById('btn-view-timeline');
+    if (timelineBtn) {
+      timelineBtn.onclick = () => {
+        this.auditViewMode = 'timeline';
+        this.renderAuditLogsTab(container);
       };
-    });
+    }
+
+    const tableBtn = document.getElementById('btn-view-table');
+    if (tableBtn) {
+      tableBtn.onclick = () => {
+        this.auditViewMode = 'table';
+        this.renderAuditLogsTab(container);
+      };
+    }
+
+    const searchInput = document.getElementById('audit-search-input');
+    if (searchInput) {
+      searchInput.oninput = (e) => {
+        this.auditSearchQuery = e.target.value;
+        this.renderAuditLogsTab(container);
+        const inputNow = document.getElementById('audit-search-input');
+        if (inputNow) {
+          inputNow.focus();
+          inputNow.setSelectionRange(inputNow.value.length, inputNow.value.length);
+        }
+      };
+    }
+
+    const entitySelect = document.getElementById('audit-entity-filter');
+    if (entitySelect) {
+      entitySelect.onchange = (e) => {
+        this.auditEntityFilter = e.target.value;
+        this.renderAuditLogsTab(container);
+      };
+    }
 
     const publishBtn = document.getElementById('btn-publish-live');
     if (publishBtn) publishBtn.onclick = () => this.handlePublishConfiguration();

@@ -23,184 +23,50 @@ export const SuperAdminReportsView = {
     TabBar.render('super-reports-tab-bar-container', activeHash);
     const contentEl = document.getElementById('super-reports-tab-content');
 
-    if (activeTab === 'access-matrix') {
-      this.renderAccessMatrix(contentEl);
-    } else if (activeTab === 'security-sessions') {
-      this.renderSecuritySessions(contentEl);
-    } else {
-      this.renderAuditTrail(contentEl);
-    }
+    this.renderUnderConstruction(contentEl);
+  },
+
+  renderUnderConstruction(container) {
+    if (!container) return;
+    container.innerHTML = `
+      <div class="space-y-4 animate-fade-in">
+        <!-- Under Construction Card -->
+        <div class="bg-white rounded-2xl border border-[#DFE1E6] p-10 sm:p-12 text-center shadow-xs animate-fade-in flex flex-col items-center justify-center max-w-3xl mx-auto my-4 min-h-[420px]">
+          <!-- Prominent Lottie Player -->
+          <div class="relative w-72 h-72 sm:w-80 sm:h-80 flex items-center justify-center">
+            <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_m6cuL6.json" background="transparent" speed="1" style="width: 100%; height: 100%;" loop="" autoplay=""></lottie-player>
+
+            <!-- Smooth SVG Construction Illustration Fallback (Works offline instantly) -->
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 opacity-30">
+              <svg class="w-48 h-48 text-[#FFAB00] animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Clean Minimal Status Badge -->
+          <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#FFF0B3] text-[#8f4d00] font-bold text-xs rounded-full mt-2 mb-2 uppercase tracking-wider">
+            <span class="w-2 h-2 rounded-full bg-[#FFAB00] animate-ping"></span>
+            Under Construction
+          </div>
+
+          <p class="text-sm text-[#5E6C84] max-w-md leading-relaxed mt-1">
+            This module is currently in development and staging.
+          </p>
+        </div>
+      </div>
+    `;
   },
 
   renderAuditTrail(container) {
-    if (!container) return;
-
-    const logs = ERP_DATA.userAuditLogs || [];
-
-    container.innerHTML = `
-      <div class="bg-white rounded-xl border border-[#DFE1E6] p-4 space-y-4 shadow-xs">
-        <div class="flex items-center justify-between pb-3 border-b border-[#EBECF0] flex-wrap gap-2">
-          <div>
-            <h2 class="text-sm font-bold text-[#172B4D]">User & Configuration Audit Trail</h2>
-            <p class="text-xs text-[#5E6C84] mt-0.5">Immutable regulatory log of user interactions, permission updates, and transaction clearances</p>
-          </div>
-          <div class="flex items-center gap-2">
-            <input 
-              type="text" 
-              id="audit-trail-search" 
-              placeholder="Search logs..." 
-              class="text-xs px-3 py-1.5 border border-[#DFE1E6] rounded-lg focus:border-[#0284C7] focus:outline-none"
-            />
-            <button id="export-audit-btn" class="px-3 py-1.5 border border-[#DFE1E6] rounded-lg text-xs font-semibold text-[#172B4D] hover:bg-[#F8FAFC] flex items-center gap-1.5 cursor-pointer">
-              <svg class="w-3.5 h-3.5 text-[#5E6C84]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-              <span>Export CSV</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="overflow-x-auto">
-          <table class="w-full text-xs text-left" id="audit-trail-table">
-            <thead class="bg-[#F8FAFC] border-y border-[#EBECF0] text-[#5E6C84] font-bold uppercase text-[10px]">
-              <tr>
-                <th class="py-2.5 px-3">Log ID</th>
-                <th class="py-2.5 px-3">Timestamp</th>
-                <th class="py-2.5 px-3">User & Department</th>
-                <th class="py-2.5 px-3">Role</th>
-                <th class="py-2.5 px-3">Module</th>
-                <th class="py-2.5 px-3">Action Description</th>
-                <th class="py-2.5 px-3">IP Address</th>
-                <th class="py-2.5 px-3">Status</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-[#EBECF0]">
-              ${logs.map(log => `
-                <tr class="hover:bg-[#F8FAFC]">
-                  <td class="py-2.5 px-3 font-bold text-[#0284C7]">${log.id}</td>
-                  <td class="py-2.5 px-3 text-[#5E6C84] whitespace-nowrap">${log.timestamp}</td>
-                  <td class="py-2.5 px-3 font-semibold text-[#172B4D]">${log.user}</td>
-                  <td class="py-2.5 px-3 text-[#42526E]">${log.role}</td>
-                  <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#F0F9FF] text-[#0369A1]">${log.module}</span></td>
-                  <td class="py-2.5 px-3 text-[#172B4D] font-medium">${log.action}</td>
-                  <td class="py-2.5 px-3 text-[#5E6C84] font-mono text-[11px]">${log.ip}</td>
-                  <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#EBF8EE] text-[#15803D]">${log.status}</span></td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    `;
-
-    const exportBtn = document.getElementById('export-audit-btn');
-    if (exportBtn) {
-      exportBtn.addEventListener('click', () => {
-        Toast.show('Audit trail logs successfully exported to CSV.', 'success', 'Export Complete');
-      });
-    }
+    this.renderUnderConstruction(container);
   },
 
   renderAccessMatrix(container) {
-    if (!container) return;
-
-    const perms = ERP_DATA.rolePermissionsTemplate || [];
-
-    container.innerHTML = `
-      <div class="bg-white rounded-xl border border-[#DFE1E6] p-4 space-y-4 shadow-xs">
-        <div class="flex items-center justify-between pb-3 border-b border-[#EBECF0]">
-          <div>
-            <h2 class="text-sm font-bold text-[#172B4D]">Module Access & Permissions Matrix</h2>
-            <p class="text-xs text-[#5E6C84] mt-0.5">Role-Based Access Control (RBAC) permission configuration across all enterprise modules</p>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-semibold text-[#5E6C84]">Scope:</span>
-            <span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#F0F9FF] text-[#0369A1] border border-[#BAE6FD]">System Administrator (Full Control)</span>
-          </div>
-        </div>
-
-        <div class="overflow-x-auto">
-          <table class="w-full text-xs text-left">
-            <thead class="bg-[#F8FAFC] border-y border-[#EBECF0] text-[#5E6C84] font-bold uppercase text-[10px]">
-              <tr>
-                <th class="py-2.5 px-3">Category</th>
-                <th class="py-2.5 px-3">Module Name</th>
-                <th class="py-2.5 px-3 text-center">Read</th>
-                <th class="py-2.5 px-3 text-center">Create</th>
-                <th class="py-2.5 px-3 text-center">Edit</th>
-                <th class="py-2.5 px-3 text-center">Delete</th>
-                <th class="py-2.5 px-3 text-center">Export</th>
-                <th class="py-2.5 px-3 text-center">Approve</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-[#EBECF0]">
-              ${perms.slice(0, 12).map(p => `
-                <tr class="hover:bg-[#F8FAFC]">
-                  <td class="py-2.5 px-3 font-semibold text-[#0369A1]">${p.category}</td>
-                  <td class="py-2.5 px-3 font-medium text-[#172B4D]">${p.module}</td>
-                  <td class="py-2.5 px-3 text-center"><input type="checkbox" checked disabled class="rounded border-[#CBD5E1] text-[#0284C7] focus:ring-0" /></td>
-                  <td class="py-2.5 px-3 text-center"><input type="checkbox" ${p.create ? 'checked' : ''} disabled class="rounded border-[#CBD5E1] text-[#0284C7] focus:ring-0" /></td>
-                  <td class="py-2.5 px-3 text-center"><input type="checkbox" ${p.edit ? 'checked' : ''} disabled class="rounded border-[#CBD5E1] text-[#0284C7] focus:ring-0" /></td>
-                  <td class="py-2.5 px-3 text-center"><input type="checkbox" ${p.delete ? 'checked' : ''} disabled class="rounded border-[#CBD5E1] text-[#0284C7] focus:ring-0" /></td>
-                  <td class="py-2.5 px-3 text-center"><input type="checkbox" ${p.export ? 'checked' : ''} disabled class="rounded border-[#CBD5E1] text-[#0284C7] focus:ring-0" /></td>
-                  <td class="py-2.5 px-3 text-center"><input type="checkbox" ${p.approve ? 'checked' : ''} disabled class="rounded border-[#CBD5E1] text-[#0284C7] focus:ring-0" /></td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    `;
+    this.renderUnderConstruction(container);
   },
 
   renderSecuritySessions(container) {
-    if (!container) return;
-
-    container.innerHTML = `
-      <div class="bg-white rounded-xl border border-[#DFE1E6] p-4 space-y-4 shadow-xs">
-        <div class="flex items-center justify-between pb-3 border-b border-[#EBECF0]">
-          <div>
-            <h2 class="text-sm font-bold text-[#172B4D]">Active User Sessions & Security Logs</h2>
-            <p class="text-xs text-[#5E6C84] mt-0.5">Real-time enterprise active connections, browser sessions, and token expiry</p>
-          </div>
-          <button class="px-3 py-1.5 border border-[#EF4444] text-[#EF4444] rounded-lg text-xs font-semibold hover:bg-[#FEF2F2] cursor-pointer">
-            Terminate Stale Sessions
-          </button>
-        </div>
-
-        <div class="space-y-3">
-          <div class="flex items-center justify-between p-3 rounded-xl border border-[#EBECF0] hover:border-[#0284C7] transition-all bg-[#F8FAFC]">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-full bg-[#E0F2FE] text-[#0369A1] flex items-center justify-center font-bold">SA</div>
-              <div>
-                <div class="font-bold text-xs text-[#172B4D]">Super Admin (You) • superadmin@devifisheries.com</div>
-                <div class="text-[11px] text-[#5E6C84]">Chrome on Windows 11 • IP: 192.168.1.10 • Active Now</div>
-              </div>
-            </div>
-            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#EBF8EE] text-[#15803D]">Current Session</span>
-          </div>
-
-          <div class="flex items-center justify-between p-3 rounded-xl border border-[#EBECF0] hover:border-[#0284C7] transition-all bg-white">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-full bg-[#F4F5F7] text-[#42526E] flex items-center justify-center font-bold">AD</div>
-              <div>
-                <div class="font-bold text-xs text-[#172B4D]">Admin • admin@devifisheries.com</div>
-                <div class="text-[11px] text-[#5E6C84]">Edge on Windows 11 • IP: 192.168.1.45 • Signed in 42 mins ago</div>
-              </div>
-            </div>
-            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#F4F5F7] text-[#5E6C84]">Active</span>
-          </div>
-
-          <div class="flex items-center justify-between p-3 rounded-xl border border-[#EBECF0] hover:border-[#0284C7] transition-all bg-white">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-full bg-[#F4F5F7] text-[#42526E] flex items-center justify-center font-bold">QC</div>
-              <div>
-                <div class="font-bold text-xs text-[#172B4D]">Dr. Rajesh K. Varma • qc.manager@devifisheries.com</div>
-                <div class="text-[11px] text-[#5E6C84]">Safari on iPad (Plant #1 Lab) • IP: 192.168.2.45 • Signed in 1 hour ago</div>
-              </div>
-            </div>
-            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#F4F5F7] text-[#5E6C84]">Active</span>
-          </div>
-        </div>
-      </div>
-    `;
+    this.renderUnderConstruction(container);
   }
 };

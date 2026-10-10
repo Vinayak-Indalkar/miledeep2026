@@ -1,10 +1,8 @@
 // Global Top Header Component
 
-import { ERP_DATA } from '../data/mockData.js';
+import { ERP_DATA, setCurrentUserRole } from '../data/mockData.js';
 import { Toast } from './toast.js';
 import { Modal } from './modal.js';
-import { TourGuide } from './tourGuide.js';
-
 
 export const Header = {
   render(containerId) {
@@ -16,27 +14,35 @@ export const Header = {
 
     container.innerHTML = `
       <header class="bg-white border-b border-[#E2E8F0] h-14 px-5 flex items-center justify-between select-none rounded-t-2xl">
-        <!-- Left: Welcome Text -->
-        <div class="flex items-center gap-1.5 text-xs sm:text-sm text-[#64748B]">
-          <span>Welcome,</span>
-          <span class="font-semibold text-[#0F172A] text-sm sm:text-base">${ERP_DATA.currentUser.name}</span>
+        <!-- Left: Welcome & Environment Context Badge (Atomic) -->
+        <div class="flex items-center gap-2.5 text-xs sm:text-sm">
+          <div class="flex items-center gap-1.5 text-[#64748B]">
+            <span>Welcome,</span>
+            <span class="font-bold text-[#0F172A] text-sm sm:text-base">${ERP_DATA.currentUser.name}</span>
+          </div>
+          <span class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10.5px] font-bold ${isSuperAdmin ? 'bg-[#E0F2FE] text-[#0284C7] border border-[#BAE6FD]' : 'bg-[#E3FCEF] text-[#006644] border border-[#ABF5D1]'}">
+            <span class="w-1.5 h-1.5 rounded-full ${isSuperAdmin ? 'bg-[#0284C7]' : 'bg-[#10B981]'}"></span>
+            ${isSuperAdmin ? 'Super Admin • Enterprise Governance' : 'Admin • Devi Fisheries Plant #1'}
+          </span>
         </div>
 
         <!-- Center: Global Inline Search (Direct typing, no popup modal) -->
         <div class="relative mx-3" id="header-search-container">
           <div class="w-52 sm:w-64 relative flex items-center">
-            <svg class="w-4 h-4 text-[#94A3B8] absolute left-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <svg class="w-4 h-4 text-[#94A3B8] pointer-events-none" style="left: 12px; width: 16px; height: 16px; position: absolute; top: 50%; transform: translateY(-50%); pointer-events: none; z-index: 5;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
             <input 
               type="text" 
               id="header-global-search-input" 
               placeholder="Search ERP records..." 
               autocomplete="off"
-              class="w-full pl-8 pr-7 py-1.5 bg-[#F8FAFC] hover:bg-[#F1F5F9] focus:bg-white text-[#0F172A] placeholder-[#94A3B8] border border-[#E2E8F0] focus:border-[#0284C7] rounded-xl text-xs transition-colors focus:outline-none"
+              style="padding-left: 42px !important; padding-right: 36px !important;"
+              class="w-full py-1.5 bg-[#F8FAFC] hover:bg-[#F1F5F9] focus:bg-white text-[#0F172A] placeholder-[#94A3B8] border border-[#E2E8F0] focus:border-[#0284C7] rounded-xl text-xs transition-colors focus:outline-none shadow-xs"
             />
             <button 
               type="button" 
               id="header-search-clear-btn" 
-              class="hidden absolute right-2 text-[#94A3B8] hover:text-[#0F172A] cursor-pointer"
+              style="display: none !important;"
+              class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-[#0F172A] p-0.5 rounded-full hover:bg-[#E2E8F0] transition-colors cursor-pointer items-center justify-center"
               title="Clear Search"
             >
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -121,10 +127,14 @@ export const Header = {
 
 
 
+              <!-- Quick Switch Role Action -->
               <div class="p-1 border-b border-[#EBECF0]">
-                <button id="start-tour-dropdown-btn" class="w-full text-left px-3 py-2 hover:bg-[#F0F9FF] text-[#0284C7] rounded font-semibold flex items-center gap-2 transition-colors cursor-pointer">
-                  <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                  <span>Play Tour Guide Again</span>
+                <button type="button" id="switch-role-menu-btn" class="w-full text-left px-3 py-2 hover:bg-[#F0F9FF] text-[#0284C7] rounded-lg font-semibold flex items-center justify-between transition-colors cursor-pointer" title="Quick toggle role between Admin and Super Admin">
+                  <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                    <span>Switch to ${isSuperAdmin ? 'Admin' : 'Super Admin'}</span>
+                  </div>
+                  <span class="text-[9.5px] font-bold px-1.5 py-0.5 rounded ${isSuperAdmin ? 'bg-[#E3FCEF] text-[#006644]' : 'bg-[#E0F2FE] text-[#0284C7]'}">${isSuperAdmin ? 'Operational' : 'Corporate'}</span>
                 </button>
               </div>
 
@@ -189,8 +199,21 @@ export const Header = {
     const clearBtn = document.getElementById('header-search-clear-btn');
 
     if (searchInput && searchDropdown && searchContent) {
+      const updateClearBtnState = () => {
+        if (!clearBtn) return;
+        const hasText = searchInput.value.trim().length > 0;
+        if (hasText) {
+          clearBtn.classList.remove('hidden');
+          clearBtn.style.display = 'inline-flex';
+        } else {
+          clearBtn.classList.add('hidden');
+          clearBtn.style.display = 'none';
+        }
+      };
+
       const renderResults = () => {
         const query = searchInput.value.trim();
+        updateClearBtnState();
         if (window.App && typeof window.App.performGlobalSearch === 'function') {
           searchContent.innerHTML = window.App.performGlobalSearch(query);
           searchDropdown.classList.remove('hidden');
@@ -198,10 +221,10 @@ export const Header = {
             window.App.bindSearchResultClicks(searchDropdown);
           }
         }
-        if (clearBtn) {
-          clearBtn.classList.toggle('hidden', !query);
-        }
       };
+
+      // Initially ensure clear button is hidden
+      updateClearBtnState();
 
       searchInput.addEventListener('focus', () => {
         renderResults();
@@ -211,10 +234,15 @@ export const Header = {
         renderResults();
       });
 
+      searchInput.addEventListener('keyup', () => {
+        updateClearBtnState();
+      });
+
       if (clearBtn) {
         clearBtn.addEventListener('click', (e) => {
           e.stopPropagation();
           searchInput.value = '';
+          updateClearBtnState();
           searchInput.focus();
           renderResults();
         });
@@ -237,6 +265,24 @@ export const Header = {
     }
 
 
+
+    // Quick Switch Role (Admin <-> Super Admin)
+    const switchRoleBtn = document.getElementById('switch-role-menu-btn');
+    if (switchRoleBtn) {
+      switchRoleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const nextRole = isSuperAdmin ? 'Admin' : 'Super Admin';
+        setCurrentUserRole(nextRole);
+        const existing = document.getElementById('erp-app-shell');
+        if (existing) existing.remove();
+        Toast.show(`Switched active context to ${nextRole}`, 'success', 'Role Updated');
+        if (nextRole === 'Super Admin') {
+          window.location.hash = '#/dashboard/overview/system-overview';
+        } else {
+          window.location.hash = '#/purchase/dashboard/rm-dashboard';
+        }
+      });
+    }
 
     // Logout
     const logoutBtn = document.getElementById('logout-menu-btn');
