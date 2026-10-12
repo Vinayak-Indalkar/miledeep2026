@@ -1,5 +1,5 @@
 /* Atlassian Design System Theme & Custom ERP Styles */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap');
 
 :root {
   /* Pastel Executive Color Palette (WCAG 2.1 AA/AAA Compliant) */
@@ -62,18 +62,18 @@
   background-image: none !important;
 }
 
-*, *::before, *::after, body, button, input, select, textarea, kbd, code, pre, table {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+*, *::before, *::after, body, button, input, select, textarea, kbd, code, pre, table, th, td, span, div, p, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
 }
 
 html {
-  font-size: 18px !important; /* Base standard enterprise font size (+2px from 16px) */
+  font-size: 17px !important; /* Base standard enterprise font size (+1px from 16px) */
 }
 
 body {
   color: var(--ds-text);
   background-color: var(--ds-background-neutral);
-  font-size: 16px !important; /* Base body font size (+2px from 14px) */
+  font-size: 15px !important; /* Base body font size (+1px from 14px) */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -107,11 +107,13 @@ body {
 
 #main-layout-wrapper {
   margin-left: calc(var(--erp-sidebar-offset) + var(--erp-sidebar-width) + var(--erp-sidebar-gap)) !important;
+  margin-right: var(--erp-sidebar-gap) !important;
   transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 #main-layout-wrapper.is-collapsed {
   margin-left: calc(var(--erp-sidebar-offset) + var(--erp-sidebar-collapsed-width) + var(--erp-sidebar-gap)) !important;
+  margin-right: var(--erp-sidebar-gap) !important;
 }
 
 /* Custom Scrollbars */
@@ -130,18 +132,47 @@ body {
   background: #94A3B8;
 }
 
-/* Subtle Pastel Lozenge (Badge) Styles - WCAG AAA Certified */
-.lozenge, [class*="lozenge-"] {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 8px;
-  font-size: 13px !important; /* +2px from 11px */
-  font-weight: 600;
-  line-height: 17px !important;
-  border-radius: 6px;
-  letter-spacing: 0.02em;
+/* Tab Navigation Lists - Prevent horizontal scroll and hide scrollbars */
+[role="tablist"] {
+  overflow-x: hidden !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
+[role="tablist"]::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Subtle Pastel Lozenge (Badge) Styles - WCAG AAA Certified in Capsules */
+.lozenge, [class*="lozenge-"], .chip, .badge, [class*="badge"]:not(#user-role-badge), .status-pill, .status-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  padding: 2.5px 9px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  line-height: 15px !important;
+  border-radius: 9999px !important; /* Capsule pill */
+  letter-spacing: 0.02em !important;
+  white-space: nowrap !important;
+}
+
+.capsule-sm,
+.lozenge.capsule-sm,
+[class*="lozenge-"].capsule-sm,
+.lozenge.rounded-full,
+[class*="lozenge-"].rounded-full,
+.badge-capsule {
+  font-size: 10px !important;
+  line-height: 14px !important;
+  padding: 1.5px 8px !important;
+  border-radius: 9999px !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
+}
+
 
 .lozenge-default {
   background-color: #F1F5F9 !important;
@@ -284,7 +315,7 @@ button.tab-active *,
 .erp-table th {
   background-color: #EEF3F8 !important;
   color: #334155 !important;
-  font-size: 13px !important; /* +2px from 11px */
+  font-size: 12px !important; /* +1px from 11px */
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -297,7 +328,7 @@ button.tab-active *,
 }
 .erp-table td {
   padding: 11px 14px;
-  font-size: 14.5px !important; /* +2px from 12.5px */
+  font-size: 13.5px !important; /* +1px from 12.5px */
   border-bottom: 1px solid #EAF0F6 !important;
   color: #0F172A !important;
   vertical-align: middle;
@@ -392,7 +423,7 @@ button.tab-active *,
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 12px !important; /* +2px from 10px */
+  font-size: 11px !important; /* +1px from 10px */
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -496,54 +527,133 @@ a[role="tab"][aria-selected="true"],
   border-color: #075985 !important;
 }
 
-/* Filter Bar Action Buttons: show only icon by default, reveal text on hover */
+/* Search & Filters Card Margin: exactly 12px */
+.dt-top-filter-card,
+div:has(> .dt-top-filter-body),
+div:has(> div > .dt-top-filter-body),
+div:has(> div > div > .dt-top-filter-body) {
+  margin-bottom: 12px !important;
+}
+
+.dt-top-filter-body {
+  margin-top: 12px !important;
+}
+
+/* Filter Bar Action Buttons: exactly match action column icons */
 .dt-top-filter-reset-btn,
 .dt-top-filter-toggle-btn,
 #comm-filter-reset-btn,
 #comm-filter-toggle-btn,
 #bill-top-reset-btn,
-#bill-top-toggle-btn {
+#bill-top-toggle-btn,
+#roles-top-reset-btn,
+#roles-top-toggle-btn,
+#users-top-reset-btn,
+#users-top-toggle-btn,
+#booking-top-reset-btn,
+#booking-top-toggle-btn,
+#lot-top-reset-btn,
+#lot-top-toggle-btn,
+#rm-top-reset-btn,
+#rm-top-toggle-btn,
+#ctx-top-reset-btn,
+#ctx-top-toggle-btn,
+#pay-top-reset-btn,
+#pay-top-toggle-btn {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  border-radius: 0 !important;
+  border: 1px solid #CBD5E1 !important;
+  background-color: #ffffff !important;
+  color: #334155 !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  min-height: 31px !important;
-  min-width: 31px !important;
-  padding: 6px 8px !important;
-  overflow: hidden !important;
-  white-space: nowrap !important;
-  cursor: pointer !important;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  transition: all 0.15s ease !important;
 }
 
-.dt-top-filter-reset-btn > span,
-.dt-top-filter-toggle-btn .dt-top-filter-toggle-text,
-#comm-filter-reset-btn > span,
-#comm-filter-toggle-btn .comm-toggle-text,
-.rm-toggle-text {
-  max-width: 0 !important;
-  opacity: 0 !important;
-  overflow: hidden !important;
-  display: inline-block !important;
-  vertical-align: middle !important;
-  white-space: nowrap !important;
-  margin-left: 0 !important;
-  pointer-events: none !important;
-  transition: max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, margin 0.2s ease !important;
+.dt-top-filter-reset-btn:hover,
+.dt-top-filter-toggle-btn:hover,
+#comm-filter-reset-btn:hover,
+#comm-filter-toggle-btn:hover,
+#bill-top-reset-btn:hover,
+#bill-top-toggle-btn:hover,
+#roles-top-reset-btn:hover,
+#roles-top-toggle-btn:hover,
+#users-top-reset-btn:hover,
+#users-top-toggle-btn:hover,
+#booking-top-reset-btn:hover,
+#booking-top-toggle-btn:hover,
+#lot-top-reset-btn:hover,
+#lot-top-toggle-btn:hover,
+#rm-top-reset-btn:hover,
+#rm-top-toggle-btn:hover,
+#ctx-top-reset-btn:hover,
+#ctx-top-toggle-btn:hover,
+#pay-top-reset-btn:hover,
+#pay-top-toggle-btn:hover {
+  background-color: #F0F9FF !important;
+  color: #0284C7 !important;
+  border-color: #0284C7 !important;
 }
 
-.dt-top-filter-reset-btn:hover > span,
-.dt-top-filter-reset-btn:focus-visible > span,
-.dt-top-filter-toggle-btn:hover .dt-top-filter-toggle-text,
-.dt-top-filter-toggle-btn:focus-visible .dt-top-filter-toggle-text,
-#comm-filter-reset-btn:hover > span,
-#comm-filter-reset-btn:focus-visible > span,
-#comm-filter-toggle-btn:hover .comm-toggle-text,
-#comm-filter-toggle-btn:focus-visible .comm-toggle-text,
-button:hover > .rm-toggle-text,
-button:focus-visible > .rm-toggle-text {
-  max-width: 100px !important;
-  opacity: 1 !important;
-  margin-left: 6px !important;
+.dt-top-filter-reset-btn:hover svg,
+.dt-top-filter-toggle-btn:hover svg,
+#comm-filter-reset-btn:hover svg,
+#comm-filter-toggle-btn:hover svg,
+#bill-top-reset-btn:hover svg,
+#bill-top-toggle-btn:hover svg,
+#roles-top-reset-btn:hover svg,
+#roles-top-toggle-btn:hover svg,
+#users-top-reset-btn:hover svg,
+#users-top-toggle-btn:hover svg,
+#booking-top-reset-btn:hover svg,
+#booking-top-toggle-btn:hover svg,
+#lot-top-reset-btn:hover svg,
+#lot-top-toggle-btn:hover svg,
+#rm-top-reset-btn:hover svg,
+#rm-top-toggle-btn:hover svg,
+#ctx-top-reset-btn:hover svg,
+#ctx-top-toggle-btn:hover svg,
+#pay-top-reset-btn:hover svg,
+#pay-top-toggle-btn:hover svg {
+  color: #0284C7 !important;
+  stroke: #0284C7 !important;
+}
+
+.dt-top-filter-reset-btn svg,
+.dt-top-filter-toggle-btn svg,
+#comm-filter-reset-btn svg,
+#comm-filter-toggle-btn svg,
+#bill-top-reset-btn svg,
+#bill-top-toggle-btn svg,
+#roles-top-reset-btn svg,
+#roles-top-toggle-btn svg,
+#users-top-reset-btn svg,
+#users-top-toggle-btn svg,
+#booking-top-reset-btn svg,
+#booking-top-toggle-btn svg,
+#lot-top-reset-btn svg,
+#lot-top-toggle-btn svg,
+#rm-top-reset-btn svg,
+#rm-top-toggle-btn svg,
+#ctx-top-reset-btn svg,
+#ctx-top-toggle-btn svg,
+#pay-top-reset-btn svg,
+#pay-top-toggle-btn svg {
+  width: 15px !important;
+  height: 15px !important;
+  min-width: 15px !important;
+  min-height: 15px !important;
+  stroke-width: 2 !important;
+  margin: auto !important;
+  color: inherit !important;
+  flex-shrink: 0 !important;
 }
 
 /* Accessibility Screen Reader Only Utility */
@@ -848,33 +958,33 @@ html.theme-dark #header-search-dropdown {
    GLOBAL +2px FONT SIZE SYSTEM & UI TYPOGRAPHY SCALING
    ========================================================================== */
 
-/* Standard text utility classes scaled up by +2px */
-.text-xs { font-size: 14px !important; line-height: 1.25rem !important; }
-.text-sm { font-size: 16px !important; line-height: 1.375rem !important; }
-.text-base { font-size: 18px !important; line-height: 1.5rem !important; }
-.text-lg { font-size: 20px !important; line-height: 1.75rem !important; }
-.text-xl { font-size: 22px !important; line-height: 1.75rem !important; }
-.text-2xl { font-size: 26px !important; line-height: 2rem !important; }
-.text-3xl { font-size: 32px !important; line-height: 2.375rem !important; }
+/* Standard text utility classes scaled (+1px from original) */
+.text-xs { font-size: 13px !important; line-height: 1.25rem !important; }
+.text-sm { font-size: 15px !important; line-height: 1.375rem !important; }
+.text-base { font-size: 17px !important; line-height: 1.5rem !important; }
+.text-lg { font-size: 19px !important; line-height: 1.75rem !important; }
+.text-xl { font-size: 21px !important; line-height: 1.75rem !important; }
+.text-2xl { font-size: 25px !important; line-height: 2rem !important; }
+.text-3xl { font-size: 31px !important; line-height: 2.375rem !important; }
 
-/* Arbitrary font sizes scaled by +2px across all components, badges, chips, labels, icons and text */
-.text-\[8px\] { font-size: 10px !important; }
-.text-\[9px\] { font-size: 11px !important; }
-.text-\[9\.5px\] { font-size: 11.5px !important; }
-.text-\[10px\] { font-size: 12px !important; }
-.text-\[10\.5px\] { font-size: 12.5px !important; }
-.text-\[11px\] { font-size: 13px !important; }
-.text-\[11\.5px\] { font-size: 13.5px !important; }
-.text-\[12px\] { font-size: 14px !important; }
-.text-\[12\.5px\] { font-size: 14.5px !important; }
-.text-\[13px\] { font-size: 15px !important; }
-.text-\[14px\] { font-size: 16px !important; }
-.text-\[15px\] { font-size: 17px !important; }
-.text-\[16px\] { font-size: 18px !important; }
-.text-\[18px\] { font-size: 20px !important; }
-.text-\[20px\] { font-size: 22px !important; }
-.text-\[22px\] { font-size: 24px !important; }
-.text-\[24px\] { font-size: 26px !important; }
+/* Arbitrary font sizes scaled (+1px from original) across all components, badges, chips, labels, icons and text */
+.text-\[8px\] { font-size: 9px !important; }
+.text-\[9px\] { font-size: 10px !important; }
+.text-\[9\.5px\] { font-size: 10.5px !important; }
+.text-\[10px\] { font-size: 11px !important; }
+.text-\[10\.5px\] { font-size: 11.5px !important; }
+.text-\[11px\] { font-size: 12px !important; }
+.text-\[11\.5px\] { font-size: 12.5px !important; }
+.text-\[12px\] { font-size: 13px !important; }
+.text-\[12\.5px\] { font-size: 13.5px !important; }
+.text-\[13px\] { font-size: 14px !important; }
+.text-\[14px\] { font-size: 15px !important; }
+.text-\[15px\] { font-size: 16px !important; }
+.text-\[16px\] { font-size: 17px !important; }
+.text-\[18px\] { font-size: 19px !important; }
+.text-\[20px\] { font-size: 21px !important; }
+.text-\[22px\] { font-size: 23px !important; }
+.text-\[24px\] { font-size: 25px !important; }
 
 /* ==========================================================================
    UNIFIED ENTERPRISE ERP DESIGN SYSTEM: 100% APPLICATION-WIDE CONSISTENCY
@@ -888,8 +998,8 @@ textarea,
 .form-input,
 .form-select,
 .form-textarea {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-  font-size: 14px !important;
+  font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: 13px !important;
   line-height: 1.5 !important;
   color: #0F172A !important;
   background-color: #FFFFFF !important;
@@ -973,8 +1083,8 @@ input[type="radio"] {
 label:not(.flex):not(.inline-flex),
 .form-label,
 .erp-label {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-  font-size: 13px !important;
+  font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: 12px !important;
   font-weight: 600 !important;
   color: #334155 !important;
   display: block !important;
@@ -1004,20 +1114,31 @@ table,
   width: 100% !important;
   border-collapse: separate !important;
   border-spacing: 0 !important;
-  font-family: 'Inter', sans-serif !important;
+  font-family: 'Noto Sans', sans-serif !important;
+  border-radius: 0 !important;
+}
+
+table thead,
+.erp-table thead,
+table tbody,
+.erp-table tbody,
+table tr,
+.erp-table tr {
+  border-radius: 0 !important;
 }
 
 table th,
 .erp-table th {
   background-color: #EEF3F8 !important;
   color: #334155 !important;
-  font-size: 13px !important;
+  font-size: 12px !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.05em !important;
   padding: 10px 14px !important;
   border-bottom: 1px solid #DDE5ED !important;
   border-top: none !important;
+  border-radius: 0 !important;
   position: sticky !important;
   top: 0 !important;
   z-index: 10 !important;
@@ -1028,11 +1149,50 @@ table th,
 table td,
 .erp-table td {
   padding: 11px 14px !important;
-  font-size: 14.5px !important;
+  font-size: 13.5px !important;
   border-bottom: 1px solid #EAF0F6 !important;
+  border-radius: 0 !important;
   color: #0F172A !important;
   vertical-align: middle !important;
   background-color: #FFFFFF;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: none !important;
+}
+
+table td > *,
+.erp-table td > *,
+table td div,
+.erp-table td div,
+table td span:not(.lozenge):not([class*="badge"]),
+.erp-table td span:not(.lozenge):not([class*="badge"]) {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Ensure sticky actions column and checkbox column don't clip */
+table td.sticky-action-col,
+.erp-table td.sticky-action-col,
+table th.sticky-action-col,
+.erp-table th.sticky-action-col,
+table td:has(input[type="checkbox"]),
+.erp-table td:has(input[type="checkbox"]),
+table th:has(input[type="checkbox"]),
+.erp-table th:has(input[type="checkbox"]) {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  max-width: none !important;
+  white-space: nowrap !important;
+}
+
+/* Unified single color for table row text across all tables (no multi-colors) */
+table tbody td,
+.erp-table tbody td,
+table tbody td *:not(.lozenge):not([class*="lozenge-"]):not([class*="badge"]):not(button):not(svg):not(input):not(.dt-action-btn),
+.erp-table tbody td *:not(.lozenge):not([class*="lozenge-"]):not([class*="badge"]):not(button):not(svg):not(input):not(.dt-action-btn) {
+  color: #0F172A !important;
 }
 
 table tbody tr:hover td,
@@ -1040,23 +1200,136 @@ table tbody tr:hover td,
   background-color: #F4F8FD !important;
 }
 
-/* Table Card / Container Frame */
+/* Table Column Resizing (Admin & Super Admin) */
+th {
+  position: relative !important;
+}
+
+.dt-col-resizer {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 8px !important;
+  cursor: col-resize !important;
+  user-select: none !important;
+  z-index: 30 !important;
+  transition: background-color 0.15s ease !important;
+}
+
+.dt-col-resizer::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 15% !important;
+  bottom: 15% !important;
+  right: 3px !important;
+  width: 2px !important;
+  background-color: transparent !important;
+  transition: background-color 0.15s ease !important;
+  border-radius: 1px !important;
+}
+
+.dt-col-resizer:hover::after,
+.dt-col-resizer.is-resizing::after {
+  background-color: #0284C7 !important;
+}
+
+.dt-col-resizer:hover,
+.dt-col-resizer.is-resizing {
+  background-color: rgba(2, 132, 199, 0.12) !important;
+}
+
+table.is-resizing,
+table.is-resizing * {
+  user-select: none !important;
+  cursor: col-resize !important;
+}
+
+/* Table Card / Container Frame - Zero border radius on column containers */
 .erp-table-container,
 .overflow-x-auto:has(table) {
   border: 1px solid #DDE5ED !important;
-  border-radius: 12px !important;
+  border-radius: 0 !important;
   background-color: #FFFFFF !important;
 }
 
+/* Action Icons: Square shape, 8px gap between each, single unified color */
+.erp-table .sticky-action-col > div,
+table .sticky-action-col > div {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+}
+
+.dt-action-btn,
+.erp-table .dt-action-btn,
+table .dt-action-btn,
+button.dt-action-btn {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  max-width: 28px !important;
+  max-height: 28px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 0 !important;
+  border: 1px solid #CBD5E1 !important;
+  background-color: #FFFFFF !important;
+  color: #334155 !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  flex-shrink: 0 !important;
+  transition: all 0.15s ease !important;
+}
+
+.dt-action-btn:hover,
+.erp-table .dt-action-btn:hover,
+table .dt-action-btn:hover,
+button.dt-action-btn:hover {
+  background-color: #F0F9FF !important;
+  color: #0284C7 !important;
+  border-color: #0284C7 !important;
+}
+
+.dt-action-btn:hover svg,
+.erp-table .dt-action-btn:hover svg,
+table .dt-action-btn:hover svg,
+button.dt-action-btn:hover svg {
+  color: #0284C7 !important;
+  stroke: #0284C7 !important;
+}
+
+.dt-action-btn svg,
+.erp-table .dt-action-btn svg,
+table .dt-action-btn svg,
+button.dt-action-btn svg {
+  width: 15px !important;
+  height: 15px !important;
+  min-width: 15px !important;
+  min-height: 15px !important;
+  max-width: 15px !important;
+  max-height: 15px !important;
+  display: block !important;
+  margin: auto !important;
+  color: inherit !important;
+  flex-shrink: 0 !important;
+}
+
 /* 4. BUTTONS */
-button:not(.sidebar-mod-btn):not(#header-settings-btn):not(#header-notifications-btn):not(#header-help-btn):not(#user-menu-btn):not(.settings-dropdown-link):not([role="tab"]):not(#sidebar-edge-toggle-btn),
+button:not(.sidebar-mod-btn):not(#header-settings-btn):not(#header-notifications-btn):not(#header-help-btn):not(#user-menu-btn):not(.settings-dropdown-link):not([role="tab"]):not(#sidebar-edge-toggle-btn):not(.dt-action-btn):not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn):not(.btn-show-all-submenus):not(.btn-sub-edit):not(.btn-sub-toggle):not(.btn-sub-del):not(#toggle-pwd-btn):not(#toggle-usr-modal-password-btn):not(#toggle-asgn-db-pass-btn):not(.btn-toggle-cpwd),
 .btn,
 .btn-primary,
 .btn-secondary,
 .btn-danger,
 .btn-subtle {
-  font-family: 'Inter', sans-serif !important;
-  font-size: 14px !important;
+  font-family: 'Noto Sans', sans-serif !important;
+  font-size: 13px !important;
   font-weight: 600 !important;
   border-radius: 8px !important;
   min-height: 38px !important;
@@ -1149,25 +1422,44 @@ button.py-1,
 button.py-1\.5 {
   min-height: 32px !important;
   padding: 4px 10px !important;
-  font-size: 13px !important;
+  font-size: 12px !important;
 }
 
-/* 5. CHIPS / BADGES / LOZENGES */
+/* 5. CHIPS / BADGES / LOZENGES / STATUS PILLS */
 .lozenge,
 [class*="lozenge-"],
 .chip,
-[class*="badge"]:not(#user-role-badge) {
+.badge,
+[class*="badge"]:not(#user-role-badge),
+.status-pill,
+.status-badge {
   display: inline-flex !important;
   align-items: center !important;
+  justify-content: center !important;
   gap: 4px !important;
-  padding: 3px 8px !important;
-  font-size: 13px !important;
+  padding: 2.5px 9px !important;
+  font-size: 11px !important;
   font-weight: 600 !important;
-  line-height: 17px !important;
-  border-radius: 6px !important;
+  line-height: 15px !important;
+  border-radius: 9999px !important; /* Capsule shape */
   letter-spacing: 0.02em !important;
   white-space: nowrap !important;
 }
+
+.capsule-sm,
+.lozenge.capsule-sm,
+[class*="lozenge-"].capsule-sm,
+.lozenge.rounded-full,
+[class*="lozenge-"].rounded-full,
+.badge-capsule {
+  font-size: 10px !important;
+  line-height: 14px !important;
+  padding: 1.5px 8px !important;
+  border-radius: 9999px !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
+}
+
 
 .lozenge-default {
   background-color: #F1F5F9 !important;

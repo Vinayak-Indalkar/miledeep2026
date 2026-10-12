@@ -2,6 +2,7 @@
 
 import { TabBar } from '../components/tabBar.js';
 import { renderEmptyState } from '../components/emptyState.js';
+import { Skeleton } from '../components/skeleton.js';
 
 export const ProductionView = {
   render(containerId, subPage = 'overview', activeHash = '#/production/dashboard/overview') {
@@ -15,14 +16,20 @@ export const ProductionView = {
 
     const tabContext = TabBar.render('production-tab-bar-container', activeHash);
     const subContainer = document.getElementById('production-subpage-content');
-
-    const tabLabel = tabContext?.submenu?.tabs?.find(t => t.id === subPage)?.label || subPage.replace(/-/g, ' ');
-
-    subContainer.innerHTML = renderEmptyState({
-      title: `No Production Batches for ${tabLabel}`,
-      description: `The Production floor line and freezing tracking (${tabContext?.submenu?.title || 'Production'}) currently has no active runs. Full interactive CRUD operations are active under the Purchase module.`,
-      moduleName: "Production",
-      tabName: tabLabel
-    });
+    if (subContainer) {
+      const sk = typeof Skeleton !== 'undefined' ? Skeleton : (typeof window !== 'undefined' ? window.Skeleton : null);
+      if (sk && typeof sk.renderTable === 'function') {
+        subContainer.innerHTML = sk.renderTable(6, 6);
+      }
+      setTimeout(() => {
+        const tabLabel = tabContext?.submenu?.tabs?.find(t => t.id === subPage)?.label || subPage.replace(/-/g, ' ');
+        subContainer.innerHTML = renderEmptyState({
+          title: `No Production Batches for ${tabLabel}`,
+          description: `The Production floor line and freezing tracking (${tabContext?.submenu?.title || 'Production'}) currently has no active runs. Full interactive CRUD operations are active under the Purchase module.`,
+          moduleName: "Production",
+          tabName: tabLabel
+        });
+      }, 120);
+    }
   }
 };

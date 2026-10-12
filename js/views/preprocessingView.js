@@ -2,6 +2,7 @@
 
 import { TabBar } from '../components/tabBar.js';
 import { renderEmptyState } from '../components/emptyState.js';
+import { Skeleton } from '../components/skeleton.js';
 
 export const PreprocessingView = {
   render(containerId, subPage = 'floor-overview', activeHash = '#/preprocessing/dashboard/floor-overview') {
@@ -15,14 +16,20 @@ export const PreprocessingView = {
 
     const tabContext = TabBar.render('preprocessing-tab-bar-container', activeHash);
     const subContainer = document.getElementById('preprocessing-subpage-content');
-
-    const tabLabel = tabContext?.submenu?.tabs?.find(t => t.id === subPage)?.label || subPage.replace(/-/g, ' ');
-
-    subContainer.innerHTML = renderEmptyState({
-      title: `No Active Records for ${tabLabel}`,
-      description: `The Pre-Processing module (${tabContext?.submenu?.title || 'Pre-Processing'}) currently has no live active records. Full interactive CRUD operations are active under the Purchase module.`,
-      moduleName: "Pre-Processing",
-      tabName: tabLabel
-    });
+    if (subContainer) {
+      const sk = typeof Skeleton !== 'undefined' ? Skeleton : (typeof window !== 'undefined' ? window.Skeleton : null);
+      if (sk && typeof sk.renderTable === 'function') {
+        subContainer.innerHTML = sk.renderTable(6, 6);
+      }
+      setTimeout(() => {
+        const tabLabel = tabContext?.submenu?.tabs?.find(t => t.id === subPage)?.label || subPage.replace(/-/g, ' ');
+        subContainer.innerHTML = renderEmptyState({
+          title: `No Active Records for ${tabLabel}`,
+          description: `The Pre-Processing module (${tabContext?.submenu?.title || 'Pre-Processing'}) currently has no live active records. Full interactive CRUD operations are active under the Purchase module.`,
+          moduleName: "Pre-Processing",
+          tabName: tabLabel
+        });
+      }, 120);
+    }
   }
 };

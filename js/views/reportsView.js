@@ -2,6 +2,7 @@
 
 import { TabBar } from '../components/tabBar.js';
 import { renderEmptyState } from '../components/emptyState.js';
+import { Skeleton } from '../components/skeleton.js';
 
 export const ReportsView = {
   render(containerId, subPage = 'yield-reports', activeHash = '#/reports/production-analytics/yield-reports') {
@@ -15,14 +16,20 @@ export const ReportsView = {
 
     const tabContext = TabBar.render('reports-tab-bar-container', activeHash);
     const subContainer = document.getElementById('reports-subpage-content');
-
-    const tabLabel = tabContext?.submenu?.tabs?.find(t => t.id === subPage)?.label || subPage.replace(/-/g, ' ');
-
-    subContainer.innerHTML = renderEmptyState({
-      title: `No Analytical Reports for ${tabLabel}`,
-      description: `The Global Reports registry (${tabContext?.submenu?.title || 'Global Reports'}) currently has no active analytical extracts. Full interactive CRUD operations are active under the Purchase module.`,
-      moduleName: "Global Reports",
-      tabName: tabLabel
-    });
+    if (subContainer) {
+      const sk = typeof Skeleton !== 'undefined' ? Skeleton : (typeof window !== 'undefined' ? window.Skeleton : null);
+      if (sk && typeof sk.renderReportsGrid === 'function') {
+        subContainer.innerHTML = sk.renderReportsGrid();
+      }
+      setTimeout(() => {
+        const tabLabel = tabContext?.submenu?.tabs?.find(t => t.id === subPage)?.label || subPage.replace(/-/g, ' ');
+        subContainer.innerHTML = renderEmptyState({
+          title: `No Analytical Reports for ${tabLabel}`,
+          description: `The Global Reports registry (${tabContext?.submenu?.title || 'Global Reports'}) currently has no active analytical extracts. Full interactive CRUD operations are active under the Purchase module.`,
+          moduleName: "Global Reports",
+          tabName: tabLabel
+        });
+      }, 120);
+    }
   }
 };

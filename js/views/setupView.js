@@ -7,6 +7,7 @@ import { Toast } from '../components/toast.js';
 import { Modal } from '../components/modal.js';
 import { DataTable } from '../components/table.js';
 import { renderEmptyState } from '../components/emptyState.js';
+import { Skeleton } from '../components/skeleton.js';
 
 const STUDIO_STORAGE_KEY = 'dfl_erp_master_studio_state_v3';
 
@@ -4282,7 +4283,7 @@ function getInitialStudioState() {
         shortName: 'DFL',
         name: 'Devi Fisheries Limited',
         joiningYear: 1997,
-        legalName: 'Devi Fisheries & Marine Products Ltd.',
+        legalName: 'Devi Fisheries Limited',
         cin: 'L05005AP1997PLC027123',
         taxId: '37AABCD1234E1Z5',
         eiaNumber: 'EIA/AP/0458',
@@ -4791,7 +4792,15 @@ export const SetupView = {
 
     TabBar.render('setup-tab-bar-container', activeHash);
     const subContainer = document.getElementById('setup-subpage-content');
-    this.renderTabContent(subContainer, tabId);
+    if (subContainer) {
+      const sk = typeof Skeleton !== 'undefined' ? Skeleton : (typeof window !== 'undefined' ? window.Skeleton : null);
+      if (sk && typeof sk.renderTable === 'function') {
+        subContainer.innerHTML = sk.renderTable(6, 6);
+      }
+      setTimeout(() => {
+        this.renderTabContent(subContainer, tabId);
+      }, 120);
+    }
   },
 
   renderClientMasterStudio(container, tabId) {
@@ -5663,17 +5672,7 @@ export const SetupView = {
           header: 'Users', 
           render: (v, r) => {
             const count = (this.state.users || []).filter(u => u.companyId === r.id || u.companyName === r.name || u.companyName === r.shortName).length;
-            return `
-              <button 
-                type="button" 
-                class="btn-client-view-users inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-[#F0F9FF] text-[#0284C7] border border-[#BAE6FD] hover:bg-[#BAE6FD] transition-colors cursor-pointer" 
-                data-client-id="${r.id}"
-                title="Click to view all users, roles, and assigned modules for ${r.name}"
-              >
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                <span>${count} Users</span>
-              </button>
-            `;
+            return `<span class="btn-client-view-users text-xs text-[#172B4D] font-medium cursor-pointer" data-client-id="${r.id}" title="Click to view all users for ${r.name}">${count} User${count === 1 ? '' : 's'}</span>`;
           } 
         },
         { field: 'status', header: 'Status', type: 'status' }
@@ -5853,8 +5852,8 @@ export const SetupView = {
             </div>
           </div>
 
-          <!-- Users Table -->
-          <div class="border border-[#EBECF0] rounded-xl overflow-hidden shadow-2xs">
+          <!-- Users Table with Matching Pagination -->
+          <div id="client-users-table-wrapper" class="border border-[#EBECF0] rounded-none overflow-hidden shadow-2xs">
             <table class="w-full text-left text-xs">
               <thead class="bg-[#FAFBFC] border-b border-[#EBECF0] text-[10px] font-bold text-[#5E6C84] uppercase tracking-wider">
                 <tr>
@@ -5868,22 +5867,21 @@ export const SetupView = {
                   <th class="py-2.5 px-3 text-center">Status</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-[#EBECF0] bg-white">
+              <tbody id="client-users-tbody" class="divide-y divide-[#EBECF0] bg-white">
                 ${clientUsers.length === 0 ? `
                   <tr>
                     <td colspan="8" class="py-8 text-center text-xs text-[#8993A4] italic">
                       No users configured for this client yet.
                     </td>
                   </tr>
-                ` : clientUsers.map((u, idx) => `
+                ` : clientUsers.slice(0, 10).map((u, idx) => `
                   <tr class="hover:bg-[#F9FAFB] transition-colors cursor-pointer client-user-row" data-user-id="${u.id}" title="Click to view full user details, role & assigned modules">
                     <td class="py-2.5 px-3 text-[#8993A4] font-mono text-[11px]">${idx + 1}</td>
                     <td class="py-2.5 px-3 font-mono font-bold text-[#0284C7]">${u.username || u.id.toLowerCase()}</td>
                     <td class="py-2.5 px-3 font-semibold text-[#172B4D]">${u.name || u.username || '—'}</td>
                     <td class="py-2.5 px-3 font-mono text-[11px] text-[#5E6C84]">${u.id}</td>
                     <td class="py-2.5 px-3">
-                      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-[#F0F9FF] text-[#0284C7] border border-[#BAE6FD]">
-                        <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#F0F9FF] border border-[#BAE6FD] text-[#0284C7] whitespace-nowrap shrink-0 shadow-2xs" style="border-radius: 9999px !important; font-size: 10px !important; line-height: 14px !important;">
                         <span>${u.role || '—'}</span>
                       </span>
                     </td>
@@ -5901,6 +5899,37 @@ export const SetupView = {
                 `).join('')}
               </tbody>
             </table>
+
+            <!-- Records Pagination Toolbar matching exact requested style -->
+            <div id="client-users-pagination-bar" class="px-3.5 py-2.5 bg-[#FAFBFC] border-t border-[#EBECF0] flex items-center justify-between flex-wrap gap-2 text-xs text-[#5E6C84]">
+              <div class="flex items-center gap-1.5">
+                Showing <span id="cu-start-rec" class="font-semibold text-[#172B4D]">${clientUsers.length > 0 ? 1 : 0}</span> to <span id="cu-end-rec" class="font-semibold text-[#172B4D]">${Math.min(10, clientUsers.length)}</span> of <span class="font-semibold text-[#172B4D]">${clientUsers.length}</span> entries
+              </div>
+              <div class="flex items-center flex-wrap gap-2.5">
+                <div class="flex items-center gap-2 text-xs font-medium text-[#64748B]">
+                  <span>Rows:</span>
+                  <select id="cu-rows-select" class="text-xs font-medium text-[#1E293B] bg-white border border-[#CBD5E1] rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-[#0284C7] cursor-pointer shadow-2xs hover:border-[#94A3B8]">
+                    <option value="5">5 per page</option>
+                    <option value="10" selected>10 per page</option>
+                    <option value="25">25 per page</option>
+                    <option value="50">50 per page</option>
+                  </select>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <button type="button" id="cu-page-prev" class="w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all opacity-40 cursor-not-allowed" title="Previous page" aria-label="Previous page" disabled>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                  </button>
+                  <div id="cu-pages-container" class="flex items-center gap-1.5">
+                    <button type="button" class="cu-page-btn w-9 h-9 min-w-[36px] flex items-center justify-center text-sm font-semibold rounded-xl transition-all cursor-pointer select-none bg-black text-white shadow-xs" data-page="1">
+                      1
+                    </button>
+                  </div>
+                  <button type="button" id="cu-page-next" class="w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all ${Math.ceil(clientUsers.length / 10) <= 1 ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}" title="Next page" aria-label="Next page" ${Math.ceil(clientUsers.length / 10) <= 1 ? 'disabled' : ''}>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -5915,17 +5944,142 @@ export const SetupView = {
       ]
     });
 
-    // Wire up events inside the modal
+    // Wire up events and pagination inside the modal
     setTimeout(() => {
-      // Clicking any user row in the table opens user details & role access modal
-      document.querySelectorAll('.client-user-row').forEach(row => {
-        row.onclick = () => {
-          const u = this.state.users.find(x => x.id === row.dataset.userId);
-          if (u) {
-            this.showUserDetailsAndRoleAccessModal(u);
+      let cuPage = 1;
+      let cuSize = 10;
+
+      const renderCuTable = () => {
+        const tbody = document.getElementById('client-users-tbody');
+        const startSpan = document.getElementById('cu-start-rec');
+        const endSpan = document.getElementById('cu-end-rec');
+        const prevBtn = document.getElementById('cu-page-prev');
+        const nextBtn = document.getElementById('cu-page-next');
+        const pagesContainer = document.getElementById('cu-pages-container');
+
+        if (!tbody) return;
+        const totalP = Math.max(1, Math.ceil(clientUsers.length / cuSize));
+        if (cuPage > totalP) cuPage = totalP;
+        if (cuPage < 1) cuPage = 1;
+
+        const startIdx = (cuPage - 1) * cuSize;
+        const endIdx = Math.min(startIdx + cuSize, clientUsers.length);
+        const pItems = clientUsers.slice(startIdx, endIdx);
+
+        if (startSpan) startSpan.textContent = clientUsers.length > 0 ? startIdx + 1 : 0;
+        if (endSpan) endSpan.textContent = endIdx;
+
+        tbody.innerHTML = pItems.length === 0 ? `
+          <tr><td colspan="8" class="py-8 text-center text-xs text-[#8993A4] italic">No users found.</td></tr>
+        ` : pItems.map((u, i) => `
+          <tr class="hover:bg-[#F9FAFB] transition-colors cursor-pointer client-user-row" data-user-id="${u.id}" title="Click to view full user details, role & assigned modules">
+            <td class="py-2.5 px-3 text-[#8993A4] font-mono text-[11px]">${startIdx + i + 1}</td>
+            <td class="py-2.5 px-3 font-mono font-bold text-[#0284C7]">${u.username || u.id.toLowerCase()}</td>
+            <td class="py-2.5 px-3 font-semibold text-[#172B4D]">${u.name || u.username || '—'}</td>
+            <td class="py-2.5 px-3 font-mono text-[11px] text-[#5E6C84]">${u.id}</td>
+            <td class="py-2.5 px-3">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#F0F9FF] border border-[#BAE6FD] text-[#0284C7] whitespace-nowrap shrink-0 shadow-2xs" style="border-radius: 9999px !important; font-size: 10px !important; line-height: 14px !important;">
+                <span>${u.role || '—'}</span>
+              </span>
+            </td>
+            <td class="py-2.5 px-3 text-[#42526E] font-medium">${u.department || '—'}</td>
+            <td class="py-2.5 px-3 text-[#5E6C84] text-[11px]">${u.productionPlant || (u.plantAccess ? u.plantAccess[0] : 'All Plants')}</td>
+            <td class="py-2.5 px-3 text-center">
+              <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                u.status === 'Active' ? 'bg-[#E3FCEF] text-[#006644]' : 'bg-[#FFEBE6] text-[#BF2600]'
+              }">
+                <span class="w-1.5 h-1.5 rounded-full ${u.status === 'Active' ? 'bg-[#36B37E]' : 'bg-[#FF5630]'}"></span>
+                ${u.status || 'Active'}
+              </span>
+            </td>
+          </tr>
+        `).join('');
+
+        // Wire row clicks
+        tbody.querySelectorAll('.client-user-row').forEach(row => {
+          row.onclick = () => {
+            const u = this.state.users.find(x => x.id === row.dataset.userId);
+            if (u) this.showUserDetailsAndRoleAccessModal(u);
+          };
+        });
+
+        // Prev/Next buttons
+        if (prevBtn) {
+          prevBtn.disabled = cuPage === 1;
+          prevBtn.className = `w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all ${
+            cuPage === 1 ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'
+          }`;
+        }
+        if (nextBtn) {
+          nextBtn.disabled = cuPage >= totalP;
+          nextBtn.className = `w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all ${
+            cuPage >= totalP ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'
+          }`;
+        }
+
+        // Page buttons window
+        if (pagesContainer) {
+          const pageWindow = 5;
+          let sp = Math.max(1, cuPage - 2);
+          let ep = Math.min(totalP, sp + pageWindow - 1);
+          if (ep - sp + 1 < pageWindow) sp = Math.max(1, ep - pageWindow + 1);
+
+          let pHtml = '';
+          for (let p = sp; p <= ep; p++) {
+            const isAct = p === cuPage;
+            pHtml += `
+              <button type="button" class="cu-page-btn w-9 h-9 min-w-[36px] flex items-center justify-center text-sm font-semibold rounded-xl transition-all cursor-pointer select-none ${
+                isAct
+                  ? 'bg-black text-white shadow-xs'
+                  : 'bg-white border border-[#CBD5E1] text-[#334155] hover:border-[#0284C7] hover:text-[#0284C7]'
+              }" data-page="${p}">
+                ${p}
+              </button>
+            `;
+          }
+          pagesContainer.innerHTML = pHtml;
+
+          pagesContainer.querySelectorAll('.cu-page-btn').forEach(btn => {
+            btn.onclick = () => {
+              const p = parseInt(btn.dataset.page, 10);
+              if (p && p !== cuPage) {
+                cuPage = p;
+                renderCuTable();
+              }
+            };
+          });
+        }
+      };
+
+      const rowsSel = document.getElementById('cu-rows-select');
+      if (rowsSel) {
+        rowsSel.onchange = (e) => {
+          cuSize = parseInt(e.target.value, 10) || 10;
+          cuPage = 1;
+          renderCuTable();
+        };
+      }
+      const prevBtn = document.getElementById('cu-page-prev');
+      if (prevBtn) {
+        prevBtn.onclick = () => {
+          if (cuPage > 1) {
+            cuPage--;
+            renderCuTable();
           }
         };
-      });
+      }
+      const nextBtn = document.getElementById('cu-page-next');
+      if (nextBtn) {
+        nextBtn.onclick = () => {
+          const totalP = Math.max(1, Math.ceil(clientUsers.length / cuSize));
+          if (cuPage < totalP) {
+            cuPage++;
+            renderCuTable();
+          }
+        };
+      }
+
+      renderCuTable();
     }, 40);
   },
 
@@ -6038,7 +6192,7 @@ export const SetupView = {
                 No active modules or submenus assigned to this role.
               </div>
             ` : `
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-[300px] overflow-y-auto pr-1">
+              <div class="grid grid-cols-1 gap-2.5 max-h-[320px] overflow-y-auto pr-1">
                 ${matchedModules.map(m => {
                   const allSubs = this.state.submenusConfig[m.id] || this.state.submenusConfig[m.key] || [];
                   const roleSubs = isFullAccess
@@ -6054,7 +6208,6 @@ export const SetupView = {
                           <span class="w-2 h-2 rounded-full bg-[#00875A]"></span>
                           ${m.label}
                         </span>
-                        <span class="text-[10px] font-mono text-[#5E6C84]">(${m.key || m.id})</span>
                       </div>
                       <div class="flex flex-wrap gap-1.5 pt-1.5 border-t border-[#EBECF0]">
                         ${roleSubs.length === 0 ? `
@@ -6363,24 +6516,66 @@ export const SetupView = {
             ` : ''}
           </div>
           <div class="flex items-center gap-3 flex-wrap">
-            <div class="flex items-center gap-2">
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider flex items-center gap-1.5">
-                <svg class="w-3.5 h-3.5 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                Select Client:
-              </span>
-              <select id="usr-client-filter" class="text-xs font-semibold text-[#172B4D] bg-transparent focus:outline-none cursor-pointer">
-                <option value="ALL">All Clients (${this.state.users.length})</option>
-                ${this.state.companies.map(c => {
-                  const count = this.state.users.filter(u => u.companyId === c.id || u.companyName === c.name || u.companyName === c.shortName).length;
-                  return `<option value="${c.id}" ${this.state.userFilterCompany === c.id ? 'selected' : ''}>${c.name} (${count})</option>`;
-                }).join('')}
-              </select>
-            </div>
-
             <button id="btn-add-user" class="btn-primary px-3 py-1.5 rounded text-xs flex items-center gap-1.5 shadow-xs cursor-pointer">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
               <span>Add User</span>
             </button>
+          </div>
+        </div>
+
+        <!-- Search / Filter Fields: Select Client, Select Role, Status -->
+        <div class="dt-top-filter-card bg-white rounded-xl border border-[#DFE1E6] p-4 shadow-xs mb-3 transition-all duration-200" style="margin-bottom: 12px !important;">
+          <div class="flex items-center justify-between pb-1">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+              <h3 class="text-xs font-bold text-[#172B4D]">Search &amp; Filters</h3>
+            </div>
+
+            <!-- Filter Controls: Reset & Toggle Open/Close -->
+            <div class="inline-flex items-center" style="gap: 8px; display: inline-flex;">
+              <button type="button" id="users-top-reset-btn" class="dt-action-btn dt-top-filter-reset-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Reset all filters" aria-label="Reset all filters">
+                <svg class="w-4 h-4 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              </button>
+
+              <button type="button" id="users-top-toggle-btn" class="dt-action-btn dt-top-filter-toggle-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Hide Filter" aria-label="Hide Filter">
+                <svg class="w-4 h-4 text-current dt-top-filter-toggle-icon transform transition-transform duration-200" id="users-top-toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Collapsible Filter Inputs Grid -->
+          <div id="users-top-filter-body" class="dt-top-filter-body mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs transition-all duration-200" style="margin-top: 12px !important;">
+            <div>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT CLIENT</label>
+              <select id="users-top-client-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
+                <option value="ALL">All Clients (${this.state.companies.length})</option>
+                ${this.state.companies.map(c => `<option value="${c.id}" ${this.state.userFilterCompany === c.id ? 'selected' : ''}>${c.name}</option>`).join('')}
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT ROLE</label>
+              <select id="users-top-role-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
+                <option value="ALL">All Roles (${this.state.roles.length})</option>
+                ${this.state.roles.map(r => `<option value="${r.name}" ${this.state.userSearchRole === r.name ? 'selected' : ''}>${r.name}</option>`).join('')}
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">STATUS</label>
+              <select id="users-top-status-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
+                <option value="ALL">All Statuses (Select)</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+
+            <div class="flex items-end">
+              <button type="button" id="users-top-search-btn" class="dt-top-filter-search-btn btn-primary px-5 py-1.5 rounded text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs hover:shadow cursor-pointer h-[31px]">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <span>Search</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -6394,6 +6589,7 @@ export const SetupView = {
       keyField: 'id',
       tableTitle: 'Users Registry',
       searchable: true,
+      hideTopFilterBar: true,
       exportable: true,
       pageSize: 10,
       onRowClick: (row) => this.showUserDetailsAndRoleAccessModal(row),
@@ -6422,8 +6618,7 @@ export const SetupView = {
           field: 'role', 
           header: 'Role', 
           render: (v) => `
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-bold bg-[#F0F9FF] text-[#0284C7] border border-[#BAE6FD]">
-              <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#F0F9FF] border border-[#BAE6FD] text-[#0284C7] whitespace-nowrap shrink-0 shadow-2xs" style="border-radius: 9999px !important; font-size: 10px !important; line-height: 14px !important;">
               <span>${v || '—'}</span>
             </span>
           ` 
@@ -6449,7 +6644,11 @@ export const SetupView = {
         { 
           field: 'accessType', 
           header: 'Access Type', 
-          render: (v) => `<span class="lozenge ${v === 'Full Access' ? 'lozenge-purple' : v === 'Admin / Manager' ? 'lozenge-inprogress' : 'lozenge-default'} text-[10px]">${v || 'Standard Access'}</span>` 
+          render: (v) => `
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#F0F9FF] border border-[#BAE6FD] text-[#0284C7] whitespace-nowrap shrink-0 shadow-2xs" style="border-radius: 9999px !important; font-size: 10px !important; line-height: 14px !important;">
+              <span>${v || 'Standard Access'}</span>
+            </span>
+          ` 
         },
         { field: 'status', header: 'Status', type: 'status' }
       ],
@@ -6530,22 +6729,84 @@ export const SetupView = {
       ]
     });
 
-    const clientFilter = document.getElementById('usr-client-filter');
-    if (clientFilter) {
-      clientFilter.onchange = (e) => {
-        this.state.userFilterCompany = e.target.value;
+    // Users top filter listeners
+    const filterClient = document.getElementById('users-top-client-select');
+    const filterRole = document.getElementById('users-top-role-select');
+    const filterStatus = document.getElementById('users-top-status-select');
+    const searchBtn = document.getElementById('users-top-search-btn');
+    const resetBtn = document.getElementById('users-top-reset-btn');
+    const toggleBtn = document.getElementById('users-top-toggle-btn');
+    const filterBody = document.getElementById('users-top-filter-body');
+    const toggleText = document.getElementById('users-top-toggle-text');
+    const toggleIcon = document.getElementById('users-top-toggle-icon');
+
+    if (toggleBtn && filterBody) {
+      let isCollapsed = false;
+      toggleBtn.addEventListener('click', () => {
+        isCollapsed = !isCollapsed;
+        const h = filterBody.previousElementSibling;
+        if (isCollapsed) {
+          filterBody.classList.add('hidden');
+          if (h) { h.classList.remove('pb-1'); h.classList.add('pb-0'); }
+          if (toggleIcon) toggleIcon.classList.add('-rotate-90');
+          toggleBtn.title = 'Show Filter';
+          toggleBtn.setAttribute('aria-label', 'Show Filter');
+        } else {
+          filterBody.classList.remove('hidden');
+          if (h) { h.classList.add('pb-1'); h.classList.remove('pb-0'); }
+          if (toggleIcon) toggleIcon.classList.remove('-rotate-90');
+          toggleBtn.title = 'Hide Filter';
+          toggleBtn.setAttribute('aria-label', 'Hide Filter');
+        }
+      });
+    }
+
+    const applyUsersFilters = () => {
+      const cVal = filterClient ? filterClient.value : 'ALL';
+      const rVal = filterRole ? filterRole.value : 'ALL';
+      const sVal = filterStatus ? filterStatus.value : 'ALL';
+
+      this.state.userFilterCompany = cVal;
+      this.state.userSearchRole = rVal !== 'ALL' ? rVal : null;
+
+      const filtered = this.state.users.filter(u => {
+        const matchClient = (cVal === 'ALL') || (u.companyId === cVal) || (u.companyName === cVal);
+        const matchRole = (rVal === 'ALL') || (u.role === rVal) || (u.designation === rVal);
+        const matchStatus = (sVal === 'ALL') || (u.status === sVal);
+        return matchClient && matchRole && matchStatus;
+      });
+
+      usersTable.setData(filtered);
+    };
+
+    if (searchBtn) searchBtn.addEventListener('click', () => {
+      applyUsersFilters();
+      Toast.show('Filtered users list updated.', 'info');
+    });
+    if (filterClient) filterClient.addEventListener('change', applyUsersFilters);
+    if (filterRole) filterRole.addEventListener('change', applyUsersFilters);
+    if (filterStatus) filterStatus.addEventListener('change', applyUsersFilters);
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        if (filterClient) filterClient.value = 'ALL';
+        if (filterRole) filterRole.value = 'ALL';
+        if (filterStatus) filterStatus.value = 'ALL';
+        this.state.userFilterCompany = 'ALL';
+        delete this.state.userSearchRole;
         this.saveState();
-        usersTable.setData(getFilteredUsers());
-      };
+        usersTable.setData(this.state.users);
+        Toast.show('Filters have been reset.', 'info');
+      });
     }
 
     const clearRoleBtn = document.getElementById('btn-clear-role-filter');
     if (clearRoleBtn) {
       clearRoleBtn.onclick = () => {
         delete this.state.userSearchRole;
+        if (filterRole) filterRole.value = 'ALL';
         this.saveState();
-        const containerEl = document.getElementById('setup-subpage-content');
-        if (containerEl) this.renderUserManagementTab(containerEl);
+        applyUsersFilters();
       };
     }
 
@@ -7064,6 +7325,19 @@ export const SetupView = {
   // 2b. ROLES MANAGEMENT TAB
   // =========================================================================
   renderRolesTab(container) {
+    const departments = Array.from(new Set([
+      'Raw Material Procurement',
+      'Quality Assurance & Lab',
+      'Production & Processing Floor',
+      'Cold Storage & Logistics',
+      'Sales, Exports & Documentation',
+      'Executive Management',
+      'Finance & Accounts',
+      'IT & Systems Administration',
+      'General Operations',
+      ...this.state.roles.map(r => r.department).filter(Boolean)
+    ]));
+
     container.innerHTML = `
       <div class="space-y-4 animate-fade-in">
         <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
@@ -7078,6 +7352,63 @@ export const SetupView = {
           </div>
         </div>
 
+        <!-- Search / Filter Fields: Select Department, Status, Role Type -->
+        <div class="dt-top-filter-card bg-white rounded-xl border border-[#DFE1E6] p-4 shadow-xs mb-3 transition-all duration-200" style="margin-bottom: 12px !important;">
+          <div class="flex items-center justify-between pb-1">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+              <h3 class="text-xs font-bold text-[#172B4D]">Search &amp; Filters</h3>
+            </div>
+
+            <!-- Filter Controls: Reset & Toggle Open/Close -->
+            <div class="inline-flex items-center" style="gap: 8px; display: inline-flex;">
+              <button type="button" id="roles-top-reset-btn" class="dt-action-btn dt-top-filter-reset-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Reset all filters" aria-label="Reset all filters">
+                <svg class="w-4 h-4 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              </button>
+
+              <button type="button" id="roles-top-toggle-btn" class="dt-action-btn dt-top-filter-toggle-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Hide Filter" aria-label="Hide Filter">
+                <svg class="w-4 h-4 text-current dt-top-filter-toggle-icon transform transition-transform duration-200" id="roles-top-toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Collapsible Filter Inputs Grid -->
+          <div id="roles-top-filter-body" class="dt-top-filter-body mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs transition-all duration-200" style="margin-top: 12px !important;">
+            <div>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT DEPARTMENT</label>
+              <select id="roles-top-dept-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
+                <option value="ALL">All Departments (${departments.length})</option>
+                ${departments.map(d => `<option value="${d}">${d}</option>`).join('')}
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">STATUS</label>
+              <select id="roles-top-status-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
+                <option value="ALL">All Statuses (Select)</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">ROLE TYPE</label>
+              <select id="roles-top-type-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
+                <option value="ALL">All Role Types</option>
+                <option value="SYSTEM">System Roles (Protected)</option>
+                <option value="CUSTOM">Custom Roles</option>
+              </select>
+            </div>
+
+            <div class="flex items-end">
+              <button type="button" id="roles-top-search-btn" class="dt-top-filter-search-btn btn-primary px-5 py-1.5 rounded text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs hover:shadow cursor-pointer h-[31px]">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <span>Search</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div id="roles-table-container"></div>
       </div>
     `;
@@ -7088,6 +7419,7 @@ export const SetupView = {
       keyField: 'id',
       tableTitle: 'Roles Registry',
       searchable: true,
+      hideTopFilterBar: true,
       exportable: true,
       pageSize: 10,
       columns: [
@@ -7100,14 +7432,9 @@ export const SetupView = {
           field: 'name', 
           header: 'Role Name', 
           render: (v, r) => `
-            <div class="flex items-center gap-2">
-              <div class="w-7 h-7 rounded-lg bg-[#F0F9FF] text-[#0284C7] border border-[#BAE6FD] flex items-center justify-center font-bold text-xs shrink-0">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-              </div>
-              <div>
-                <span class="font-bold text-[#172B4D] text-xs">${v}</span>
-                ${r.isProtected ? '<span class="ml-1.5 text-[9.5px] font-bold text-[#8993A4] bg-[#F4F5F7] px-1.5 py-0.5 rounded border border-[#DFE1E6]">🔒 System</span>' : ''}
-              </div>
+            <div class="flex items-center gap-1.5">
+              <span class="font-bold text-[#172B4D] text-xs">${v}</span>
+              ${r.isProtected ? '<span class="ml-1 text-[9.5px] font-bold text-[#8993A4] bg-[#F4F5F7] px-1.5 py-0.5 rounded border border-[#DFE1E6]">🔒 System</span>' : ''}
             </div>
           ` 
         },
@@ -7128,31 +7455,31 @@ export const SetupView = {
             const assigned = Array.isArray(v) ? v : [];
             const isAll = assigned.includes('*') || assigned.length >= this.state.modulesConfig.length;
             if (isAll) {
-              return `<span class="lozenge lozenge-purple text-[10px]">All Menus (Full Access)</span>`;
+              return `<span class="lozenge lozenge-purple capsule-sm whitespace-nowrap" style="border-radius: 9999px !important; font-size: 10px !important; line-height: 14px !important; padding: 2px 8px !important;">All Menus (Full Access)</span>`;
             }
             if (assigned.length === 0) {
-              return `<span class="text-xs text-[#8993A4] italic">No menus assigned</span>`;
+              return `<span class="text-xs text-[#8993A4] italic whitespace-nowrap">No menus assigned</span>`;
             }
             const matchedMods = this.state.modulesConfig.filter(m => assigned.includes(m.key) || assigned.includes(m.id));
-            const maxVisible = 3;
+            const maxVisible = 2;
             const hasMore = matchedMods.length > maxVisible;
             const displayList = hasMore ? matchedMods.slice(0, maxVisible) : matchedMods;
             const remainingCount = matchedMods.length - maxVisible;
 
             return `
-              <div class="flex flex-wrap gap-1.5 items-center max-w-md">
+              <div class="flex items-center gap-1.5 flex-nowrap whitespace-nowrap overflow-hidden" title="${matchedMods.map(m => m.label).join(', ')}">
                 ${displayList.map(m => {
                   const subs = this.state.submenusConfig[m.id] || this.state.submenusConfig[m.key] || [];
                   return `
-                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-[#F0F9FF] border border-[#BAE6FD] text-[#0284C7] whitespace-nowrap">
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#F0F9FF] border border-[#BAE6FD] text-[#0284C7] whitespace-nowrap shrink-0 shadow-2xs" style="border-radius: 9999px !important; font-size: 10px !important; line-height: 14px !important;">
                       <span>${m.label}</span>
-                      ${subs.length > 0 ? `<span class="text-[9.5px] px-1 bg-[#E0F2FE] text-[#0369A1] rounded-full font-bold">${subs.length}</span>` : ''}
+                      ${subs.length > 0 ? `<span class="text-[9px] px-1 bg-[#E0F2FE] text-[#0369A1] rounded-full font-bold" style="border-radius: 9999px !important; font-size: 9px !important;">${subs.length}</span>` : ''}
                     </span>
                   `;
                 }).join('')}
                 ${hasMore ? `
-                  <button type="button" class="btn-role-show-more-menus px-2 py-0.5 rounded text-[11px] font-bold bg-[#F4F5F7] border border-[#DFE1E6] text-[#42526E] hover:bg-[#EBECF0] hover:text-[#172B4D] transition-colors cursor-pointer" data-role-id="${r.id}">
-                    +${remainingCount} more
+                  <button type="button" class="btn-role-show-more-menus inline-flex items-center text-[11px] font-bold text-[#0284C7] hover:underline cursor-pointer shrink-0 p-0 m-0 border-0 bg-transparent" data-role-id="${r.id}" title="Click to view all ${matchedMods.length} assigned menus in popup">
+                    +${remainingCount}
                   </button>
                 ` : ''}
               </div>
@@ -7164,12 +7491,7 @@ export const SetupView = {
           header: 'Users', 
           render: (v, r) => {
             const count = this.state.users.filter(u => u.role === r.name || u.role === r.id).length;
-            return `
-              <button type="button" class="btn-role-view-users inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold ${count > 0 ? 'bg-[#EBF8FF] text-[#0284C7] hover:bg-[#BAE6FD] border border-[#BAE6FD]' : 'bg-[#F4F5F7] text-[#8993A4] border border-[#DFE1E6]'} transition-colors cursor-pointer" data-role-name="${r.name}" title="Click to view all users with this role">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                <span>${count} User${count === 1 ? '' : 's'}</span>
-              </button>
-            `;
+            return `<span class="btn-role-view-users text-xs text-[#172B4D] font-medium cursor-pointer" data-role-name="${r.name}" title="Click to view all users with this role">${count} User${count === 1 ? '' : 's'}</span>`;
           } 
         },
         { field: 'status', header: 'Status', type: 'status' }
@@ -7209,6 +7531,70 @@ export const SetupView = {
         }
       ]
     });
+
+    const filterDept = document.getElementById('roles-top-dept-select');
+    const filterStatus = document.getElementById('roles-top-status-select');
+    const filterType = document.getElementById('roles-top-type-select');
+    const searchBtn = document.getElementById('roles-top-search-btn');
+    const resetBtn = document.getElementById('roles-top-reset-btn');
+    const toggleBtn = document.getElementById('roles-top-toggle-btn');
+    const filterBody = document.getElementById('roles-top-filter-body');
+    const toggleText = document.getElementById('roles-top-toggle-text');
+    const toggleIcon = document.getElementById('roles-top-toggle-icon');
+
+    if (toggleBtn && filterBody) {
+      let isCollapsed = false;
+      toggleBtn.addEventListener('click', () => {
+        isCollapsed = !isCollapsed;
+        const h = filterBody.previousElementSibling;
+        if (isCollapsed) {
+          filterBody.classList.add('hidden');
+          if (h) { h.classList.remove('pb-1'); h.classList.add('pb-0'); }
+          if (toggleIcon) toggleIcon.classList.add('-rotate-90');
+          toggleBtn.title = 'Show Filter';
+          toggleBtn.setAttribute('aria-label', 'Show Filter');
+        } else {
+          filterBody.classList.remove('hidden');
+          if (h) { h.classList.add('pb-1'); h.classList.remove('pb-0'); }
+          if (toggleIcon) toggleIcon.classList.remove('-rotate-90');
+          toggleBtn.title = 'Hide Filter';
+          toggleBtn.setAttribute('aria-label', 'Hide Filter');
+        }
+      });
+    }
+
+    const applyRolesFilters = () => {
+      const dVal = filterDept ? filterDept.value : 'ALL';
+      const sVal = filterStatus ? filterStatus.value : 'ALL';
+      const tVal = filterType ? filterType.value : 'ALL';
+
+      const filtered = this.state.roles.filter(r => {
+        const matchDept = (dVal === 'ALL') || (r.department === dVal) || (!r.department && dVal === 'General Operations');
+        const matchStatus = (sVal === 'ALL') || (r.status === sVal) || (!r.status && sVal === 'Active');
+        const matchType = (tVal === 'ALL') || (tVal === 'SYSTEM' && r.isProtected) || (tVal === 'CUSTOM' && !r.isProtected);
+        return matchDept && matchStatus && matchType;
+      });
+
+      rolesTable.setData(filtered);
+    };
+
+    if (searchBtn) searchBtn.addEventListener('click', () => {
+      applyRolesFilters();
+      Toast.show('Filtered roles list updated.', 'info');
+    });
+    if (filterDept) filterDept.addEventListener('change', applyRolesFilters);
+    if (filterStatus) filterStatus.addEventListener('change', applyRolesFilters);
+    if (filterType) filterType.addEventListener('change', applyRolesFilters);
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        if (filterDept) filterDept.value = 'ALL';
+        if (filterStatus) filterStatus.value = 'ALL';
+        if (filterType) filterType.value = 'ALL';
+        rolesTable.setData(this.state.roles);
+        Toast.show('Filters have been reset.', 'info');
+      });
+    }
 
     const addBtn = document.getElementById('btn-add-role');
     if (addBtn) {
@@ -7260,20 +7646,32 @@ export const SetupView = {
 
           <div class="space-y-2 max-h-[380px] overflow-y-auto pr-1">
             ${mods.map(m => {
+              const modKey = m.key || m.id;
               const subs = this.state.submenusConfig[m.id] || this.state.submenusConfig[m.key] || [];
               const assignedSubs = subs.filter(s => {
                 const subId = s.id || s.name || s.title;
                 return !role.assignedSubmenus || role.assignedSubmenus.length === 0 || role.assignedSubmenus.includes(subId) || role.assignedSubmenus.includes(s.title);
               });
+              const crud = role.crudPermissions?.[modKey] || {
+                add: true,
+                edit: true,
+                delete: role.id === 'ROLE-ADMIN'
+              };
               return `
                 <div class="p-3 bg-white rounded-lg border border-[#EBECF0] space-y-2">
-                  <div class="flex items-center justify-between">
+                  <div class="flex items-center justify-between flex-wrap gap-2">
                     <div class="flex items-center gap-2">
                       <div class="w-6 h-6 rounded bg-[#F0F9FF] text-[#0284C7] flex items-center justify-center">${this.getModuleIconSvg(m)}</div>
                       <span class="font-bold text-xs text-[#172B4D]">${m.label}</span>
-                      <span class="text-[10px] font-mono text-[#5E6C84]">(${m.key || m.id})</span>
                     </div>
-                    <span class="text-[10px] font-semibold text-[#0284C7] bg-[#F0F9FF] px-2 py-0.5 rounded border border-[#BAE6FD]">${assignedSubs.length} of ${subs.length} Submenus</span>
+                    <div class="flex items-center gap-2">
+                      <div class="flex items-center gap-1.5 text-[10px] bg-white px-2 py-0.5 rounded border border-[#DFE1E6]">
+                        <span class="text-[9.5px] font-bold text-[#5E6C84] uppercase">Access:</span>
+                        <span class="px-1.5 py-0.5 rounded-full text-[9.5px] font-bold ${crud.add ? 'bg-[#DCFCE7] text-[#065F46] border border-[#86EFAC]' : 'bg-[#F1F5F9] text-[#94A3B8] border border-[#CBD5E1] line-through'}">Add</span>
+                        <span class="px-1.5 py-0.5 rounded-full text-[9.5px] font-bold ${crud.edit ? 'bg-[#DCFCE7] text-[#065F46] border border-[#86EFAC]' : 'bg-[#F1F5F9] text-[#94A3B8] border border-[#CBD5E1] line-through'}">Edit</span>
+                        <span class="px-1.5 py-0.5 rounded-full text-[9.5px] font-bold ${crud.delete ? 'bg-[#DCFCE7] text-[#065F46] border border-[#86EFAC]' : 'bg-[#F1F5F9] text-[#94A3B8] border border-[#CBD5E1] line-through'}">Delete</span>
+                      </div>
+                    </div>
                   </div>
                   ${assignedSubs.length > 0 ? `
                     <div class="flex flex-wrap gap-1.5 pt-1 border-t border-[#F4F5F7]">
@@ -7304,6 +7702,7 @@ export const SetupView = {
     const isProtected = role?.isProtected || false;
     const assignedMenus = Array.isArray(role?.assignedMenus) ? role.assignedMenus : [];
     const assignedSubmenus = Array.isArray(role?.assignedSubmenus) ? role.assignedSubmenus : [];
+    const crudPerms = role?.crudPermissions || {};
 
     const departments = [
       'Raw Material Procurement',
@@ -7403,6 +7802,11 @@ export const SetupView = {
                 const modKey = mod.key || mod.id;
                 const subList = this.state.submenusConfig[mod.id] || this.state.submenusConfig[mod.key] || [];
                 const isMenuChecked = assignedMenus.includes('*') || assignedMenus.includes(modKey) || assignedMenus.includes(mod.id);
+                const modCrud = crudPerms[modKey] || {
+                  add: isMenuChecked,
+                  edit: isMenuChecked,
+                  delete: isMenuChecked && (role?.id === 'ROLE-ADMIN' || !role)
+                };
 
                 return `
                   <div class="role-menu-card rounded-lg border border-[#DFE1E6] bg-white overflow-hidden shadow-2xs" data-menu-key="${modKey}">
@@ -7419,12 +7823,41 @@ export const SetupView = {
                           ${this.getModuleIconSvg(mod)}
                         </div>
                         <span class="text-xs font-bold text-[#172B4D] whitespace-nowrap">${mod.label}</span>
-                        <span class="text-[10px] font-mono text-[#5E6C84] whitespace-nowrap">(${modKey})</span>
                       </label>
                       <div class="flex items-center gap-2">
-                        <span class="text-[10px] font-semibold text-[#0284C7] bg-[#F0F9FF] border border-[#BAE6FD] px-2 py-0.5 rounded">
-                          ${subList.length} Submenu${subList.length === 1 ? '' : 's'}
-                        </span>
+                        <div class="flex items-center gap-3 bg-white px-2.5 py-1 rounded border border-[#DFE1E6]">
+                          <span class="text-[10px] font-bold text-[#5E6C84] uppercase tracking-wider">Access:</span>
+                          <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#172B4D] cursor-pointer select-none" title="Allow adding records in ${mod.label}">
+                            <input 
+                              type="checkbox" 
+                              class="role-perm-cb role-perm-add w-3.5 h-3.5 rounded text-[#0284C7] accent-[#0284C7] cursor-pointer" 
+                              data-parent-key="${modKey}" 
+                              data-perm="add"
+                              ${modCrud.add ? 'checked' : ''}
+                            />
+                            <span>Add</span>
+                          </label>
+                          <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#172B4D] cursor-pointer select-none" title="Allow editing records in ${mod.label}">
+                            <input 
+                              type="checkbox" 
+                              class="role-perm-cb role-perm-edit w-3.5 h-3.5 rounded text-[#0284C7] accent-[#0284C7] cursor-pointer" 
+                              data-parent-key="${modKey}" 
+                              data-perm="edit"
+                              ${modCrud.edit ? 'checked' : ''}
+                            />
+                            <span>Edit</span>
+                          </label>
+                          <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#172B4D] cursor-pointer select-none" title="Allow deleting records in ${mod.label}">
+                            <input 
+                              type="checkbox" 
+                              class="role-perm-cb role-perm-delete w-3.5 h-3.5 rounded text-[#0284C7] accent-[#0284C7] cursor-pointer" 
+                              data-parent-key="${modKey}" 
+                              data-perm="delete"
+                              ${modCrud.delete ? 'checked' : ''}
+                            />
+                            <span>Delete</span>
+                          </label>
+                        </div>
                       </div>
                     </div>
 
@@ -7518,12 +7951,28 @@ export const SetupView = {
             const checkedSubCbs = Array.from(document.querySelectorAll('.role-sub-cb:checked'));
             const selectedSubmenus = checkedSubCbs.map(cb => cb.dataset.subId);
 
+            const crudPermissions = {};
+            this.state.modulesConfig.forEach(mod => {
+              const modKey = mod.key || mod.id;
+              const isMenuChecked = document.querySelector(`.role-parent-menu-cb[data-menu-key="${modKey}"]`)?.checked;
+              const canAdd = document.querySelector(`.role-perm-cb[data-parent-key="${modKey}"][data-perm="add"]`)?.checked;
+              const canEdit = document.querySelector(`.role-perm-cb[data-parent-key="${modKey}"][data-perm="edit"]`)?.checked;
+              const canDelete = document.querySelector(`.role-perm-cb[data-parent-key="${modKey}"][data-perm="delete"]`)?.checked;
+              crudPermissions[modKey] = {
+                view: !!isMenuChecked,
+                add: !!canAdd,
+                edit: !!canEdit,
+                delete: !!canDelete
+              };
+            });
+
             if (isEdit) {
               role.name = name;
               role.department = department;
               role.status = roleStatus;
               role.assignedMenus = selectedMenus;
               role.assignedSubmenus = selectedSubmenus;
+              role.crudPermissions = crudPermissions;
               this.logAudit('Role Setup', `Updated role: ${name} (${role.id}) with ${selectedMenus.length} assigned menus`);
             } else {
               const newRole = {
@@ -7534,7 +7983,8 @@ export const SetupView = {
                 isProtected: false,
                 usersCount: 0,
                 assignedMenus: selectedMenus,
-                assignedSubmenus: selectedSubmenus
+                assignedSubmenus: selectedSubmenus,
+                crudPermissions
               };
               this.state.roles.push(newRole);
               this.logAudit('Role Setup', `Created role: ${name} (${id}) with ${selectedMenus.length} assigned menus`);
@@ -7600,7 +8050,7 @@ export const SetupView = {
 
     if (selectAllBtn) {
       selectAllBtn.onclick = () => {
-        document.querySelectorAll('.role-parent-menu-cb, .role-sub-cb').forEach(cb => {
+        document.querySelectorAll('.role-parent-menu-cb, .role-sub-cb, .role-perm-cb').forEach(cb => {
           cb.checked = true;
         });
       };
@@ -7608,13 +8058,13 @@ export const SetupView = {
 
     if (deselectAllBtn) {
       deselectAllBtn.onclick = () => {
-        document.querySelectorAll('.role-parent-menu-cb, .role-sub-cb').forEach(cb => {
+        document.querySelectorAll('.role-parent-menu-cb, .role-sub-cb, .role-perm-cb').forEach(cb => {
           cb.checked = false;
         });
       };
     }
 
-    // Bind parent menu checkbox change -> toggle its submenus
+    // Bind parent menu checkbox change -> toggle its submenus and permissions
     document.querySelectorAll('.role-parent-menu-cb').forEach(parentCb => {
       parentCb.onchange = () => {
         const key = parentCb.dataset.menuKey;
@@ -7622,6 +8072,21 @@ export const SetupView = {
         subCbs.forEach(subCb => {
           subCb.checked = parentCb.checked;
         });
+        const permCbs = document.querySelectorAll(`.role-perm-cb[data-parent-key="${key}"]`);
+        permCbs.forEach(permCb => {
+          permCb.checked = parentCb.checked;
+        });
+      };
+    });
+
+    // Bind permission checkbox change -> if checked, ensure parent menu is checked
+    document.querySelectorAll('.role-perm-cb').forEach(permCb => {
+      permCb.onchange = () => {
+        const parentKey = permCb.dataset.parentKey;
+        const parentCb = document.querySelector(`.role-parent-menu-cb[data-menu-key="${parentKey}"]`);
+        if (permCb.checked && parentCb && !parentCb.checked) {
+          parentCb.checked = true;
+        }
       };
     });
 
@@ -7633,10 +8098,12 @@ export const SetupView = {
         if (subCb.checked) {
           if (parentCb) parentCb.checked = true;
         } else {
-          // If all submenus for this parent are unchecked, uncheck the parent menu
+          // If all submenus for this parent are unchecked and all perms unchecked, uncheck the parent menu
           const siblingSubs = document.querySelectorAll(`.role-sub-cb[data-parent-key="${parentKey}"]`);
-          const anyChecked = Array.from(siblingSubs).some(s => s.checked);
-          if (!anyChecked && parentCb) {
+          const siblingPerms = document.querySelectorAll(`.role-perm-cb[data-parent-key="${parentKey}"]`);
+          const anySubChecked = Array.from(siblingSubs).some(s => s.checked);
+          const anyPermChecked = Array.from(siblingPerms).some(p => p.checked);
+          if (!anySubChecked && !anyPermChecked && parentCb) {
             parentCb.checked = false;
           }
         }
@@ -7906,6 +8373,12 @@ export const SetupView = {
       </div>
     `;
 
+    this.state.modulesConfig.forEach(m => {
+      if (!m.status) {
+        m.status = m.visible !== false ? 'Active' : 'Inactive';
+      }
+    });
+
     const modulesTable = new DataTable({
       containerId: 'modules-table-container',
       data: this.state.modulesConfig,
@@ -7932,12 +8405,12 @@ export const SetupView = {
                 </div>
               </div>
             `;
-          }
+          } 
         },
         { 
           field: 'label', 
           header: 'Menu Name', 
-          render: (v, r) => `<div><span class="font-bold text-[#172B4D] text-xs">${v}</span><div class="text-[10px] font-mono text-[#5E6C84]">${r.key || r.id}</div></div>` 
+          render: (v) => `<span class="font-bold text-[#172B4D] text-xs">${v}</span>` 
         },
         { 
           field: 'submenus', 
@@ -7947,27 +8420,22 @@ export const SetupView = {
             if (!list || list.length === 0) {
               return `<span class="text-xs text-[#8993A4] italic">No Sub Menus</span>`;
             }
-            const maxVisible = 3;
+            const maxVisible = 2;
             const hasMore = list.length > maxVisible;
             const displayList = hasMore ? list.slice(0, maxVisible) : list;
             const remainingCount = list.length - maxVisible;
 
             return `
-              <div class="flex flex-wrap gap-1.5 max-w-md max-h-[58px] overflow-hidden items-center">
-                ${displayList.map(sm => {
-                  const urlText = sm.url || sm.hash || sm.route;
-                  return `
-                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-[#FAFBFC] border border-[#DFE1E6] text-[#172B4D] whitespace-nowrap">
-                      <span class="w-1.5 h-1.5 rounded-full ${sm.status === 'Inactive' ? 'bg-[#FF5630]' : 'bg-[#00875A]'}"></span>
-                      <span class="font-semibold">${sm.title || sm.name}</span>
-                      ${urlText ? `<span class="text-[10px] text-[#5E6C84] font-mono">(${urlText})</span>` : ''}
-                    </span>
-                  `;
-                }).join('')}
+              <div class="flex items-center flex-nowrap gap-1.5 whitespace-nowrap overflow-hidden">
+                ${displayList.map(sm => `
+                  <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-[#FAFBFC] border border-[#DFE1E6] text-[#172B4D] whitespace-nowrap shrink-0 truncate max-w-[140px]" title="${sm.title || sm.name}">
+                    <span class="w-1.5 h-1.5 rounded-full ${sm.status === 'Inactive' ? 'bg-[#FF5630]' : 'bg-[#00875A]'} shrink-0"></span>
+                    <span class="font-semibold truncate">${sm.title || sm.name}</span>
+                  </span>
+                `).join('')}
                 ${hasMore ? `
-                  <button type="button" class="btn-show-all-submenus inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#EBF8FF] hover:bg-[#BAE6FD] text-[#0284C7] border border-[#BAE6FD] transition-all cursor-pointer shadow-2xs shrink-0" data-menu-id="${r.id}" title="Click to view all ${list.length} submenus in popup">
-                    <span>+${remainingCount} more</span>
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                  <button type="button" class="btn-show-all-submenus inline-flex items-center text-[11px] font-bold text-[#0284C7] hover:underline cursor-pointer shrink-0 p-0 m-0 border-0 bg-transparent" data-menu-id="${r.id}" onclick="event.stopPropagation(); (window.SetupView || SetupView).showAllSubmenusModal('${r.id}')" title="Click to view all ${list.length} submenus in popup">
+                    +${remainingCount}
                   </button>
                 ` : ''}
               </div>
@@ -7977,13 +8445,11 @@ export const SetupView = {
         { 
           field: 'status', 
           header: 'Status', 
+          type: 'status',
           render: (v, r) => {
-            const isActive = v === 'Active' || (v === undefined && r.visible);
-            return `
-              <div class="flex items-center">
-                <input type="checkbox" class="menu-table-status-cb w-4.5 h-4.5 rounded border-[#DFE1E6] text-[#0284C7] accent-[#0284C7] cursor-pointer" data-menu-id="${r.id}" ${isActive ? 'checked' : ''} title="Click to ${isActive ? 'Deactivate' : 'Activate'}" />
-              </div>
-            `;
+            const status = v || (r.visible !== false ? 'Active' : 'Inactive');
+            const isAct = String(status).toUpperCase() === 'ACTIVE';
+            return `<span class="lozenge ${isAct ? 'lozenge-success' : 'lozenge-danger'}">${status}</span>`;
           } 
         }
       ],
@@ -8091,7 +8557,7 @@ export const SetupView = {
         const moreSubBtn = e.target.closest('.btn-show-all-submenus');
         if (moreSubBtn) {
           e.preventDefault();
-          this.showAllSubmenusModal(moreSubBtn.dataset.menuId);
+          this.showAllSubmenusModal(moreSubBtn.dataset.menuId, modulesTable);
           return;
         }
 
@@ -8158,34 +8624,48 @@ export const SetupView = {
   },
 
   showAllSubmenusModal(menuId, modulesTable = null) {
-    const mod = this.state.modulesConfig.find(m => m.id === menuId || m.key === menuId);
+    const mod = this.state.modulesConfig.find(m => m.id === menuId || m.key === menuId) || 
+                DEFAULT_MODULES_CONFIG.find(m => m.id === menuId || m.key === menuId);
     if (!mod) return;
-    let list = this.state.submenusConfig[mod.id] || this.state.submenusConfig[mod.key] || [];
+    let list = this.state.submenusConfig[mod.id] || this.state.submenusConfig[mod.key] || DEFAULT_SUBMENUS_CONFIG[mod.id] || DEFAULT_SUBMENUS_CONFIG[mod.key] || [];
+    let currentPage = 1;
+    let pageSize = 10;
 
-    const getModalContent = () => `
+    const getModalContent = () => {
+      const totalPages = Math.max(1, Math.ceil(list.length / pageSize));
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+      const startIdx = (currentPage - 1) * pageSize;
+      const endIdx = Math.min(startIdx + pageSize, list.length);
+      const pageItems = list.slice(startIdx, endIdx);
+      const startRecord = list.length > 0 ? startIdx + 1 : 0;
+      const endRecord = endIdx;
+
+      // Calculate visible page buttons (window around current page)
+      const pageWindow = 5;
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage = Math.min(totalPages, startPage + pageWindow - 1);
+      if (endPage - startPage + 1 < pageWindow) {
+        startPage = Math.max(1, endPage - pageWindow + 1);
+      }
+
+      let pagesHtml = '';
+      for (let p = startPage; p <= endPage; p++) {
+        const isActive = p === currentPage;
+        pagesHtml += `
+          <button type="button" class="sub-page-btn w-9 h-9 min-w-[36px] flex items-center justify-center text-sm font-semibold rounded-xl transition-all cursor-pointer select-none ${
+            isActive
+              ? 'bg-black text-white shadow-xs'
+              : 'bg-white border border-[#CBD5E1] text-[#334155] hover:border-[#0284C7] hover:text-[#0284C7]'
+          }" data-page="${p}">
+            ${p}
+          </button>
+        `;
+      }
+
+      return `
       <div id="submenus-modal-inner" class="space-y-3.5">
-        <div class="flex flex-wrap items-center justify-between gap-2 p-3 bg-[#F4F5F7] rounded-xl border border-[#DFE1E6]">
-          <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-[#EBF8FF] text-[#0284C7] flex items-center justify-center shrink-0">
-              ${mod.icon || '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>'}
-            </div>
-            <div>
-              <h4 class="text-xs font-bold text-[#172B4D]">${mod.label}</h4>
-              <p class="text-[11px] text-[#5E6C84] font-mono">${mod.key || mod.id}</p>
-            </div>
-          </div>
-          <div class="flex items-center gap-2">
-            <span id="submenus-modal-count-badge" class="px-2.5 py-1 rounded-full text-xs font-bold bg-white border border-[#DFE1E6] text-[#0284C7] font-mono shadow-2xs">
-              ${list.length} Submenu${list.length === 1 ? '' : 's'}
-            </span>
-            <button type="button" id="btn-modal-add-sub" class="btn-primary px-2.5 py-1 rounded text-xs font-semibold flex items-center gap-1 cursor-pointer shadow-xs">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-              <span>Add Submenu</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="border border-[#EBECF0] rounded-xl overflow-hidden shadow-2xs">
+        <div class="border border-[#EBECF0] rounded-none overflow-hidden shadow-2xs">
           <table class="w-full text-left text-xs">
             <thead class="bg-[#FAFBFC] border-b border-[#EBECF0] text-[10px] font-bold text-[#5E6C84] uppercase tracking-wider">
               <tr>
@@ -8193,21 +8673,23 @@ export const SetupView = {
                 <th class="py-2.5 px-3">Submenu Name</th>
                 <th class="py-2.5 px-3">URL</th>
                 <th class="py-2.5 px-3 text-center">Status</th>
-                <th class="py-2.5 px-3 text-center">Action</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-[#EBECF0] bg-white">
               ${list.length === 0 ? `
                 <tr>
-                  <td colspan="5" class="py-6 text-center text-xs text-[#8993A4] italic">
-                    No configured submenus found for this menu. Click "Add Submenu" above to create one.
+                  <td colspan="4" class="py-6 text-center text-xs text-[#8993A4] italic">
+                    No configured submenus found for this menu.
                   </td>
                 </tr>
-              ` : list.map((sm, idx) => `
+              ` : pageItems.map((sm, i) => {
+                const actualIdx = startIdx + i;
+                const smRoute = sm.tabs?.[0]?.route || sm.route || sm.url || sm.hash || '—';
+                return `
                 <tr class="hover:bg-[#F9FAFB] transition-colors">
-                  <td class="py-2.5 px-3 text-[#8993A4] font-mono text-[11px]">${idx + 1}</td>
+                  <td class="py-2.5 px-3 text-[#8993A4] font-mono text-[11px]">${actualIdx + 1}</td>
                   <td class="py-2.5 px-3 font-semibold text-[#172B4D]">${sm.title || sm.name}</td>
-                  <td class="py-2.5 px-3 font-mono text-[11px] text-[#0284C7]">${sm.url || sm.hash || sm.route || '—'}</td>
+                  <td class="py-2.5 px-3 font-mono text-[11px] text-[#0284C7]">${smRoute}</td>
                   <td class="py-2.5 px-3 text-center">
                     <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold ${
                       sm.status === 'Inactive' ? 'bg-rose-50 text-[#FF5630] border border-rose-200' : 'bg-emerald-50 text-[#00875A] border border-emerald-200'
@@ -8216,26 +8698,51 @@ export const SetupView = {
                       ${sm.status || 'Active'}
                     </span>
                   </td>
-                  <td class="py-2.5 px-3 text-center">
-                    <div class="inline-flex items-center gap-1 justify-center">
-                      <button type="button" class="btn-sub-edit p-1 rounded hover:bg-[#F0F9FF] text-[#0284C7] transition-colors cursor-pointer" data-idx="${idx}" title="Edit Submenu">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                      </button>
-                      <button type="button" class="btn-sub-toggle p-1 rounded hover:bg-[#F4F5F7] ${sm.status === 'Inactive' ? 'text-[#00875A]' : 'text-[#FF5630]'} transition-colors cursor-pointer" data-idx="${idx}" title="${sm.status === 'Inactive' ? 'Activate Submenu' : 'Deactivate Submenu'}">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${sm.status === 'Inactive' ? 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' : 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636'}"/></svg>
-                      </button>
-                      <button type="button" class="btn-sub-del p-1 rounded hover:bg-rose-50 text-[#FF5630] transition-colors cursor-pointer" data-idx="${idx}" title="Delete Submenu">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                      </button>
-                    </div>
-                  </td>
                 </tr>
-              `).join('')}
+              `;
+              }).join('')}
             </tbody>
           </table>
+
+          <!-- Records Pagination Toolbar matching exact requested style -->
+          <div class="px-3.5 py-2.5 bg-[#FAFBFC] border-t border-[#EBECF0] flex items-center justify-between flex-wrap gap-2 text-xs text-[#5E6C84]">
+            <div class="flex items-center gap-1.5">
+              Showing <span class="font-semibold text-[#172B4D]">${startRecord}</span> to <span class="font-semibold text-[#172B4D]">${endRecord}</span> of <span class="font-semibold text-[#172B4D]">${list.length}</span> submenus
+            </div>
+            <div class="flex items-center flex-wrap gap-2.5">
+              <!-- Rows per page selector -->
+              <div class="flex items-center gap-2 text-xs font-medium text-[#64748B]">
+                <span>Rows:</span>
+                <select id="sub-rows-select" class="text-xs font-medium text-[#1E293B] bg-white border border-[#CBD5E1] rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-[#0284C7] cursor-pointer shadow-2xs hover:border-[#94A3B8]">
+                  <option value="5" ${pageSize === 5 ? 'selected' : ''}>5 per page</option>
+                  <option value="10" ${pageSize === 10 ? 'selected' : ''}>10 per page</option>
+                  <option value="25" ${pageSize === 25 ? 'selected' : ''}>25 per page</option>
+                  <option value="50" ${pageSize === 50 ? 'selected' : ''}>50 per page</option>
+                </select>
+              </div>
+
+              <!-- Page navigation buttons -->
+              <div class="flex items-center gap-1.5">
+                <button type="button" id="sub-page-prev" class="w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all ${
+                  currentPage === 1 ? 'opacity-40 cursor-not-allowed hover:border-[#CBD5E1] hover:text-[#64748B]' : 'cursor-pointer'
+                }" title="Previous page" aria-label="Previous page" ${currentPage === 1 ? 'disabled' : ''}>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+
+                ${pagesHtml}
+
+                <button type="button" id="sub-page-next" class="w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all ${
+                  currentPage >= totalPages ? 'opacity-40 cursor-not-allowed hover:border-[#CBD5E1] hover:text-[#64748B]' : 'cursor-pointer'
+                }" title="Next page" aria-label="Next page" ${currentPage >= totalPages ? 'disabled' : ''}>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     `;
+    };
 
     const subModal = Modal.open({
       title: `Submenus in ${mod.label}`,
@@ -8251,7 +8758,7 @@ export const SetupView = {
       if (!inner) return;
 
       const refreshInner = () => {
-        list = this.state.submenusConfig[mod.id] || this.state.submenusConfig[mod.key] || [];
+        list = this.state.submenusConfig[mod.id] || this.state.submenusConfig[mod.key] || DEFAULT_SUBMENUS_CONFIG[mod.id] || DEFAULT_SUBMENUS_CONFIG[mod.key] || [];
         mod.submenusCount = list.length;
         if (modulesTable) {
           modulesTable.setData(this.state.modulesConfig);
@@ -8259,6 +8766,50 @@ export const SetupView = {
         inner.outerHTML = getModalContent();
         bindSubmenuModalEvents();
       };
+
+      const rowsSelect = document.getElementById('sub-rows-select');
+      if (rowsSelect) {
+        rowsSelect.onchange = (e) => {
+          pageSize = parseInt(e.target.value, 10) || 10;
+          currentPage = 1;
+          inner.outerHTML = getModalContent();
+          bindSubmenuModalEvents();
+        };
+      }
+
+      const prevBtn = document.getElementById('sub-page-prev');
+      if (prevBtn) {
+        prevBtn.onclick = () => {
+          if (currentPage > 1) {
+            currentPage--;
+            inner.outerHTML = getModalContent();
+            bindSubmenuModalEvents();
+          }
+        };
+      }
+
+      const nextBtn = document.getElementById('sub-page-next');
+      if (nextBtn) {
+        nextBtn.onclick = () => {
+          const totalPages = Math.ceil(list.length / pageSize) || 1;
+          if (currentPage < totalPages) {
+            currentPage++;
+            inner.outerHTML = getModalContent();
+            bindSubmenuModalEvents();
+          }
+        };
+      }
+
+      inner.querySelectorAll('.sub-page-btn').forEach(btn => {
+        btn.onclick = () => {
+          const p = parseInt(btn.dataset.page, 10);
+          if (p && p !== currentPage) {
+            currentPage = p;
+            inner.outerHTML = getModalContent();
+            bindSubmenuModalEvents();
+          }
+        };
+      });
 
       const addBtn = document.getElementById('btn-modal-add-sub');
       if (addBtn) {
@@ -8851,7 +9402,6 @@ export const SetupView = {
                 <div class="flex items-center justify-between pb-2.5 mb-2.5 border-b border-[#EBECF0]">
                   <div class="flex items-center gap-2">
                     <span class="font-bold text-xs text-[#172B4D]">${sm.title}</span>
-                    <span class="font-mono text-[10px] text-[#5E6C84]">(${sm.id})</span>
                     <span class="lozenge lozenge-default text-[9.5px]">${(sm.tabs || []).length} Tabs</span>
                   </div>
                   <div class="flex items-center gap-1.5">
@@ -8859,11 +9409,11 @@ export const SetupView = {
                       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                       <span>Add Tab</span>
                     </button>
-                    <button data-action="edit-sm" data-sm-id="${sm.id}" class="p-1 hover:bg-[#EBECF0] rounded text-[#0284C7] cursor-pointer" title="Edit Submenu">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                    <button data-action="edit-sm" data-sm-id="${sm.id}" class="dt-action-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Edit Submenu">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                     </button>
-                    <button data-action="del-sm" data-sm-id="${sm.id}" class="p-1 hover:bg-[#FEE2E2] rounded text-[#FF5630] cursor-pointer" title="Delete Submenu">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    <button data-action="del-sm" data-sm-id="${sm.id}" class="dt-action-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Delete Submenu">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                     </button>
                   </div>
                 </div>
@@ -8895,13 +9445,13 @@ export const SetupView = {
                               </span>
                             </td>
                             <td>${tab.badge ? `<span class="lozenge lozenge-default text-[9.5px] font-mono">${tab.badge}</span>` : '—'}</td>
-                            <td class="text-center">
-                              <div class="flex items-center justify-center gap-1">
-                                <button data-action="edit-tab" data-sm-id="${sm.id}" data-tab-id="${tab.id}" class="p-1 hover:bg-[#EBECF0] rounded text-[#0284C7] cursor-pointer" title="Edit Tab">
-                                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                            <td class="text-center" style="min-width: 80px;">
+                              <div class="inline-flex items-center justify-center" style="gap: 8px;">
+                                <button data-action="edit-tab" data-sm-id="${sm.id}" data-tab-id="${tab.id}" class="dt-action-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Edit Tab">
+                                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                 </button>
-                                <button data-action="del-tab" data-sm-id="${sm.id}" data-tab-id="${tab.id}" class="p-1 hover:bg-[#FEE2E2] rounded text-[#FF5630] cursor-pointer" title="Delete Tab">
-                                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                <button data-action="del-tab" data-sm-id="${sm.id}" data-tab-id="${tab.id}" class="dt-action-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Delete Tab">
+                                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                 </button>
                               </div>
                             </td>
@@ -9943,3 +10493,22 @@ export const SetupView = {
     });
   }
 };
+
+if (typeof window !== 'undefined') {
+  window.SetupView = SetupView;
+
+  // Bulletproof delegated capture click listener for popup viewing all submenus
+  document.addEventListener('click', (e) => {
+    const moreSubBtn = e.target.closest('.btn-show-all-submenus');
+    if (moreSubBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const menuId = moreSubBtn.dataset.menuId || moreSubBtn.getAttribute('data-menu-id');
+      if (menuId && typeof SetupView !== 'undefined' && SetupView.showAllSubmenusModal) {
+        SetupView.showAllSubmenusModal(menuId);
+      } else if (menuId && window.SetupView && window.SetupView.showAllSubmenusModal) {
+        window.SetupView.showAllSubmenusModal(menuId);
+      }
+    }
+  }, true);
+}

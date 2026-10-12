@@ -30,6 +30,7 @@ const inventoryView = fs.readFileSync(path.join(__dirname, 'js', 'views', 'inven
 const salesView = fs.readFileSync(path.join(__dirname, 'js', 'views', 'salesView.js'), 'utf-8');
 const reportsView = fs.readFileSync(path.join(__dirname, 'js', 'views', 'reportsView.js'), 'utf-8');
 const setupView = fs.readFileSync(path.join(__dirname, 'js', 'views', 'setupView.js'), 'utf-8');
+const helpView = fs.readFileSync(path.join(__dirname, 'js', 'views', 'helpView.js'), 'utf-8');
 const superAdminDashboardView = fs.readFileSync(path.join(__dirname, 'js', 'views', 'superAdminDashboardView.js'), 'utf-8');
 const superAdminReportsView = fs.readFileSync(path.join(__dirname, 'js', 'views', 'superAdminReportsView.js'), 'utf-8');
 const app = fs.readFileSync(path.join(__dirname, 'js', 'app.js'), 'utf-8');
@@ -74,6 +75,7 @@ const combinedJS = `
   ${cleanCode(salesView)}
   ${cleanCode(reportsView)}
   ${cleanCode(setupView)}
+  ${cleanCode(helpView)}
   ${cleanCode(superAdminDashboardView)}
   ${cleanCode(superAdminReportsView)}
 
@@ -87,13 +89,23 @@ const html = `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Devi Fisheries ERP — Enterprise Seafood Processing & Export SaaS</title>
+  <title>Devi Fisheries Limited ERP — Enterprise Seafood Processing & Export SaaS</title>
+  
+  <!-- Single Unified Google Font: Noto Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap" rel="stylesheet">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     if (typeof tailwind !== 'undefined') {
       tailwind.config = {
         theme: {
           extend: {
+            fontFamily: {
+              sans: ['"Noto Sans"', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+              mono: ['"Noto Sans"', 'sans-serif']
+            },
             fontSize: {
               'xs': ['14px', { lineHeight: '1.25rem' }],
               'sm': ['16px', { lineHeight: '1.375rem' }],

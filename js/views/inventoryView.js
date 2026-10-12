@@ -2,6 +2,7 @@
 
 import { TabBar } from '../components/tabBar.js';
 import { renderEmptyState } from '../components/emptyState.js';
+import { Skeleton } from '../components/skeleton.js';
 
 export const InventoryView = {
   render(containerId, subPage = 'overview', activeHash = '#/inventory/dashboard/overview') {
@@ -15,14 +16,20 @@ export const InventoryView = {
 
     const tabContext = TabBar.render('inventory-tab-bar-container', activeHash);
     const subContainer = document.getElementById('inventory-subpage-content');
-
-    const tabLabel = tabContext?.submenu?.tabs?.find(t => t.id === subPage)?.label || subPage.replace(/-/g, ' ');
-
-    subContainer.innerHTML = renderEmptyState({
-      title: `No Inventory Stock for ${tabLabel}`,
-      description: `The Inventory & consumables registry (${tabContext?.submenu?.title || 'Inventory'}) currently has no active indents or issues. Full interactive CRUD operations are active under the Purchase module.`,
-      moduleName: "Inventory",
-      tabName: tabLabel
-    });
+    if (subContainer) {
+      const sk = typeof Skeleton !== 'undefined' ? Skeleton : (typeof window !== 'undefined' ? window.Skeleton : null);
+      if (sk && typeof sk.renderTable === 'function') {
+        subContainer.innerHTML = sk.renderTable(6, 6);
+      }
+      setTimeout(() => {
+        const tabLabel = tabContext?.submenu?.tabs?.find(t => t.id === subPage)?.label || subPage.replace(/-/g, ' ');
+        subContainer.innerHTML = renderEmptyState({
+          title: `No Inventory Stock for ${tabLabel}`,
+          description: `The Inventory & consumables registry (${tabContext?.submenu?.title || 'Inventory'}) currently has no active indents or issues. Full interactive CRUD operations are active under the Purchase module.`,
+          moduleName: "Inventory",
+          tabName: tabLabel
+        });
+      }, 120);
+    }
   }
 };

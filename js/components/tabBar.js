@@ -33,7 +33,7 @@ export const TabBar = {
           role="tablist" 
           aria-label="${submenu.title} views" 
           id="${containerId}-tablist"
-          class="flex items-center gap-2 overflow-x-auto bg-white px-3 pt-1 border-b border-[#DDE5ED] rounded-xl"
+          class="flex items-center gap-2 overflow-x-hidden bg-white px-3 pt-1 border-b border-[#DDE5ED] rounded-xl"
         >
           ${submenu.tabs.map(tab => {
             const isActive = tab.id === currentTabId;

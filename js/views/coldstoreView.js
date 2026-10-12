@@ -2,6 +2,7 @@
 
 import { TabBar } from '../components/tabBar.js';
 import { renderEmptyState } from '../components/emptyState.js';
+import { Skeleton } from '../components/skeleton.js';
 
 export const ColdstoreView = {
   render(containerId, subPage = 'overview', activeHash = '#/coldstore/dashboard/overview') {
@@ -15,14 +16,20 @@ export const ColdstoreView = {
 
     const tabContext = TabBar.render('coldstore-tab-bar-container', activeHash);
     const subContainer = document.getElementById('coldstore-subpage-content');
-
-    const tabLabel = tabContext?.submenu?.tabs?.find(t => t.id === subPage)?.label || subPage.replace(/-/g, ' ');
-
-    subContainer.innerHTML = renderEmptyState({
-      title: `No Coldstore Stock Records for ${tabLabel}`,
-      description: `The Coldstore warehouse registry (${tabContext?.submenu?.title || 'Coldstore'}) currently has no active pallet records. Full interactive CRUD operations are active under the Purchase module.`,
-      moduleName: "Coldstore",
-      tabName: tabLabel
-    });
+    if (subContainer) {
+      const sk = typeof Skeleton !== 'undefined' ? Skeleton : (typeof window !== 'undefined' ? window.Skeleton : null);
+      if (sk && typeof sk.renderTable === 'function') {
+        subContainer.innerHTML = sk.renderTable(6, 6);
+      }
+      setTimeout(() => {
+        const tabLabel = tabContext?.submenu?.tabs?.find(t => t.id === subPage)?.label || subPage.replace(/-/g, ' ');
+        subContainer.innerHTML = renderEmptyState({
+          title: `No Coldstore Stock Records for ${tabLabel}`,
+          description: `The Coldstore warehouse registry (${tabContext?.submenu?.title || 'Coldstore'}) currently has no active pallet records. Full interactive CRUD operations are active under the Purchase module.`,
+          moduleName: "Coldstore",
+          tabName: tabLabel
+        });
+      }, 120);
+    }
   }
 };

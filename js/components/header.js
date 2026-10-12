@@ -14,16 +14,12 @@ export const Header = {
 
     container.innerHTML = `
       <header class="bg-white border-b border-[#E2E8F0] h-14 px-5 flex items-center justify-between select-none rounded-t-2xl">
-        <!-- Left: Welcome & Environment Context Badge (Atomic) -->
+        <!-- Left: Welcome -->
         <div class="flex items-center gap-2.5 text-xs sm:text-sm">
           <div class="flex items-center gap-1.5 text-[#64748B]">
             <span>Welcome,</span>
             <span class="font-bold text-[#0F172A] text-sm sm:text-base">${ERP_DATA.currentUser.name}</span>
           </div>
-          <span class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10.5px] font-bold ${isSuperAdmin ? 'bg-[#E0F2FE] text-[#0284C7] border border-[#BAE6FD]' : 'bg-[#E3FCEF] text-[#006644] border border-[#ABF5D1]'}">
-            <span class="w-1.5 h-1.5 rounded-full ${isSuperAdmin ? 'bg-[#0284C7]' : 'bg-[#10B981]'}"></span>
-            ${isSuperAdmin ? 'Super Admin • Enterprise Governance' : 'Admin • Devi Fisheries Plant #1'}
-          </span>
         </div>
 
         <!-- Center: Global Inline Search (Direct typing, no popup modal) -->
@@ -214,11 +210,22 @@ export const Header = {
       const renderResults = () => {
         const query = searchInput.value.trim();
         updateClearBtnState();
+        if (!query) {
+          searchContent.innerHTML = '';
+          searchDropdown.classList.add('hidden');
+          return;
+        }
         if (window.App && typeof window.App.performGlobalSearch === 'function') {
-          searchContent.innerHTML = window.App.performGlobalSearch(query);
-          searchDropdown.classList.remove('hidden');
-          if (window.App.bindSearchResultClicks) {
-            window.App.bindSearchResultClicks(searchDropdown);
+          const resultsHtml = window.App.performGlobalSearch(query);
+          if (resultsHtml && resultsHtml.trim()) {
+            searchContent.innerHTML = resultsHtml;
+            searchDropdown.classList.remove('hidden');
+            if (window.App.bindSearchResultClicks) {
+              window.App.bindSearchResultClicks(searchDropdown);
+            }
+          } else {
+            searchContent.innerHTML = '';
+            searchDropdown.classList.add('hidden');
           }
         }
       };
@@ -227,7 +234,11 @@ export const Header = {
       updateClearBtnState();
 
       searchInput.addEventListener('focus', () => {
-        renderResults();
+        if (searchInput.value.trim()) {
+          renderResults();
+        } else {
+          searchDropdown.classList.add('hidden');
+        }
       });
 
       searchInput.addEventListener('input', () => {
@@ -243,8 +254,9 @@ export const Header = {
           e.stopPropagation();
           searchInput.value = '';
           updateClearBtnState();
+          searchContent.innerHTML = '';
+          searchDropdown.classList.add('hidden');
           searchInput.focus();
-          renderResults();
         });
       }
 

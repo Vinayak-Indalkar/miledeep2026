@@ -1,5 +1,6 @@
 // Super Admin Central Executive Dashboard View (General, Master & Reports Data with Charts)
 import { SetupView, SEAFOOD_MASTERS } from './setupView.js';
+import { Skeleton } from '../components/skeleton.js';
 
 export const SuperAdminDashboardView = {
   chartInstances: {},
@@ -8,7 +9,14 @@ export const SuperAdminDashboardView = {
     const container = typeof containerId === 'string' ? document.getElementById(containerId) : containerId;
     if (!container) return;
 
-    this.renderUnifiedDashboard(container);
+    const sk = typeof Skeleton !== 'undefined' ? Skeleton : (typeof window !== 'undefined' ? window.Skeleton : null);
+    if (sk && typeof sk.renderDashboard === 'function') {
+      container.innerHTML = sk.renderDashboard();
+    }
+
+    setTimeout(() => {
+      this.renderUnifiedDashboard(container);
+    }, 120);
   },
 
   renderUnifiedDashboard(container) {

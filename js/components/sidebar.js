@@ -472,34 +472,16 @@ export const SUPER_ADMIN_NAV_HIERARCHY = [
     ]
   },
   {
-    id: "master",
-    title: "Master",
-    icon: `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>`,
-    submenus: [
-      {
-        id: "master-data",
-        title: "Master Data",
-        defaultTab: "masters",
-        tabs: [
-          { id: "masters", label: "Master Registries", hash: "#/master/master-data/masters" },
-          { id: "field-form-builder", label: "Field & Form Builder", hash: "#/master/master-data/field-form-builder" }
-        ]
-      }
-    ]
-  },
-  {
     id: "super-reports",
     title: "Reports",
     icon: `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>`,
     submenus: [
       {
-        id: "audit-logs",
-        title: "Audit & Security",
-        defaultTab: "audit-trail",
+        id: "client-reports",
+        title: "Client Reports",
+        defaultTab: "clients-overview",
         tabs: [
-          { id: "audit-trail", label: "User Audit Trail", hash: "#/super-reports/audit-logs/audit-trail" },
-          { id: "access-matrix", label: "Permissions Matrix", hash: "#/super-reports/audit-logs/access-matrix" },
-          { id: "security-sessions", label: "Security & Sessions", hash: "#/super-reports/audit-logs/security-sessions" }
+          { id: "clients-overview", label: "Client Section Reports", hash: "#/super-reports/client-reports/clients-overview" }
         ]
       }
     ]
@@ -574,7 +556,7 @@ export const Sidebar = {
         <div class="relative h-full w-full">
           <aside id="erp-sidebar" class="bg-[#0F172A] text-[#94A3B8] w-full h-full flex flex-col transition-all duration-300 select-none border border-[#1E293B] rounded-2xl overflow-hidden">
             <!-- Collapsed Logo Icon Header -->
-            <div class="h-14 px-2 py-2 flex items-center justify-center border-b border-[#1E293B] bg-[#0B0F19] shrink-0" title="${isSuperAdmin ? 'Camaroo ERP' : 'Devi Fisheries Limited'}">
+            <div class="h-14 px-2 py-2 flex items-center justify-center border-b border-[#1E293B] bg-[#0B0F19] shrink-0" title="${isSuperAdmin ? 'Camaroo ERP' : 'Devi Fisheries'}">
               ${isSuperAdmin ? `
                 <div class="w-9 h-9 rounded-lg bg-[#0284C7] border border-[#38BDF8]/30 flex items-center justify-center font-black text-white text-xs">
                   CMR
@@ -616,7 +598,7 @@ export const Sidebar = {
                 <div class="flex items-center gap-2.5 min-w-0">
                   <img src="${LOGO_WHITE}" alt="Devi Fisheries" class="h-9 w-auto object-contain shrink-0" />
                   <div class="leading-tight flex flex-col justify-center min-w-0">
-                    <span class="text-sm font-bold text-white tracking-wide truncate">Devi Fisheries Limited</span>
+                    <span class="text-sm font-bold text-white tracking-wide truncate">Devi Fisheries</span>
                     <span class="text-[9.5px] font-bold text-[#00A3BF] tracking-wider uppercase font-mono truncate">POWERED BY CAMAROO</span>
                   </div>
                 </div>

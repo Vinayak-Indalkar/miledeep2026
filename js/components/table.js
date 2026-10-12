@@ -55,6 +55,7 @@ export class DataTable {
     this.sortDirection = 'asc';
     this.selectedKeys = new Set();
     this.hiddenColumns = new Set();
+    this.colWidths = {};
 
     this.render();
   }
@@ -162,7 +163,7 @@ export class DataTable {
     if (!this.hideTopFilterBar) {
       topFilterHTML = `
         <!-- Collapsible Top Filter Header Card -->
-        <div class="bg-white rounded-xl border border-[#DFE1E6] p-4 shadow-xs mb-4 transition-all duration-200">
+        <div class="dt-top-filter-card bg-white rounded-xl border border-[#DFE1E6] p-4 shadow-xs mb-3 transition-all duration-200" style="margin-bottom: 12px !important;">
           <div class="flex items-center justify-between pb-1">
             <div class="flex items-center gap-2">
               <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
@@ -170,21 +171,31 @@ export class DataTable {
             </div>
 
             <!-- Filter Controls: Reset & Toggle Open/Close -->
-            <div class="flex items-center gap-2">
-              <button type="button" class="dt-top-filter-reset-btn text-xs font-semibold text-[#5E6C84] hover:text-[#172B4D] hover:bg-[#F4F5F7] px-2.5 py-1.5 rounded border border-[#DFE1E6] flex items-center gap-1.5 transition-colors cursor-pointer" title="Reset all filters">
-                <svg class="w-3.5 h-3.5 text-[#6B778C]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                <span>Reset</span>
+            <div class="inline-flex items-center" style="gap: 8px; display: inline-flex;">
+              <button 
+                type="button" 
+                class="dt-action-btn dt-top-filter-reset-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" 
+                style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;"
+                title="Reset all filters" 
+                aria-label="Reset all filters"
+              >
+                <svg class="w-4 h-4 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
               </button>
 
-              <button type="button" class="dt-top-filter-toggle-btn text-xs font-semibold text-[#0284C7] bg-[#F0F9FF]/80 hover:bg-[#F0F9FF] px-2.5 py-1.5 rounded border border-[#BAE6FD] flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer" title="Hide Filter">
-                <svg class="w-3.5 h-3.5 dt-top-filter-toggle-icon transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                <span class="dt-top-filter-toggle-text">Hide Filter</span>
+              <button 
+                type="button" 
+                class="dt-action-btn dt-top-filter-toggle-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" 
+                style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;"
+                title="Hide Filter" 
+                aria-label="Hide Filter"
+              >
+                <svg class="w-4 h-4 text-current dt-top-filter-toggle-icon transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
               </button>
             </div>
           </div>
 
           <!-- Collapsible Filter Inputs Grid -->
-          <div class="dt-top-filter-body mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs transition-all duration-200">
+          <div class="dt-top-filter-body mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs transition-all duration-200" style="margin-top: 12px !important;">
             <div>
               <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT CENTER</label>
               <select class="dt-top-center-select w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
@@ -247,7 +258,7 @@ export class DataTable {
         ${topFilterHTML}
 
         <!-- Table Card Container -->
-        <div class="bg-white rounded-lg border border-[#DFE1E6] shadow-sm flex flex-col overflow-hidden">
+        <div class="bg-white rounded-none border border-[#DFE1E6] shadow-sm flex flex-col overflow-hidden">
           <!-- Table Control Toolbar (Column visibility, Download, Copy, Search) -->
           <div class="px-4 py-2.5 border-b border-[#DFE1E6] bg-[#FAFBFC] flex flex-wrap items-center justify-between gap-3">
             <div class="flex items-center gap-2.5 flex-wrap">
@@ -344,12 +355,16 @@ export class DataTable {
     const theadRow = this.container.querySelector('#dt-thead-row');
     if (!theadRow) return;
 
+    if (!this.colWidths) this.colWidths = {};
+
     const visibleCols = this.getVisibleColumns();
     let html = '';
     if (this.selectable) {
+      const selW = this.colWidths['__select__'] ? `style="width: ${this.colWidths['__select__']}px; min-width: ${this.colWidths['__select__']}px;"` : '';
       html += `
-        <th class="w-10 text-center">
+        <th class="w-10 text-center relative select-none" data-field="__select__" ${selW}>
           <input type="checkbox" id="dt-select-all-checkbox" class="rounded border-[#DFE1E6] text-[#0284C7] focus:ring-0 cursor-pointer" />
+          <div class="dt-col-resizer" title="Drag to resize column (Double-click to reset)"></div>
         </th>
       `;
     }
@@ -361,21 +376,110 @@ export class DataTable {
         : '';
       
       const sortClass = col.sortable !== false ? 'cursor-pointer hover:bg-[#EBECF0] transition-colors select-none' : '';
+      const customWidth = this.colWidths[col.field] ? `style="width: ${this.colWidths[col.field]}px; min-width: ${this.colWidths[col.field]}px; max-width: ${this.colWidths[col.field]}px;"` : '';
+
       html += `
-        <th data-field="${col.field}" class="${sortClass}">
-          <div class="flex items-center gap-1.5">
+        <th data-field="${col.field}" class="${sortClass} relative" ${customWidth}>
+          <div class="flex items-center gap-1.5 pr-2">
             <span>${col.header}</span>
             <span class="text-xs text-[#0284C7] font-bold">${sortIcon}</span>
           </div>
+          <div class="dt-col-resizer" title="Drag to resize column (Double-click to reset)"></div>
         </th>
       `;
     });
 
     if (this.actions.length > 0) {
-      html += `<th class="text-right w-24 sticky-action-col">Actions</th>`;
+      const actionsW = this.colWidths['__actions__'] ? `style="width: ${this.colWidths['__actions__']}px; min-width: ${this.colWidths['__actions__']}px; overflow: visible !important;"` : 'style="min-width: 130px; overflow: visible !important;"';
+      html += `
+        <th class="text-right sticky-action-col relative" data-field="__actions__" ${actionsW}>
+          <div class="pr-2">Actions</div>
+          <div class="dt-col-resizer" title="Drag to resize column (Double-click to reset)"></div>
+        </th>
+      `;
     }
 
     theadRow.innerHTML = html;
+    this.initColumnResizing();
+  }
+
+  initColumnResizing() {
+    const table = this.container.querySelector('table');
+    const theadRow = this.container.querySelector('#dt-thead-row');
+    if (!table || !theadRow) return;
+
+    const resizers = theadRow.querySelectorAll('.dt-col-resizer');
+    resizers.forEach(resizer => {
+      resizer.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const th = resizer.closest('th');
+        if (!th) return;
+
+        const field = th.dataset.field;
+        const startX = e.pageX;
+        const startWidth = th.offsetWidth;
+
+        table.style.tableLayout = 'fixed';
+        table.classList.add('is-resizing');
+
+        const allThs = theadRow.querySelectorAll('th');
+        allThs.forEach(otherTh => {
+          if (!otherTh.style.width) {
+            const w = otherTh.offsetWidth;
+            otherTh.style.width = w + 'px';
+            otherTh.style.minWidth = w + 'px';
+          }
+        });
+
+        resizer.classList.add('is-resizing');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+
+        const onMouseMove = (moveEvent) => {
+          moveEvent.preventDefault();
+          const diff = moveEvent.pageX - startX;
+          const newWidth = Math.max(45, Math.round(startWidth + diff));
+          th.style.width = newWidth + 'px';
+          th.style.minWidth = newWidth + 'px';
+          th.style.maxWidth = newWidth + 'px';
+          if (field) {
+            if (!this.colWidths) this.colWidths = {};
+            this.colWidths[field] = newWidth;
+          }
+        };
+
+        const onMouseUp = () => {
+          resizer.classList.remove('is-resizing');
+          table.classList.remove('is-resizing');
+          document.body.style.cursor = '';
+          document.body.style.userSelect = '';
+          window.removeEventListener('mousemove', onMouseMove);
+          window.removeEventListener('mouseup', onMouseUp);
+        };
+
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mouseup', onMouseUp);
+      });
+
+      resizer.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+      });
+
+      resizer.addEventListener('dblclick', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const th = resizer.closest('th');
+        if (!th) return;
+        const field = th.dataset.field;
+        th.style.width = '';
+        th.style.minWidth = '';
+        th.style.maxWidth = '';
+        if (field && this.colWidths) delete this.colWidths[field];
+      });
+    });
   }
 
   renderTableBody() {
@@ -429,21 +533,49 @@ export class DataTable {
           content = this.renderStatusLozenge(cellVal);
         }
 
-        rowsHtml += `<td>${content}</td>`;
+        let rawPlainText = '';
+        if (content !== undefined && content !== null) {
+          rawPlainText = String(content)
+            .replace(/<[^>]*>/g, ' ')
+            .replace(/&nbsp;/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+        }
+        if (!rawPlainText && cellVal !== undefined && cellVal !== null) {
+          rawPlainText = String(cellVal).trim();
+        }
+
+        rowsHtml += `<td title="${rawPlainText.replace(/"/g, '&quot;')}" class="truncate">${content}</td>`;
       });
 
       if (this.actions.length > 0) {
-        rowsHtml += `<td class="text-right whitespace-nowrap sticky-action-col">`;
+        rowsHtml += `<td class="text-right whitespace-nowrap sticky-action-col" style="min-width: 130px; overflow: visible !important;">`;
+        rowsHtml += `<div class="inline-flex items-center justify-end" style="gap: 8px; display: inline-flex;">`;
         this.actions.forEach((act, actIdx) => {
           const actLabel = typeof act.label === 'function' ? act.label(row) : (act.label || '');
-          const actIcon = typeof act.icon === 'function' ? act.icon(row) : (act.icon || actLabel);
+          let actIcon = typeof act.icon === 'function' ? act.icon(row) : (act.icon || actLabel);
+
+          if (typeof actIcon === 'string') {
+            actIcon = actIcon
+              .replace(/text-\[[^\]]+\]/g, 'text-current')
+              .replace(/text-(?:green|blue|red|amber|orange|purple|indigo|slate|gray)-\d+/g, 'text-current');
+          }
+
           rowsHtml += `
-            <button data-action-idx="${actIdx}" data-key="${keyVal}" class="dt-action-btn p-1 text-[#5E6C84] hover:text-[#0284C7] hover:bg-[#EBECF0] rounded text-xs font-medium mr-1 transition-colors" title="${actLabel}">
+            <button 
+              type="button"
+              data-action-idx="${actIdx}" 
+              data-key="${keyVal}" 
+              class="dt-action-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" 
+              style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;"
+              title="${actLabel}" 
+              aria-label="${actLabel}"
+            >
               ${actIcon}
             </button>
           `;
         });
-        rowsHtml += `</td>`;
+        rowsHtml += `</div></td>`;
       }
 
       rowsHtml += `</tr>`;
@@ -458,14 +590,14 @@ export class DataTable {
     const s = String(status).toUpperCase();
     let cls = 'lozenge-default';
 
-    if (s.includes('PASS') || s.includes('ACTIVE') || s.includes('CLEARED') || s.includes('COMPLETED') || s.includes('OPTIMAL') || s.includes('ISSUED') || s.includes('PAID') || s.includes('FULFILLED') || s.includes('CONFIRMED')) {
+    if (s.includes('INACTIVE') || s.includes('REJECT') || s.includes('FAIL') || s.includes('CANCEL') || s.includes('BLOCK') || s.includes('SUSPENDED') || s.includes('DEACTIVATED')) {
+      cls = 'lozenge-danger';
+    } else if (s.includes('PASS') || s.includes('ACTIVE') || s.includes('CLEARED') || s.includes('COMPLETED') || s.includes('OPTIMAL') || s.includes('ISSUED') || s.includes('PAID') || s.includes('FULFILLED') || s.includes('CONFIRMED')) {
       cls = 'lozenge-success';
     } else if (s.includes('PEND') || s.includes('TEST') || s.includes('IN_PROGRESS') || s.includes('STAGE') || s.includes('PARTIAL') || s.includes('PROCESSING') || s.includes('POSTED')) {
       cls = 'lozenge-inprogress';
     } else if (s.includes('HOLD') || s.includes('WARN') || s.includes('PROVISION')) {
       cls = 'lozenge-warning';
-    } else if (s.includes('REJECT') || s.includes('FAIL') || s.includes('CANCEL') || s.includes('BLOCK')) {
-      cls = 'lozenge-danger';
     }
 
     return `<span class="lozenge ${cls}">${status.replace(/_/g, ' ')}</span>`;
@@ -475,35 +607,115 @@ export class DataTable {
     const pagContainer = this.container.querySelector('#dt-pagination-container');
     if (!pagContainer) return;
 
-    const totalPages = Math.ceil(this.filteredData.length / this.pageSize) || 1;
+    const totalPages = Math.max(1, Math.ceil(this.filteredData.length / this.pageSize));
+    if (this.currentPage > totalPages) {
+      this.currentPage = totalPages;
+    }
     const startRecord = this.filteredData.length > 0 ? (this.currentPage - 1) * this.pageSize + 1 : 0;
     const endRecord = Math.min(this.currentPage * this.pageSize, this.filteredData.length);
 
+    // Calculate visible page buttons (window around current page)
+    const pageWindow = 5;
+    let startPage = Math.max(1, this.currentPage - 2);
+    let endPage = Math.min(totalPages, startPage + pageWindow - 1);
+    if (endPage - startPage + 1 < pageWindow) {
+      startPage = Math.max(1, endPage - pageWindow + 1);
+    }
+
+    let pagesHtml = '';
+    for (let p = startPage; p <= endPage; p++) {
+      const isActive = p === this.currentPage;
+      pagesHtml += `
+        <button type="button" class="dt-page-btn w-9 h-9 min-w-[36px] flex items-center justify-center text-sm font-semibold rounded-xl transition-all cursor-pointer select-none ${
+          isActive
+            ? 'bg-black text-white shadow-xs'
+            : 'bg-white border border-[#CBD5E1] text-[#334155] hover:border-[#0284C7] hover:text-[#0284C7]'
+        }" data-page="${p}">
+          ${p}
+        </button>
+      `;
+    }
+
     pagContainer.innerHTML = `
-      <div>
+      <div class="flex items-center gap-1.5 text-xs text-[#5E6C84]">
         Showing <span class="font-semibold text-[#172B4D]">${startRecord}</span> to <span class="font-semibold text-[#172B4D]">${endRecord}</span> of <span class="font-semibold text-[#172B4D]">${this.filteredData.length}</span> entries
       </div>
-      <div class="flex items-center gap-2">
-        <button id="dt-page-prev" class="btn-secondary px-2.5 py-1 rounded text-xs ${this.currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}">Previous</button>
-        <span class="font-medium text-[#172B4D]">Page ${this.currentPage} of ${totalPages}</span>
-        <button id="dt-page-next" class="btn-secondary px-2.5 py-1 rounded text-xs ${this.currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}">Next</button>
+      <div class="flex items-center flex-wrap gap-2.5">
+        <!-- Rows per page selector -->
+        <div class="flex items-center gap-2 text-xs font-medium text-[#64748B]">
+          <span>Rows:</span>
+          <select class="dt-rows-per-page text-xs font-medium text-[#1E293B] bg-white border border-[#CBD5E1] rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-[#0284C7] cursor-pointer shadow-2xs hover:border-[#94A3B8]">
+            <option value="5" ${this.pageSize === 5 ? 'selected' : ''}>5 per page</option>
+            <option value="10" ${this.pageSize === 10 ? 'selected' : ''}>10 per page</option>
+            <option value="25" ${this.pageSize === 25 ? 'selected' : ''}>25 per page</option>
+            <option value="50" ${this.pageSize === 50 ? 'selected' : ''}>50 per page</option>
+            <option value="100" ${this.pageSize === 100 ? 'selected' : ''}>100 per page</option>
+          </select>
+        </div>
+
+        <!-- Page navigation buttons -->
+        <div class="flex items-center gap-1.5">
+          <!-- Previous page button -->
+          <button type="button" id="dt-page-prev" class="w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all ${
+            this.currentPage === 1 ? 'opacity-40 cursor-not-allowed hover:border-[#CBD5E1] hover:text-[#64748B]' : 'cursor-pointer'
+          }" title="Previous page" aria-label="Previous page" ${this.currentPage === 1 ? 'disabled' : ''}>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+
+          <!-- Numbered page buttons -->
+          ${pagesHtml}
+
+          <!-- Next page button -->
+          <button type="button" id="dt-page-next" class="w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all ${
+            this.currentPage >= totalPages ? 'opacity-40 cursor-not-allowed hover:border-[#CBD5E1] hover:text-[#64748B]' : 'cursor-pointer'
+          }" title="Next page" aria-label="Next page" ${this.currentPage >= totalPages ? 'disabled' : ''}>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
       </div>
     `;
 
-    pagContainer.querySelector('#dt-page-prev').addEventListener('click', () => {
-      if (this.currentPage > 1) {
+    // Page size dropdown change
+    const rowsSelect = pagContainer.querySelector('.dt-rows-per-page');
+    if (rowsSelect) {
+      rowsSelect.addEventListener('change', (e) => {
+        this.pageSize = parseInt(e.target.value, 10) || 10;
+        this.currentPage = 1;
+        this.renderTableBody();
+        this.renderPagination();
+      });
+    }
+
+    // Previous click
+    const prevBtn = pagContainer.querySelector('#dt-page-prev');
+    if (prevBtn && this.currentPage > 1) {
+      prevBtn.addEventListener('click', () => {
         this.currentPage--;
         this.renderTableBody();
         this.renderPagination();
-      }
-    });
+      });
+    }
 
-    pagContainer.querySelector('#dt-page-next').addEventListener('click', () => {
-      if (this.currentPage < totalPages) {
+    // Next click
+    const nextBtn = pagContainer.querySelector('#dt-page-next');
+    if (nextBtn && this.currentPage < totalPages) {
+      nextBtn.addEventListener('click', () => {
         this.currentPage++;
         this.renderTableBody();
         this.renderPagination();
-      }
+      });
+    }
+
+    // Numbered buttons click
+    pagContainer.querySelectorAll('.dt-page-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetPage = parseInt(btn.dataset.page, 10);
+        if (targetPage && targetPage !== this.currentPage) {
+          this.currentPage = targetPage;
+          this.renderTableBody();
+          this.renderPagination();
+        }
+      });
     });
   }
 
@@ -519,18 +731,14 @@ export class DataTable {
         this.isFilterCollapsed = !this.isFilterCollapsed;
         if (this.isFilterCollapsed) {
           filterBody.classList.add('hidden');
-          if (toggleText) toggleText.innerText = 'Show Filter';
           toggleBtn.title = 'Show Filter';
+          toggleBtn.setAttribute('aria-label', 'Show Filter');
           if (toggleIcon) toggleIcon.classList.add('-rotate-90');
-          toggleBtn.classList.remove('bg-[#F0F9FF]/80', 'text-[#0284C7]', 'border-[#BAE6FD]');
-          toggleBtn.classList.add('bg-[#FAFBFC]', 'text-[#5E6C84]', 'border-[#DFE1E6]');
         } else {
           filterBody.classList.remove('hidden');
-          if (toggleText) toggleText.innerText = 'Hide Filter';
           toggleBtn.title = 'Hide Filter';
+          toggleBtn.setAttribute('aria-label', 'Hide Filter');
           if (toggleIcon) toggleIcon.classList.remove('-rotate-90');
-          toggleBtn.classList.add('bg-[#F0F9FF]/80', 'text-[#0284C7]', 'border-[#BAE6FD]');
-          toggleBtn.classList.remove('bg-[#FAFBFC]', 'text-[#5E6C84]', 'border-[#DFE1E6]');
         }
       });
     }
@@ -702,9 +910,14 @@ export class DataTable {
     const theadRow = this.container.querySelector('#dt-thead-row');
     if (theadRow) {
       theadRow.addEventListener('click', (e) => {
+        if (e.target.closest('.dt-col-resizer') || e.target.classList.contains('dt-col-resizer')) {
+          e.stopPropagation();
+          return;
+        }
         const th = e.target.closest('th[data-field]');
         if (!th) return;
         const field = th.dataset.field;
+        if (field === '__actions__' || field === '__select__') return;
         if (this.sortColumn === field) {
           this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
         } else {
@@ -934,7 +1147,7 @@ export class DataTable {
         <div class="header">
           <div>
             <h1>${title}</h1>
-            <div class="meta">Devi Fisheries ERP • Exported: ${new Date().toLocaleString()}</div>
+            <div class="meta">Devi Fisheries Limited ERP • Exported: ${new Date().toLocaleString()}</div>
           </div>
           <div class="meta" style="text-align:right;">
             <div>Total Records: <strong>${this.filteredData.length}</strong></div>
@@ -961,3 +1174,104 @@ export class DataTable {
     Toast.show('Print & PDF dialog opened', 'info', 'Export PDF');
   }
 }
+
+export function makeTableResizable(table) {
+  if (!table || table.dataset.resizableInit === 'true') return;
+  const thead = table.querySelector('thead');
+  if (!thead) return;
+
+  const theadRows = thead.querySelectorAll('tr');
+  if (theadRows.length === 0) return;
+  const lastRow = theadRows[theadRows.length - 1];
+  const ths = lastRow.querySelectorAll('th');
+  if (ths.length === 0) return;
+
+  table.dataset.resizableInit = 'true';
+
+  ths.forEach(th => {
+    if (th.querySelector('.dt-col-resizer')) return;
+
+    th.style.position = 'relative';
+    const resizer = document.createElement('div');
+    resizer.className = 'dt-col-resizer';
+    resizer.title = 'Drag to resize column (Double-click to reset)';
+    th.appendChild(resizer);
+
+    resizer.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const startX = e.pageX;
+      const startWidth = th.offsetWidth;
+
+      table.style.tableLayout = 'fixed';
+      table.classList.add('is-resizing');
+
+      ths.forEach(otherTh => {
+        if (!otherTh.style.width) {
+          const w = otherTh.offsetWidth;
+          otherTh.style.width = w + 'px';
+          otherTh.style.minWidth = w + 'px';
+        }
+      });
+
+      resizer.classList.add('is-resizing');
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+
+      const onMouseMove = (moveEvent) => {
+        moveEvent.preventDefault();
+        const diff = moveEvent.pageX - startX;
+        const newWidth = Math.max(45, Math.round(startWidth + diff));
+        th.style.width = newWidth + 'px';
+        th.style.minWidth = newWidth + 'px';
+        th.style.maxWidth = newWidth + 'px';
+      };
+
+      const onMouseUp = () => {
+        resizer.classList.remove('is-resizing');
+        table.classList.remove('is-resizing');
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', onMouseUp);
+      };
+
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+    });
+
+    resizer.addEventListener('click', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+    });
+
+    resizer.addEventListener('dblclick', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      th.style.width = '';
+      th.style.minWidth = '';
+      th.style.maxWidth = '';
+    });
+  });
+}
+
+if (typeof window !== 'undefined') {
+  window.makeTableResizable = makeTableResizable;
+  const attachAll = () => {
+    document.querySelectorAll('table:not([data-resizable-init="true"])').forEach(makeTableResizable);
+  };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attachAll);
+  } else {
+    attachAll();
+  }
+
+  const tableObserver = new MutationObserver(() => {
+    attachAll();
+  });
+  if (document.body) {
+    tableObserver.observe(document.body, { childList: true, subtree: true });
+  }
+}
+

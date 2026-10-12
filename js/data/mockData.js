@@ -3,7 +3,7 @@ import { LOGO_COLOR, LOGO_WHITE } from './logos.js';
 
 export const ERP_DATA = {
   company: {
-    name: "Devi Fisheries & Marine Products Ltd.",
+    name: "Devi Fisheries",
     shortName: "Devi Fisheries",
     code: "DF-EXP-088",
     eiaNumber: "EIA/AP/0458",
@@ -19,18 +19,20 @@ export const ERP_DATA = {
 
   currentUser: (typeof localStorage !== 'undefined' && localStorage.getItem('dfl_current_role') === 'Super Admin') ? {
     id: "SADM-001",
-    name: "Super Admin",
+    name: "Dr. Y.S. Prasad",
     role: "Super Admin",
-    email: "superadmin@devifisheries.com",
+    email: "ys.prasad@devifisheries.com",
     avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80",
-    roles: ["Super Admin"]
+    roles: ["Super Admin"],
+    company: "Devi Fisheries Limited"
   } : {
     id: "ADM-001",
-    name: "Admin",
+    name: "P. Rama Krishna",
     role: "Admin",
-    email: "admin@devifisheries.com",
+    email: "ramakrishna.p@devifisheries.com",
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
-    roles: ["Admin"]
+    roles: ["Admin"],
+    company: "Devi Fisheries"
   },
 
   species: [
@@ -1485,11 +1487,12 @@ export function setCurrentUserRole(role) {
   if (role === 'Super Admin') {
     ERP_DATA.currentUser = {
       id: "SADM-001",
-      name: "Super Admin",
+      name: "Dr. Y.S. Prasad",
       role: "Super Admin",
-      email: "superadmin@devifisheries.com",
+      email: "ys.prasad@devifisheries.com",
       avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80",
-      roles: ["Super Admin"]
+      roles: ["Super Admin"],
+      company: "Devi Fisheries Limited"
     };
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem('dfl_current_role', 'Super Admin');
@@ -1497,11 +1500,12 @@ export function setCurrentUserRole(role) {
   } else {
     ERP_DATA.currentUser = {
       id: "ADM-001",
-      name: "Admin",
+      name: "P. Rama Krishna",
       role: "Admin",
-      email: "admin@devifisheries.com",
+      email: "ramakrishna.p@devifisheries.com",
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
-      roles: ["Admin"]
+      roles: ["Admin"],
+      company: "Devi Fisheries Limited"
     };
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem('dfl_current_role', 'Admin');

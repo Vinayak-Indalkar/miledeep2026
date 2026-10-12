@@ -171,3 +171,7 @@ export const Skeleton = {
     `;
   }
 };
+
+if (typeof window !== 'undefined') {
+  window.Skeleton = Skeleton;
+}

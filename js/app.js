@@ -6,6 +6,7 @@ import { Modal } from './components/modal.js';
 import { Header } from './components/header.js';
 import { Sidebar, NAV_HIERARCHY } from './components/sidebar.js';
 import { Breadcrumbs } from './components/breadcrumbs.js';
+import { Skeleton } from './components/skeleton.js';
 
 // Views
 import { LoginView } from './views/loginView.js';
@@ -30,8 +31,23 @@ export const App = {
     Toast.init();
     this.bindHashChange();
     this.bindDatePickerHelper();
+    this.bindTableTruncationTooltip();
     this.bindGlobalShortcuts();
     this.route();
+  },
+
+  bindTableTruncationTooltip() {
+    document.addEventListener('mouseover', (e) => {
+      const td = e.target.closest('td, th');
+      if (td && !td.classList.contains('sticky-action-col')) {
+        if (!td.getAttribute('title')) {
+          const txt = td.textContent.trim();
+          if (txt && (td.scrollWidth > td.clientWidth || td.offsetWidth < td.scrollWidth)) {
+            td.setAttribute('title', txt);
+          }
+        }
+      }
+    });
   },
 
   bindGlobalShortcuts() {
@@ -147,8 +163,8 @@ export const App = {
     let submenuName = parts[1] || '';
     let tabName = parts[2] || '';
 
-    // If Super Admin navigates to an operational module, guard and redirect to super admin dashboard
-    const operationalModules = ['purchase', 'preprocessing', 'quality', 'production', 'coldstore', 'inventory', 'sales', 'help'];
+    // If Super Admin navigates to an operational or removed module, guard and redirect to super admin dashboard
+    const operationalModules = ['purchase', 'preprocessing', 'quality', 'production', 'coldstore', 'inventory', 'sales', 'help', 'master'];
     if (isSuperAdmin && operationalModules.includes(moduleName)) {
       window.location.hash = '#/dashboard/overview/system-overview';
       return;
@@ -192,11 +208,8 @@ export const App = {
       case 'general':
         SetupView.render(mainContainer, tabName || 'clients', resolvedHash);
         break;
-      case 'master':
-        SetupView.render(mainContainer, tabName || 'masters', resolvedHash);
-        break;
       case 'super-reports':
-        SuperAdminReportsView.render(mainContainer, tabName || 'audit-trail', resolvedHash);
+        SuperAdminReportsView.render(mainContainer, tabName || 'clients-overview', resolvedHash);
         break;
       case 'setup':
         SetupView.render(mainContainer, tabName || 'clients', resolvedHash);
@@ -226,7 +239,7 @@ export const App = {
         break;
       case 'reports':
         if (isSuperAdmin) {
-          SuperAdminReportsView.render(mainContainer, tabName || 'audit-trail', resolvedHash);
+          SuperAdminReportsView.render(mainContainer, tabName || 'clients-overview', resolvedHash);
         } else {
           ReportsView.render(mainContainer, tabName || 'yield-reports', resolvedHash);
         }
@@ -262,7 +275,7 @@ export const App = {
           <!-- Main Layout Wrapper (offset by floating sidebar width + margins) -->
           <div id="main-layout-wrapper" class="${collapsedClass} flex flex-col min-h-screen">
             <!-- Fixed / Sticky Top Header & Breadcrumbs Wrapper (Option 1) -->
-            <div class="sticky top-3 z-30 mr-3 mt-3 rounded-2xl border border-[#E2E8F0] bg-white">
+            <div class="sticky top-3 z-30 mt-3 rounded-2xl border border-[#E2E8F0] bg-white">
               <div id="header-container" class="bg-white rounded-t-2xl"></div>
               <!-- Breadcrumbs Bar (Fixed in position right below Header) -->
               <div class="px-6 py-2 bg-[#F8FAFC] border-t border-[#E2E8F0] flex items-center justify-between rounded-b-2xl">
@@ -271,7 +284,7 @@ export const App = {
             </div>
 
             <!-- Module Subview Injected Here (Full-Width Responsive UI) -->
-            <main id="main-content-container" class="p-6 flex-1 w-full"></main>
+            <main id="main-content-container" class="py-4 flex-1 w-full"></main>
           </div>
         </div>
       `;
@@ -302,7 +315,7 @@ export const App = {
 
           <!-- Dynamic Search Results -->
           <div id="global-search-results" class="max-h-96 overflow-y-auto space-y-4 text-xs">
-            ${this.renderInitialSearchResults()}
+            <div class="py-8 text-center text-xs text-[#94A3B8] italic">Type a keyword to search across lots, arrivals, suppliers, bills, and modules...</div>
           </div>
         </div>
       `,
@@ -317,7 +330,12 @@ export const App = {
       if (input && resultsContainer) {
         input.focus();
         input.addEventListener('input', (e) => {
-          resultsContainer.innerHTML = this.performGlobalSearch(e.target.value);
+          const val = e.target.value.trim();
+          if (!val) {
+            resultsContainer.innerHTML = '<div class="py-8 text-center text-xs text-[#94A3B8] italic">Type a keyword to search across lots, arrivals, suppliers, bills, and modules...</div>';
+            return;
+          }
+          resultsContainer.innerHTML = this.performGlobalSearch(val);
           this.bindSearchResultClicks();
         });
       }
@@ -326,38 +344,12 @@ export const App = {
   },
 
   renderInitialSearchResults() {
-    return `
-      <div>
-        <div class="text-[10px] font-bold text-[#64748B] uppercase tracking-wider mb-2 flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-          Quick Suggestions & Recent Searches
-        </div>
-        <div class="grid grid-cols-2 gap-2 mb-3">
-          <button type="button" class="search-preset-btn p-2 bg-[#F8FAFC] hover:bg-[#F0F9FF] border border-[#E2E8F0] hover:border-[#0284C7] rounded-lg text-left transition-colors cursor-pointer" data-term="LOT-2026">
-            <div class="font-bold text-[#0284C7] text-xs">LOT-2026-00125</div>
-            <div class="text-[10px] text-[#64748B]">Vannamei Shrimp Traceability</div>
-          </button>
-          <button type="button" class="search-preset-btn p-2 bg-[#F8FAFC] hover:bg-[#F0F9FF] border border-[#E2E8F0] hover:border-[#0284C7] rounded-lg text-left transition-colors cursor-pointer" data-term="RMA-2026">
-            <div class="font-bold text-[#15803D] text-xs">RMA-2026-00341</div>
-            <div class="text-[10px] text-[#64748B]">Fresh Dock Arrival #1</div>
-          </button>
-          <button type="button" class="search-preset-btn p-2 bg-[#F8FAFC] hover:bg-[#F0F9FF] border border-[#E2E8F0] hover:border-[#0284C7] rounded-lg text-left transition-colors cursor-pointer" data-term="Godavari">
-            <div class="font-bold text-[#6D28D9] text-xs">Godavari Coastal</div>
-            <div class="text-[10px] text-[#64748B]">Top Supplier Records</div>
-          </button>
-          <button type="button" class="search-preset-btn p-2 bg-[#F8FAFC] hover:bg-[#F0F9FF] border border-[#E2E8F0] hover:border-[#0284C7] rounded-lg text-left transition-colors cursor-pointer" data-term="BILL-2026">
-            <div class="font-bold text-[#B45309] text-xs">BILL-2026-118</div>
-            <div class="text-[10px] text-[#64748B]">Pending Supplier Invoice</div>
-          </button>
-        </div>
-        <div class="text-[10px] text-[#94A3B8] italic">Type any lot number, species, supplier, vehicle, or section name...</div>
-      </div>
-    `;
+    return '';
   },
 
   performGlobalSearch(term) {
     if (!term || term.trim() === '') {
-      return this.renderInitialSearchResults();
+      return '';
     }
 
     const rawTerm = term.trim();
