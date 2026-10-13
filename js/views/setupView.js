@@ -4889,7 +4889,7 @@ export const SetupView = {
         <!-- Profile Header Card -->
         <div class="bg-white rounded-xl border border-[#DFE1E6] p-4 flex flex-wrap items-center justify-between gap-4 shadow-none">
           <div class="flex items-center gap-3.5">
-            <div class="w-14 h-14 rounded-full bg-[#0369A1] text-white flex items-center justify-center font-bold text-lg ring-4 ring-[#E0F2FE]">
+            <div class="w-14 h-14 rounded-full bg-[#00A4B7] text-white flex items-center justify-center font-bold text-lg ring-4 ring-[#E0F2FE]">
               YP
             </div>
             <div>
@@ -5005,7 +5005,7 @@ export const SetupView = {
                   <div class="text-xs font-semibold text-[#172B4D]">Login Password</div>
                   <div class="text-[11px] text-[#5E6C84]">Protected with strong password policy</div>
                 </div>
-                <button id="btn-modal-change-pass" class="px-3 py-1.5 border border-[#DFE1E6] hover:bg-[#FAFBFC] rounded-lg text-xs font-semibold text-[#0369A1] cursor-pointer">
+                <button id="btn-modal-change-pass" class="px-3 py-1.5 border border-[#DFE1E6] hover:bg-[#FAFBFC] rounded-lg text-xs font-semibold text-[#00A4B7] cursor-pointer">
                   Change Password
                 </button>
               </div>
@@ -5065,7 +5065,7 @@ export const SetupView = {
                 <div class="text-xs font-bold text-[#172B4D]">Email Notifications</div>
                 <div class="text-[11px] text-[#5E6C84]">Receive transaction approvals, audit alerts & daily reports</div>
               </div>
-              <input type="checkbox" checked class="w-4 h-4 text-[#0369A1] rounded cursor-pointer" />
+              <input type="checkbox" checked class="w-4 h-4 text-[#00A4B7] rounded cursor-pointer" />
             </div>
 
             <div class="p-3 border border-[#DFE1E6] rounded-xl flex items-center justify-between">
@@ -5073,7 +5073,7 @@ export const SetupView = {
                 <div class="text-xs font-bold text-[#172B4D]">WhatsApp & SMS Alerts</div>
                 <div class="text-[11px] text-[#5E6C84]">Instant alerts for container gate-out & harvest gate pass</div>
               </div>
-              <input type="checkbox" checked class="w-4 h-4 text-[#0369A1] rounded cursor-pointer" />
+              <input type="checkbox" checked class="w-4 h-4 text-[#00A4B7] rounded cursor-pointer" />
             </div>
 
             <div class="p-3 border border-[#DFE1E6] rounded-xl flex items-center justify-between">
@@ -5081,7 +5081,7 @@ export const SetupView = {
                 <div class="text-xs font-bold text-[#172B4D]">In-App Sound Alerts</div>
                 <div class="text-[11px] text-[#5E6C84]">Chime tone when new raw material arrival reaches receiving bay</div>
               </div>
-              <input type="checkbox" checked class="w-4 h-4 text-[#0369A1] rounded cursor-pointer" />
+              <input type="checkbox" checked class="w-4 h-4 text-[#00A4B7] rounded cursor-pointer" />
             </div>
 
             <div class="p-3 border border-[#DFE1E6] rounded-xl flex items-center justify-between">
@@ -5089,7 +5089,7 @@ export const SetupView = {
                 <div class="text-xs font-bold text-[#172B4D]">Morning Briefing Digest</div>
                 <div class="text-[11px] text-[#5E6C84]">Automated 08:00 AM summary of coldstore stock & yesterday's yields</div>
               </div>
-              <input type="checkbox" checked class="w-4 h-4 text-[#0369A1] rounded cursor-pointer" />
+              <input type="checkbox" checked class="w-4 h-4 text-[#00A4B7] rounded cursor-pointer" />
             </div>
           </div>
         </div>
@@ -5103,7 +5103,7 @@ export const SetupView = {
                 <span class="font-bold text-[#172B4D]">Raw Material Procurement & Inward Gate Pass</span>
                 <span class="block text-[11px] text-[#5E6C84]">Alert when harvest lorry reaches plant gate or net weight is finalized</span>
               </div>
-              <input type="checkbox" checked class="w-4 h-4 text-[#0369A1] rounded cursor-pointer" />
+              <input type="checkbox" checked class="w-4 h-4 text-[#00A4B7] rounded cursor-pointer" />
             </label>
 
             <label class="flex items-center justify-between p-2.5 rounded-lg hover:bg-[#FAFBFC] cursor-pointer border-t border-[#F4F5F7]">
@@ -5111,7 +5111,7 @@ export const SetupView = {
                 <span class="font-bold text-[#172B4D]">Antibiotic & QC Batch Test Results (Clearance / Rejection)</span>
                 <span class="block text-[11px] text-[#5E6C84]">Instant alert if ELISA or LC-MS detects antibiotic residue in harvest batch</span>
               </div>
-              <input type="checkbox" checked class="w-4 h-4 text-[#0369A1] rounded cursor-pointer" />
+              <input type="checkbox" checked class="w-4 h-4 text-[#00A4B7] rounded cursor-pointer" />
             </label>
 
             <label class="flex items-center justify-between p-2.5 rounded-lg hover:bg-[#FAFBFC] cursor-pointer border-t border-[#F4F5F7]">
@@ -5119,7 +5119,7 @@ export const SetupView = {
                 <span class="font-bold text-[#172B4D]">Coldstore Temperature Deviation Alerts (Above -18°C)</span>
                 <span class="block text-[11px] text-[#5E6C84]">High priority critical alarm if ante-room or blast room temperature rises</span>
               </div>
-              <input type="checkbox" checked class="w-4 h-4 text-[#0369A1] rounded cursor-pointer" />
+              <input type="checkbox" checked class="w-4 h-4 text-[#00A4B7] rounded cursor-pointer" />
             </label>
 
             <label class="flex items-center justify-between p-2.5 rounded-lg hover:bg-[#FAFBFC] cursor-pointer border-t border-[#F4F5F7]">
@@ -5127,7 +5127,7 @@ export const SetupView = {
                 <span class="font-bold text-[#172B4D]">Export Container Shipping Bill & Customs Clearance</span>
                 <span class="block text-[11px] text-[#5E6C84]">Status update when CHA files LEO (Let Export Order) with Customs</span>
               </div>
-              <input type="checkbox" checked class="w-4 h-4 text-[#0369A1] rounded cursor-pointer" />
+              <input type="checkbox" checked class="w-4 h-4 text-[#00A4B7] rounded cursor-pointer" />
             </label>
 
             <label class="flex items-center justify-between p-2.5 rounded-lg hover:bg-[#FAFBFC] cursor-pointer border-t border-[#F4F5F7]">
@@ -5135,7 +5135,7 @@ export const SetupView = {
                 <span class="font-bold text-[#172B4D]">Farmer & Supplier Bill Realization</span>
                 <span class="block text-[11px] text-[#5E6C84]">Payment credit confirmation and e-remittance advice alerts</span>
               </div>
-              <input type="checkbox" checked class="w-4 h-4 text-[#0369A1] rounded cursor-pointer" />
+              <input type="checkbox" checked class="w-4 h-4 text-[#00A4B7] rounded cursor-pointer" />
             </label>
           </div>
 
@@ -5170,7 +5170,7 @@ export const SetupView = {
               <div class="text-[11px] text-[#5E6C84]">Protected with Camaroo Authenticator / Google Authenticator Time-Based OTP</div>
             </div>
           </div>
-          <button id="btn-reconfigure-mfa" class="px-3 py-1.5 border border-[#DFE1E6] hover:bg-[#FAFBFC] rounded-lg text-xs font-semibold text-[#0369A1] cursor-pointer">
+          <button id="btn-reconfigure-mfa" class="px-3 py-1.5 border border-[#DFE1E6] hover:bg-[#FAFBFC] rounded-lg text-xs font-semibold text-[#00A4B7] cursor-pointer">
             Reconfigure 2FA
           </button>
         </div>
@@ -5376,7 +5376,7 @@ export const SetupView = {
               ${categories.map(cat => `
                 <button 
                   data-cat="${cat}" 
-                  class="master-cat-pill px-2.5 py-0.5 rounded-full text-[11px] font-semibold transition-all cursor-pointer ${this.state.selectedMasterCategory === cat ? 'bg-[#0369A1] text-white' : 'bg-[#F4F5F7] text-[#42526E] hover:bg-[#EBECF0]'}"
+                  class="master-cat-pill px-2.5 py-0.5 rounded-full text-[11px] font-semibold transition-all cursor-pointer ${this.state.selectedMasterCategory === cat ? 'bg-[#00A4B7] text-white' : 'bg-[#F4F5F7] text-[#42526E] hover:bg-[#EBECF0]'}"
                 >
                   ${cat}
                 </button>
@@ -5388,7 +5388,7 @@ export const SetupView = {
           <div class="flex items-center justify-between flex-wrap gap-3">
             <div class="flex items-center gap-3 flex-wrap">
               <label class="text-xs font-semibold text-[#5E6C84]">Active Master Entity:</label>
-              <select id="master-entity-dropdown" class="px-3 py-1.5 border border-[#DFE1E6] rounded-lg text-xs font-bold text-[#172B4D] bg-white cursor-pointer hover:border-[#0369A1] focus:outline-none min-w-[220px]">
+              <select id="master-entity-dropdown" class="px-3 py-1.5 border border-[#DFE1E6] rounded-lg text-xs font-bold text-[#172B4D] bg-white cursor-pointer hover:border-[#00A4B7] focus:outline-none min-w-[220px]">
                 ${filteredMasters.map(m => `
                   <option value="${m.id}" ${m.id === selectedMaster.id ? 'selected' : ''}>${m.label} (${m.records.length} records)</option>
                 `).join('')}
@@ -5807,7 +5807,7 @@ export const SetupView = {
           </div>
 
           <!-- Client Details Grid -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs bg-white p-3 rounded-lg border border-[#EBECF0]">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs bg-white p-3 rounded-lg border border-[#EBECF0]">
             <div>
               <span class="block text-[10px] font-bold text-[#5E6C84] uppercase">Database Name</span>
               <span class="font-mono text-xs font-bold text-[#0284C7] block mt-0.5">${company.dbName || 'devi_erp'}</span>
@@ -5820,11 +5820,7 @@ export const SetupView = {
               <span class="block text-[10px] font-bold text-[#5E6C84] uppercase">DB User</span>
               <span class="font-mono text-xs text-[#172B4D] block mt-0.5">${company.dbUser || 'root'}</span>
             </div>
-            <div>
-              <span class="block text-[10px] font-bold text-[#5E6C84] uppercase">Country / Currency</span>
-              <span class="text-xs text-[#172B4D] block mt-0.5 font-medium">${company.country || 'India'} (${company.currency || 'INR'})</span>
-            </div>
-            <div class="col-span-2 sm:col-span-4 pt-1 border-t border-[#EBECF0]">
+            <div class="col-span-1 sm:col-span-3 pt-1 border-t border-[#EBECF0]">
               <span class="block text-[10px] font-bold text-[#5E6C84] uppercase">Configured Production Plants</span>
               <div class="flex flex-wrap gap-1.5 mt-1">
                 ${plantsList.map(p => `
@@ -6102,7 +6098,7 @@ export const SetupView = {
         <!-- 1. User Header Banner -->
         <div class="p-3.5 bg-[#F4F5F7] rounded-xl border border-[#DFE1E6] flex flex-wrap items-center justify-between gap-3 shadow-2xs">
           <div class="flex items-center gap-3">
-            <div class="w-11 h-11 rounded-full bg-[#E0F2FE] text-[#0369A1] font-extrabold flex items-center justify-center text-sm border border-[#BAE6FD] shrink-0">
+            <div class="w-11 h-11 rounded-full bg-[#E0F2FE] text-[#00A4B7] font-extrabold flex items-center justify-center text-sm border border-[#BAE6FD] shrink-0">
               ${initials}
             </div>
             <div>
@@ -6240,21 +6236,859 @@ export const SetupView = {
   },
 
   showAddCompanyModal(companyTable) {
-    this.showCompanyFormModal({
-      id: `CMP-00${this.state.companies.length + 1}`,
-      name: '',
-      code: '',
-      shortName: '',
-      address: '',
-      dbHost: '',
-      dbName: '',
-      dbUser: '',
-      dbPass: '',
-      status: 'Active',
-      country: 'India',
-      currency: 'INR / USD',
-      plants: ['Unit-1 VSP']
-    }, false, companyTable);
+    const nextCompIndex = this.state.companies.length + 1;
+    const nextCompId = `CMP-00${nextCompIndex}`;
+    const nextUserId = `USR-00${(this.state.users || []).length + 1}`;
+    
+    const allRoles = (this.state.roles && this.state.roles.length > 0)
+      ? this.state.roles.map(r => r.name)
+      : [
+        'Procurement Officer',
+        'QC Inspector',
+        'Production Supervisor',
+        'Coldstore Keeper',
+        'Sales & Exports Manager',
+        'Plant Manager',
+        'System Administrator'
+      ];
+
+    const departments = [
+      'Raw Material Procurement',
+      'Quality Assurance & Lab',
+      'Production & Processing Floor',
+      'Cold Storage & Logistics',
+      'Sales, Exports & Documentation',
+      'Executive Management',
+      'Finance & Accounts',
+      'IT & Systems Administration',
+      'Engineering & Maintenance',
+      'General Operations'
+    ];
+
+    const lucideIcons = this.getLucideIconLibrary();
+
+    const wizardState = {
+      step: 1, // 1: Add Client, 2: Add Users, 3: Add Roles, 4: Add Menus
+      maxStepReached: 1,
+      client: {
+        id: nextCompId,
+        name: '',
+        shortName: '',
+        plants: 'Unit-1 VSP',
+        status: 'Active',
+        address: ''
+      },
+      user: {
+        id: nextUserId,
+        username: '',
+        password: '',
+        role: allRoles[0] || 'Procurement Officer',
+        plant: 'Unit-1 VSP',
+        department: 'Administration',
+        designation: 'Administrator',
+        accessType: 'Full Access',
+        status: 'Active'
+      },
+      role: {
+        name: '',
+        id: '',
+        department: 'Raw Material Procurement',
+        status: 'Active',
+        assignedMenus: ['purchase', 'qc', 'inventory', 'production']
+      },
+      menu: {
+        name: '',
+        status: 'Active',
+        icon: 'shopping-cart',
+        submenus: [
+          { name: 'Dashboard', url: '#/dashboard', status: 'Active' }
+        ]
+      }
+    };
+
+    const saveCurrentStepData = (currentStep) => {
+      if (currentStep === 1) {
+        wizardState.client.name = document.getElementById('w-cmp-name')?.value.trim() || wizardState.client.name;
+        wizardState.client.shortName = document.getElementById('w-cmp-short-name')?.value.trim().toUpperCase() || wizardState.client.shortName;
+        wizardState.client.plants = document.getElementById('w-cmp-plant')?.value.trim() || wizardState.client.plants;
+        wizardState.client.status = document.getElementById('w-cmp-status')?.value || wizardState.client.status;
+        wizardState.client.address = document.getElementById('w-cmp-address')?.value.trim() || wizardState.client.address;
+        
+        // Auto-seed user & role names if empty
+        if (!wizardState.user.username && wizardState.client.shortName) {
+          wizardState.user.username = `${wizardState.client.shortName.toLowerCase()}_admin`;
+        }
+        if (!wizardState.role.name && wizardState.client.shortName) {
+          wizardState.role.name = `${wizardState.client.shortName} Operations Head`;
+          wizardState.role.id = `ROLE-${wizardState.client.shortName}-OPS`;
+        }
+        if (!wizardState.menu.name && wizardState.client.shortName) {
+          wizardState.menu.name = `${wizardState.client.shortName} Operations`;
+        }
+      } else if (currentStep === 2) {
+        wizardState.user.id = document.getElementById('w-usr-id')?.value.trim() || wizardState.user.id;
+        wizardState.user.username = document.getElementById('w-usr-username')?.value.trim() || wizardState.user.username;
+        wizardState.user.password = document.getElementById('w-usr-password')?.value || wizardState.user.password;
+        wizardState.user.role = document.getElementById('w-usr-role')?.value || wizardState.user.role;
+        wizardState.user.plant = document.getElementById('w-usr-plant')?.value || wizardState.user.plant;
+        wizardState.user.department = document.getElementById('w-usr-dept')?.value.trim() || wizardState.user.department;
+        wizardState.user.designation = document.getElementById('w-usr-desig')?.value.trim() || wizardState.user.designation;
+        wizardState.user.accessType = document.getElementById('w-usr-access')?.value || wizardState.user.accessType;
+        wizardState.user.status = document.getElementById('w-usr-status')?.value || wizardState.user.status;
+      } else if (currentStep === 3) {
+        wizardState.role.name = document.getElementById('w-role-name')?.value.trim() || wizardState.role.name;
+        wizardState.role.id = document.getElementById('w-role-id')?.value.trim() || wizardState.role.id;
+        wizardState.role.department = document.getElementById('w-role-dept')?.value || wizardState.role.department;
+        wizardState.role.status = document.getElementById('w-role-status-cb')?.checked ? 'Active' : 'Inactive';
+        const checkedBoxes = Array.from(document.querySelectorAll('.w-role-menu-cb:checked')).map(cb => cb.value);
+        wizardState.role.assignedMenus = checkedBoxes;
+      } else if (currentStep === 4) {
+        wizardState.menu.name = document.getElementById('w-menu-name')?.value.trim() || wizardState.menu.name;
+        wizardState.menu.status = document.getElementById('w-menu-status-cb')?.checked ? 'Active' : 'Inactive';
+        wizardState.menu.icon = document.getElementById('w-menu-icon-val')?.value || wizardState.menu.icon;
+        const subRows = Array.from(document.querySelectorAll('.w-sub-row'));
+        wizardState.menu.submenus = subRows.map(row => ({
+          name: row.querySelector('.w-sub-name')?.value.trim() || '',
+          url: row.querySelector('.w-sub-url')?.value.trim() || '',
+          status: row.querySelector('.w-sub-status')?.checked ? 'Active' : 'Inactive'
+        })).filter(s => s.name);
+      }
+    };
+
+    const renderWizard = (step) => {
+      wizardState.step = step;
+      if (step > wizardState.maxStepReached) {
+        wizardState.maxStepReached = step;
+      }
+
+      const clientPlantsList = wizardState.client.plants
+        ? wizardState.client.plants.split(',').map(p => p.trim()).filter(Boolean)
+        : ['Unit-1 VSP'];
+
+      const stepTitles = [
+        'Add Client',
+        'Add Users',
+        'Add Roles',
+        'Add Menus'
+      ];
+
+      // Stepper Header Component: Connected Progress Stepper (No '>')
+      const stepperHeaderHtml = `
+        <div class="bg-[#F8FAFC] px-4 sm:px-6 py-4 border-b border-[#E2E8F0] -mx-6 -mt-6 mb-5 select-none">
+          <div class="flex items-center justify-between w-full max-w-4xl mx-auto">
+            ${[1, 2, 3, 4].map(sNum => {
+              const isActive = wizardState.step === sNum;
+              const isPassed = wizardState.step > sNum;
+              const canClick = sNum <= wizardState.maxStepReached;
+              const isLast = sNum === 4;
+
+              return `
+                <div class="flex items-center ${!isLast ? 'flex-1' : ''}">
+                  <!-- Step Interactive Button -->
+                  <button 
+                    type="button" 
+                    data-step="${sNum}" 
+                    class="wizard-step-tab group flex items-center gap-2.5 text-left transition-all outline-none ${
+                      canClick ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
+                    }"
+                    title="${canClick ? `Go to Step ${sNum}: ${stepTitles[sNum - 1]}` : `${stepTitles[sNum - 1]} (Complete earlier steps first)`}"
+                  >
+                    <!-- Badge Circle -->
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black transition-all shrink-0 ${
+                      isActive 
+                        ? 'bg-[#00A4B7] text-[#002d34] shadow-xs ring-4 ring-[#00A4B7]/25 scale-105' 
+                        : (isPassed 
+                            ? 'bg-[#00A4B7] text-[#002d34] group-hover:scale-105' 
+                            : 'bg-white border-2 border-[#CBD5E1] text-[#94A3B8]')
+                    }">
+                      ${isPassed 
+                        ? '<svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>' 
+                        : sNum
+                      }
+                    </div>
+
+                    <!-- Step Text Labels -->
+                    <div class="hidden sm:flex flex-col leading-tight">
+                      <span class="text-[10px] uppercase font-bold tracking-wider transition-colors ${
+                        isActive 
+                          ? 'text-[#00A4B7]' 
+                          : (isPassed ? 'text-[#006C7A]' : 'text-[#94A3B8]')
+                      }">
+                        Step ${sNum}
+                      </span>
+                      <span class="text-xs font-bold whitespace-nowrap transition-colors ${
+                        isActive 
+                          ? 'text-[#0F172A]' 
+                          : (isPassed ? 'text-[#1E293B] group-hover:text-[#00A4B7]' : 'text-[#64748B]')
+                      }">
+                        ${stepTitles[sNum - 1]}
+                      </span>
+                    </div>
+                  </button>
+
+                  <!-- Connected Progress Track between steps (No '>') -->
+                  ${!isLast ? `
+                    <div class="flex-1 mx-2 sm:mx-4 h-0.5 rounded-full transition-all duration-300 ${
+                      isPassed ? 'bg-[#00A4B7]' : 'bg-[#E2E8F0]'
+                    }"></div>
+                  ` : ''}
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+
+      let stepBodyHtml = '';
+
+      // STEP 1: Add Client
+      if (step === 1) {
+        stepBodyHtml = `
+          <div class="space-y-4">
+            <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-4">
+              <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
+                <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-2">
+                  <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                  Client Information
+                </span>
+                <span class="text-[10px] font-bold text-[#00A4B7] bg-[#E0F2FE] px-2.5 py-1 rounded-full border border-[#BAE6FD] font-mono">
+                  ${wizardState.client.id}
+                </span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div>
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    Client Name <span class="text-rose-500">*</span>
+                  </label>
+                  <input type="text" id="w-cmp-name" value="${wizardState.client.name}" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7]" placeholder="e.g. Devi Fisheries Limited" required autofocus />
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    Client Short Name
+                  </label>
+                  <input type="text" id="w-cmp-short-name" value="${wizardState.client.shortName}" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7] font-mono uppercase" placeholder="e.g. DFL" />
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    Status
+                  </label>
+                  <select id="w-cmp-status" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7]">
+                    <option value="Active" ${wizardState.client.status === 'Active' ? 'selected' : ''}>Active</option>
+                    <option value="Inactive" ${wizardState.client.status === 'Inactive' ? 'selected' : ''}>Inactive</option>
+                  </select>
+                </div>
+
+                <!-- Production Plant field (Requested!) -->
+                <div class="col-span-1 sm:col-span-2 lg:col-span-3">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    Production Plant <span class="text-[#64748B] font-normal lowercase">(comma-separated if multiple)</span>
+                  </label>
+                  <input type="text" id="w-cmp-plant" value="${wizardState.client.plants}" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7]" placeholder="e.g. Unit-1 VSP, Unit-2 Singarayakonda, Unit-3 Kakinada" />
+                </div>
+
+                <div class="col-span-1 sm:col-span-2 lg:col-span-3">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    Address
+                  </label>
+                  <textarea id="w-cmp-address" rows="3" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7]" placeholder="Enter complete corporate entity address, plant location, city, pin code...">${wizardState.client.address}</textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // STEP 2: Add Users
+      else if (step === 2) {
+        stepBodyHtml = `
+          <div class="space-y-4">
+            <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-4">
+              <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
+                <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-2">
+                  <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 21v-2a4 4 0 0 0-3-3.87"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  User Information for ${wizardState.client.name || 'New Client'}
+                </span>
+                <span class="text-[10px] font-bold text-[#00A4B7] bg-[#E0F2FE] px-2.5 py-1 rounded-full border border-[#BAE6FD] font-mono">
+                  ${wizardState.user.id}
+                </span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- 1. Client Name -->
+                <div>
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    Client Name
+                  </label>
+                  <input type="text" id="w-usr-company" value="${wizardState.client.name || 'New Client'}" readonly class="w-full text-xs px-3 py-2 bg-[#F1F5F9] border border-[#DFE1E6] rounded-lg font-bold text-[#172B4D] cursor-not-allowed" />
+                </div>
+
+                <!-- 2. User ID -->
+                <div>
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    User ID
+                  </label>
+                  <input type="text" id="w-usr-id" value="${wizardState.user.id}" placeholder="e.g. USR-009" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono text-[#172B4D] focus:outline-none focus:border-[#00A4B7]" />
+                </div>
+
+                <!-- 3. User Name -->
+                <div>
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    User Name
+                  </label>
+                  <input type="text" id="w-usr-username" value="${wizardState.user.username}" placeholder="e.g. ramesh_varma" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono text-[#172B4D] focus:outline-none focus:border-[#00A4B7]" />
+                </div>
+
+                <!-- 4. Password -->
+                <div>
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    Password
+                  </label>
+                  <div class="relative">
+                    <input type="password" id="w-usr-password" value="${wizardState.user.password || 'Client@123'}" placeholder="••••••••••••" class="w-full text-xs pl-3 pr-10 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono focus:outline-none focus:border-[#00A4B7]" />
+                    <button type="button" id="w-toggle-pwd-btn" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#6B778C] hover:text-[#172B4D] cursor-pointer p-1" title="Toggle password visibility">
+                      <svg id="w-pwd-eye-open" class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                      <svg id="w-pwd-eye-closed" class="w-4 h-4 pointer-events-none hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"/></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- 5. Role -->
+                <div>
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    Role
+                  </label>
+                  <select id="w-usr-role" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7] font-medium text-[#172B4D]">
+                    ${allRoles.map(r => `<option value="${r}" ${wizardState.user.role === r ? 'selected' : ''}>${r}</option>`).join('')}
+                  </select>
+                </div>
+
+                <!-- 6. Production Plant -->
+                <div>
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    Production Plant
+                  </label>
+                  <select id="w-usr-plant" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7] font-medium text-[#172B4D]">
+                    <option value="All Plants">All Plants</option>
+                    ${clientPlantsList.map(p => `<option value="${p}" ${wizardState.user.plant === p ? 'selected' : ''}>${p}</option>`).join('')}
+                  </select>
+                </div>
+
+                <!-- 7. Department -->
+                <div>
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    Department
+                  </label>
+                  <input type="text" id="w-usr-dept" list="w-usr-dept-list" value="${wizardState.user.department}" placeholder="e.g. Procurement" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7] text-[#172B4D]" />
+                  <datalist id="w-usr-dept-list">
+                    ${departments.map(d => `<option value="${d}">`).join('')}
+                  </datalist>
+                </div>
+
+                <!-- 8. Designation -->
+                <div>
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    Designation
+                  </label>
+                  <input type="text" id="w-usr-desig" value="${wizardState.user.designation}" placeholder="e.g. Procurement Manager" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7] text-[#172B4D]" />
+                </div>
+
+                <!-- 9. Access Type -->
+                <div>
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    Access Type
+                  </label>
+                  <select id="w-usr-access" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7] font-medium text-[#172B4D]">
+                    <option value="Full Access" ${wizardState.user.accessType === 'Full Access' ? 'selected' : ''}>Full Access</option>
+                    <option value="Admin / Manager" ${wizardState.user.accessType === 'Admin / Manager' ? 'selected' : ''}>Admin / Manager</option>
+                    <option value="Standard Access" ${wizardState.user.accessType === 'Standard Access' ? 'selected' : ''}>Standard Access</option>
+                    <option value="View Only" ${wizardState.user.accessType === 'View Only' ? 'selected' : ''}>View Only / Read Only</option>
+                    <option value="Operator" ${wizardState.user.accessType === 'Operator' ? 'selected' : ''}>Operator</option>
+                  </select>
+                </div>
+
+                <!-- 10. Status -->
+                <div>
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    Status
+                  </label>
+                  <select id="w-usr-status" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7] font-medium text-[#172B4D]">
+                    <option value="Active" ${wizardState.user.status === 'Active' ? 'selected' : ''}>Active</option>
+                    <option value="Inactive" ${wizardState.user.status === 'Inactive' ? 'selected' : ''}>Inactive</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // STEP 3: Add Roles
+      else if (step === 3) {
+        stepBodyHtml = `
+          <div class="space-y-4">
+            <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-4">
+              <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
+                <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-2">
+                  <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                  Role Configuration &amp; Menu Permissions
+                </span>
+                <span class="text-[10px] text-[#64748B]">Assign modules and view permissions</span>
+              </div>
+
+              <!-- Role Basic Info -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div>
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    Role Name
+                  </label>
+                  <input type="text" id="w-role-name" value="${wizardState.role.name}" placeholder="e.g. Operations Head" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded-md focus:outline-none focus:border-[#00A4B7] font-semibold text-[#172B4D]" />
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    Role ID
+                  </label>
+                  <input type="text" id="w-role-id" value="${wizardState.role.id}" placeholder="e.g. ROLE-OPS-HEAD" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded-md font-mono text-[#00A4B7] font-semibold focus:outline-none focus:border-[#00A4B7]" />
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                    Department
+                  </label>
+                  <select id="w-role-dept" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded-md focus:outline-none focus:border-[#00A4B7] font-medium text-[#172B4D]">
+                    ${departments.map(d => `<option value="${d}" ${wizardState.role.department === d ? 'selected' : ''}>${d}</option>`).join('')}
+                  </select>
+                </div>
+
+                <div class="flex items-center">
+                  <label class="flex items-center gap-2 cursor-pointer select-none pt-4">
+                    <input type="checkbox" id="w-role-status-cb" class="w-4 h-4 rounded text-[#00A4B7] accent-[#00A4B7] cursor-pointer" ${wizardState.role.status === 'Active' ? 'checked' : ''} />
+                    <span class="text-xs font-semibold text-[#172B4D]">Active Role</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Assign Menu Access Grid -->
+              <div class="space-y-2 pt-2 border-t border-[#EBECF0]">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-bold text-[#172B4D] uppercase tracking-wider">Assign Menu Access</span>
+                  <div class="flex items-center gap-2">
+                    <button type="button" id="w-role-select-all" class="px-2.5 py-1 text-[11px] font-semibold text-[#006C7A] bg-[#E0F2FE] hover:bg-[#BAE6FD] border border-[#BAE6FD] rounded cursor-pointer transition-colors">Select All</button>
+                    <button type="button" id="w-role-deselect-all" class="px-2.5 py-1 text-[11px] font-semibold text-[#64748B] bg-white hover:bg-[#F1F5F9] border border-[#DFE1E6] rounded cursor-pointer transition-colors">Deselect All</button>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 max-h-[220px] overflow-y-auto p-2 bg-white rounded-lg border border-[#DFE1E6]">
+                  ${this.state.modulesConfig.map(mod => `
+                    <label class="flex items-center gap-2.5 p-2 rounded-lg border border-[#EBECF0] hover:bg-[#F8FAFC] cursor-pointer transition-colors">
+                      <input type="checkbox" value="${mod.key || mod.id}" class="w-role-menu-cb w-4 h-4 rounded text-[#00A4B7] accent-[#00A4B7]" ${wizardState.role.assignedMenus.includes(mod.key || mod.id) ? 'checked' : ''} />
+                      <span class="w-4 h-4 flex items-center justify-center text-[#00A4B7] shrink-0">${mod.iconSvg || ''}</span>
+                      <span class="text-xs font-semibold text-[#172B4D] truncate">${mod.label}</span>
+                    </label>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // STEP 4: Add Menus
+      else if (step === 4) {
+        stepBodyHtml = `
+          <div class="space-y-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start text-xs">
+              <!-- Main Menu Box -->
+              <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-3.5 flex flex-col h-full">
+                <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
+                  <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-2">
+                    <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    Custom Main Menu
+                  </span>
+                </div>
+
+                <div class="space-y-3 flex-1 flex flex-col">
+                  <div class="grid grid-cols-12 gap-3 items-end">
+                    <div class="col-span-8 sm:col-span-9">
+                      <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                        Menu Name
+                      </label>
+                      <input type="text" id="w-menu-name" value="${wizardState.menu.name}" placeholder="e.g. Procurement & Inward" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7] font-semibold text-[#172B4D]" />
+                    </div>
+
+                    <div class="col-span-4 sm:col-span-3">
+                      <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                        Status
+                      </label>
+                      <div class="flex items-center h-[38px]">
+                        <label class="inline-flex items-center cursor-pointer select-none">
+                          <input type="checkbox" id="w-menu-status-cb" class="w-4.5 h-4.5 rounded border-[#DFE1E6] text-[#00A4B7] accent-[#00A4B7] cursor-pointer" ${wizardState.menu.status === 'Active' ? 'checked' : ''} />
+                          <span class="ml-2 text-xs font-semibold text-[#172B4D]">Active</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <input type="hidden" id="w-menu-icon-val" value="${wizardState.menu.icon}" />
+
+                  <!-- Icon Picker -->
+                  <div class="flex-1 flex flex-col space-y-2">
+                    <div class="flex items-center justify-between">
+                      <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider">
+                        Menu Icon
+                      </label>
+                      <input type="text" id="w-icon-search-input" placeholder="Search icon..." class="text-[11px] px-2 py-0.5 border border-[#DFE1E6] rounded w-28 bg-white focus:outline-none focus:border-[#00A4B7]" />
+                    </div>
+
+                    <div id="w-lucide-icon-grid" class="grid grid-cols-4 sm:grid-cols-5 gap-2 max-h-[170px] overflow-y-auto p-2 border border-[#DFE1E6] rounded-lg bg-white shadow-2xs">
+                      <!-- Populated by JS -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub Menu Box -->
+              <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-3.5 flex flex-col h-full">
+                <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
+                  <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-2">
+                    <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                    Sub Menus
+                  </span>
+                  <button type="button" id="w-btn-add-sub" class="btn-secondary px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 hover:bg-[#EBECF0] transition-colors cursor-pointer text-[#006C7A] border border-[#DFE1E6]">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    <span>Add Sub Menu</span>
+                  </button>
+                </div>
+
+                <div class="space-y-2 flex-1 flex flex-col">
+                  <div class="grid grid-cols-12 gap-2 px-1 text-[10px] font-bold text-[#5E6C84] uppercase tracking-wider">
+                    <div class="col-span-5">Sub Menu Name</div>
+                    <div class="col-span-4">Url / Hash</div>
+                    <div class="col-span-2 text-center">Status</div>
+                    <div class="col-span-1 text-center">Action</div>
+                  </div>
+
+                  <div id="w-submenus-list" class="space-y-2 max-h-[220px] overflow-y-auto pr-1 flex-1">
+                    <!-- Populated by JS -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      const nextTitles = [
+        'Add Users',
+        'Add Roles',
+        'Add Menus'
+      ];
+      const nextLabel = step === 4 ? 'Complete & Register Client ✓' : `Next: ${nextTitles[step - 1]} &gt;`;
+
+      const footerHtml = `
+        <div class="flex items-center justify-between w-full">
+          <button type="button" id="wizard-cancel-btn" class="btn-secondary px-4 py-2 rounded-full text-xs font-semibold cursor-pointer">
+            Cancel
+          </button>
+          <div class="flex items-center gap-2">
+            ${step > 1 ? `
+              <button type="button" id="wizard-back-btn" class="btn-secondary px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 cursor-pointer">
+                <span>&larr; Back</span>
+              </button>
+            ` : ''}
+            <button type="button" id="wizard-next-btn" class="btn-primary px-5 py-2 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-xs cursor-pointer">
+              <span>${nextLabel}</span>
+            </button>
+          </div>
+        </div>
+      `;
+
+      // Render Modal Shell or update container
+      const containerEl = document.getElementById('client-onboarding-wizard-container');
+      if (containerEl) {
+        containerEl.innerHTML = stepperHeaderHtml + stepBodyHtml;
+        const footerTarget = document.querySelector('#erp-modal-root .border-t.bg-\\[\\#FAFBFC\\]');
+        if (footerTarget) {
+          footerTarget.innerHTML = footerHtml;
+        }
+      } else {
+        Modal.open({
+          title: 'Register New Client - Onboarding Wizard',
+          size: 'xl',
+          content: `<div id="client-onboarding-wizard-container">${stepperHeaderHtml + stepBodyHtml}</div>`,
+          footerButtons: []
+        });
+
+        const footerTarget = document.querySelector('#erp-modal-root .border-t.bg-\\[\\#FAFBFC\\]');
+        if (footerTarget) {
+          footerTarget.innerHTML = footerHtml;
+        }
+      }
+
+      // Attach Stepper Navigation clicks
+      document.querySelectorAll('.wizard-step-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          const targetStep = parseInt(tab.getAttribute('data-step') || '1');
+          if (targetStep <= wizardState.maxStepReached) {
+            saveCurrentStepData(wizardState.step);
+            renderWizard(targetStep);
+          }
+        });
+      });
+
+      // Attach Cancel Button
+      document.getElementById('wizard-cancel-btn')?.addEventListener('click', () => {
+        Modal.close();
+      });
+
+      // Attach Back Button
+      document.getElementById('wizard-back-btn')?.addEventListener('click', () => {
+        saveCurrentStepData(wizardState.step);
+        renderWizard(wizardState.step - 1);
+      });
+
+      // Attach Next / Finish Button
+      document.getElementById('wizard-next-btn')?.addEventListener('click', () => {
+        saveCurrentStepData(wizardState.step);
+
+        // Validation for Step 1
+        if (wizardState.step === 1) {
+          if (!wizardState.client.name) {
+            Toast.show('Please enter Client Name to continue', 'warning', 'Required Field');
+            document.getElementById('w-cmp-name')?.focus();
+            return;
+          }
+          renderWizard(2);
+          return;
+        }
+
+        // Proceed Step 2 -> 3
+        if (wizardState.step === 2) {
+          renderWizard(3);
+          return;
+        }
+
+        // Proceed Step 3 -> 4
+        if (wizardState.step === 3) {
+          renderWizard(4);
+          return;
+        }
+
+        // Step 4: Finish & Register Client
+        if (wizardState.step === 4) {
+          const clientPlants = wizardState.client.plants
+            ? wizardState.client.plants.split(',').map(p => p.trim()).filter(Boolean)
+            : ['Unit-1 VSP'];
+
+          // 1. Create Client
+          const newComp = {
+            id: wizardState.client.id,
+            name: wizardState.client.name || 'New Client',
+            code: wizardState.client.shortName || wizardState.client.name.slice(0, 3).toUpperCase(),
+            shortName: wizardState.client.shortName || wizardState.client.name.slice(0, 3).toUpperCase(),
+            address: wizardState.client.address || '',
+            plants: clientPlants.length > 0 ? clientPlants : ['Unit-1 VSP'],
+            dbHost: 'localhost:3306',
+            dbName: (wizardState.client.shortName || 'client').toLowerCase().replace(/[^a-z0-9]/g, '_') + '_erp',
+            dbUser: 'root',
+            dbPass: '****',
+            status: wizardState.client.status || 'Active'
+          };
+          this.state.companies.push(newComp);
+
+          // 2. Create User
+          if (wizardState.user.username || wizardState.user.id) {
+            const newUser = {
+              id: wizardState.user.id,
+              name: wizardState.user.username || 'Client Admin',
+              username: wizardState.user.username || 'client_admin',
+              password: wizardState.user.password || 'Client@123',
+              companyId: newComp.id,
+              companyName: newComp.name,
+              role: wizardState.user.role || 'Client Admin',
+              plant: wizardState.user.plant || newComp.plants[0],
+              department: wizardState.user.department || 'Administration',
+              designation: wizardState.user.designation || 'Administrator',
+              accessType: wizardState.user.accessType || 'Full Access',
+              status: wizardState.user.status || 'Active',
+              accessIps: 'Any IP'
+            };
+            this.state.users.push(newUser);
+          }
+
+          // 3. Create Role
+          if (wizardState.role.name) {
+            const newRole = {
+              id: wizardState.role.id || `ROLE-${wizardState.role.name.toUpperCase().replace(/[^A-Z0-9]/g, '-')}`,
+              name: wizardState.role.name,
+              department: wizardState.role.department || 'General Operations',
+              status: wizardState.role.status || 'Active',
+              assignedMenus: wizardState.role.assignedMenus.length > 0 ? wizardState.role.assignedMenus : ['*'],
+              crudPermissions: {},
+              isProtected: false
+            };
+            this.state.roles.push(newRole);
+          }
+
+          // 4. Create Menu
+          if (wizardState.menu.name) {
+            const modKey = wizardState.menu.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+            const matchedIcon = lucideIcons.find(i => i.id === wizardState.menu.icon) || lucideIcons[0];
+            const validSubmenus = (wizardState.menu.submenus || []).filter(s => s.name);
+            const newMod = {
+              id: `MOD-00${this.state.modulesConfig.length + 1}`,
+              key: modKey,
+              label: wizardState.menu.name,
+              icon: wizardState.menu.icon,
+              iconSvg: matchedIcon.svg,
+              status: wizardState.menu.status,
+              isVisible: wizardState.menu.status === 'Active',
+              isProtected: false,
+              submenusCount: validSubmenus.length
+            };
+            this.state.modulesConfig.push(newMod);
+            this.state.submenusConfig[modKey] = validSubmenus;
+          }
+
+          this.saveState();
+          this.logAudit('Company Setup', `Registered client: ${newComp.name} (${newComp.code}) via onboarding wizard with users, roles, and menus`);
+          Modal.close();
+
+          if (companyTable) {
+            companyTable.setData(this.state.companies);
+          } else {
+            const c = document.getElementById('setup-subpage-content');
+            if (c) this.renderCompanySetupTab(c);
+          }
+
+          Modal.success({
+            title: 'Client Onboarding Completed Successfully',
+            message: `Client <strong>${newComp.name}</strong> (${newComp.code}) has been successfully created with Production Plants, User, Role, and Menu configurations.`
+          });
+        }
+      });
+
+      // Step-specific bindings
+      if (step === 2) {
+        // Toggle password visibility
+        const toggleBtn = document.getElementById('w-toggle-pwd-btn');
+        const pwdInput = document.getElementById('w-usr-password');
+        const eyeOpen = document.getElementById('w-pwd-eye-open');
+        const eyeClosed = document.getElementById('w-pwd-eye-closed');
+
+        if (toggleBtn && pwdInput) {
+          toggleBtn.onclick = () => {
+            const isPassword = pwdInput.type === 'password';
+            pwdInput.type = isPassword ? 'text' : 'password';
+            if (eyeOpen) eyeOpen.classList.toggle('hidden', isPassword);
+            if (eyeClosed) eyeClosed.classList.toggle('hidden', !isPassword);
+          };
+        }
+      }
+
+      if (step === 3) {
+        // Select All / Deselect All Menu Checkboxes
+        document.getElementById('w-role-select-all')?.addEventListener('click', () => {
+          document.querySelectorAll('.w-role-menu-cb').forEach(cb => { cb.checked = true; });
+        });
+        document.getElementById('w-role-deselect-all')?.addEventListener('click', () => {
+          document.querySelectorAll('.w-role-menu-cb').forEach(cb => { cb.checked = false; });
+        });
+      }
+
+      if (step === 4) {
+        // Submenus list management
+        const subListContainer = document.getElementById('w-submenus-list');
+        const renderSubmenus = () => {
+          if (!subListContainer) return;
+          subListContainer.innerHTML = wizardState.menu.submenus.map((sub, idx) => `
+            <div class="w-sub-row grid grid-cols-12 gap-2 items-center p-2 rounded-lg bg-white border border-[#EBECF0]">
+              <div class="col-span-5">
+                <input type="text" class="w-sub-name w-full text-xs px-2.5 py-1.5 border border-[#DFE1E6] rounded focus:outline-none focus:border-[#00A4B7] font-semibold text-[#172B4D]" placeholder="Submenu Name" value="${sub.name}" />
+              </div>
+              <div class="col-span-4">
+                <input type="text" class="w-sub-url w-full text-xs px-2.5 py-1.5 border border-[#DFE1E6] rounded font-mono text-[#006C7A] focus:outline-none focus:border-[#00A4B7]" placeholder="#/route" value="${sub.url}" />
+              </div>
+              <div class="col-span-2 text-center">
+                <label class="inline-flex items-center cursor-pointer">
+                  <input type="checkbox" class="w-sub-status w-4 h-4 rounded text-[#00A4B7] accent-[#00A4B7]" ${sub.status === 'Active' ? 'checked' : ''} />
+                </label>
+              </div>
+              <div class="col-span-1 text-center">
+                <button type="button" data-idx="${idx}" class="w-sub-del-btn text-[#6B778C] hover:text-rose-600 p-1 rounded hover:bg-rose-50 transition-colors cursor-pointer" title="Delete submenu">
+                  <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </button>
+              </div>
+            </div>
+          `).join('');
+
+          subListContainer.querySelectorAll('.w-sub-del-btn').forEach(btn => {
+            btn.onclick = (e) => {
+              const delIdx = parseInt(btn.getAttribute('data-idx') || '0');
+              if (wizardState.menu.submenus.length > 1) {
+                wizardState.menu.submenus.splice(delIdx, 1);
+                renderSubmenus();
+              } else {
+                Toast.show('At least one submenu item should be kept', 'info');
+              }
+            };
+          });
+        };
+
+        renderSubmenus();
+
+        document.getElementById('w-btn-add-sub')?.addEventListener('click', () => {
+          wizardState.menu.submenus.push({ name: '', url: '', status: 'Active' });
+          renderSubmenus();
+        });
+
+        // Icon Grid Picker
+        const iconGrid = document.getElementById('w-lucide-icon-grid');
+        const iconSearchInput = document.getElementById('w-icon-search-input');
+        const renderIconGrid = (items) => {
+          if (!iconGrid) return;
+          iconGrid.innerHTML = items.map(item => `
+            <button type="button" data-icon-id="${item.id}" class="w-icon-btn flex flex-col items-center justify-center p-2 rounded-lg border text-center transition-all cursor-pointer ${
+              item.id === wizardState.menu.icon 
+                ? 'border-[#00A4B7] bg-[#E0F2FE] text-[#006C7A] font-bold shadow-xs ring-1 ring-[#00A4B7]' 
+                : 'border-[#DFE1E6] hover:bg-[#F4F5F7] text-[#42526E]'
+            }">
+              <span class="w-5 h-5 flex items-center justify-center pointer-events-none mb-1 text-current">${item.svg}</span>
+              <span class="text-[9px] truncate w-full pointer-events-none leading-tight">${item.name}</span>
+            </button>
+          `).join('');
+
+          iconGrid.querySelectorAll('.w-icon-btn').forEach(btn => {
+            btn.onclick = () => {
+              const iconId = btn.getAttribute('data-icon-id');
+              if (iconId) {
+                wizardState.menu.icon = iconId;
+                const hiddenInput = document.getElementById('w-menu-icon-val');
+                if (hiddenInput) hiddenInput.value = iconId;
+                renderIconGrid(items);
+              }
+            };
+          });
+        };
+
+        renderIconGrid(lucideIcons);
+
+        if (iconSearchInput) {
+          iconSearchInput.oninput = (e) => {
+            const term = e.target.value.toLowerCase().trim();
+            const filtered = term 
+              ? lucideIcons.filter(i => i.id.includes(term) || i.name.includes(term))
+              : lucideIcons;
+            renderIconGrid(filtered);
+          };
+        }
+      }
+    };
+
+    renderWizard(1);
   },
 
   showEditCompanyModal(company, companyTable) {
@@ -6301,7 +7135,15 @@ export const SetupView = {
                 </select>
               </div>
 
-              <!-- Row 2: Address in Full Width (Across all 3 columns) -->
+              <!-- Row 2: Production Plant (Full Width) -->
+              <div class="col-span-1 sm:col-span-2 lg:col-span-3">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  Production Plant
+                </label>
+                <input type="text" id="cmp-plant" value="${(company.plants && company.plants.length > 0) ? company.plants.join(', ') : 'Unit-1 VSP'}" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]" placeholder="e.g. Unit-1 VSP, Unit-2 Singarayakonda" />
+              </div>
+
+              <!-- Row 3: Address in Full Width (Across all 3 columns) -->
               <div class="col-span-1 sm:col-span-2 lg:col-span-3">
                 <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
                   Address
@@ -6322,12 +7164,15 @@ export const SetupView = {
             const shortName = document.getElementById('cmp-short-name')?.value.trim().toUpperCase() || 'CLI';
             const address = document.getElementById('cmp-address')?.value.trim();
             const status = document.getElementById('cmp-status')?.value || 'Active';
+            const plantStr = document.getElementById('cmp-plant')?.value.trim() || 'Unit-1 VSP';
+            const plants = plantStr.split(',').map(p => p.trim()).filter(Boolean);
 
             company.name = name;
             company.code = shortName;
             company.shortName = shortName;
             company.address = address;
             company.status = status;
+            company.plants = plants.length > 0 ? plants : ['Unit-1 VSP'];
 
             if (!isEdit) {
               this.state.companies.push(company);
@@ -6511,7 +7356,7 @@ export const SetupView = {
             ${this.state.userSearchRole ? `
               <div class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#F0F9FF] border border-[#BAE6FD] text-[#0284C7] rounded-lg text-xs font-semibold">
                 <span>Role: <strong>${this.state.userSearchRole}</strong></span>
-                <button type="button" id="btn-clear-role-filter" class="text-[#0284C7] hover:text-[#0369A1] font-bold text-sm leading-none ml-1 cursor-pointer" title="Clear role filter">×</button>
+                <button type="button" id="btn-clear-role-filter" class="text-[#0284C7] hover:text-[#00A4B7] font-bold text-sm leading-none ml-1 cursor-pointer" title="Clear role filter">×</button>
               </div>
             ` : ''}
           </div>
@@ -7473,7 +8318,7 @@ export const SetupView = {
                   return `
                     <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#F0F9FF] border border-[#BAE6FD] text-[#0284C7] whitespace-nowrap shrink-0 shadow-2xs" style="border-radius: 9999px !important; font-size: 10px !important; line-height: 14px !important;">
                       <span>${m.label}</span>
-                      ${subs.length > 0 ? `<span class="text-[9px] px-1 bg-[#E0F2FE] text-[#0369A1] rounded-full font-bold" style="border-radius: 9999px !important; font-size: 9px !important;">${subs.length}</span>` : ''}
+                      ${subs.length > 0 ? `<span class="text-[9px] px-1 bg-[#E0F2FE] text-[#00A4B7] rounded-full font-bold" style="border-radius: 9999px !important; font-size: 9px !important;">${subs.length}</span>` : ''}
                     </span>
                   `;
                 }).join('')}
@@ -8137,7 +8982,7 @@ export const SetupView = {
           <div class="p-3 border-b border-[#EBECF0] flex items-center justify-between flex-wrap gap-2">
             <div class="flex items-center gap-2">
               <span class="text-xs font-bold text-[#172B4D]">Permissions Matrix for:</span>
-              <select id="role-matrix-selector" class="px-2.5 py-1 border border-[#DFE1E6] rounded-lg text-xs font-bold text-[#172B4D] bg-white cursor-pointer hover:border-[#0369A1] focus:outline-none">
+              <select id="role-matrix-selector" class="px-2.5 py-1 border border-[#DFE1E6] rounded-lg text-xs font-bold text-[#172B4D] bg-white cursor-pointer hover:border-[#00A4B7] focus:outline-none">
                 ${this.state.roles.map(r => `
                   <option value="${r.id}" ${r.id === selectedRole.id ? 'selected' : ''}>${r.name} ${r.isProtected ? '(🔒 Protected)' : `(${r.usersCount} Users)`}</option>
                 `).join('')}
@@ -9907,13 +10752,13 @@ export const SetupView = {
                             <div class="flex flex-wrap gap-2 pt-1 text-xs">
                               ${f.options?.map(opt => `
                                 <label class="flex items-center gap-1 cursor-pointer">
-                                  <input type="radio" name="${f.key}" value="${opt}" ${opt === f.defaultValue ? 'checked' : ''} class="text-[#0369A1]" />
+                                  <input type="radio" name="${f.key}" value="${opt}" ${opt === f.defaultValue ? 'checked' : ''} class="text-[#00A4B7]" />
                                   <span>${opt}</span>
                                 </label>
                               `).join('')}
                             </div>
                           ` : f.type === 'file' ? `
-                            <div class="border border-dashed border-[#DFE1E6] rounded-lg p-2 text-center text-xs text-[#0369A1] hover:bg-[#FAFBFC] cursor-pointer">
+                            <div class="border border-dashed border-[#DFE1E6] rounded-lg p-2 text-center text-xs text-[#00A4B7] hover:bg-[#FAFBFC] cursor-pointer">
                               <span>Click to upload file</span>
                               <span class="text-[10px] text-[#5E6C84] block">${f.helpText || 'PDF / JPG'}</span>
                             </div>
@@ -10051,7 +10896,7 @@ export const SetupView = {
         </div>
 
         <div class="flex items-center gap-2 pt-1">
-          <input type="checkbox" id="af-req" class="rounded text-[#0369A1]" />
+          <input type="checkbox" id="af-req" class="rounded text-[#00A4B7]" />
           <label for="af-req" class="font-bold text-[#172B4D] cursor-pointer">Mark as Mandatory (Required)</label>
         </div>
 
@@ -10113,7 +10958,7 @@ export const SetupView = {
           border: 'border-[#0284C7]',
           bg: 'bg-[#F0F9FF]',
           text: 'text-[#0284C7]',
-          badgeBg: 'bg-[#E0F2FE] text-[#0369A1] border-[#BAE6FD]',
+          badgeBg: 'bg-[#E0F2FE] text-[#00A4B7] border-[#BAE6FD]',
           icon: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>`
         };
       }

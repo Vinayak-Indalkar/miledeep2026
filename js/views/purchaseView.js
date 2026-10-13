@@ -513,7 +513,7 @@ export const PurchaseView = {
                   <div class=" font-bold text-base text-[#006644] mt-0.5">₹ 5.51 Cr <span class="text-xs text-[#5E6C84]">($664k)</span></div>
                 </div>
               </div>
-              <div class="mt-3 p-2 bg-[#F0F9FF] text-[#0369A1] rounded text-[11px] flex justify-between items-center font-medium">
+              <div class="mt-3 p-2 bg-[#F0F9FF] text-[#00A4B7] rounded text-[11px] flex justify-between items-center font-medium">
                 <span>Avg Processing Yield: <strong>69.37%</strong></span>
                 <span>Active Supplier Centers: <strong>6 Units</strong></span>
               </div>
@@ -6277,8 +6277,8 @@ export const PurchaseView = {
                 <div class="font-bold  text-[#006644] mt-0.5">${lot.qcAcceptedQtyKg.toLocaleString()} KG</div>
               </div>
               <div class="bg-[#F0F9FF] p-2 rounded">
-                <div class="text-[10px] text-[#0369A1]">Pre-Processed</div>
-                <div class="font-bold  text-[#0369A1] mt-0.5">${lot.preProcessedQtyKg.toLocaleString()} KG</div>
+                <div class="text-[10px] text-[#00A4B7]">Pre-Processed</div>
+                <div class="font-bold  text-[#00A4B7] mt-0.5">${lot.preProcessedQtyKg.toLocaleString()} KG</div>
               </div>
               <div class="bg-[#EAE6FF] p-2 rounded">
                 <div class="text-[10px] text-[#403294]">Production Output</div>
@@ -6319,7 +6319,7 @@ export const PurchaseView = {
                   </div>
                   <div class="flex items-center gap-2 mt-1">
                     <span class="lozenge lozenge-success text-[10px]">${step.status}</span>
-                    <span class="text-xs  font-semibold text-[#0369A1]">${step.quantity}</span>
+                    <span class="text-xs  font-semibold text-[#00A4B7]">${step.quantity}</span>
                   </div>
                   <p class="text-xs text-[#42526E] mt-1.5 leading-relaxed">${step.details}</p>
                   <div class="text-[10px] text-[#8993A4] mt-1">Responsible: ${step.operator}</div>

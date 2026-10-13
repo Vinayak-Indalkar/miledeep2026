@@ -41,11 +41,11 @@ export const LoginView = {
 
               <!-- Role Selector: Admin / Super Admin -->
               <div class="mb-4">
-                <div class="grid grid-cols-2 p-1 bg-[#F4F5F7] rounded-xl border border-[#DFE1E6] gap-1">
+                <div class="grid grid-cols-2 p-1 bg-[#F4F5F7] rounded-full border border-[#DFE1E6] gap-1">
                   <button 
                     type="button" 
                     id="role-tab-admin" 
-                    class="role-select-btn py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${isAdmin ? 'bg-white text-[#0369A1] shadow-xs border border-[#DFE1E6]' : 'text-[#5E6C84] hover:text-[#172B4D]'}"
+                    class="role-select-btn py-2 px-3 rounded-full text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${isAdmin ? 'bg-white text-[#00A4B7] shadow-xs border border-[#DFE1E6]' : 'text-[#5E6C84] hover:text-[#172B4D]'}"
                     data-role="Admin"
                   >
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
@@ -54,7 +54,7 @@ export const LoginView = {
                   <button 
                     type="button" 
                     id="role-tab-superadmin" 
-                    class="role-select-btn py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${!isAdmin ? 'bg-white text-[#0369A1] shadow-xs border border-[#DFE1E6]' : 'text-[#5E6C84] hover:text-[#172B4D]'}"
+                    class="role-select-btn py-2 px-3 rounded-full text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${!isAdmin ? 'bg-white text-[#00A4B7] shadow-xs border border-[#DFE1E6]' : 'text-[#5E6C84] hover:text-[#172B4D]'}"
                     data-role="Super Admin"
                   >
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
@@ -117,7 +117,7 @@ export const LoginView = {
                   <button 
                     type="submit" 
                     id="submit-login-btn" 
-                    class="w-full btn-primary py-3 rounded-xl font-semibold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+                    class="w-full btn-primary py-3 rounded-full font-semibold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
                   >
                     <span id="login-btn-text">Sign In</span>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
@@ -150,19 +150,19 @@ export const LoginView = {
       this.selectedRole = role;
       if (role === 'Super Admin') {
         if (superAdminTab) {
-          superAdminTab.className = 'role-select-btn py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer bg-white text-[#0369A1] shadow-xs border border-[#DFE1E6]';
+          superAdminTab.className = 'role-select-btn py-2 px-3 rounded-full text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer bg-white text-[#00A4B7] shadow-xs border border-[#DFE1E6]';
         }
         if (adminTab) {
-          adminTab.className = 'role-select-btn py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer text-[#5E6C84] hover:text-[#172B4D]';
+          adminTab.className = 'role-select-btn py-2 px-3 rounded-full text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer text-[#5E6C84] hover:text-[#172B4D]';
         }
         if (emailInput) emailInput.value = 'superadmin@devifisheries.com';
         if (pwdInput) pwdInput.value = 'SuperAdmin@2026';
       } else {
         if (adminTab) {
-          adminTab.className = 'role-select-btn py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer bg-white text-[#0369A1] shadow-xs border border-[#DFE1E6]';
+          adminTab.className = 'role-select-btn py-2 px-3 rounded-full text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer bg-white text-[#00A4B7] shadow-xs border border-[#DFE1E6]';
         }
         if (superAdminTab) {
-          superAdminTab.className = 'role-select-btn py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer text-[#5E6C84] hover:text-[#172B4D]';
+          superAdminTab.className = 'role-select-btn py-2 px-3 rounded-full text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer text-[#5E6C84] hover:text-[#172B4D]';
         }
         if (emailInput) emailInput.value = 'admin@devifisheries.com';
         if (pwdInput) pwdInput.value = 'Admin@devi2024';

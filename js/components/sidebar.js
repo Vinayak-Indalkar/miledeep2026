@@ -639,10 +639,10 @@ export const Sidebar = {
           <div class="nav-module-group mb-1">
             <button 
               data-module-id="${mod.id}" 
-              class="sidebar-mod-btn w-full px-3 py-2.5 rounded-lg text-xs font-bold flex items-center transition-colors cursor-pointer ${isExpanded ? 'bg-[#0284C7] text-white shadow-xs' : 'text-[#CBD5E1] hover:bg-white/5 hover:text-white'}"
+              class="sidebar-mod-btn w-full px-3 py-2.5 rounded-lg text-xs font-bold flex items-center transition-colors cursor-pointer ${isExpanded ? 'bg-[#00A4B7] text-[#002d34] shadow-xs' : 'text-[#CBD5E1] hover:bg-white/5 hover:text-white'}"
             >
               <div class="flex items-center gap-2.5 truncate">
-                <span class="w-4 h-4 flex items-center justify-center shrink-0 ${isExpanded ? 'text-white' : 'text-[#64748B]'}">${mod.icon}</span>
+                <span class="w-4 h-4 flex items-center justify-center shrink-0 ${isExpanded ? 'text-[#002d34]' : 'text-[#64748B]'}">${mod.icon}</span>
                 <span class="text-xs tracking-tight truncate">${mod.title}</span>
               </div>
             </button>
@@ -654,7 +654,7 @@ export const Sidebar = {
       let submenusHtml = '';
       if (isExpanded) {
         submenusHtml = `
-          <div class="nav-submenus-list mt-1 ml-4 pl-3 py-1 space-y-1 border-l-2 border-[#0284C7]">
+          <div class="nav-submenus-list mt-1 ml-4 pl-3 py-1 space-y-1 border-l-2 border-[#00A4B7]">
             ${mod.submenus.map(sub => {
               const isSubActive = sub.id === this.activeSubmenuId;
               const defaultHash = sub.tabs[0]?.hash || `/#/${mod.id}/${sub.id}`;
@@ -663,10 +663,10 @@ export const Sidebar = {
                 <div class="nav-submenu-block">
                   <a 
                     href="${defaultHash}" 
-                    class="flex items-center px-2.5 py-1.5 rounded-md text-xs font-semibold transition-all ${isSubActive ? 'bg-white text-[#0F172A] font-bold' : 'text-[#94A3B8] hover:bg-white/5 hover:text-white'}"
+                    class="flex items-center px-2.5 py-1.5 rounded-md text-xs font-semibold transition-all ${isSubActive ? 'bg-[#00A4B7] text-[#002d34] font-bold' : 'text-[#94A3B8] hover:bg-white/5 hover:text-white'}"
                   >
                     <div class="flex items-center gap-2 truncate">
-                      <span class="w-1.5 h-1.5 rounded-full ${isSubActive ? 'bg-[#0284C7]' : 'bg-[#475569]'} shrink-0"></span>
+                      <span class="w-1.5 h-1.5 rounded-full ${isSubActive ? 'bg-[#002d34]' : 'bg-[#475569]'} shrink-0"></span>
                       <span class="truncate">${sub.title}</span>
                     </div>
                   </a>
@@ -681,14 +681,14 @@ export const Sidebar = {
         <div class="nav-module-group mb-1">
           <button 
             data-module-id="${mod.id}" 
-            class="sidebar-mod-btn w-full px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-between transition-colors cursor-pointer ${isExpanded ? 'bg-[#0284C7] text-white' : 'text-[#CBD5E1] hover:bg-white/5 hover:text-white'}"
+            class="sidebar-mod-btn w-full px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-between transition-colors cursor-pointer ${isExpanded ? 'bg-[#00A4B7] text-[#002d34]' : 'text-[#CBD5E1] hover:bg-white/5 hover:text-white'}"
           >
             <div class="flex items-center gap-2.5 truncate">
-              <span class="w-4 h-4 flex items-center justify-center shrink-0 ${isExpanded ? 'text-white' : 'text-[#64748B]'}">${mod.icon}</span>
+              <span class="w-4 h-4 flex items-center justify-center shrink-0 ${isExpanded ? 'text-[#002d34]' : 'text-[#64748B]'}">${mod.icon}</span>
               <span class="text-xs tracking-tight truncate">${mod.title}</span>
             </div>
             <div class="flex items-center gap-1 shrink-0">
-              <svg class="w-3.5 h-3.5 transform transition-transform duration-200 ${isExpanded ? 'rotate-90 text-white' : 'text-[#64748B]'}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              <svg class="w-3.5 h-3.5 transform transition-transform duration-200 ${isExpanded ? 'rotate-90 text-[#002d34]' : 'text-[#64748B]'}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </div>
           </button>
           ${submenusHtml}
@@ -710,10 +710,10 @@ export const Sidebar = {
           <div class="relative group flex justify-center nav-module-group">
             <button 
               data-module-id="${mod.id}" 
-              class="sidebar-mod-btn w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer ${isCurrentMod ? 'bg-white text-[#0F172A] ring-2 ring-[#0284C7] font-bold' : 'text-[#94A3B8] hover:bg-white/5 hover:text-white'}"
+              class="sidebar-mod-btn w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer ${isCurrentMod ? 'bg-[#00A4B7] text-[#002d34] ring-2 ring-[#00A4B7] font-bold' : 'text-[#94A3B8] hover:bg-white/5 hover:text-white'}"
               title="${mod.title}"
             >
-              <span class="w-4 h-4 flex items-center justify-center">${mod.icon}</span>
+              <span class="w-4 h-4 flex items-center justify-center ${isCurrentMod ? 'text-[#002d34]' : ''}">${mod.icon}</span>
             </button>
             <div class="absolute left-full top-0 ml-3 px-2 py-1 bg-[#0F172A] border border-[#1E293B] rounded-lg text-white font-bold text-xs whitespace-nowrap hidden group-hover:block z-50 pointer-events-none">
               ${mod.title}
@@ -727,17 +727,17 @@ export const Sidebar = {
           <!-- Icon Button -->
           <button 
             data-module-id="${mod.id}" 
-            class="sidebar-mod-btn w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer ${isCurrentMod ? 'bg-white text-[#0F172A] ring-2 ring-[#0284C7] font-bold' : 'text-[#94A3B8] hover:bg-white/5 hover:text-white'}"
+            class="sidebar-mod-btn w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer ${isCurrentMod ? 'bg-[#00A4B7] text-[#002d34] ring-2 ring-[#00A4B7] font-bold' : 'text-[#94A3B8] hover:bg-white/5 hover:text-white'}"
             title="${mod.title}"
           >
-            <span class="w-4 h-4 flex items-center justify-center">${mod.icon}</span>
+            <span class="w-4 h-4 flex items-center justify-center ${isCurrentMod ? 'text-[#002d34]' : ''}">${mod.icon}</span>
           </button>
 
           <!-- Floating Flyout Menu on Hover -->
           <div class="absolute left-full top-0 ml-3 w-60 bg-[#0F172A] border border-[#1E293B] rounded-xl p-2.5 hidden group-hover:block z-50 transition-all pointer-events-auto">
             <!-- Module Title in Flyout -->
             <div class="flex items-center gap-2 px-2.5 py-1.5 border-b border-[#1E293B] mb-1.5 text-white font-bold text-xs">
-              <span class="text-[#38BDF8]">${mod.icon}</span>
+              <span class="text-[#00A4B7]">${mod.icon}</span>
               <span class="tracking-wide">${mod.title}</span>
             </div>
 
@@ -749,7 +749,7 @@ export const Sidebar = {
                 return `
                   <a 
                     href="${defaultHash}" 
-                    class="flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-all ${isSubActive ? 'bg-[#0284C7] text-white font-bold' : 'text-[#94A3B8] hover:bg-white/5 hover:text-white'}"
+                    class="flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-all ${isSubActive ? 'bg-[#00A4B7] text-[#002d34] font-bold' : 'text-[#94A3B8] hover:bg-white/5 hover:text-white'}"
                   >
                     <span>${sub.title}</span>
                   </a>

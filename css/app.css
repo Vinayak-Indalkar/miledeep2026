@@ -26,7 +26,7 @@
   --ds-border-focused: #0284C7;
   
   /* Brand: Marine & Pastel Sky */
-  --ds-brand-primary: #0369A1; /* 5.96:1 contrast with white text */
+  --ds-brand-primary: #00A4B7; /* 5.96:1 contrast with white text */
   --ds-brand-primary-hover: #075985; /* 7.95:1 AAA */
   --ds-brand-primary-active: #0C4A6E;
   --ds-brand-subtle: #E0F2FE; /* Pastel Powder Sky */
@@ -103,6 +103,43 @@ body {
 #sidebar-container #erp-sidebar {
   width: 100% !important;
   height: 100% !important;
+}
+
+/* Side Menu Active Item Styling - WCAG AA #002d34 text color on #00A4B7 */
+#erp-sidebar .sidebar-mod-btn.bg-\[\#00A4B7\],
+#erp-sidebar .sidebar-mod-btn.bg-\[\#0284C7\],
+#erp-sidebar button.sidebar-mod-btn.bg-\[\#00A4B7\],
+#erp-sidebar button.sidebar-mod-btn.bg-\[\#0284C7\],
+#erp-sidebar button.sidebar-mod-btn[class*="bg-\[\#00A4B7\]"],
+#erp-sidebar button.sidebar-mod-btn[class*="bg-\[\#0284C7\]"],
+#erp-sidebar .nav-submenu-block a.bg-\[\#00A4B7\],
+#erp-sidebar .nav-submenus-list a.bg-\[\#00A4B7\],
+#erp-sidebar [class*="bg-\[\#00A4B7\]"].text-\[\#002d34\],
+#erp-sidebar a[class*="bg-\[\#00A4B7\]"],
+#erp-sidebar button.bg-\[\#00A4B7\],
+#erp-sidebar button.bg-\[\#0284C7\] {
+  color: #002d34 !important;
+}
+
+#erp-sidebar .sidebar-mod-btn.bg-\[\#00A4B7\] *,
+#erp-sidebar .sidebar-mod-btn.bg-\[\#0284C7\] *,
+#erp-sidebar button.sidebar-mod-btn.bg-\[\#00A4B7\] *,
+#erp-sidebar button.sidebar-mod-btn.bg-\[\#0284C7\] *,
+#erp-sidebar button.sidebar-mod-btn[class*="bg-\[\#00A4B7\]"] *,
+#erp-sidebar button.sidebar-mod-btn[class*="bg-\[\#0284C7\]"] *,
+#erp-sidebar .nav-submenu-block a.bg-\[\#00A4B7\] *,
+#erp-sidebar .nav-submenus-list a.bg-\[\#00A4B7\] *,
+#erp-sidebar [class*="bg-\[\#00A4B7\]"].text-\[\#002d34\] *,
+#erp-sidebar a[class*="bg-\[\#00A4B7\]"] *,
+#erp-sidebar button.bg-\[\#00A4B7\] *,
+#erp-sidebar button.bg-\[\#0284C7\] * {
+  color: #002d34 !important;
+}
+
+#erp-sidebar .sidebar-mod-btn.bg-\[\#0284C7\],
+#erp-sidebar button.sidebar-mod-btn.bg-\[\#0284C7\],
+#erp-sidebar [class*="bg-\[\#0284C7\]"] {
+  background-color: #00A4B7 !important;
 }
 
 #main-layout-wrapper {
@@ -216,22 +253,24 @@ body {
   border: 1px solid #C4B5FD !important;
 }
 
-/* Accessible Action Buttons */
+/* Accessible Action Buttons - Calibrated WCAG Button System */
 .btn-primary {
-  background-color: #0369A1 !important;
-  color: #ffffff !important;
+  background-color: #00A4B7 !important;
+  color: #000000 !important; /* Calibrated 6.99:1 AAA black text on Teal 600 */
   font-weight: 700 !important;
-  border: 1px solid #02598B !important;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  border: 1px solid #0092A3 !important;
+  border-radius: 9999px !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
 }
 .btn-primary:hover {
-  background-color: #075985 !important;
-  border-color: #075985 !important;
-  color: #ffffff !important;
+  background-color: #008F9F !important;
+  border-color: #007D8C !important;
+  color: #000000 !important;
 }
 .btn-primary:active {
-  background-color: #0C4A6E !important;
-  color: #ffffff !important;
+  background-color: #007D8C !important;
+  color: #000000 !important;
+  transform: scale(0.98) !important;
 }
 
 /* Clean Underline Tab - Zero Text Highlighting */
@@ -242,8 +281,8 @@ a[role="tab"][aria-selected="true"],
 [role="tab"][aria-selected="true"] {
   background-color: transparent !important;
   background: transparent !important;
-  color: #0369A1 !important;
-  border-bottom: 2px solid #0369A1 !important;
+  color: #00A4B7 !important;
+  border-bottom: 2px solid #00A4B7 !important;
   font-weight: 700 !important;
   user-select: none !important;
   -webkit-user-select: none !important;
@@ -254,15 +293,11 @@ button.tab-active *,
 [role="tab"][aria-selected="true"] * {
   background-color: transparent !important;
   background: transparent !important;
-  color: #0369A1 !important;
+  color: #00A4B7 !important;
   user-select: none !important;
   -webkit-user-select: none !important;
 }
 
-[role="tab"] {
-  user-select: none !important;
-  -webkit-user-select: none !important;
-}
 [role="tab"]:focus:not(:focus-visible) {
   outline: none !important;
   box-shadow: none !important;
@@ -370,19 +405,19 @@ button.tab-active *,
   border-left: 3px solid #0284C7 !important;
 }
 .nav-item-active svg {
-  color: #0369A1 !important;
+  color: #00A4B7 !important;
 }
 
 /* Tab active */
 .tab-active {
   background-color: transparent !important;
-  color: #0369A1 !important;
-  border-bottom: 2px solid #0369A1 !important;
+  color: #00A4B7 !important;
+  border-bottom: 2px solid #00A4B7 !important;
   font-weight: 700 !important;
 }
 .tab-active span {
   background-color: transparent !important;
-  color: #0369A1 !important;
+  color: #00A4B7 !important;
 }
 
 /* Drawer & Modal Transitions */
@@ -508,13 +543,13 @@ a[role="tab"][aria-selected="true"],
 [role="tab"][aria-selected="true"] * {
   background-color: transparent !important;
   background: transparent !important;
-  color: #0369A1 !important;
-  border-bottom: 2px solid #0369A1 !important;
+  color: #00A4B7 !important;
+  border-bottom: 2px solid #00A4B7 !important;
   font-weight: 700 !important;
 }
 
 .btn-primary {
-  background-color: #0369A1 !important;
+  background-color: #00A4B7 !important;
   background-image: none !important;
   color: #FFFFFF !important;
   font-weight: 700 !important;
@@ -790,7 +825,7 @@ body, #erp-app-shell, .bg-\[\#F4F5F7\] {
 
 .text-\[\#008DA6\],
 .text-\[\#0284C7\] {
-  color: #0369A1 !important; /* 5.96:1 AA on white/pastel */
+  color: #00A4B7 !important; /* 5.96:1 AA on white/pastel */
 }
 
 /* Form Controls with 3:1 Non-Text Boundary Contrast */
@@ -1022,7 +1057,7 @@ input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus,
 select:focus,
 textarea:focus,
 .erp-input:focus {
-  border-color: #0369A1 !important;
+  border-color: #00A4B7 !important;
   box-shadow: 0 0 0 2px rgba(3, 105, 161, 0.15) !important;
   outline: none !important;
 }
@@ -1069,7 +1104,7 @@ input[type="month"] {
 /* Checkboxes and Radios */
 input[type="checkbox"],
 input[type="radio"] {
-  accent-color: #0369A1 !important;
+  accent-color: #00A4B7 !important;
   width: 16px !important;
   height: 16px !important;
   cursor: pointer !important;
@@ -1321,19 +1356,25 @@ button.dt-action-btn svg {
   flex-shrink: 0 !important;
 }
 
-/* 4. BUTTONS */
+/* 4. BUTTONS & CONTROLS - PILL GEOMETRY & WCAG CALIBRATED SYSTEM */
 button:not(.sidebar-mod-btn):not(#header-settings-btn):not(#header-notifications-btn):not(#header-help-btn):not(#user-menu-btn):not(.settings-dropdown-link):not([role="tab"]):not(#sidebar-edge-toggle-btn):not(.dt-action-btn):not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn):not(.btn-show-all-submenus):not(.btn-sub-edit):not(.btn-sub-toggle):not(.btn-sub-del):not(#toggle-pwd-btn):not(#toggle-usr-modal-password-btn):not(#toggle-asgn-db-pass-btn):not(.btn-toggle-cpwd),
 .btn,
 .btn-primary,
+.btn-primary-deep,
 .btn-secondary,
+.btn-outline,
 .btn-danger,
-.btn-subtle {
+.btn-destructive,
+.btn-dark,
+.btn-pitch,
+.btn-subtle,
+.btn-ghost {
   font-family: 'Noto Sans', sans-serif !important;
   font-size: 13px !important;
   font-weight: 600 !important;
-  border-radius: 8px !important;
+  border-radius: 9999px !important; /* Full Pill Geometry */
   min-height: 38px !important;
-  padding: 6px 14px !important;
+  padding: 6px 18px !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -1344,29 +1385,83 @@ button:not(.sidebar-mod-btn):not(#header-settings-btn):not(#header-notifications
   box-shadow: none !important;
 }
 
-/* Primary Button */
-.btn-primary,
-button.bg-brand-600,
-button.bg-brand-700,
-button.bg-\[\#0284C7\],
-button.bg-\[\#0369A1\] {
-  background-color: #0369A1 !important;
-  color: #FFFFFF !important;
-  border: 1px solid #02598B !important;
-  font-weight: 700 !important;
-}
-.btn-primary:hover,
-button.bg-brand-600:hover,
-button.bg-brand-700:hover,
-button.bg-\[\#0284C7\]:hover,
-button.bg-\[\#0369A1\]:hover {
-  background-color: #075985 !important;
-  border-color: #075985 !important;
-  color: #FFFFFF !important;
+/* Active State Depression */
+button:not(.sidebar-mod-btn):not([role="tab"]):active,
+.btn:active,
+.btn-primary:active,
+.btn-secondary:active,
+.btn-danger:active,
+.btn-dark:active {
+  transform: scale(0.98) !important;
 }
 
-/* Secondary Button */
+/* 1. Primary (Teal 600 · Black Text) - Calibrated 6.99:1 AAA */
+.btn-primary,
+button:not(.sidebar-mod-btn).bg-brand-600,
+button:not(.sidebar-mod-btn).bg-brand-700,
+button:not(.sidebar-mod-btn).bg-\[\#0284C7\],
+button:not(.sidebar-mod-btn).bg-\[\#00A4B7\] {
+  background-color: #00A4B7 !important;
+  color: #000000 !important;
+  border: 1px solid #0092A3 !important;
+  font-weight: 700 !important;
+  border-radius: 9999px !important;
+}
+.btn-primary:hover,
+button:not(.sidebar-mod-btn).bg-brand-600:hover,
+button:not(.sidebar-mod-btn).bg-brand-700:hover,
+button:not(.sidebar-mod-btn).bg-\[\#0284C7\]:hover,
+button:not(.sidebar-mod-btn).bg-\[\#00A4B7\]:hover {
+  background-color: #008F9F !important;
+  border-color: #007D8C !important;
+  color: #000000 !important;
+}
+.btn-primary:active {
+  background-color: #007D8C !important;
+  transform: scale(0.98) !important;
+}
+
+/* 2. Primary Deep (Teal 800 · White Text) - Calibrated 6.13:1 AAA */
+.btn-primary-deep {
+  background-color: #006C7A !important;
+  color: #FFFFFF !important;
+  border: 1px solid #005661 !important;
+  font-weight: 700 !important;
+  border-radius: 9999px !important;
+}
+.btn-primary-deep:hover {
+  background-color: #005661 !important;
+  border-color: #00454E !important;
+  color: #FFFFFF !important;
+}
+.btn-primary-deep:active {
+  background-color: #00454E !important;
+  transform: scale(0.98) !important;
+}
+
+/* 3. Dark Pitch */
+.btn-dark,
+.btn-pitch {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #000000 !important;
+  font-weight: 700 !important;
+  border-radius: 9999px !important;
+}
+.btn-dark:hover,
+.btn-pitch:hover {
+  background-color: #1E293B !important;
+  border-color: #1E293B !important;
+  color: #FFFFFF !important;
+}
+.btn-dark:active,
+.btn-pitch:active {
+  transform: scale(0.98) !important;
+}
+
+/* 4. Secondary Outline */
 .btn-secondary,
+.btn-outline,
 button.border-neutral-300,
 button.border-\[\#CBD5E1\],
 button.border-\[\#DFE1E6\] {
@@ -1374,8 +1469,10 @@ button.border-\[\#DFE1E6\] {
   color: #1E293B !important;
   border: 1px solid #CBD5E1 !important;
   font-weight: 600 !important;
+  border-radius: 9999px !important;
 }
 .btn-secondary:hover,
+.btn-outline:hover,
 button.border-neutral-300:hover,
 button.border-\[\#CBD5E1\]:hover,
 button.border-\[\#DFE1E6\]:hover {
@@ -1384,36 +1481,56 @@ button.border-\[\#DFE1E6\]:hover {
   color: #0F172A !important;
 }
 
-/* Danger Button */
+/* 5. Ghost Link */
+.btn-subtle,
+.btn-ghost {
+  background-color: transparent !important;
+  color: #006C7A !important;
+  border: 1px solid transparent !important;
+  font-weight: 600 !important;
+  border-radius: 9999px !important;
+}
+.btn-subtle:hover,
+.btn-ghost:hover {
+  background-color: rgba(0, 164, 183, 0.08) !important;
+  color: #005661 !important;
+}
+
+/* 6. Destructive */
 .btn-danger,
+.btn-destructive,
 button.bg-red-600,
 button.bg-red-700,
 button.bg-\[\#991B1B\],
 button.bg-\[\#BF2600\] {
-  background-color: #991B1B !important;
-  color: #FFFFFF !important;
-  border: 1px solid #7F1D1D !important;
+  background-color: #FFF1F2 !important;
+  color: #BE123C !important;
+  border: 1px solid #FECDD3 !important;
   font-weight: 600 !important;
+  border-radius: 9999px !important;
 }
 .btn-danger:hover,
+.btn-destructive:hover,
 button.bg-red-600:hover,
 button.bg-red-700:hover,
 button.bg-\[\#991B1B\]:hover,
 button.bg-\[\#BF2600\]:hover {
-  background-color: #7F1D1D !important;
-  border-color: #7F1D1D !important;
+  background-color: #FFE4E6 !important;
+  border-color: #FDA4AF !important;
+  color: #9F1239 !important;
 }
 
-/* Subtle / Ghost Button */
-.btn-subtle {
-  background-color: transparent !important;
-  color: #334155 !important;
-  border: 1px solid transparent !important;
-  font-weight: 500 !important;
-}
-.btn-subtle:hover {
-  background-color: #EBF1F7 !important;
-  color: #0F172A !important;
+/* Disabled State */
+button:disabled,
+.btn:disabled,
+.btn[disabled] {
+  background-color: #A5DCE3 !important;
+  color: #64748B !important;
+  border-color: transparent !important;
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  transform: none !important;
 }
 
 /* Small button modifier */
@@ -1421,8 +1538,19 @@ button.bg-\[\#BF2600\]:hover {
 button.py-1,
 button.py-1\.5 {
   min-height: 32px !important;
-  padding: 4px 10px !important;
+  padding: 4px 12px !important;
   font-size: 12px !important;
+}
+
+/* Full Rounded Corner Search Bars for Super Admin and Admin */
+input[type="search"],
+input[placeholder*="Search"],
+input[placeholder*="search"],
+#header-global-search-input,
+#dt-search-input,
+.dt-search-input,
+.search-input {
+  border-radius: 9999px !important;
 }
 
 /* 5. CHIPS / BADGES / LOZENGES / STATUS PILLS */

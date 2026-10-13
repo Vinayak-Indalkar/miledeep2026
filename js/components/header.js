@@ -32,7 +32,7 @@ export const Header = {
               placeholder="Search ERP records..." 
               autocomplete="off"
               style="padding-left: 42px !important; padding-right: 36px !important;"
-              class="w-full py-1.5 bg-[#F8FAFC] hover:bg-[#F1F5F9] focus:bg-white text-[#0F172A] placeholder-[#94A3B8] border border-[#E2E8F0] focus:border-[#0284C7] rounded-xl text-xs transition-colors focus:outline-none shadow-xs"
+              class="w-full py-1.5 bg-[#F8FAFC] hover:bg-[#F1F5F9] focus:bg-white text-[#0F172A] placeholder-[#94A3B8] border border-[#E2E8F0] focus:border-[#00A4B7] rounded-full text-xs transition-colors focus:outline-none shadow-xs"
             />
             <button 
               type="button" 

@@ -243,7 +243,7 @@ export class DataTable {
             </div>
 
             <div class="flex items-end">
-              <button type="button" class="dt-top-filter-search-btn btn-primary px-5 py-1.5 rounded text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs hover:shadow cursor-pointer h-[31px]">
+              <button type="button" class="dt-top-filter-search-btn btn-primary px-5 py-1.5 rounded-full text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs hover:shadow cursor-pointer h-[31px]">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 <span>Search</span>
               </button>
@@ -270,7 +270,7 @@ export class DataTable {
             <div class="flex items-center gap-2 flex-wrap">
               <!-- Unified Download Button with Dropdown (Excel, CSV, PDF) -->
               <div class="relative">
-                <button type="button" id="dt-download-btn" class="btn-secondary px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 hover:bg-[#EBECF0] transition-colors cursor-pointer shadow-2xs" title="Download Table Data">
+                <button type="button" id="dt-download-btn" class="btn-secondary px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 hover:bg-[#EBECF0] transition-colors cursor-pointer shadow-2xs" title="Download Table Data">
                   <svg class="w-3.5 h-3.5 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                   <span>Download</span>
                   <svg id="dt-download-chevron" class="w-3 h-3 text-[#5E6C84] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
@@ -282,7 +282,7 @@ export class DataTable {
                     <span class="font-semibold text-xs text-[#172B4D]">Excel</span>
                   </button>
                   <button type="button" id="dt-opt-csv" class="w-full text-left px-3 py-2 hover:bg-[#F4F5F7] flex items-center gap-2.5 text-[#172B4D] transition-colors cursor-pointer border-t border-[#EBECF0]">
-                    <svg class="w-4 h-4 text-[#0369A1] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <svg class="w-4 h-4 text-[#00A4B7] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     <span class="font-semibold text-xs text-[#172B4D]">CSV</span>
                   </button>
                   <button type="button" id="dt-opt-pdf" class="w-full text-left px-3 py-2 hover:bg-[#F4F5F7] flex items-center gap-2.5 text-[#172B4D] transition-colors cursor-pointer border-t border-[#EBECF0]">
@@ -294,7 +294,7 @@ export class DataTable {
 
               <!-- Column Section / Visibility Dropdown -->
               <div class="relative">
-                <button type="button" id="dt-columns-btn" class="btn-secondary px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 hover:bg-[#EBECF0] transition-colors cursor-pointer shadow-2xs" title="Customize Visible Columns">
+                <button type="button" id="dt-columns-btn" class="btn-secondary px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 hover:bg-[#EBECF0] transition-colors cursor-pointer shadow-2xs" title="Customize Visible Columns">
                   <svg class="w-3.5 h-3.5 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                   <span>Column visibility</span>
                 </button>
@@ -323,7 +323,7 @@ export class DataTable {
           </div>
 
           <!-- Selected Rows Bulk Bar -->
-          <div id="dt-bulk-bar" class="hidden px-4 py-2 bg-[#F0F9FF] border-b border-[#BAE6FD] items-center justify-between text-xs text-[#0369A1]">
+          <div id="dt-bulk-bar" class="hidden px-4 py-2 bg-[#F0F9FF] border-b border-[#BAE6FD] items-center justify-between text-xs text-[#00A4B7]">
             <span id="dt-selected-count">0 items selected</span>
             <div id="dt-bulk-actions" class="flex items-center gap-2"></div>
           </div>

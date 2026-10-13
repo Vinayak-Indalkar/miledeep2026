@@ -360,7 +360,7 @@ export const App = {
       if (!text) return '';
       const escaped = rawTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       const regex = new RegExp(`(${escaped})`, 'gi');
-      return String(text).replace(regex, '<span class="bg-[#BAE6FD] text-[#0369A1] font-bold rounded px-0.5">$1</span>');
+      return String(text).replace(regex, '<span class="bg-[#BAE6FD] text-[#00A4B7] font-bold rounded px-0.5">$1</span>');
     };
 
     // 1. DYNAMIC SUGGESTIONS LIST BASED ON INPUT WORD
@@ -532,7 +532,7 @@ export const App = {
     if (matchingCompanies.length > 0) {
       html += `
         <div class="mb-2.5">
-          <div class="text-[10px] font-bold text-[#0369A1] uppercase tracking-wider mb-1 flex items-center justify-between">
+          <div class="text-[10px] font-bold text-[#00A4B7] uppercase tracking-wider mb-1 flex items-center justify-between">
             <span>Corporate Clients & Tenants (${matchingCompanies.length})</span>
             <span class="text-[9px] font-normal text-[#64748B]">Click to Manage</span>
           </div>
@@ -540,7 +540,7 @@ export const App = {
             ${matchingCompanies.map(c => `
               <div class="p-2 hover:bg-[#F8FAFC] flex items-center justify-between cursor-pointer search-result-item" data-action="nav" data-hash="#/general/configuration/clients">
                 <div>
-                  <div class="font-bold text-[#0369A1] text-xs">${highlight(c.name)} <span class="font-mono text-[10px] text-[#5E6C84]">(${c.code})</span></div>
+                  <div class="font-bold text-[#00A4B7] text-xs">${highlight(c.name)} <span class="font-mono text-[10px] text-[#5E6C84]">(${c.code})</span></div>
                   <div class="text-[11px] text-[#64748B]">${highlight(c.legalName || '')} • ${c.country || ''}</div>
                 </div>
                 <span class="text-[11px] text-[#0284C7] font-semibold">Open Client &rarr;</span>

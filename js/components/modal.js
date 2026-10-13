@@ -21,10 +21,10 @@ export const Modal = {
     let buttonsHtml = '';
     footerButtons.forEach((btn, idx) => {
       const cls = btn.type === 'primary' 
-        ? 'btn-primary px-4 py-2 rounded text-sm' 
+        ? 'btn-primary px-5 py-2 rounded-full text-sm font-bold' 
         : btn.type === 'danger'
-        ? 'btn-danger px-4 py-2 rounded text-sm font-medium'
-        : 'btn-secondary px-4 py-2 rounded text-sm';
+        ? 'btn-danger px-5 py-2 rounded-full text-sm font-semibold' 
+        : 'btn-secondary px-5 py-2 rounded-full text-sm font-semibold';
       buttonsHtml += `<button id="modal-btn-${idx}" class="${cls}">${btn.label}</button>`;
     });
 
@@ -198,7 +198,7 @@ export const Modal = {
         ${detailsHtml}
 
         <div class="mt-5 flex justify-center">
-          <button id="modal-success-btn" class="btn-primary w-full py-2 rounded-lg text-xs font-bold shadow-xs hover:shadow cursor-pointer">
+          <button id="modal-success-btn" class="btn-primary w-full py-2.5 rounded-full text-xs font-bold shadow-xs hover:shadow cursor-pointer">
             ${buttonText}
           </button>
         </div>
