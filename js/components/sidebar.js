@@ -56,35 +56,37 @@ export const ADMIN_NAV_HIERARCHY = [
       {
         id: "dashboard",
         title: "Dashboard",
-        defaultTab: "floor-overview",
+        defaultTab: "overview",
         tabs: [
-          { id: "floor-overview", label: "Floor Overview", hash: "#/preprocessing/dashboard/floor-overview" }
+          { id: "overview", label: "Overview", hash: "#/preprocessing/dashboard/overview" }
         ]
       },
       {
-        id: "floor-operations",
-        title: "Floor Operations",
-        defaultTab: "receiving-sorting",
+        id: "operations",
+        title: "Operations",
+        defaultTab: "deheading",
         tabs: [
-          { id: "receiving-sorting", label: "Receiving & Sorting", hash: "#/preprocessing/floor-operations/receiving-sorting" },
-          { id: "preprocessing-tasks", label: "Pre-Processing Tasks", hash: "#/preprocessing/floor-operations/preprocessing-tasks" }
+          { id: "deheading", label: "Deheading", hash: "#/preprocessing/operations/deheading" },
+          { id: "grading", label: "Grading", hash: "#/preprocessing/operations/grading" },
+          { id: "rm-received-trackid", label: "Rm Received trackid", hash: "#/preprocessing/operations/rm-received-trackid" },
+          { id: "de-heading-trackid", label: "De-Heading trackid", hash: "#/preprocessing/operations/de-heading-trackid" },
+          { id: "grading-trackid", label: "Grading trackid", hash: "#/preprocessing/operations/grading-trackid" },
+          { id: "value-addition-trackid", label: "Value Addition trackid", hash: "#/preprocessing/operations/value-addition-trackid" },
+          { id: "hon-qty-transfer-after-va", label: "Hon Qty Transfer After VA", hash: "#/preprocessing/operations/hon-qty-transfer-after-va" }
         ]
       },
       {
-        id: "chemical-inventory",
-        title: "Chemical Inventory & Usage",
-        defaultTab: "chemical-stock",
+        id: "chemical-screens",
+        title: "Chemical Screens",
+        defaultTab: "chemical-pos",
         tabs: [
-          { id: "chemical-stock", label: "Chemical Stock", hash: "#/preprocessing/chemical-inventory/chemical-stock" },
-          { id: "usage-logs", label: "Usage Logs", hash: "#/preprocessing/chemical-inventory/usage-logs" }
-        ]
-      },
-      {
-        id: "traceability",
-        title: "Traceability",
-        defaultTab: "batch-traceability",
-        tabs: [
-          { id: "batch-traceability", label: "Batch Traceability Logs", hash: "#/preprocessing/traceability/batch-traceability" }
+          { id: "chemical-pos", label: "Chemical Pos", hash: "#/preprocessing/chemical-screens/chemical-pos" },
+          { id: "received-chemicals", label: "Received Chemicals", hash: "#/preprocessing/chemical-screens/received-chemicals" },
+          { id: "chemicals-consumption", label: "Chemicals Consumption", hash: "#/preprocessing/chemical-screens/chemicals-consumption" },
+          { id: "chemical-received-report", label: "Chemical Received Report", hash: "#/preprocessing/chemical-screens/chemical-received-report" },
+          { id: "chemical-opening-balance-report", label: "Chemical Opening Balance Report", hash: "#/preprocessing/chemical-screens/chemical-opening-balance-report" },
+          { id: "chemical-balance-report", label: "Chemical Balance Report", hash: "#/preprocessing/chemical-screens/chemical-balance-report" },
+          { id: "chemical-payments-list", label: "Chemical Payments List", hash: "#/preprocessing/chemical-screens/chemical-payments-list" }
         ]
       }
     ]
@@ -492,7 +494,7 @@ export const NAV_HIERARCHY = [...ADMIN_NAV_HIERARCHY, ...SUPER_ADMIN_NAV_HIERARC
 
 
 export const Sidebar = {
-  isCollapsed: localStorage.getItem('dfl_sidebar_collapsed') === 'true',
+  isCollapsed: localStorage.getItem('dfl_sidebar_collapsed') === 'true' || window.innerWidth <= 767,
   activeModuleId: 'purchase',
   activeSubmenuId: 'dashboard',
   activeTabId: 'rm-dashboard',
@@ -639,10 +641,10 @@ export const Sidebar = {
           <div class="nav-module-group mb-1">
             <button 
               data-module-id="${mod.id}" 
-              class="sidebar-mod-btn w-full px-3 py-2.5 rounded-lg text-xs font-bold flex items-center transition-colors cursor-pointer ${isExpanded ? 'bg-[#00A4B7] text-[#002d34] shadow-xs' : 'text-[#CBD5E1] hover:bg-white/5 hover:text-white'}"
+              class="sidebar-mod-btn w-full px-3 py-2.5 rounded-lg text-xs font-bold flex items-center transition-colors cursor-pointer ${isExpanded ? 'bg-[#00A4B7] text-white shadow-xs' : 'text-[#CBD5E1] hover:bg-white/5 hover:text-white'}"
             >
               <div class="flex items-center gap-2.5 truncate">
-                <span class="w-4 h-4 flex items-center justify-center shrink-0 ${isExpanded ? 'text-[#002d34]' : 'text-[#64748B]'}">${mod.icon}</span>
+                <span class="w-4 h-4 flex items-center justify-center shrink-0 ${isExpanded ? 'text-white' : 'text-[#64748B]'}">${mod.icon}</span>
                 <span class="text-xs tracking-tight truncate">${mod.title}</span>
               </div>
             </button>
@@ -663,10 +665,10 @@ export const Sidebar = {
                 <div class="nav-submenu-block">
                   <a 
                     href="${defaultHash}" 
-                    class="flex items-center px-2.5 py-1.5 rounded-md text-xs font-semibold transition-all ${isSubActive ? 'bg-[#00A4B7] text-[#002d34] font-bold' : 'text-[#94A3B8] hover:bg-white/5 hover:text-white'}"
+                    class="flex items-center px-2.5 py-1.5 rounded-md text-xs font-semibold transition-all ${isSubActive ? 'bg-[#00A4B7] text-white font-bold' : 'text-[#94A3B8] hover:bg-white/5 hover:text-white'}"
                   >
                     <div class="flex items-center gap-2 truncate">
-                      <span class="w-1.5 h-1.5 rounded-full ${isSubActive ? 'bg-[#002d34]' : 'bg-[#475569]'} shrink-0"></span>
+                      <span class="w-1.5 h-1.5 rounded-full ${isSubActive ? 'bg-white' : 'bg-[#475569]'} shrink-0"></span>
                       <span class="truncate">${sub.title}</span>
                     </div>
                   </a>
@@ -681,14 +683,14 @@ export const Sidebar = {
         <div class="nav-module-group mb-1">
           <button 
             data-module-id="${mod.id}" 
-            class="sidebar-mod-btn w-full px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-between transition-colors cursor-pointer ${isExpanded ? 'bg-[#00A4B7] text-[#002d34]' : 'text-[#CBD5E1] hover:bg-white/5 hover:text-white'}"
+            class="sidebar-mod-btn w-full px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-between transition-colors cursor-pointer ${isExpanded ? 'bg-[#00A4B7] text-white' : 'text-[#CBD5E1] hover:bg-white/5 hover:text-white'}"
           >
             <div class="flex items-center gap-2.5 truncate">
-              <span class="w-4 h-4 flex items-center justify-center shrink-0 ${isExpanded ? 'text-[#002d34]' : 'text-[#64748B]'}">${mod.icon}</span>
+              <span class="w-4 h-4 flex items-center justify-center shrink-0 ${isExpanded ? 'text-white' : 'text-[#64748B]'}">${mod.icon}</span>
               <span class="text-xs tracking-tight truncate">${mod.title}</span>
             </div>
             <div class="flex items-center gap-1 shrink-0">
-              <svg class="w-3.5 h-3.5 transform transition-transform duration-200 ${isExpanded ? 'rotate-90 text-[#002d34]' : 'text-[#64748B]'}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              <svg class="w-3.5 h-3.5 transform transition-transform duration-200 ${isExpanded ? 'rotate-90 text-white' : 'text-[#64748B]'}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </div>
           </button>
           ${submenusHtml}
@@ -710,10 +712,10 @@ export const Sidebar = {
           <div class="relative group flex justify-center nav-module-group">
             <button 
               data-module-id="${mod.id}" 
-              class="sidebar-mod-btn w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer ${isCurrentMod ? 'bg-[#00A4B7] text-[#002d34] ring-2 ring-[#00A4B7] font-bold' : 'text-[#94A3B8] hover:bg-white/5 hover:text-white'}"
+              class="sidebar-mod-btn w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer ${isCurrentMod ? 'bg-[#00A4B7] text-white ring-2 ring-[#00A4B7] font-bold' : 'text-[#94A3B8] hover:bg-white/5 hover:text-white'}"
               title="${mod.title}"
             >
-              <span class="w-4 h-4 flex items-center justify-center ${isCurrentMod ? 'text-[#002d34]' : ''}">${mod.icon}</span>
+              <span class="w-4 h-4 flex items-center justify-center ${isCurrentMod ? 'text-white' : ''}">${mod.icon}</span>
             </button>
             <div class="absolute left-full top-0 ml-3 px-2 py-1 bg-[#0F172A] border border-[#1E293B] rounded-lg text-white font-bold text-xs whitespace-nowrap hidden group-hover:block z-50 pointer-events-none">
               ${mod.title}
@@ -727,10 +729,10 @@ export const Sidebar = {
           <!-- Icon Button -->
           <button 
             data-module-id="${mod.id}" 
-            class="sidebar-mod-btn w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer ${isCurrentMod ? 'bg-[#00A4B7] text-[#002d34] ring-2 ring-[#00A4B7] font-bold' : 'text-[#94A3B8] hover:bg-white/5 hover:text-white'}"
+            class="sidebar-mod-btn w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer ${isCurrentMod ? 'bg-[#00A4B7] text-white ring-2 ring-[#00A4B7] font-bold' : 'text-[#94A3B8] hover:bg-white/5 hover:text-white'}"
             title="${mod.title}"
           >
-            <span class="w-4 h-4 flex items-center justify-center ${isCurrentMod ? 'text-[#002d34]' : ''}">${mod.icon}</span>
+            <span class="w-4 h-4 flex items-center justify-center ${isCurrentMod ? 'text-white' : ''}">${mod.icon}</span>
           </button>
 
           <!-- Floating Flyout Menu on Hover -->
@@ -749,7 +751,7 @@ export const Sidebar = {
                 return `
                   <a 
                     href="${defaultHash}" 
-                    class="flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-all ${isSubActive ? 'bg-[#00A4B7] text-[#002d34] font-bold' : 'text-[#94A3B8] hover:bg-white/5 hover:text-white'}"
+                    class="flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-all ${isSubActive ? 'bg-[#00A4B7] text-white font-bold' : 'text-[#94A3B8] hover:bg-white/5 hover:text-white'}"
                   >
                     <span>${sub.title}</span>
                   </a>

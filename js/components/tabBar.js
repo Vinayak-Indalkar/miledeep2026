@@ -23,7 +23,10 @@ export const TabBar = {
         tabId = subId;
       }
     }
-    if (!submenu) return null;
+    if (!submenu || submenu.tabs.length <= 1) {
+      container.innerHTML = '';
+      return null;
+    }
 
     const currentTabId = tabId || submenu.defaultTab;
 
@@ -32,8 +35,8 @@ export const TabBar = {
         <div 
           role="tablist" 
           aria-label="${submenu.title} views" 
-          id="${containerId}-tablist"
-          class="flex items-center gap-2 overflow-x-hidden bg-white px-3 pt-1 border-b border-[#DDE5ED] rounded-xl"
+          id="${containerId}-tablist" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch; scrollbar-width: thin;"
+          class="flex items-center gap-2 overflow-x-auto bg-transparent p-0 border-b-0 rounded-xl scrollbar-thin"
         >
           ${submenu.tabs.map(tab => {
             const isActive = tab.id === currentTabId;
@@ -45,7 +48,7 @@ export const TabBar = {
                 aria-selected="${isActive ? 'true' : 'false'}"
                 tabindex="${isActive ? '0' : '-1'}"
                 aria-controls="panel-${tab.id}"
-                class="select-none px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 border-b-2 -mb-[1px] outline-none ${isActive ? 'tab-active border-[#00A4B7] text-[#00A4B7] font-bold bg-transparent' : 'border-transparent text-[#475569] hover:text-[#0F172A] hover:border-[#CBD5E1] bg-transparent'}"
+                class="select-none px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap transition-all rounded-full flex items-center gap-1.5 outline-none border-0 ${isActive ? 'tab-active bg-[#00A4B7] text-white font-bold shadow-xs' : 'text-[#475569] hover:text-[#0F172A] hover:bg-[#F1F5F9] bg-transparent'}"
               >
                 <span class="select-none">${tab.label}</span>
               </a>
@@ -56,8 +59,30 @@ export const TabBar = {
     `;
 
     this.bindKeyboardNav(containerId);
+    this.bindClickNav(containerId);
+    this.bindWheelScroll(containerId);
+    this.scrollActiveTabIntoView(containerId);
 
     return { module, submenu, currentTabId };
+  },
+
+  bindClickNav(containerId) {
+    const tablistEl = document.getElementById(`${containerId}-tablist`);
+    if (!tablistEl) return;
+    tablistEl.addEventListener('click', (e) => {
+      const clicked = e.target.closest('[role="tab"]');
+      if (!clicked) return;
+      tablistEl.querySelectorAll('[role="tab"]').forEach(t => {
+        t.setAttribute('aria-selected', 'false');
+        t.tabIndex = -1;
+        t.classList.remove('tab-active', 'bg-[#00A4B7]', 'text-white', 'font-bold', 'shadow-xs');
+        t.classList.add('text-[#475569]', 'hover:text-[#0F172A]', 'hover:bg-[#F1F5F9]', 'bg-transparent');
+      });
+      clicked.setAttribute('aria-selected', 'true');
+      clicked.tabIndex = 0;
+      clicked.classList.remove('text-[#475569]', 'hover:text-[#0F172A]', 'hover:bg-[#F1F5F9]', 'bg-transparent');
+      clicked.classList.add('tab-active', 'bg-[#00A4B7]', 'text-white', 'font-bold', 'shadow-xs');
+    });
   },
 
   bindKeyboardNav(containerId) {
@@ -96,5 +121,27 @@ export const TabBar = {
         }
       });
     });
-  }
+  },
+
+  bindWheelScroll(containerId) {
+    const tablistEl = document.getElementById(`${containerId}-tablist`);
+    if (!tablistEl) return;
+    tablistEl.addEventListener('wheel', (e) => {
+      if (e.deltaY !== 0) {
+        e.preventDefault();
+        tablistEl.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
+  },
+
+  scrollActiveTabIntoView(containerId) {
+    const tablistEl = document.getElementById(`${containerId}-tablist`);
+    if (!tablistEl) return;
+    requestAnimationFrame(() => {
+      const activeTab = tablistEl.querySelector('[aria-selected="true"]');
+      if (activeTab) {
+        activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      }
+    });
+  },
 };

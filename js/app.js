@@ -1,3 +1,4 @@
+import { UIEnhancements } from './components/uiEnhancements.js';
 // Master Application Controller & Router for Fisheries ERP
 
 import { ERP_DATA } from './data/mockData.js';
@@ -6,7 +7,6 @@ import { Modal } from './components/modal.js';
 import { Header } from './components/header.js';
 import { Sidebar, NAV_HIERARCHY } from './components/sidebar.js';
 import { Breadcrumbs } from './components/breadcrumbs.js';
-import { Skeleton } from './components/skeleton.js';
 
 // Views
 import { LoginView } from './views/loginView.js';
@@ -29,6 +29,7 @@ export const App = {
       document.documentElement.classList.add('theme-dark');
     }
     Toast.init();
+    UIEnhancements.init();
     this.bindHashChange();
     this.bindDatePickerHelper();
     this.bindTableTruncationTooltip();
@@ -92,7 +93,7 @@ export const App = {
           '6': '#/super-reports/audit-logs/audit-trail'
         } : {
           '1': '#/purchase/dashboard/rm-dashboard',
-          '2': '#/preprocessing/dashboard/floor-overview',
+          '2': '#/preprocessing/dashboard/overview',
           '3': '#/quality/dashboard/qc-overview',
           '4': '#/production/dashboard/overview',
           '5': '#/coldstore/dashboard/overview',
@@ -109,23 +110,7 @@ export const App = {
   },
 
   bindDatePickerHelper() {
-    document.addEventListener('click', (e) => {
-      const wrapper = e.target.closest('.erp-date-wrapper');
-      if (wrapper && e.target.tagName !== 'INPUT') {
-        const input = wrapper.querySelector('input[type="date"]');
-        if (input) {
-          if (typeof input.showPicker === 'function') {
-            try {
-              input.showPicker();
-            } catch (_) {
-              input.focus();
-            }
-          } else {
-            input.focus();
-          }
-        }
-      }
-    });
+    // Handled globally by UIEnhancements
   },
 
   bindHashChange() {

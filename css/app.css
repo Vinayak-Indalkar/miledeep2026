@@ -105,7 +105,7 @@ body {
   height: 100% !important;
 }
 
-/* Side Menu Active Item Styling - WCAG AA #002d34 text color on #00A4B7 */
+/* Side Menu Active Item Styling - Pure White text and icon on #00A4B7 / rgb(0 163 182) */
 #erp-sidebar .sidebar-mod-btn.bg-\[\#00A4B7\],
 #erp-sidebar .sidebar-mod-btn.bg-\[\#0284C7\],
 #erp-sidebar button.sidebar-mod-btn.bg-\[\#00A4B7\],
@@ -114,11 +114,11 @@ body {
 #erp-sidebar button.sidebar-mod-btn[class*="bg-\[\#0284C7\]"],
 #erp-sidebar .nav-submenu-block a.bg-\[\#00A4B7\],
 #erp-sidebar .nav-submenus-list a.bg-\[\#00A4B7\],
-#erp-sidebar [class*="bg-\[\#00A4B7\]"].text-\[\#002d34\],
+#erp-sidebar [class*="bg-\[\#00A4B7\]"],
 #erp-sidebar a[class*="bg-\[\#00A4B7\]"],
 #erp-sidebar button.bg-\[\#00A4B7\],
 #erp-sidebar button.bg-\[\#0284C7\] {
-  color: #002d34 !important;
+  color: #FFFFFF !important;
 }
 
 #erp-sidebar .sidebar-mod-btn.bg-\[\#00A4B7\] *,
@@ -129,11 +129,27 @@ body {
 #erp-sidebar button.sidebar-mod-btn[class*="bg-\[\#0284C7\]"] *,
 #erp-sidebar .nav-submenu-block a.bg-\[\#00A4B7\] *,
 #erp-sidebar .nav-submenus-list a.bg-\[\#00A4B7\] *,
-#erp-sidebar [class*="bg-\[\#00A4B7\]"].text-\[\#002d34\] *,
+#erp-sidebar [class*="bg-\[\#00A4B7\]"] *,
 #erp-sidebar a[class*="bg-\[\#00A4B7\]"] *,
 #erp-sidebar button.bg-\[\#00A4B7\] *,
 #erp-sidebar button.bg-\[\#0284C7\] * {
-  color: #002d34 !important;
+  color: #FFFFFF !important;
+}
+
+#erp-sidebar .sidebar-mod-btn.bg-\[\#00A4B7\] svg,
+#erp-sidebar .sidebar-mod-btn.bg-\[\#0284C7\] svg,
+#erp-sidebar button.sidebar-mod-btn.bg-\[\#00A4B7\] svg,
+#erp-sidebar button.sidebar-mod-btn.bg-\[\#0284C7\] svg,
+#erp-sidebar button.sidebar-mod-btn[class*="bg-\[\#00A4B7\]"] svg,
+#erp-sidebar button.sidebar-mod-btn[class*="bg-\[\#0284C7\]"] svg,
+#erp-sidebar .nav-submenu-block a.bg-\[\#00A4B7\] svg,
+#erp-sidebar .nav-submenus-list a.bg-\[\#00A4B7\] svg,
+#erp-sidebar [class*="bg-\[\#00A4B7\]"] svg,
+#erp-sidebar a[class*="bg-\[\#00A4B7\]"] svg,
+#erp-sidebar button.bg-\[\#00A4B7\] svg,
+#erp-sidebar button.bg-\[\#0284C7\] svg {
+  stroke: currentColor !important;
+  color: #FFFFFF !important;
 }
 
 #erp-sidebar .sidebar-mod-btn.bg-\[\#0284C7\],
@@ -169,16 +185,60 @@ body {
   background: #94A3B8;
 }
 
-/* Tab Navigation Lists - Prevent horizontal scroll and hide scrollbars */
-[role="tablist"] {
-  overflow-x: hidden !important;
-  scrollbar-width: none !important;
-  -ms-overflow-style: none !important;
+/* Tab Navigation Lists - Transparent background with visible smooth horizontal scrollbar */
+[role="tablist"],
+.tab-bar-container,
+[id$="-tablist"],
+#preprocessing-tab-bar-container-tablist,
+div:has(> [role="tab"]) {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #CBD5E1 #F1F5F9 !important;
+  -webkit-overflow-scrolling: touch !important;
+  background-color: transparent !important;
+  background: transparent !important;
+  border-bottom: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 0 6px 0 !important;
+  flex-wrap: nowrap !important;
 }
-[role="tablist"]::-webkit-scrollbar {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
+
+[role="tablist"]::-webkit-scrollbar,
+.tab-bar-container::-webkit-scrollbar,
+[id$="-tablist"]::-webkit-scrollbar,
+#preprocessing-tab-bar-container-tablist::-webkit-scrollbar,
+div:has(> [role="tab"])::-webkit-scrollbar {
+  display: block !important;
+  height: 6px !important;
+  width: 6px !important;
+}
+
+[role="tablist"]::-webkit-scrollbar-track,
+.tab-bar-container::-webkit-scrollbar-track,
+[id$="-tablist"]::-webkit-scrollbar-track,
+#preprocessing-tab-bar-container-tablist::-webkit-scrollbar-track,
+div:has(> [role="tab"])::-webkit-scrollbar-track {
+  background: #F1F5F9 !important;
+  border-radius: 9999px !important;
+}
+
+[role="tablist"]::-webkit-scrollbar-thumb,
+.tab-bar-container::-webkit-scrollbar-thumb,
+[id$="-tablist"]::-webkit-scrollbar-thumb,
+#preprocessing-tab-bar-container-tablist::-webkit-scrollbar-thumb,
+div:has(> [role="tab"])::-webkit-scrollbar-thumb {
+  background: #CBD5E1 !important;
+  border-radius: 9999px !important;
+}
+
+[role="tablist"]::-webkit-scrollbar-thumb:hover,
+.tab-bar-container::-webkit-scrollbar-thumb:hover,
+[id$="-tablist"]::-webkit-scrollbar-thumb:hover,
+#preprocessing-tab-bar-container-tablist::-webkit-scrollbar-thumb:hover,
+div:has(> [role="tab"])::-webkit-scrollbar-thumb:hover {
+  background: #0284C7 !important;
 }
 
 /* Subtle Pastel Lozenge (Badge) Styles - WCAG AAA Certified in Capsules */
@@ -253,10 +313,10 @@ body {
   border: 1px solid #C4B5FD !important;
 }
 
-/* Accessible Action Buttons - Calibrated WCAG Button System */
+/* Accessible Action Buttons - White Text & Icons on #00A4B7 / rgb(0 163 182) */
 .btn-primary {
   background-color: #00A4B7 !important;
-  color: #000000 !important; /* Calibrated 6.99:1 AAA black text on Teal 600 */
+  color: #FFFFFF !important;
   font-weight: 700 !important;
   border: 1px solid #0092A3 !important;
   border-radius: 9999px !important;
@@ -265,37 +325,55 @@ body {
 .btn-primary:hover {
   background-color: #008F9F !important;
   border-color: #007D8C !important;
-  color: #000000 !important;
+  color: #FFFFFF !important;
 }
 .btn-primary:active {
   background-color: #007D8C !important;
-  color: #000000 !important;
+  color: #FFFFFF !important;
   transform: scale(0.98) !important;
 }
 
-/* Clean Underline Tab - Zero Text Highlighting */
+/* Capsule Tab - Active state is a pill with pure white text and teal background */
 .tab-active,
 a.tab-active,
 button.tab-active,
 a[role="tab"][aria-selected="true"],
 [role="tab"][aria-selected="true"] {
-  background-color: transparent !important;
-  background: transparent !important;
-  color: #00A4B7 !important;
-  border-bottom: 2px solid #00A4B7 !important;
+  background-color: #00A4B7 !important;
+  background: #00A4B7 !important;
+  color: #FFFFFF !important;
+  border-radius: 9999px !important;
+  border: none !important;
+  border-bottom: none !important;
   font-weight: 700 !important;
   user-select: none !important;
   -webkit-user-select: none !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
 }
 .tab-active *,
 a.tab-active *,
 button.tab-active *,
-[role="tab"][aria-selected="true"] * {
+[role="tab"][aria-selected="true"] *,
+[role="tab"][aria-selected="true"] span {
   background-color: transparent !important;
   background: transparent !important;
-  color: #00A4B7 !important;
+  color: #FFFFFF !important;
   user-select: none !important;
   -webkit-user-select: none !important;
+}
+
+[role="tab"] {
+  border-radius: 9999px !important;
+  border: none !important;
+  border-bottom: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+[role="tab"]:not([aria-selected="true"]):not(.tab-active):hover {
+  background-color: #F1F5F9 !important;
+  color: #0F172A !important;
 }
 
 [role="tab"]:focus:not(:focus-visible) {
@@ -410,14 +488,17 @@ button.tab-active *,
 
 /* Tab active */
 .tab-active {
-  background-color: transparent !important;
-  color: #00A4B7 !important;
-  border-bottom: 2px solid #00A4B7 !important;
+  background-color: #00A4B7 !important;
+  background: #00A4B7 !important;
+  color: #FFFFFF !important;
+  border-radius: 9999px !important;
+  border: none !important;
+  border-bottom: none !important;
   font-weight: 700 !important;
 }
 .tab-active span {
   background-color: transparent !important;
-  color: #00A4B7 !important;
+  color: #FFFFFF !important;
 }
 
 /* Drawer & Modal Transitions */
@@ -533,19 +614,24 @@ input[type="month"]::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
 }
 
-/* Active Tab: Clean Underline Tab */
+/* Active Tab: Capsule */
 .tab-active,
 a.tab-active,
 a.tab-active:visited,
 a[role="tab"][aria-selected="true"],
-[role="tab"][aria-selected="true"],
-[role="tab"][aria-selected="true"] span,
+[role="tab"][aria-selected="true"] {
+  background-color: #00A4B7 !important;
+  background: #00A4B7 !important;
+  color: #FFFFFF !important;
+  border-radius: 9999px !important;
+  border: none !important;
+  border-bottom: none !important;
+  font-weight: 700 !important;
+}
+.tab-active *,
 [role="tab"][aria-selected="true"] * {
   background-color: transparent !important;
-  background: transparent !important;
-  color: #00A4B7 !important;
-  border-bottom: 2px solid #00A4B7 !important;
-  font-weight: 700 !important;
+  color: #FFFFFF !important;
 }
 
 .btn-primary {
@@ -595,11 +681,13 @@ div:has(> div > div > .dt-top-filter-body) {
 #ctx-top-toggle-btn,
 #pay-top-reset-btn,
 #pay-top-toggle-btn {
-  width: 28px !important;
-  height: 28px !important;
-  min-width: 28px !important;
-  min-height: 28px !important;
-  border-radius: 0 !important;
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  min-height: 30px !important;
+  max-width: 30px !important;
+  max-height: 30px !important;
+  border-radius: 9999px !important;
   border: 1px solid #CBD5E1 !important;
   background-color: #ffffff !important;
   color: #334155 !important;
@@ -1123,7 +1211,7 @@ label:not(.flex):not(.inline-flex),
   font-weight: 600 !important;
   color: #334155 !important;
   display: block !important;
-  margin-bottom: 5px !important;
+  margin-bottom: 0 !important;
   letter-spacing: 0.01em !important;
 }
 
@@ -1288,7 +1376,7 @@ table.is-resizing * {
   background-color: #FFFFFF !important;
 }
 
-/* Action Icons: Square shape, 8px gap between each, single unified color */
+/* Action Icons: 30px by 30px Circle exclusively in table Actions Column */
 .erp-table .sticky-action-col > div,
 table .sticky-action-col > div {
   display: inline-flex !important;
@@ -1297,23 +1385,30 @@ table .sticky-action-col > div {
   gap: 8px !important;
 }
 
-.dt-action-btn,
-.erp-table .dt-action-btn,
-table .dt-action-btn,
-button.dt-action-btn {
-  width: 28px !important;
-  height: 28px !important;
-  min-width: 28px !important;
-  min-height: 28px !important;
-  max-width: 28px !important;
-  max-height: 28px !important;
+.sticky-action-col .dt-action-btn,
+.sticky-action-col button,
+.erp-table .sticky-action-col .dt-action-btn,
+.erp-table .sticky-action-col button,
+table .sticky-action-col .dt-action-btn,
+table .sticky-action-col button,
+td.sticky-action-col .dt-action-btn,
+td.sticky-action-col button,
+table td button.dt-action-btn:not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn),
+.erp-table td button.dt-action-btn:not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn),
+button.dt-action-btn:not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn) {
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  min-height: 30px !important;
+  max-width: 30px !important;
+  max-height: 30px !important;
   padding: 0 !important;
   margin: 0 !important;
   box-sizing: border-box !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  border-radius: 0 !important;
+  border-radius: 9999px !important;
   border: 1px solid #CBD5E1 !important;
   background-color: #FFFFFF !important;
   color: #334155 !important;
@@ -1323,27 +1418,114 @@ button.dt-action-btn {
   transition: all 0.15s ease !important;
 }
 
-.dt-action-btn:hover,
-.erp-table .dt-action-btn:hover,
-table .dt-action-btn:hover,
-button.dt-action-btn:hover {
+@media (max-width: 767px) {
+  #sidebar-container {
+    width: var(--erp-sidebar-collapsed-width) !important;
+  }
+
+  #sidebar-container:not(.is-collapsed) {
+    width: min(var(--erp-sidebar-width), calc(100vw - 24px)) !important;
+    z-index: 60 !important;
+  }
+
+  #main-layout-wrapper,
+  #main-layout-wrapper.is-collapsed {
+    min-width: 0 !important;
+    margin-left: calc(var(--erp-sidebar-offset) + var(--erp-sidebar-collapsed-width) + var(--erp-sidebar-gap)) !important;
+    margin-right: var(--erp-sidebar-offset) !important;
+  }
+
+  #main-content-container {
+    min-width: 0 !important;
+  }
+
+  #header-container header {
+    gap: 8px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  #header-container header > div:first-child {
+    display: none !important;
+  }
+
+  #header-search-container {
+    flex: 1 1 0% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+  }
+
+  #header-search-container > div:first-child {
+    width: 100% !important;
+  }
+
+  #header-container header > div:last-child {
+    flex: 0 0 auto !important;
+    gap: 4px !important;
+  }
+
+  #user-menu-btn {
+    gap: 4px !important;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+  }
+
+  #user-menu-btn img {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+  }
+
+  #main-content-container [role="tablist"],
+  #main-content-container [id$="-tablist"] {
+    overflow-x: auto !important;
+    scrollbar-width: thin !important;
+  }
+}
+
+.sticky-action-col .dt-action-btn:hover,
+.sticky-action-col button:hover,
+.erp-table .sticky-action-col .dt-action-btn:hover,
+.erp-table .sticky-action-col button:hover,
+table .sticky-action-col .dt-action-btn:hover,
+table .sticky-action-col button:hover,
+td.sticky-action-col .dt-action-btn:hover,
+td.sticky-action-col button:hover,
+table td button.dt-action-btn:not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn):hover,
+.erp-table td button.dt-action-btn:not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn):hover,
+button.dt-action-btn:not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn):hover {
   background-color: #F0F9FF !important;
   color: #0284C7 !important;
   border-color: #0284C7 !important;
 }
 
-.dt-action-btn:hover svg,
-.erp-table .dt-action-btn:hover svg,
-table .dt-action-btn:hover svg,
-button.dt-action-btn:hover svg {
+.sticky-action-col .dt-action-btn:hover svg,
+.sticky-action-col button:hover svg,
+.erp-table .sticky-action-col .dt-action-btn:hover svg,
+.erp-table .sticky-action-col button:hover svg,
+table .sticky-action-col .dt-action-btn:hover svg,
+table .sticky-action-col button:hover svg,
+td.sticky-action-col .dt-action-btn:hover svg,
+td.sticky-action-col button:hover svg,
+table td button.dt-action-btn:not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn):hover svg,
+.erp-table td button.dt-action-btn:not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn):hover svg,
+button.dt-action-btn:not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn):hover svg {
   color: #0284C7 !important;
   stroke: #0284C7 !important;
 }
 
-.dt-action-btn svg,
-.erp-table .dt-action-btn svg,
-table .dt-action-btn svg,
-button.dt-action-btn svg {
+.sticky-action-col .dt-action-btn svg,
+.sticky-action-col button svg,
+.erp-table .sticky-action-col .dt-action-btn svg,
+.erp-table .sticky-action-col button svg,
+table .sticky-action-col .dt-action-btn svg,
+table .sticky-action-col button svg,
+td.sticky-action-col .dt-action-btn svg,
+td.sticky-action-col button svg,
+table td button.dt-action-btn:not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn) svg,
+.erp-table td button.dt-action-btn:not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn) svg,
+button.dt-action-btn:not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn) svg {
   width: 15px !important;
   height: 15px !important;
   min-width: 15px !important;
@@ -1356,8 +1538,49 @@ button.dt-action-btn svg {
   flex-shrink: 0 !important;
 }
 
+/* Guard: Search & Filters Bar Action Buttons always maintain square 28px */
+.dt-top-filter-card .dt-top-filter-reset-btn,
+.dt-top-filter-card .dt-top-filter-toggle-btn,
+.dt-top-filter-reset-btn,
+.dt-top-filter-toggle-btn,
+#comm-filter-reset-btn,
+#comm-filter-toggle-btn,
+#bill-top-reset-btn,
+#bill-top-toggle-btn,
+#roles-top-reset-btn,
+#roles-top-toggle-btn,
+#users-top-reset-btn,
+#users-top-toggle-btn,
+#booking-top-reset-btn,
+#booking-top-toggle-btn,
+#lot-top-reset-btn,
+#lot-top-toggle-btn,
+#rm-top-reset-btn,
+#rm-top-toggle-btn,
+#ctx-top-reset-btn,
+#ctx-top-toggle-btn,
+#pay-top-reset-btn,
+#pay-top-toggle-btn {
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  min-height: 30px !important;
+  max-width: 30px !important;
+  max-height: 30px !important;
+  border-radius: 9999px !important;
+  border: 1px solid #CBD5E1 !important;
+  background-color: #ffffff !important;
+  color: #334155 !important;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
 /* 4. BUTTONS & CONTROLS - PILL GEOMETRY & WCAG CALIBRATED SYSTEM */
-button:not(.sidebar-mod-btn):not(#header-settings-btn):not(#header-notifications-btn):not(#header-help-btn):not(#user-menu-btn):not(.settings-dropdown-link):not([role="tab"]):not(#sidebar-edge-toggle-btn):not(.dt-action-btn):not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn):not(.btn-show-all-submenus):not(.btn-sub-edit):not(.btn-sub-toggle):not(.btn-sub-del):not(#toggle-pwd-btn):not(#toggle-usr-modal-password-btn):not(#toggle-asgn-db-pass-btn):not(.btn-toggle-cpwd),
+button:not(.sidebar-mod-btn):not(#header-settings-btn):not(#header-notifications-btn):not(#header-help-btn):not(#user-menu-btn):not(.settings-dropdown-link):not([role="tab"]):not(#sidebar-edge-toggle-btn):not(.dt-action-btn):not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn):not(.btn-show-all-submenus):not(.btn-sub-edit):not(.btn-sub-toggle):not(.btn-sub-del):not(#toggle-pwd-btn):not(#toggle-usr-modal-password-btn):not(#toggle-asgn-db-pass-btn):not(.btn-toggle-cpwd):not(#dt-opt-excel):not(#dt-opt-csv):not(#dt-opt-pdf):not([id^="dt-opt-"]):not([class*="text-left"]):not(#dt-page-prev):not(#dt-page-next):not([id*="page-prev"]):not([id*="page-next"]):not(.dt-page-btn):not([class*="page-btn"]),
 .btn,
 .btn-primary,
 .btn-primary-deep,
@@ -1395,17 +1618,30 @@ button:not(.sidebar-mod-btn):not([role="tab"]):active,
   transform: scale(0.98) !important;
 }
 
-/* 1. Primary (Teal 600 · Black Text) - Calibrated 6.99:1 AAA */
+/* 1. Primary (Teal 600 · White Text & Icons) */
 .btn-primary,
 button:not(.sidebar-mod-btn).bg-brand-600,
 button:not(.sidebar-mod-btn).bg-brand-700,
 button:not(.sidebar-mod-btn).bg-\[\#0284C7\],
 button:not(.sidebar-mod-btn).bg-\[\#00A4B7\] {
   background-color: #00A4B7 !important;
-  color: #000000 !important;
+  color: #FFFFFF !important;
   border: 1px solid #0092A3 !important;
   font-weight: 700 !important;
   border-radius: 9999px !important;
+}
+.btn-primary *,
+.btn-primary svg,
+button:not(.sidebar-mod-btn).bg-brand-600 *,
+button:not(.sidebar-mod-btn).bg-brand-600 svg,
+button:not(.sidebar-mod-btn).bg-brand-700 *,
+button:not(.sidebar-mod-btn).bg-brand-700 svg,
+button:not(.sidebar-mod-btn).bg-\[\#0284C7\] *,
+button:not(.sidebar-mod-btn).bg-\[\#0284C7\] svg,
+button:not(.sidebar-mod-btn).bg-\[\#00A4B7\] *,
+button:not(.sidebar-mod-btn).bg-\[\#00A4B7\] svg {
+  color: #FFFFFF !important;
+  stroke: currentColor !important;
 }
 .btn-primary:hover,
 button:not(.sidebar-mod-btn).bg-brand-600:hover,
@@ -1414,11 +1650,51 @@ button:not(.sidebar-mod-btn).bg-\[\#0284C7\]:hover,
 button:not(.sidebar-mod-btn).bg-\[\#00A4B7\]:hover {
   background-color: #008F9F !important;
   border-color: #007D8C !important;
-  color: #000000 !important;
+  color: #FFFFFF !important;
+}
+.btn-primary:hover *,
+.btn-primary:hover svg,
+button:not(.sidebar-mod-btn).bg-brand-600:hover *,
+button:not(.sidebar-mod-btn).bg-brand-700:hover *,
+button:not(.sidebar-mod-btn).bg-\[\#0284C7\]:hover *,
+button:not(.sidebar-mod-btn).bg-\[\#00A4B7\]:hover * {
+  color: #FFFFFF !important;
 }
 .btn-primary:active {
   background-color: #007D8C !important;
+  color: #FFFFFF !important;
   transform: scale(0.98) !important;
+}
+.btn-primary:active * {
+  color: #FFFFFF !important;
+}
+
+/* Universal rule: Everywhere rgb(0 163 182) / #00A4B7 / #00A3B6 background appears, icon and text MUST be white */
+[class*="bg-[#00A4B7]"],
+[class*="bg-[#00A4B7]"] *,
+[class*="bg-[#00A3B6]"],
+[class*="bg-[#00A3B6]"] *,
+[style*="background-color: #00A4B7"],
+[style*="background-color: #00A4B7"] *,
+[style*="background-color:#00A4B7"],
+[style*="background-color:#00A4B7"] *,
+[style*="background-color: rgb(0, 163, 182)"],
+[style*="background-color: rgb(0, 163, 182)"] *,
+[style*="background-color: rgb(0, 164, 183)"],
+[style*="background-color: rgb(0, 164, 183)"] *,
+[style*="background: #00A4B7"],
+[style*="background: #00A4B7"] * {
+  color: #FFFFFF !important;
+}
+
+[class*="bg-[#00A4B7]"] svg,
+[class*="bg-[#00A3B6]"] svg,
+[style*="background-color: #00A4B7"] svg,
+[style*="background-color:#00A4B7"] svg,
+[style*="background-color: rgb(0, 163, 182)"] svg,
+[style*="background-color: rgb(0, 164, 183)"] svg {
+  stroke: currentColor !important;
+  color: #FFFFFF !important;
 }
 
 /* 2. Primary Deep (Teal 800 · White Text) - Calibrated 6.13:1 AAA */
@@ -1463,8 +1739,8 @@ button:not(.sidebar-mod-btn).bg-\[\#00A4B7\]:hover {
 .btn-secondary,
 .btn-outline,
 button.border-neutral-300,
-button.border-\[\#CBD5E1\],
-button.border-\[\#DFE1E6\] {
+button.border-[\#CBD5E1],
+button.border-[\#DFE1E6] {
   background-color: #FFFFFF !important;
   color: #1E293B !important;
   border: 1px solid #CBD5E1 !important;
@@ -1474,8 +1750,8 @@ button.border-\[\#DFE1E6\] {
 .btn-secondary:hover,
 .btn-outline:hover,
 button.border-neutral-300:hover,
-button.border-\[\#CBD5E1\]:hover,
-button.border-\[\#DFE1E6\]:hover {
+button.border-[\#CBD5E1]:hover,
+button.border-[\#DFE1E6]:hover {
   background-color: #F8FAFD !important;
   border-color: #94A3B8 !important;
   color: #0F172A !important;
@@ -1715,3 +1991,801 @@ html.a11y-underline-links .cursor-pointer {
 }
 
 
+
+/* User Profile Navigation Bar Avatar: exactly 40px by 40px */
+#user-menu-btn img {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  max-width: 40px !important;
+  max-height: 40px !important;
+  border-radius: 9999px !important;
+  object-fit: cover !important;
+}
+
+
+/* Page Title Header - Zero bottom margin across entire application */
+div:has(> div > h1),
+div:has(> h1) {
+  margin-bottom: 0 !important;
+}
+
+
+/* ==========================================================================
+   GLOBAL UI ENHANCEMENTS: TOOLTIP, DROPDOWN LIST, AND CALENDAR DATEPICKER
+   ========================================================================== */
+
+/* 1. Global Tooltip System */
+.erp-global-tooltip {
+  position: fixed !important;
+  z-index: 9999999 !important;
+  pointer-events: none !important;
+  padding: 5px 10px !important;
+  background-color: #0F172A !important;
+  color: #FFFFFF !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  line-height: 1.35 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.28), 0 1px 3px rgba(15, 23, 42, 0.15) !important;
+  white-space: nowrap !important;
+  opacity: 0 !important;
+  transform: translateY(3px) scale(0.96) !important;
+  transition: opacity 0.15s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  display: none;
+}
+.erp-global-tooltip.is-visible {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
+}
+.erp-global-tooltip .erp-tooltip-arrow {
+  position: absolute !important;
+  width: 6px !important;
+  height: 6px !important;
+  background-color: #0F172A !important;
+  transform: rotate(45deg) !important;
+}
+.erp-global-tooltip[data-placement="top"] .erp-tooltip-arrow {
+  bottom: -3px !important;
+}
+.erp-global-tooltip[data-placement="bottom"] .erp-tooltip-arrow {
+  top: -3px !important;
+}
+
+/* 2. Global Custom Dropdown Menu */
+.erp-floating-dropdown-menu {
+  position: fixed !important;
+  z-index: 999999 !important;
+  background-color: #FFFFFF !important;
+  border: 1px solid #DFE1E6 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15), 0 8px 10px -6px rgba(15, 23, 42, 0.08) !important;
+  display: none;
+  overflow: hidden !important;
+  animation: dropdownAnim 0.14s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.erp-floating-dropdown-menu.is-open {
+  display: block !important;
+}
+@keyframes dropdownAnim {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.erp-dropdown-items-container::-webkit-scrollbar {
+  width: 5px !important;
+}
+.erp-dropdown-items-container::-webkit-scrollbar-thumb {
+  background: #CBD5E1 !important;
+  border-radius: 4px !important;
+}
+
+/* 3. Global Custom Calendar Datepicker */
+.erp-global-calendar-popup {
+  position: fixed !important;
+  z-index: 999999 !important;
+  width: 280px !important;
+  background-color: #FFFFFF !important;
+  border: 1px solid #DFE1E6 !important;
+  border-radius: 16px !important;
+  padding: 14px !important;
+  box-shadow: 0 14px 30px -4px rgba(15, 23, 42, 0.16), 0 10px 10px -5px rgba(15, 23, 42, 0.06) !important;
+  display: none;
+  animation: calendarAnim 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.erp-global-calendar-popup.is-open {
+  display: block !important;
+}
+@keyframes calendarAnim {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.erp-cal-day {
+  width: 32px !important;
+  height: 32px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  border-radius: 9999px !important;
+  cursor: pointer !important;
+  border: 1px solid transparent !important;
+  background-color: transparent !important;
+  color: #1E293B !important;
+  transition: all 0.12s ease !important;
+  padding: 0 !important;
+  margin: auto !important;
+}
+.erp-cal-day:hover:not(.is-selected):not(.is-muted) {
+  background-color: #F0F9FF !important;
+  color: #00A4B7 !important;
+}
+.erp-cal-day.is-selected {
+  background-color: #00A4B7 !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  box-shadow: 0 1px 3px rgba(0, 164, 183, 0.3) !important;
+}
+.erp-cal-day.is-today:not(.is-selected) {
+  border-color: #00A4B7 !important;
+  color: #00A4B7 !important;
+  font-weight: 700 !important;
+}
+.erp-cal-day.is-muted {
+  color: #CBD5E1 !important;
+  cursor: default !important;
+}
+
+/* Datepicker & Select Fields Enhancement */
+input[type="date"],
+.erp-date-input,
+select,
+.form-select {
+  cursor: pointer !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+input[type="date"]:hover,
+.erp-date-input:hover,
+select:hover,
+.form-select:hover {
+  border-color: #00A4B7 !important;
+}
+input[type="date"]:focus,
+.erp-date-input:focus,
+select:focus,
+.form-select:focus {
+  border-color: #00A4B7 !important;
+  box-shadow: 0 0 0 3px rgba(0, 164, 183, 0.15) !important;
+  outline: none !important;
+}
+
+
+/* Form Section Containers - Zero padding & borderless across entire application */
+div.space-y-3:has(> div > span.uppercase.tracking-wider),
+div.space-y-4:has(> div > span.uppercase.tracking-wider),
+div:has(> div.border-b > span.uppercase.tracking-wider) {
+  padding: 0 !important;
+  border: none !important;
+  border-width: 0 !important;
+  background-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+
+/* Form Labels - Zero bottom margin on every label across entire application */
+label,
+label:not(.flex):not(.inline-flex),
+.form-label,
+.erp-label,
+label.mb-1,
+label.mb-1\.5,
+label.mb-2,
+label[class*="mb-"] {
+  margin-bottom: 0 !important;
+}
+
+
+/* ==========================================================================
+   AUTO-FILLED & PRE-FILLED DATA - LIGHT GRAY BACKGROUND
+   ========================================================================== */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+textarea:-webkit-autofill:active,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+select:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #F1F5F9 inset !important;
+  box-shadow: 0 0 0 1000px #F1F5F9 inset !important;
+  background-color: #F1F5F9 !important;
+  -webkit-text-fill-color: #0F172A !important;
+  color: #0F172A !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input:read-only:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="date"]):not(.erp-date-input),
+textarea:read-only,
+input[readonly]:not([type="date"]):not(.erp-date-input),
+textarea[readonly],
+.is-autofilled,
+[data-autofilled="true"],
+.bg-autofilled,
+#newbkg-no,
+#editbkg-no,
+#newlot-no,
+#newbill-no,
+#modal-pay-utr,
+input[id$="-auto"],
+input[name*="auto"] {
+  background-color: #F1F5F9 !important;
+  background: #F1F5F9 !important;
+  color: #172B4D !important;
+  border-color: #CBD5E1 !important;
+}
+
+input:read-only:focus,
+input[readonly]:focus,
+#newbkg-no:focus,
+#editbkg-no:focus,
+#newlot-no:focus,
+#newbill-no:focus,
+#modal-pay-utr:focus {
+  background-color: #F1F5F9 !important;
+  border-color: #00A4B7 !important;
+}
+
+
+/* Dropdown and Menu Option Buttons - Never capsule layout */
+#dt-opt-excel,
+#dt-opt-csv,
+#dt-opt-pdf,
+[id^="dt-opt-"],
+[id*="dropdown"] button:not(.btn-primary):not(.btn-danger):not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn),
+[id*="dropdown-menu"] button:not(.btn-primary):not(.btn-danger),
+.dropdown-menu button:not(.btn-primary):not(.btn-danger),
+.dt-dropdown-menu button:not(.btn-primary):not(.btn-danger),
+.dropdown-item,
+button.text-left,
+button[class*="text-left"] {
+  border-radius: 0 !important;
+  min-height: auto !important;
+  height: auto !important;
+  padding: 8px 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  text-align: left !important;
+  background-color: transparent !important;
+  color: #172B4D !important;
+  border: none !important;
+  box-shadow: none !important;
+  white-space: normal !important;
+}
+
+#dt-opt-excel:hover,
+#dt-opt-csv:hover,
+#dt-opt-pdf:hover,
+[id^="dt-opt-"]:hover,
+[id*="dropdown"] button:hover:not(.btn-primary):not(.btn-danger),
+[id*="dropdown-menu"] button:hover:not(.btn-primary):not(.btn-danger),
+.dropdown-menu button:hover:not(.btn-primary):not(.btn-danger),
+.dt-dropdown-menu button:hover:not(.btn-primary):not(.btn-danger),
+.dropdown-item:hover,
+button.text-left:hover:not(.btn-primary):not(.btn-danger),
+button[class*="text-left"]:hover:not(.btn-primary):not(.btn-danger) {
+  background-color: #F4F5F7 !important;
+  color: #0F172A !important;
+  border-radius: 0 !important;
+}
+
+#dt-opt-csv,
+#dt-opt-pdf {
+  border-top: 1px solid #EBECF0 !important;
+}
+
+
+/* ==========================================================================
+   Table & Grid Pagination Buttons - Visible Arrows & Strict 36px Geometry
+   ========================================================================== */
+#dt-page-prev,
+#dt-page-next,
+#cu-page-prev,
+#cu-page-next,
+#sub-page-prev,
+#sub-page-next,
+[id*="page-prev"],
+[id*="page-next"],
+.dt-page-btn,
+.cu-page-btn,
+.sub-page-btn,
+[class*="page-btn"] {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  max-width: 36px !important;
+  max-height: 36px !important;
+  padding: 0 !important;
+  border-radius: 10px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  line-height: 1 !important;
+  font-family: inherit !important;
+  font-size: 13px !important;
+  white-space: nowrap !important;
+  text-decoration: none !important;
+  margin: 0 !important;
+  position: relative !important;
+}
+
+#dt-page-prev svg,
+#dt-page-next svg,
+#cu-page-prev svg,
+#cu-page-next svg,
+#sub-page-prev svg,
+#sub-page-next svg,
+[id*="page-prev"] svg,
+[id*="page-next"] svg {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+  display: block !important;
+  stroke: currentColor !important;
+  stroke-width: 2 !important;
+  flex-shrink: 0 !important;
+  margin: auto !important;
+  pointer-events: none !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Enabled previous & next navigation buttons */
+#dt-page-prev:not(:disabled),
+#dt-page-next:not(:disabled),
+#cu-page-prev:not(:disabled),
+#cu-page-next:not(:disabled),
+#sub-page-prev:not(:disabled),
+#sub-page-next:not(:disabled),
+[id*="page-prev"]:not(:disabled),
+[id*="page-next"]:not(:disabled) {
+  background-color: #FFFFFF !important;
+  border: 1px solid #CBD5E1 !important;
+  color: #334155 !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+}
+
+#dt-page-prev:not(:disabled):hover,
+#dt-page-next:not(:disabled):hover,
+#cu-page-prev:not(:disabled):hover,
+#cu-page-next:not(:disabled):hover,
+#sub-page-prev:not(:disabled):hover,
+#sub-page-next:not(:disabled):hover,
+[id*="page-prev"]:not(:disabled):hover,
+[id*="page-next"]:not(:disabled):hover {
+  background-color: #F0F9FF !important;
+  border-color: #00A4B7 !important;
+  color: #00A4B7 !important;
+}
+
+/* Disabled previous & next navigation buttons */
+#dt-page-prev:disabled,
+#dt-page-next:disabled,
+#cu-page-prev:disabled,
+#cu-page-next:disabled,
+#sub-page-prev:disabled,
+#sub-page-next:disabled,
+[id*="page-prev"]:disabled,
+[id*="page-next"]:disabled,
+#dt-page-prev.opacity-40,
+#dt-page-next.opacity-40 {
+  background-color: #F8FAFC !important;
+  border: 1px solid #E2E8F0 !important;
+  color: #94A3B8 !important;
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+}
+
+/* Active Numbered Page Button */
+.dt-page-btn.bg-black,
+.dt-page-btn[class*="bg-black"],
+.cu-page-btn.bg-black,
+.cu-page-btn[class*="bg-black"],
+.sub-page-btn.bg-black,
+.sub-page-btn[class*="bg-black"],
+[class*="page-btn"].bg-black,
+[class*="page-btn"].is-active {
+  background-color: #00A4B7 !important;
+  border: 1px solid #0092A3 !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+}
+
+.dt-page-btn:not(.bg-black):not([class*="bg-black"]):not(.is-active),
+.cu-page-btn:not(.bg-black):not([class*="bg-black"]):not(.is-active),
+.sub-page-btn:not(.bg-black):not([class*="bg-black"]):not(.is-active),
+[class*="page-btn"]:not(.bg-black):not([class*="bg-black"]):not(.is-active) {
+  background-color: #FFFFFF !important;
+  border: 1px solid #CBD5E1 !important;
+  color: #334155 !important;
+}
+
+.dt-page-btn:not(.bg-black):hover,
+.cu-page-btn:not(.bg-black):hover,
+.sub-page-btn:not(.bg-black):hover {
+  background-color: #F0F9FF !important;
+  border-color: #00A4B7 !important;
+  color: #00A4B7 !important;
+}
+
+/* ==========================================================================
+   Breadcrumb Navigation Typography - Refined Decreased Font Size
+   ========================================================================== */
+#breadcrumbs-container,
+#breadcrumbs-container nav,
+#breadcrumbs-container a,
+#breadcrumbs-container span,
+[aria-label="Breadcrumb"],
+[aria-label="Breadcrumb"] a,
+[aria-label="Breadcrumb"] span {
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+}
+
+#breadcrumbs-container span.text-\[\#CBD5E1\],
+[aria-label="Breadcrumb"] span.text-\[\#CBD5E1\] {
+  font-size: 9px !important;
+}
+
+
+/* ==========================================================================
+   Table & Grid Pagination Buttons - Visible Arrows & Strict 36px Geometry
+   ========================================================================== */
+#dt-page-prev,
+#dt-page-next,
+#cu-page-prev,
+#cu-page-next,
+#sub-page-prev,
+#sub-page-next,
+[id*="page-prev"],
+[id*="page-next"],
+.dt-page-btn,
+.cu-page-btn,
+.sub-page-btn,
+[class*="page-btn"] {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  max-width: 36px !important;
+  max-height: 36px !important;
+  padding: 0 !important;
+  border-radius: 10px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  line-height: 1 !important;
+  font-family: inherit !important;
+  font-size: 13px !important;
+  white-space: nowrap !important;
+  text-decoration: none !important;
+  margin: 0 !important;
+  position: relative !important;
+}
+
+#dt-page-prev svg,
+#dt-page-next svg,
+#cu-page-prev svg,
+#cu-page-next svg,
+#sub-page-prev svg,
+#sub-page-next svg,
+[id*="page-prev"] svg,
+[id*="page-next"] svg {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+  display: block !important;
+  stroke: currentColor !important;
+  stroke-width: 2 !important;
+  flex-shrink: 0 !important;
+  margin: auto !important;
+  pointer-events: none !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Enabled previous & next navigation buttons */
+#dt-page-prev:not(:disabled),
+#dt-page-next:not(:disabled),
+#cu-page-prev:not(:disabled),
+#cu-page-next:not(:disabled),
+#sub-page-prev:not(:disabled),
+#sub-page-next:not(:disabled),
+[id*="page-prev"]:not(:disabled),
+[id*="page-next"]:not(:disabled) {
+  background-color: #FFFFFF !important;
+  border: 1px solid #CBD5E1 !important;
+  color: #334155 !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+}
+
+#dt-page-prev:not(:disabled):hover,
+#dt-page-next:not(:disabled):hover,
+#cu-page-prev:not(:disabled):hover,
+#cu-page-next:not(:disabled):hover,
+#sub-page-prev:not(:disabled):hover,
+#sub-page-next:not(:disabled):hover,
+[id*="page-prev"]:not(:disabled):hover,
+[id*="page-next"]:not(:disabled):hover {
+  background-color: #F0F9FF !important;
+  border-color: #00A4B7 !important;
+  color: #00A4B7 !important;
+}
+
+/* Disabled previous & next navigation buttons */
+#dt-page-prev:disabled,
+#dt-page-next:disabled,
+#cu-page-prev:disabled,
+#cu-page-next:disabled,
+#sub-page-prev:disabled,
+#sub-page-next:disabled,
+[id*="page-prev"]:disabled,
+[id*="page-next"]:disabled,
+#dt-page-prev.opacity-40,
+#dt-page-next.opacity-40 {
+  background-color: #F8FAFC !important;
+  border: 1px solid #E2E8F0 !important;
+  color: #94A3B8 !important;
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+}
+
+/* Active Numbered Page Button */
+.dt-page-btn.bg-black,
+.dt-page-btn[class*="bg-black"],
+.cu-page-btn.bg-black,
+.cu-page-btn[class*="bg-black"],
+.sub-page-btn.bg-black,
+.sub-page-btn[class*="bg-black"],
+[class*="page-btn"].bg-black,
+[class*="page-btn"].is-active {
+  background-color: #00A4B7 !important;
+  border: 1px solid #0092A3 !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+}
+
+.dt-page-btn:not(.bg-black):not([class*="bg-black"]):not(.is-active),
+.cu-page-btn:not(.bg-black):not([class*="bg-black"]):not(.is-active),
+.sub-page-btn:not(.bg-black):not([class*="bg-black"]):not(.is-active),
+[class*="page-btn"]:not(.bg-black):not([class*="bg-black"]):not(.is-active) {
+  background-color: #FFFFFF !important;
+  border: 1px solid #CBD5E1 !important;
+  color: #334155 !important;
+}
+
+.dt-page-btn:not(.bg-black):hover,
+.cu-page-btn:not(.bg-black):hover,
+.sub-page-btn:not(.bg-black):hover {
+  background-color: #F0F9FF !important;
+  border-color: #00A4B7 !important;
+  color: #00A4B7 !important;
+}
+
+/* ==========================================================================
+   Breadcrumb Navigation Typography - Refined Decreased Font Size
+   ========================================================================== */
+#breadcrumbs-container,
+#breadcrumbs-container nav,
+#breadcrumbs-container a,
+#breadcrumbs-container span,
+[aria-label="Breadcrumb"],
+[aria-label="Breadcrumb"] a,
+[aria-label="Breadcrumb"] span {
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+}
+
+#breadcrumbs-container span.text-\[\#CBD5E1\],
+[aria-label="Breadcrumb"] span.text-\[\#CBD5E1\] {
+  font-size: 9px !important;
+}
+
+
+/* ==========================================================================
+   Form & Modal Section Containers - Clean Flat Borderless Style
+   ========================================================================== */
+form .bg-\[\#FAFBFC\].border.rounded-xl.p-4.shadow-2xs,
+form .bg-white.border.rounded-xl.p-4.shadow-2xs,
+.modal-body .bg-\[\#FAFBFC\].border.rounded-xl.p-4,
+.modal-body .bg-white.border.rounded-xl.p-4,
+.erp-section-flat {
+  background-color: transparent !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-width: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+
+/* ==========================================================================
+   Currency Prefix (INR ₹) & Input Number Alignment System
+   ========================================================================== */
+.relative > span.absolute:first-child,
+.relative > span[class*="absolute"]:first-child {
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  left: 10px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  pointer-events: none !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  color: #475569 !important;
+  line-height: 1 !important;
+  height: 100% !important;
+  user-select: none !important;
+  z-index: 5 !important;
+}
+
+.relative:has(> span.absolute) > input,
+.relative:has(> span[class*="absolute"]) > input,
+.relative > input[type="number"].pl-7,
+.relative > input[id*="deduction"],
+.relative > input[id*="rate"],
+.relative > input[id*="amount"],
+.relative > input[id*="price"] {
+  padding-left: 28px !important;
+}
+
+/* Number input spinners alignment */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  opacity: 0.6;
+  cursor: pointer;
+}
+input[type="number"]:hover::-webkit-inner-spin-button,
+input[type="number"]:hover::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
+
+/* ==========================================================================
+   Search Buttons & Primary Action Buttons - Zero Border Everywhere
+   ========================================================================== */
+.dt-top-filter-search-btn,
+.dt-top-filter-card .dt-top-filter-search-btn,
+button.dt-top-filter-search-btn,
+button[id*="search-btn"],
+button[id$="-search-btn"],
+#rm-top-search-btn,
+#booking-top-search-btn,
+#lot-search-btn,
+#comm-search-btn,
+#bill-top-search-btn,
+#ctx-top-search-btn,
+#pay-top-search-btn,
+#users-top-search-btn,
+#roles-top-search-btn,
+.btn-primary {
+  border: none !important;
+  border-width: 0 !important;
+  border-style: none !important;
+  outline: none !important;
+}
+
+.dt-top-filter-search-btn:hover,
+.dt-top-filter-search-btn:focus,
+.dt-top-filter-search-btn:active,
+button[id*="search-btn"]:hover,
+button[id*="search-btn"]:focus,
+button[id*="search-btn"]:active,
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  border: none !important;
+  border-width: 0 !important;
+  border-style: none !important;
+  border-color: transparent !important;
+  outline: none !important;
+}
+
+
+/* ==========================================================================
+   Table Actions Column - Center Aligned Header & Icons
+   ========================================================================== */
+.erp-table th.sticky-action-col,
+table th.sticky-action-col,
+th.sticky-action-col,
+th[data-field="__actions__"] {
+  text-align: center !important;
+}
+
+.erp-table th.sticky-action-col > div,
+table th.sticky-action-col > div,
+th.sticky-action-col > div,
+th[data-field="__actions__"] > div {
+  text-align: center !important;
+  justify-content: center !important;
+  margin: 0 auto !important;
+  padding-right: 0 !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.erp-table td.sticky-action-col,
+table td.sticky-action-col,
+td.sticky-action-col {
+  text-align: center !important;
+}
+
+.erp-table td.sticky-action-col > div,
+table td.sticky-action-col > div,
+td.sticky-action-col > div {
+  display: flex !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  gap: 8px !important;
+  padding-right: 0 !important;
+  text-align: center !important;
+}
+
+/* Enterprise Horizontal Scrollbar for Data Tables & Chemical Payments */
+#chem-payments-table-container table.erp-table {
+  min-width: 1450px !important;
+}
+
+#chem-payments-table-container .overflow-x-auto,
+.erp-table-scroll-container,
+.overflow-x-auto {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: thin !important;
+}
+
+#chem-payments-table-container .overflow-x-auto::-webkit-scrollbar,
+.overflow-x-auto::-webkit-scrollbar {
+  height: 8px !important;
+}
+
+#chem-payments-table-container .overflow-x-auto::-webkit-scrollbar-track,
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: #F1F5F9 !important;
+  border-radius: 4px;
+}
+
+#chem-payments-table-container .overflow-x-auto::-webkit-scrollbar-thumb,
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: #CBD5E1 !important;
+  border-radius: 4px;
+}
+
+#chem-payments-table-container .overflow-x-auto::-webkit-scrollbar-thumb:hover,
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8 !important;
+}

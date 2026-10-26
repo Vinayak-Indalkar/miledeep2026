@@ -10,7 +10,7 @@ export const ERP_DATA = {
     fdaNumber: "FDA-REG-10928374",
     bapNumber: "BAP-P-4492-4STAR",
     facility: "Plant #1 - Processing & Cold Chain Hub (Visakhapatnam)",
-    currency: "USD",
+    currency: "INR",
     localCurrency: "INR",
     currentDateTime: "2026-10-05 15:30 IST",
     logoColor: LOGO_COLOR,
@@ -82,7 +82,7 @@ export const ERP_DATA = {
       rating: "A+ (Preferred)",
       totalLotsSupplied: 142,
       pendingBillsCount: 2,
-      pendingBillAmount: "$ 48,200"
+      pendingBillAmount: "₹ 48,200"
     },
     {
       id: "SUP-102",
@@ -97,7 +97,7 @@ export const ERP_DATA = {
       rating: "A (Verified)",
       totalLotsSupplied: 98,
       pendingBillsCount: 1,
-      pendingBillAmount: "$ 24,500"
+      pendingBillAmount: "₹ 24,500"
     },
     {
       id: "SUP-103",
@@ -112,7 +112,7 @@ export const ERP_DATA = {
       rating: "A+ (Premium)",
       totalLotsSupplied: 215,
       pendingBillsCount: 3,
-      pendingBillAmount: "$ 72,150"
+      pendingBillAmount: "₹ 72,150"
     },
     {
       id: "SUP-104",
@@ -127,7 +127,7 @@ export const ERP_DATA = {
       rating: "B+ (Standard)",
       totalLotsSupplied: 64,
       pendingBillsCount: 0,
-      pendingBillAmount: "$ 0"
+      pendingBillAmount: "₹ 0"
     }
   ],
 
@@ -943,7 +943,7 @@ export const ERP_DATA = {
       contact: "Mark Henderson",
       email: "m.henderson@pacificseafood.com",
       paymentTerms: "LC at Sight (Irrevocable)",
-      creditLimit: "$ 1,500,000",
+      creditLimit: "₹ 1,50,00,000",
       activeContracts: 3,
       totalShippedYTD: "184 MT"
     },
@@ -955,7 +955,7 @@ export const ERP_DATA = {
       contact: "Sarah Jenkins",
       email: "sjenkins@redlobster.com",
       paymentTerms: "DA 60 Days with Bank Guarantee",
-      creditLimit: "$ 2,200,000",
+      creditLimit: "₹ 2,20,00,000",
       activeContracts: 2,
       totalShippedYTD: "310 MT"
     },
@@ -967,7 +967,7 @@ export const ERP_DATA = {
       contact: "Kenji Sato",
       email: "k-sato@maruha-nichiro.co.jp",
       paymentTerms: "100% TT against OBL copies",
-      creditLimit: "$ 1,800,000",
+      creditLimit: "₹ 1,80,00,000",
       activeContracts: 4,
       totalShippedYTD: "245 MT"
     },
@@ -979,7 +979,7 @@ export const ERP_DATA = {
       contact: "Lars Olsen",
       email: "lolsen@royalgreenland.dk",
       paymentTerms: "LC 30 Days",
-      creditLimit: "$ 1,200,000",
+      creditLimit: "₹ 1,20,00,000",
       activeContracts: 1,
       totalShippedYTD: "92 MT"
     }

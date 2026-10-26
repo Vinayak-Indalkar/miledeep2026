@@ -92,7 +92,7 @@ export const Skeleton = {
     return `
       <div class="space-y-4 animate-fade-in select-none">
         <!-- Title & Action Bar Skeleton -->
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-0">
           <div class="space-y-2">
             <div class="skeleton-shimmer h-6 w-60 rounded"></div>
             <div class="skeleton-shimmer h-3.5 w-96 rounded"></div>
@@ -159,7 +159,7 @@ export const Skeleton = {
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
             ${Array.from({ length: 12 }).map(() => `
-              <div class="bg-[#FAFBFC] border border-[#DFE1E6] p-3.5 rounded-lg space-y-3">
+              <div class="bg-transparent p-0 border-0 space-y-3">
                 <div class="skeleton-shimmer w-8 h-8 rounded-lg"></div>
                 <div class="skeleton-shimmer h-4 w-full rounded"></div>
                 <div class="skeleton-shimmer h-3 w-3/4 rounded"></div>

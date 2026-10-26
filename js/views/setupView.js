@@ -4290,7 +4290,7 @@ function getInitialStudioState() {
         fdaNumber: 'FDA-REG-10928374',
         bapNumber: 'BAP-P-4492-4STAR',
         country: 'India',
-        currency: 'INR / USD',
+        currency: 'INR (₹)',
         timezone: 'Asia/Kolkata (IST)',
         dateFormat: 'DD/MM/YYYY',
         contactEmail: 'purchase@devifisheries.com',
@@ -4322,7 +4322,7 @@ function getInitialStudioState() {
         fdaNumber: 'FDA-REG-US-99120',
         bapNumber: 'BAP-IMP-8821',
         country: 'United States',
-        currency: 'USD ($)',
+        currency: 'INR (₹)',
         timezone: 'America/New_York (EST)',
         dateFormat: 'MM/DD/YYYY',
         contactEmail: 'sales.us@deviseafoods.com',
@@ -4354,7 +4354,7 @@ function getInitialStudioState() {
         fdaNumber: 'FDA-AP-88402',
         bapNumber: 'BAP-P-5510',
         country: 'Singapore',
-        currency: 'SGD / USD',
+        currency: 'INR (₹)',
         timezone: 'Asia/Singapore (SGT)',
         dateFormat: 'YYYY-MM-DD',
         contactEmail: 'apac.trade@coastalmarine.sg',
@@ -4463,7 +4463,7 @@ function getInitialStudioState() {
               { id: 'pi_variety', key: 'packedVariety', label: 'Finished Variety', type: 'dropdown', options: ['Head-Less Shell-On (HLSO) Block Frozen', 'Easy Peel (EZP) IQF', 'Peeled & Deveined Tail-On (PDTO) IQF', 'Butterfly Cut (BF) IQF'], required: true, width: 'col-span-1', defaultValue: 'Head-Less Shell-On (HLSO) Block Frozen' },
               { id: 'pi_grade', key: 'gradeCount', label: 'Contract Grade Count', type: 'dropdown', options: ['16/20 pcs/lb', '21/25 pcs/lb', '26/30 pcs/lb', '31/40 pcs/lb', '41/50 pcs/lb'], required: true, width: 'col-span-1', defaultValue: '26/30 pcs/lb' },
               { id: 'pi_qty_cartons', key: 'totalCartons', label: 'Quantity (Master Cartons)', type: 'number', placeholder: 'e.g. 1500', required: true, width: 'col-span-1', defaultValue: '1500' },
-              { id: 'pi_price_usd', key: 'unitPriceUsd', label: 'Contract Price (USD / Kg)', type: 'number', placeholder: 'e.g. 8.45', required: true, width: 'col-span-1', defaultValue: '8.45' }
+              { id: 'pi_price_usd', key: 'unitPriceUsd', label: 'Contract Price (INR / Kg)', type: 'number', placeholder: 'e.g. 720.00', required: true, width: 'col-span-1', defaultValue: '720.00' }
             ]
           }
         ]
@@ -4572,7 +4572,7 @@ export const SEAFOOD_MASTERS = [
     { code: 'NLRTM', name: 'Port of Rotterdam (Discharge)', details: 'Netherlands • EU Seafood Border Inspection Post', status: 'Active' }
   ]},
   { id: 'exchange-rates', label: 'Exchange Rates', category: 'Commercial', count: 4, records: [
-    { code: 'USD/INR', name: 'US Dollar to INR', details: 'Spot Rate: ₹86.42 • Custom Valuation: ₹86.25', status: 'Active' },
+    { code: 'INR/USD', name: 'US Dollar to INR', details: 'Spot Rate: ₹86.42 • Custom Valuation: ₹86.25', status: 'Active' },
     { code: 'EUR/INR', name: 'Euro to INR', details: 'Spot Rate: ₹93.80 • Custom Valuation: ₹93.50', status: 'Active' },
     { code: 'GBP/INR', name: 'British Pound to INR', details: 'Spot Rate: ₹109.15 • Custom Valuation: ₹108.90', status: 'Active' },
     { code: 'JPY/INR', name: 'Japanese Yen (per 100) to INR', details: 'Spot Rate: ₹58.20 • Custom Valuation: ₹57.90', status: 'Active' }
@@ -4661,7 +4661,7 @@ export const SEAFOOD_MASTERS = [
   ]},
   { id: 'currency', label: 'Currency Master', category: 'Commercial', count: 4, records: [
     { code: 'INR', name: 'Indian Rupee (₹)', details: 'Base Operational & Accounting Currency', status: 'Active' },
-    { code: 'USD', name: 'United States Dollar ($)', details: 'Primary Export Invoice Currency', status: 'Active' },
+    { code: 'USD', name: 'Indian Rupee (₹)', details: 'Primary Export Invoice Currency', status: 'Active' },
     { code: 'EUR', name: 'Euro (€)', details: 'European Union Contract Currency', status: 'Active' },
     { code: 'JPY', name: 'Japanese Yen (¥)', details: 'Far East Export Currency', status: 'Active' }
   ]},
@@ -4700,9 +4700,9 @@ export const SEAFOOD_MASTERS = [
     { code: 'HAT-02', name: 'Visakha Coastal Aqua Hatchery Unit (Bheemili)', details: 'CAA Lic #HAT-2021-082 • Biosecure Post-Larvae PL-10', status: 'Active' }
   ]},
   { id: 'freight-rates', label: 'Freight Rates', category: 'Logistics', count: 3, records: [
-    { code: 'FRT-01', name: 'Vizag to Los Angeles (40ft High Cube Reefer)', details: 'Maersk: $4,200 / Container • Transit: 28 Days', status: 'Active' },
-    { code: 'FRT-02', name: 'Vizag to Rotterdam (40ft High Cube Reefer)', details: 'CMA CGM: $3,650 / Container • Transit: 24 Days', status: 'Active' },
-    { code: 'FRT-03', name: 'Chennai to New York (40ft High Cube Reefer)', details: 'MSC: $4,450 / Container • Transit: 32 Days', status: 'Active' }
+    { code: 'FRT-01', name: 'Vizag to Los Angeles (40ft High Cube Reefer)', details: 'Maersk: ₹3,60,000 / Container • Transit: 28 Days', status: 'Active' },
+    { code: 'FRT-02', name: 'Vizag to Rotterdam (40ft High Cube Reefer)', details: 'CMA CGM: ₹3,15,000 / Container • Transit: 24 Days', status: 'Active' },
+    { code: 'FRT-03', name: 'Chennai to New York (40ft High Cube Reefer)', details: 'MSC: ₹3,85,000 / Container • Transit: 32 Days', status: 'Active' }
   ]},
   { id: 'departments-master', label: 'Departments Master', category: 'Operations', count: 5, records: [
     { code: 'DEP-01', name: 'Raw Material Procurement & Farm Liaison', details: 'Responsible for pond testing, grading and harvesting', status: 'Active' },
@@ -4922,30 +4922,30 @@ export const SetupView = {
             <div class="space-y-3 text-xs">
               <div class="grid grid-cols-2 gap-2.5">
                 <div>
-                  <label class="block font-semibold text-[#5E6C84] mb-1">First Name</label>
+                  <label class="block font-semibold text-[#5E6C84] mb-0">First Name</label>
                   <input type="text" id="prof-fname" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg font-medium text-[#172B4D]" value="Y.S." />
                 </div>
                 <div>
-                  <label class="block font-semibold text-[#5E6C84] mb-1">Last Name</label>
+                  <label class="block font-semibold text-[#5E6C84] mb-0">Last Name</label>
                   <input type="text" id="prof-lname" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg font-medium text-[#172B4D]" value="Prasad" />
                 </div>
               </div>
               <div>
-                <label class="block font-semibold text-[#5E6C84] mb-1">Work Email</label>
+                <label class="block font-semibold text-[#5E6C84] mb-0">Work Email</label>
                 <input type="email" id="prof-email" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg font-medium text-[#172B4D]" value="ys.prasad@devifisheries.com" />
               </div>
               <div class="grid grid-cols-2 gap-2.5">
                 <div>
-                  <label class="block font-semibold text-[#5E6C84] mb-1">Phone Number</label>
+                  <label class="block font-semibold text-[#5E6C84] mb-0">Phone Number</label>
                   <input type="text" id="prof-phone" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg font-medium text-[#172B4D]" value="+91 891 2788900" />
                 </div>
                 <div>
-                  <label class="block font-semibold text-[#5E6C84] mb-1">Mobile / WhatsApp</label>
+                  <label class="block font-semibold text-[#5E6C84] mb-0">Mobile / WhatsApp</label>
                   <input type="text" id="prof-mobile" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg font-medium text-[#172B4D]" value="+91 98480 12345" />
                 </div>
               </div>
               <div>
-                <label class="block font-semibold text-[#5E6C84] mb-1">Designation</label>
+                <label class="block font-semibold text-[#5E6C84] mb-0">Designation</label>
                 <input type="text" id="prof-designation" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg font-medium text-[#172B4D]" value="Managing Director & System Administrator" />
               </div>
             </div>
@@ -4958,7 +4958,7 @@ export const SetupView = {
               <div class="space-y-3 text-xs">
                 <div class="grid grid-cols-2 gap-2.5">
                   <div>
-                    <label class="block font-semibold text-[#5E6C84] mb-1">Language</label>
+                    <label class="block font-semibold text-[#5E6C84] mb-0">Language</label>
                     <select class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg font-medium text-[#172B4D] bg-white">
                       <option selected>English (India)</option>
                       <option>Telugu</option>
@@ -4966,7 +4966,7 @@ export const SetupView = {
                     </select>
                   </div>
                   <div>
-                    <label class="block font-semibold text-[#5E6C84] mb-1">Timezone</label>
+                    <label class="block font-semibold text-[#5E6C84] mb-0">Timezone</label>
                     <select class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg font-medium text-[#172B4D] bg-white">
                       <option selected>(GMT+05:30) Asia/Kolkata (IST)</option>
                       <option>(GMT-05:00) Eastern Time (US)</option>
@@ -4975,7 +4975,7 @@ export const SetupView = {
                 </div>
                 <div class="grid grid-cols-2 gap-2.5">
                   <div>
-                    <label class="block font-semibold text-[#5E6C84] mb-1">Date Format</label>
+                    <label class="block font-semibold text-[#5E6C84] mb-0">Date Format</label>
                     <select class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg font-medium text-[#172B4D] bg-white">
                       <option selected>DD-MM-YYYY (e.g. 09-10-2026)</option>
                       <option>YYYY-MM-DD</option>
@@ -4983,11 +4983,11 @@ export const SetupView = {
                     </select>
                   </div>
                   <div>
-                    <label class="block font-semibold text-[#5E6C84] mb-1">Currency Display</label>
+                    <label class="block font-semibold text-[#5E6C84] mb-0">Currency Display</label>
                     <select class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg font-medium text-[#172B4D] bg-white">
-                      <option selected>INR (₹) / USD ($)</option>
+                      <option selected>INR (₹)</option>
                       <option>INR (₹) Only</option>
-                      <option>USD ($) Only</option>
+                      <option>INR (₹) Only</option>
                     </select>
                   </div>
                 </div>
@@ -5029,15 +5029,15 @@ export const SetupView = {
         content: `
           <div class="space-y-3 text-xs">
             <div>
-              <label class="block font-semibold text-[#5E6C84] mb-1">Current Password</label>
+              <label class="block font-semibold text-[#5E6C84] mb-0">Current Password</label>
               <input type="password" id="curr-pwd" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg" placeholder="••••••••" />
             </div>
             <div>
-              <label class="block font-semibold text-[#5E6C84] mb-1">New Password</label>
+              <label class="block font-semibold text-[#5E6C84] mb-0">New Password</label>
               <input type="password" id="new-pwd" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg" placeholder="Minimum 8 characters" />
             </div>
             <div>
-              <label class="block font-semibold text-[#5E6C84] mb-1">Confirm New Password</label>
+              <label class="block font-semibold text-[#5E6C84] mb-0">Confirm New Password</label>
               <input type="password" id="conf-pwd" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg" placeholder="Repeat new password" />
             </div>
           </div>
@@ -5181,7 +5181,7 @@ export const SetupView = {
             <div class="text-xs font-bold text-[#172B4D] border-b border-[#EBECF0] pb-2 mb-3">Session Inactivity Policy</div>
             <div class="space-y-3 text-xs">
               <div>
-                <label class="block font-semibold text-[#5E6C84] mb-1">Inactivity Auto-Logout</label>
+                <label class="block font-semibold text-[#5E6C84] mb-0">Inactivity Auto-Logout</label>
                 <select class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg font-medium text-[#172B4D] bg-white">
                   <option>15 Minutes</option>
                   <option selected>30 Minutes (Recommended)</option>
@@ -5190,7 +5190,7 @@ export const SetupView = {
                 </select>
               </div>
               <div>
-                <label class="block font-semibold text-[#5E6C84] mb-1">Concurrent Logins per Account</label>
+                <label class="block font-semibold text-[#5E6C84] mb-0">Concurrent Logins per Account</label>
                 <select class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg font-medium text-[#172B4D] bg-white">
                   <option selected>Up to 2 Devices (Desktop + Mobile)</option>
                   <option>Strictly 1 Device Only</option>
@@ -5204,7 +5204,7 @@ export const SetupView = {
             <div class="text-xs font-bold text-[#172B4D] border-b border-[#EBECF0] pb-2 mb-3">Password Expiry & Complexity</div>
             <div class="space-y-3 text-xs">
               <div>
-                <label class="block font-semibold text-[#5E6C84] mb-1">Mandatory Password Rotation</label>
+                <label class="block font-semibold text-[#5E6C84] mb-0">Mandatory Password Rotation</label>
                 <select class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg font-medium text-[#172B4D] bg-white">
                   <option>Every 60 Days</option>
                   <option selected>Every 90 Days (ISO 27001 standard)</option>
@@ -5212,7 +5212,7 @@ export const SetupView = {
                 </select>
               </div>
               <div>
-                <label class="block font-semibold text-[#5E6C84] mb-1">Complexity Requirement</label>
+                <label class="block font-semibold text-[#5E6C84] mb-0">Complexity Requirement</label>
                 <input type="text" disabled class="w-full px-2.5 py-1.5 bg-[#F4F5F7] border border-[#DFE1E6] rounded-lg font-medium text-[#5E6C84]" value="Min 8 chars, 1 Upper, 1 Lower, 1 Number, 1 Special" />
               </div>
             </div>
@@ -5497,19 +5497,19 @@ export const SetupView = {
       content: `
         <div class="space-y-3 text-xs">
           <div>
-            <label class="block font-semibold text-[#5E6C84] mb-1">Code / Identifier <span class="text-rose-500">*</span></label>
+            <label class="block font-semibold text-[#5E6C84] mb-0">Code / Identifier <span class="text-rose-500">*</span></label>
             <input type="text" id="m-rec-code" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded font-mono text-[#172B4D] focus:outline-none focus:border-[#0284C7]" placeholder="e.g. ${master.id.substring(0, 3).toUpperCase()}-${Math.floor(100 + Math.random() * 900)}" />
           </div>
           <div>
-            <label class="block font-semibold text-[#5E6C84] mb-1">Name / Title <span class="text-rose-500">*</span></label>
+            <label class="block font-semibold text-[#5E6C84] mb-0">Name / Title <span class="text-rose-500">*</span></label>
             <input type="text" id="m-rec-name" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded font-medium text-[#172B4D] focus:outline-none focus:border-[#0284C7]" placeholder="e.g. Full trade name or title" />
           </div>
           <div>
-            <label class="block font-semibold text-[#5E6C84] mb-1">Configuration Details & Notes</label>
+            <label class="block font-semibold text-[#5E6C84] mb-0">Configuration Details & Notes</label>
             <input type="text" id="m-rec-details" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded font-medium text-[#172B4D] focus:outline-none focus:border-[#0284C7]" placeholder="e.g. Licences, ports, specification, parameters" />
           </div>
           <div>
-            <label class="block font-semibold text-[#5E6C84] mb-1">Operating Status</label>
+            <label class="block font-semibold text-[#5E6C84] mb-0">Operating Status</label>
             <select id="m-rec-status" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded font-medium text-[#172B4D] bg-white focus:outline-none focus:border-[#0284C7]">
               <option value="Active" selected>Active</option>
               <option value="Inactive">Inactive</option>
@@ -5551,19 +5551,19 @@ export const SetupView = {
       content: `
         <div class="space-y-3 text-xs">
           <div>
-            <label class="block font-semibold text-[#5E6C84] mb-1">Code / Identifier</label>
+            <label class="block font-semibold text-[#5E6C84] mb-0">Code / Identifier</label>
             <input type="text" id="m-edit-code" class="w-full px-2.5 py-1.5 bg-[#EBECF0] border border-[#DFE1E6] rounded font-mono text-[#5E6C84]" value="${record.code}" readonly />
           </div>
           <div>
-            <label class="block font-semibold text-[#5E6C84] mb-1">Name / Title <span class="text-rose-500">*</span></label>
+            <label class="block font-semibold text-[#5E6C84] mb-0">Name / Title <span class="text-rose-500">*</span></label>
             <input type="text" id="m-edit-name" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded font-medium text-[#172B4D] focus:outline-none focus:border-[#0284C7]" value="${record.name}" />
           </div>
           <div>
-            <label class="block font-semibold text-[#5E6C84] mb-1">Configuration Details & Notes</label>
+            <label class="block font-semibold text-[#5E6C84] mb-0">Configuration Details & Notes</label>
             <input type="text" id="m-edit-details" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded font-medium text-[#172B4D] focus:outline-none focus:border-[#0284C7]" value="${record.details || ''}" />
           </div>
           <div>
-            <label class="block font-semibold text-[#5E6C84] mb-1">Operating Status</label>
+            <label class="block font-semibold text-[#5E6C84] mb-0">Operating Status</label>
             <select id="m-edit-status" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded font-medium text-[#172B4D] bg-white focus:outline-none focus:border-[#0284C7]">
               <option value="Active" ${record.status === 'Active' ? 'selected' : ''}>Active</option>
               <option value="Inactive" ${record.status === 'Inactive' ? 'selected' : ''}>Inactive</option>
@@ -5606,7 +5606,7 @@ export const SetupView = {
   renderCompanySetupTab(container) {
     container.innerHTML = `
       <div class="space-y-4 animate-fade-in">
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-0">
           <div>
             <h1 class="text-xl font-extrabold text-[#172B4D]">Clients Management</h1>
           </div>
@@ -5784,7 +5784,7 @@ export const SetupView = {
     const contentHtml = `
       <div class="space-y-4">
         <!-- 1. Client Details Section -->
-        <div class="bg-[#FAFBFC] rounded-xl border border-[#DFE1E6] p-4 space-y-3 shadow-2xs">
+        <div class="bg-transparent border-0 p-0 space-y-3 shadow-none">
           <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#EBECF0] pb-3">
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 rounded-xl bg-[#0284C7] text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
@@ -5838,10 +5838,7 @@ export const SetupView = {
         <div class="space-y-2.5">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div class="flex items-center gap-2">
-              <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-1.5">
-                <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                Users List
-              </h4>
+              <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Users List</h4>
               <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-[#EBF8FF] text-[#0284C7] border border-[#BAE6FD] font-mono">
                 ${clientUsers.length} User${clientUsers.length === 1 ? '' : 's'}
               </span>
@@ -5912,7 +5909,7 @@ export const SetupView = {
                   </select>
                 </div>
                 <div class="flex items-center gap-1.5">
-                  <button type="button" id="cu-page-prev" class="w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all opacity-40 cursor-not-allowed" title="Previous page" aria-label="Previous page" disabled>
+                  <button type="button" id="cu-page-prev" style="padding: 0 !important; width: 36px !important; height: 36px !important;" class="w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all opacity-40 cursor-not-allowed" title="Previous page" aria-label="Previous page" disabled>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                   </button>
                   <div id="cu-pages-container" class="flex items-center gap-1.5">
@@ -5920,7 +5917,7 @@ export const SetupView = {
                       1
                     </button>
                   </div>
-                  <button type="button" id="cu-page-next" class="w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all ${Math.ceil(clientUsers.length / 10) <= 1 ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}" title="Next page" aria-label="Next page" ${Math.ceil(clientUsers.length / 10) <= 1 ? 'disabled' : ''}>
+                  <button type="button" id="cu-page-next" style="padding: 0 !important; width: 36px !important; height: 36px !important;" class="w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all ${Math.ceil(clientUsers.length / 10) <= 1 ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}" title="Next page" aria-label="Next page" ${Math.ceil(clientUsers.length / 10) <= 1 ? 'disabled' : ''}>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                   </button>
                 </div>
@@ -6178,10 +6175,7 @@ export const SetupView = {
 
           <!-- Modules & Submodules Breakdown -->
           <div class="space-y-2">
-            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-1.5">
-              <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-              Assigned Modules & Submenus
-            </h4>
+            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Assigned Modules & Submenus</h4>
 
             ${matchedModules.length === 0 ? `
               <div class="text-[11px] text-[#8993A4] italic p-4 bg-[#FAFBFC] rounded-xl border border-[#EBECF0] text-center">
@@ -6396,9 +6390,9 @@ export const SetupView = {
                     <!-- Badge Circle -->
                     <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black transition-all shrink-0 ${
                       isActive 
-                        ? 'bg-[#00A4B7] text-[#002d34] shadow-xs ring-4 ring-[#00A4B7]/25 scale-105' 
+                        ? 'bg-[#00A4B7] text-white shadow-xs ring-4 ring-[#00A4B7]/25 scale-105' 
                         : (isPassed 
-                            ? 'bg-[#00A4B7] text-[#002d34] group-hover:scale-105' 
+                            ? 'bg-[#00A4B7] text-white group-hover:scale-105' 
                             : 'bg-white border-2 border-[#CBD5E1] text-[#94A3B8]')
                     }">
                       ${isPassed 
@@ -6445,12 +6439,9 @@ export const SetupView = {
       if (step === 1) {
         stepBodyHtml = `
           <div class="space-y-4">
-            <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-4">
+            <div class="bg-transparent p-0 border-0 space-y-4">
               <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
-                <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-2">
-                  <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                  Client Information
-                </span>
+                <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Client Information</span>
                 <span class="text-[10px] font-bold text-[#00A4B7] bg-[#E0F2FE] px-2.5 py-1 rounded-full border border-[#BAE6FD] font-mono">
                   ${wizardState.client.id}
                 </span>
@@ -6458,21 +6449,21 @@ export const SetupView = {
 
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     Client Name <span class="text-rose-500">*</span>
                   </label>
                   <input type="text" id="w-cmp-name" value="${wizardState.client.name}" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7]" placeholder="e.g. Devi Fisheries Limited" required autofocus />
                 </div>
 
                 <div>
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     Client Short Name
                   </label>
                   <input type="text" id="w-cmp-short-name" value="${wizardState.client.shortName}" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7] font-mono uppercase" placeholder="e.g. DFL" />
                 </div>
 
                 <div>
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     Status
                   </label>
                   <select id="w-cmp-status" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7]">
@@ -6483,14 +6474,14 @@ export const SetupView = {
 
                 <!-- Production Plant field (Requested!) -->
                 <div class="col-span-1 sm:col-span-2 lg:col-span-3">
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     Production Plant <span class="text-[#64748B] font-normal lowercase">(comma-separated if multiple)</span>
                   </label>
                   <input type="text" id="w-cmp-plant" value="${wizardState.client.plants}" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7]" placeholder="e.g. Unit-1 VSP, Unit-2 Singarayakonda, Unit-3 Kakinada" />
                 </div>
 
                 <div class="col-span-1 sm:col-span-2 lg:col-span-3">
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     Address
                   </label>
                   <textarea id="w-cmp-address" rows="3" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7]" placeholder="Enter complete corporate entity address, plant location, city, pin code...">${wizardState.client.address}</textarea>
@@ -6505,12 +6496,9 @@ export const SetupView = {
       else if (step === 2) {
         stepBodyHtml = `
           <div class="space-y-4">
-            <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-4">
+            <div class="bg-transparent p-0 border-0 space-y-4">
               <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
-                <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-2">
-                  <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 21v-2a4 4 0 0 0-3-3.87"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                  User Information for ${wizardState.client.name || 'New Client'}
-                </span>
+                <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">User Information for ${wizardState.client.name || 'New Client'}</span>
                 <span class="text-[10px] font-bold text-[#00A4B7] bg-[#E0F2FE] px-2.5 py-1 rounded-full border border-[#BAE6FD] font-mono">
                   ${wizardState.user.id}
                 </span>
@@ -6519,7 +6507,7 @@ export const SetupView = {
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- 1. Client Name -->
                 <div>
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     Client Name
                   </label>
                   <input type="text" id="w-usr-company" value="${wizardState.client.name || 'New Client'}" readonly class="w-full text-xs px-3 py-2 bg-[#F1F5F9] border border-[#DFE1E6] rounded-lg font-bold text-[#172B4D] cursor-not-allowed" />
@@ -6527,7 +6515,7 @@ export const SetupView = {
 
                 <!-- 2. User ID -->
                 <div>
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     User ID
                   </label>
                   <input type="text" id="w-usr-id" value="${wizardState.user.id}" placeholder="e.g. USR-009" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono text-[#172B4D] focus:outline-none focus:border-[#00A4B7]" />
@@ -6535,7 +6523,7 @@ export const SetupView = {
 
                 <!-- 3. User Name -->
                 <div>
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     User Name
                   </label>
                   <input type="text" id="w-usr-username" value="${wizardState.user.username}" placeholder="e.g. ramesh_varma" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono text-[#172B4D] focus:outline-none focus:border-[#00A4B7]" />
@@ -6543,7 +6531,7 @@ export const SetupView = {
 
                 <!-- 4. Password -->
                 <div>
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     Password
                   </label>
                   <div class="relative">
@@ -6557,7 +6545,7 @@ export const SetupView = {
 
                 <!-- 5. Role -->
                 <div>
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     Role
                   </label>
                   <select id="w-usr-role" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7] font-medium text-[#172B4D]">
@@ -6567,7 +6555,7 @@ export const SetupView = {
 
                 <!-- 6. Production Plant -->
                 <div>
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     Production Plant
                   </label>
                   <select id="w-usr-plant" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7] font-medium text-[#172B4D]">
@@ -6578,7 +6566,7 @@ export const SetupView = {
 
                 <!-- 7. Department -->
                 <div>
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     Department
                   </label>
                   <input type="text" id="w-usr-dept" list="w-usr-dept-list" value="${wizardState.user.department}" placeholder="e.g. Procurement" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7] text-[#172B4D]" />
@@ -6589,7 +6577,7 @@ export const SetupView = {
 
                 <!-- 8. Designation -->
                 <div>
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     Designation
                   </label>
                   <input type="text" id="w-usr-desig" value="${wizardState.user.designation}" placeholder="e.g. Procurement Manager" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7] text-[#172B4D]" />
@@ -6597,7 +6585,7 @@ export const SetupView = {
 
                 <!-- 9. Access Type -->
                 <div>
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     Access Type
                   </label>
                   <select id="w-usr-access" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7] font-medium text-[#172B4D]">
@@ -6611,7 +6599,7 @@ export const SetupView = {
 
                 <!-- 10. Status -->
                 <div>
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     Status
                   </label>
                   <select id="w-usr-status" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7] font-medium text-[#172B4D]">
@@ -6629,33 +6617,30 @@ export const SetupView = {
       else if (step === 3) {
         stepBodyHtml = `
           <div class="space-y-4">
-            <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-4">
+            <div class="bg-transparent p-0 border-0 space-y-4">
               <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
-                <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-2">
-                  <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                  Role Configuration &amp; Menu Permissions
-                </span>
+                <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Role Configuration &amp; Menu Permissions</span>
                 <span class="text-[10px] text-[#64748B]">Assign modules and view permissions</span>
               </div>
 
               <!-- Role Basic Info -->
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 <div>
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     Role Name
                   </label>
                   <input type="text" id="w-role-name" value="${wizardState.role.name}" placeholder="e.g. Operations Head" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded-md focus:outline-none focus:border-[#00A4B7] font-semibold text-[#172B4D]" />
                 </div>
 
                 <div>
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     Role ID
                   </label>
                   <input type="text" id="w-role-id" value="${wizardState.role.id}" placeholder="e.g. ROLE-OPS-HEAD" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded-md font-mono text-[#00A4B7] font-semibold focus:outline-none focus:border-[#00A4B7]" />
                 </div>
 
                 <div>
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     Department
                   </label>
                   <select id="w-role-dept" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded-md focus:outline-none focus:border-[#00A4B7] font-medium text-[#172B4D]">
@@ -6702,25 +6687,22 @@ export const SetupView = {
           <div class="space-y-4">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start text-xs">
               <!-- Main Menu Box -->
-              <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-3.5 flex flex-col h-full">
+              <div class="bg-transparent p-0 border-0 space-y-3.5 flex flex-col h-full">
                 <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
-                  <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-2">
-                    <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-                    Custom Main Menu
-                  </span>
+                  <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Custom Main Menu</span>
                 </div>
 
                 <div class="space-y-3 flex-1 flex flex-col">
                   <div class="grid grid-cols-12 gap-3 items-end">
                     <div class="col-span-8 sm:col-span-9">
-                      <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                      <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                         Menu Name
                       </label>
                       <input type="text" id="w-menu-name" value="${wizardState.menu.name}" placeholder="e.g. Procurement & Inward" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#00A4B7] font-semibold text-[#172B4D]" />
                     </div>
 
                     <div class="col-span-4 sm:col-span-3">
-                      <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                      <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                         Status
                       </label>
                       <div class="flex items-center h-[38px]">
@@ -6751,12 +6733,9 @@ export const SetupView = {
               </div>
 
               <!-- Sub Menu Box -->
-              <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-3.5 flex flex-col h-full">
+              <div class="bg-transparent p-0 border-0 space-y-3.5 flex flex-col h-full">
                 <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
-                  <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-2">
-                    <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-                    Sub Menus
-                  </span>
+                  <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Sub Menus</span>
                   <button type="button" id="w-btn-add-sub" class="btn-secondary px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 hover:bg-[#EBECF0] transition-colors cursor-pointer text-[#006C7A] border border-[#DFE1E6]">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                     <span>Add Sub Menu</span>
@@ -7102,7 +7081,7 @@ export const SetupView = {
       content: `
         <form id="company-client-form" class="space-y-4 text-xs">
           <!-- Client Information Card (3 Columns with Full-Width Address Row) -->
-          <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-4">
+          <div class="bg-transparent p-0 border-0 space-y-4">
             <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
               <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Client Information</span>
             </div>
@@ -7110,7 +7089,7 @@ export const SetupView = {
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <!-- Row 1, Col 1: Client Name -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Client Name
                 </label>
                 <input type="text" id="cmp-name" value="${company.name || ''}" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]" placeholder="e.g. Devi Fisheries Limited" />
@@ -7118,7 +7097,7 @@ export const SetupView = {
 
               <!-- Row 1, Col 2: Client Short Name -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Client Short Name
                 </label>
                 <input type="text" id="cmp-short-name" value="${company.code || company.shortName || ''}" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] font-mono uppercase" placeholder="e.g. DFL" />
@@ -7126,7 +7105,7 @@ export const SetupView = {
 
               <!-- Row 1, Col 3: Status -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Status
                 </label>
                 <select id="cmp-status" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]">
@@ -7137,7 +7116,7 @@ export const SetupView = {
 
               <!-- Row 2: Production Plant (Full Width) -->
               <div class="col-span-1 sm:col-span-2 lg:col-span-3">
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Production Plant
                 </label>
                 <input type="text" id="cmp-plant" value="${(company.plants && company.plants.length > 0) ? company.plants.join(', ') : 'Unit-1 VSP'}" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]" placeholder="e.g. Unit-1 VSP, Unit-2 Singarayakonda" />
@@ -7145,7 +7124,7 @@ export const SetupView = {
 
               <!-- Row 3: Address in Full Width (Across all 3 columns) -->
               <div class="col-span-1 sm:col-span-2 lg:col-span-3">
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Address
                 </label>
                 <textarea id="cmp-address" rows="3" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]" placeholder="Enter complete corporate entity address, plant location, city, pin code...">${company.address || ''}</textarea>
@@ -7215,7 +7194,7 @@ export const SetupView = {
       content: `
         <form id="assign-db-form" class="space-y-4 text-xs">
           <!-- Database Configuration Section (4 Columns) -->
-          <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-4">
+          <div class="bg-transparent p-0 border-0 space-y-4">
             <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
               <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Database Configuration</span>
               <span class="text-[10px] font-bold text-[#0284C7] bg-[#F0F9FF] px-2.5 py-1 rounded border border-[#BAE6FD] font-mono">${company.code || company.shortName || 'DFL'}</span>
@@ -7224,7 +7203,7 @@ export const SetupView = {
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <!-- 1. DB Host -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   DB Host
                 </label>
                 <input type="text" id="asgn-db-host" value="${company.dbHost || ''}" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono focus:outline-none focus:border-[#0284C7]" placeholder="e.g. db-cluster-primary.rds.aws.com" />
@@ -7232,7 +7211,7 @@ export const SetupView = {
 
               <!-- 2. DB Name -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   DB Name
                 </label>
                 <input type="text" id="asgn-db-name" value="${company.dbName || ''}" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono focus:outline-none focus:border-[#0284C7]" placeholder="e.g. devi_fisheries_db" />
@@ -7240,7 +7219,7 @@ export const SetupView = {
 
               <!-- 3. User Name -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   User Name
                 </label>
                 <input type="text" id="asgn-db-user" value="${company.dbUser || ''}" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono focus:outline-none focus:border-[#0284C7]" placeholder="e.g. dfl_db_admin" />
@@ -7248,7 +7227,7 @@ export const SetupView = {
 
               <!-- 4. Password -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Password
                 </label>
                 <div class="relative">
@@ -7378,11 +7357,11 @@ export const SetupView = {
 
             <!-- Filter Controls: Reset & Toggle Open/Close -->
             <div class="inline-flex items-center" style="gap: 8px; display: inline-flex;">
-              <button type="button" id="users-top-reset-btn" class="dt-action-btn dt-top-filter-reset-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Reset all filters" aria-label="Reset all filters">
+              <button type="button" id="users-top-reset-btn" class="dt-top-filter-reset-btn w-[30px] h-[30px] min-w-[30px] min-h-[30px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-full transition-colors cursor-pointer select-none" style="width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 9999px; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Reset all filters" aria-label="Reset all filters">
                 <svg class="w-4 h-4 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
               </button>
 
-              <button type="button" id="users-top-toggle-btn" class="dt-action-btn dt-top-filter-toggle-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Hide Filter" aria-label="Hide Filter">
+              <button type="button" id="users-top-toggle-btn" class="dt-top-filter-toggle-btn w-[30px] h-[30px] min-w-[30px] min-h-[30px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-full transition-colors cursor-pointer select-none" style="width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 9999px; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Hide Filter" aria-label="Hide Filter">
                 <svg class="w-4 h-4 text-current dt-top-filter-toggle-icon transform transition-transform duration-200" id="users-top-toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
               </button>
             </div>
@@ -7391,7 +7370,7 @@ export const SetupView = {
           <!-- Collapsible Filter Inputs Grid -->
           <div id="users-top-filter-body" class="dt-top-filter-body mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs transition-all duration-200" style="margin-top: 12px !important;">
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT CLIENT</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT CLIENT</label>
               <select id="users-top-client-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Clients (${this.state.companies.length})</option>
                 ${this.state.companies.map(c => `<option value="${c.id}" ${this.state.userFilterCompany === c.id ? 'selected' : ''}>${c.name}</option>`).join('')}
@@ -7399,7 +7378,7 @@ export const SetupView = {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT ROLE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT ROLE</label>
               <select id="users-top-role-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Roles (${this.state.roles.length})</option>
                 ${this.state.roles.map(r => `<option value="${r.name}" ${this.state.userSearchRole === r.name ? 'selected' : ''}>${r.name}</option>`).join('')}
@@ -7407,7 +7386,7 @@ export const SetupView = {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">STATUS</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">STATUS</label>
               <select id="users-top-status-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Statuses (Select)</option>
                 <option value="Active">Active</option>
@@ -7719,7 +7698,7 @@ export const SetupView = {
       content: `
         <form id="user-setup-form" class="space-y-4 text-xs">
           <!-- User Information Card (4 Columns Layout) -->
-          <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-4">
+          <div class="bg-transparent p-0 border-0 space-y-4">
             <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
               <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">User Information</span>
               ${isEdit ? `<span class="text-[10px] font-bold text-[#0284C7] bg-[#F0F9FF] px-2.5 py-1 rounded border border-[#BAE6FD] font-mono">${user.id}</span>` : ''}
@@ -7729,7 +7708,7 @@ export const SetupView = {
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <!-- 1. Client Name (Dropdown field) -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Client Name
                 </label>
                 <select id="usr-modal-company" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] font-medium text-[#172B4D]">
@@ -7743,7 +7722,7 @@ export const SetupView = {
 
               <!-- 2. User ID -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   User ID
                 </label>
                 <input type="text" id="usr-modal-id" value="${user.id || ''}" placeholder="e.g. USR-009" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono text-[#172B4D] focus:outline-none focus:border-[#0284C7]" />
@@ -7751,7 +7730,7 @@ export const SetupView = {
 
               <!-- 3. User Name (Free Text field) -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   User Name
                 </label>
                 <input type="text" id="usr-modal-username" value="${user.username || ''}" placeholder="e.g. ramesh_varma" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg font-mono text-[#172B4D] focus:outline-none focus:border-[#0284C7]" />
@@ -7760,7 +7739,7 @@ export const SetupView = {
               <!-- 4. Password (Only displayed on Add User; on Edit, no password field is shown) -->
               ${!isEdit ? `
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Password <span class="text-rose-500">*</span>
                 </label>
                 <div class="relative">
@@ -7775,7 +7754,7 @@ export const SetupView = {
 
               <!-- 5. Role -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Role
                 </label>
                 <select id="usr-modal-role" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] font-medium text-[#172B4D]">
@@ -7790,7 +7769,7 @@ export const SetupView = {
 
               <!-- 6. Production Plant -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Production Plant
                 </label>
                 <select id="usr-modal-plant" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] font-medium text-[#172B4D]">
@@ -7804,7 +7783,7 @@ export const SetupView = {
 
               <!-- 7. Department -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Department
                 </label>
                 <input type="text" id="usr-modal-dept" list="usr-modal-dept-list" value="${user.department || ''}" placeholder="e.g. Procurement" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] text-[#172B4D]" />
@@ -7823,7 +7802,7 @@ export const SetupView = {
 
               <!-- 8. Designation -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Designation
                 </label>
                 <input type="text" id="usr-modal-desig" value="${user.designation || ''}" placeholder="e.g. Procurement Manager" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] text-[#172B4D]" />
@@ -7831,7 +7810,7 @@ export const SetupView = {
 
               <!-- 9. Access Type -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Access Type
                 </label>
                 <select id="usr-modal-access" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] font-medium text-[#172B4D]">
@@ -7846,7 +7825,7 @@ export const SetupView = {
               <!-- 10. Access IPs (Only shown on Edit User) -->
               ${isEdit ? `
               <div class="col-span-1 sm:col-span-2">
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0 flex items-center justify-between">
                   <span>Access IPs</span>
                   <span class="text-[10px] text-[#5E6C84] font-normal font-sans">Comma-separated or leave blank for Any</span>
                 </label>
@@ -7856,7 +7835,7 @@ export const SetupView = {
 
               <!-- 11. Status -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Status
                 </label>
                 <select id="usr-modal-status" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] font-medium text-[#172B4D]">
@@ -8045,7 +8024,7 @@ export const SetupView = {
       content: `
         <form id="change-pwd-modal-form" class="space-y-3.5 text-xs" onsubmit="return false;">
           <div>
-            <label class="block text-xs font-semibold text-[#172B4D] mb-1">
+            <label class="block text-xs font-semibold text-[#172B4D] mb-0">
               New Password <span class="text-rose-500">*</span>
             </label>
             <div class="relative">
@@ -8063,7 +8042,7 @@ export const SetupView = {
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-[#172B4D] mb-1">
+            <label class="block text-xs font-semibold text-[#172B4D] mb-0">
               Confirm New Password <span class="text-rose-500">*</span>
             </label>
             <div class="relative">
@@ -8185,7 +8164,7 @@ export const SetupView = {
 
     container.innerHTML = `
       <div class="space-y-4 animate-fade-in">
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-0">
           <div>
             <h1 class="text-xl font-extrabold text-[#172B4D]">Roles Management</h1>
           </div>
@@ -8207,11 +8186,11 @@ export const SetupView = {
 
             <!-- Filter Controls: Reset & Toggle Open/Close -->
             <div class="inline-flex items-center" style="gap: 8px; display: inline-flex;">
-              <button type="button" id="roles-top-reset-btn" class="dt-action-btn dt-top-filter-reset-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Reset all filters" aria-label="Reset all filters">
+              <button type="button" id="roles-top-reset-btn" class="dt-top-filter-reset-btn w-[30px] h-[30px] min-w-[30px] min-h-[30px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-full transition-colors cursor-pointer select-none" style="width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 9999px; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Reset all filters" aria-label="Reset all filters">
                 <svg class="w-4 h-4 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
               </button>
 
-              <button type="button" id="roles-top-toggle-btn" class="dt-action-btn dt-top-filter-toggle-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Hide Filter" aria-label="Hide Filter">
+              <button type="button" id="roles-top-toggle-btn" class="dt-top-filter-toggle-btn w-[30px] h-[30px] min-w-[30px] min-h-[30px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-full transition-colors cursor-pointer select-none" style="width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 9999px; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Hide Filter" aria-label="Hide Filter">
                 <svg class="w-4 h-4 text-current dt-top-filter-toggle-icon transform transition-transform duration-200" id="roles-top-toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
               </button>
             </div>
@@ -8220,7 +8199,7 @@ export const SetupView = {
           <!-- Collapsible Filter Inputs Grid -->
           <div id="roles-top-filter-body" class="dt-top-filter-body mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs transition-all duration-200" style="margin-top: 12px !important;">
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT DEPARTMENT</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT DEPARTMENT</label>
               <select id="roles-top-dept-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Departments (${departments.length})</option>
                 ${departments.map(d => `<option value="${d}">${d}</option>`).join('')}
@@ -8228,7 +8207,7 @@ export const SetupView = {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">STATUS</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">STATUS</label>
               <select id="roles-top-status-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Statuses (Select)</option>
                 <option value="Active">Active</option>
@@ -8237,7 +8216,7 @@ export const SetupView = {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">ROLE TYPE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">ROLE TYPE</label>
               <select id="roles-top-type-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Role Types</option>
                 <option value="SYSTEM">System Roles (Protected)</option>
@@ -8568,9 +8547,9 @@ export const SetupView = {
       content: `
         <form id="role-setup-form" class="space-y-4 text-xs" onsubmit="return false;">
           <!-- Top Row: Role Name, Role ID, Department, Status -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-[#FAFBFC] p-3.5 rounded-xl border border-[#DFE1E6]">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-transparent p-0 border-0">
             <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">
+              <label class="block text-xs font-semibold text-[#172B4D] mb-0">
                 Role Name <span class="text-rose-500">*</span>
               </label>
               <input 
@@ -8584,7 +8563,7 @@ export const SetupView = {
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">
+              <label class="block text-xs font-semibold text-[#172B4D] mb-0">
                 Role ID <span class="text-rose-500">*</span>
               </label>
               <input 
@@ -8598,7 +8577,7 @@ export const SetupView = {
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">
+              <label class="block text-xs font-semibold text-[#172B4D] mb-0">
                 Department <span class="text-rose-500">*</span>
               </label>
               <select 
@@ -8626,10 +8605,7 @@ export const SetupView = {
           <div class="space-y-3 pt-2">
             <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-[#EBECF0]">
               <div>
-                <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-2">
-                  <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-                  Assign Menu Access
-                </h4>
+                <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Assign Menu Access</h4>
               </div>
               <div class="flex items-center gap-2">
                 <button type="button" id="btn-role-select-all" class="px-2.5 py-1 text-[11px] font-semibold text-[#0284C7] bg-[#F0F9FF] hover:bg-[#E0F2FE] border border-[#BAE6FD] rounded cursor-pointer transition-colors">
@@ -9202,7 +9178,7 @@ export const SetupView = {
   renderModuleStudioTab(container) {
     container.innerHTML = `
       <div class="space-y-4 animate-fade-in">
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-0">
           <div>
             <h1 class="text-xl font-extrabold text-[#172B4D]">Menus Management</h1>
           </div>
@@ -9568,7 +9544,7 @@ export const SetupView = {
 
               <!-- Page navigation buttons -->
               <div class="flex items-center gap-1.5">
-                <button type="button" id="sub-page-prev" class="w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all ${
+                <button type="button" id="sub-page-prev" style="padding: 0 !important; width: 36px !important; height: 36px !important;" class="w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all ${
                   currentPage === 1 ? 'opacity-40 cursor-not-allowed hover:border-[#CBD5E1] hover:text-[#64748B]' : 'cursor-pointer'
                 }" title="Previous page" aria-label="Previous page" ${currentPage === 1 ? 'disabled' : ''}>
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
@@ -9576,7 +9552,7 @@ export const SetupView = {
 
                 ${pagesHtml}
 
-                <button type="button" id="sub-page-next" class="w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all ${
+                <button type="button" id="sub-page-next" style="padding: 0 !important; width: 36px !important; height: 36px !important;" class="w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all ${
                   currentPage >= totalPages ? 'opacity-40 cursor-not-allowed hover:border-[#CBD5E1] hover:text-[#64748B]' : 'cursor-pointer'
                 }" title="Next page" aria-label="Next page" ${currentPage >= totalPages ? 'disabled' : ''}>
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
@@ -9729,7 +9705,7 @@ export const SetupView = {
       content: `
         <form id="submenu-single-form" class="space-y-4 text-xs" onsubmit="return false;">
           <div>
-            <label class="block text-xs font-semibold text-[#172B4D] mb-1">
+            <label class="block text-xs font-semibold text-[#172B4D] mb-0">
               Submenu Name <span class="text-rose-500">*</span>
             </label>
             <input 
@@ -9743,7 +9719,7 @@ export const SetupView = {
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-[#172B4D] mb-1">
+            <label class="block text-xs font-semibold text-[#172B4D] mb-0">
               URL / Route
             </label>
             <input 
@@ -9757,7 +9733,7 @@ export const SetupView = {
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-[#172B4D] mb-1">
+            <label class="block text-xs font-semibold text-[#172B4D] mb-0">
               Status
             </label>
             <select id="sub-modal-status" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] font-medium text-[#172B4D]">
@@ -9885,12 +9861,9 @@ export const SetupView = {
       content: `
         <form id="menu-setup-form" class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start text-xs" onsubmit="return false;">
           <!-- 1. Main Menu Section -->
-          <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-3.5 flex flex-col h-full">
+          <div class="bg-transparent p-0 border-0 space-y-3.5 flex flex-col h-full">
             <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
-              <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-2">
-                <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-                Main Menu
-              </span>
+              <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Main Menu</span>
               ${isEdit ? `<span class="text-[10px] font-bold text-[#0284C7] bg-[#F0F9FF] px-2.5 py-1 rounded border border-[#BAE6FD] font-mono">${mod.id}</span>` : ''}
             </div>
 
@@ -9898,14 +9871,14 @@ export const SetupView = {
               <!-- Menu Name & Status in 2 columns -->
               <div class="grid grid-cols-12 gap-3 items-end">
                 <div class="col-span-8 sm:col-span-9">
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     Menu Name <span class="text-rose-500">*</span>
                   </label>
                   <input type="text" id="menu-modal-name" value="${currentName}" placeholder="e.g. Procurement & Inward" class="w-full text-xs px-3 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7] font-semibold text-[#172B4D]" />
                 </div>
 
                 <div class="col-span-4 sm:col-span-3">
-                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1.5">
+                  <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                     Status
                   </label>
                   <div class="flex items-center h-[38px]">
@@ -9937,13 +9910,10 @@ export const SetupView = {
           </div>
 
           <!-- 2. Sub Menu Section (Multiple Sub Menus) -->
-          <div class="bg-[#FAFBFC] p-4 sm:p-5 rounded-xl border border-[#DFE1E6] space-y-3.5 flex flex-col h-full">
+          <div class="bg-transparent p-0 border-0 space-y-3.5 flex flex-col h-full">
             <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2.5">
               <div>
-                <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider flex items-center gap-2">
-                  <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-                  Sub Menu
-                </span>
+                <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Sub Menu</span>
               </div>
               <button type="button" id="btn-add-sub-item" class="btn-secondary px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 hover:bg-[#EBECF0] transition-colors cursor-pointer text-[#0284C7] border border-[#DFE1E6]">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
@@ -10207,7 +10177,7 @@ export const SetupView = {
 
     container.innerHTML = `
       <div class="space-y-4 animate-fade-in">
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-0">
           <div>
             <h1 class="text-xl font-extrabold text-[#172B4D]">Submenus & Dynamic Tabs Studio</h1>
           </div>
@@ -10254,10 +10224,10 @@ export const SetupView = {
                       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                       <span>Add Tab</span>
                     </button>
-                    <button data-action="edit-sm" data-sm-id="${sm.id}" class="dt-action-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Edit Submenu">
+                    <button data-action="edit-sm" data-sm-id="${sm.id}" class="dt-action-btn w-[30px] h-[30px] min-w-[30px] min-h-[30px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-full transition-colors cursor-pointer select-none" style="width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 9999px; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Edit Submenu">
                       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                     </button>
-                    <button data-action="del-sm" data-sm-id="${sm.id}" class="dt-action-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Delete Submenu">
+                    <button data-action="del-sm" data-sm-id="${sm.id}" class="dt-action-btn w-[30px] h-[30px] min-w-[30px] min-h-[30px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-full transition-colors cursor-pointer select-none" style="width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 9999px; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Delete Submenu">
                       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                     </button>
                   </div>
@@ -10292,10 +10262,10 @@ export const SetupView = {
                             <td>${tab.badge ? `<span class="lozenge lozenge-default text-[9.5px] font-mono">${tab.badge}</span>` : '—'}</td>
                             <td class="text-center" style="min-width: 80px;">
                               <div class="inline-flex items-center justify-center" style="gap: 8px;">
-                                <button data-action="edit-tab" data-sm-id="${sm.id}" data-tab-id="${tab.id}" class="dt-action-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Edit Tab">
+                                <button data-action="edit-tab" data-sm-id="${sm.id}" data-tab-id="${tab.id}" class="dt-action-btn w-[30px] h-[30px] min-w-[30px] min-h-[30px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-full transition-colors cursor-pointer select-none" style="width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 9999px; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Edit Tab">
                                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                 </button>
-                                <button data-action="del-tab" data-sm-id="${sm.id}" data-tab-id="${tab.id}" class="dt-action-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Delete Tab">
+                                <button data-action="del-tab" data-sm-id="${sm.id}" data-tab-id="${tab.id}" class="dt-action-btn w-[30px] h-[30px] min-w-[30px] min-h-[30px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-full transition-colors cursor-pointer select-none" style="width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 9999px; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;" title="Delete Tab">
                                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                 </button>
                               </div>
@@ -10452,11 +10422,11 @@ export const SetupView = {
       content: `
         <form class="space-y-3" onsubmit="return false;">
           <div>
-            <label class="block text-xs font-semibold text-[#172B4D] mb-1">Submenu Title <span class="text-rose-500">*</span></label>
+            <label class="block text-xs font-semibold text-[#172B4D] mb-0">Submenu Title <span class="text-rose-500">*</span></label>
             <input type="text" id="sm-title" required class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" placeholder="e.g. Inward Catch Inspection" />
           </div>
           <div>
-            <label class="block text-xs font-semibold text-[#172B4D] mb-1">Submenu Key / Slug <span class="text-rose-500">*</span></label>
+            <label class="block text-xs font-semibold text-[#172B4D] mb-0">Submenu Key / Slug <span class="text-rose-500">*</span></label>
             <input type="text" id="sm-slug" required class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono lowercase focus:outline-none focus:border-[#0284C7]" placeholder="inward-inspection" />
           </div>
         </form>
@@ -10500,11 +10470,11 @@ export const SetupView = {
       content: `
         <form class="space-y-3" onsubmit="return false;">
           <div>
-            <label class="block text-xs font-semibold text-[#172B4D] mb-1">Submenu Title <span class="text-rose-500">*</span></label>
+            <label class="block text-xs font-semibold text-[#172B4D] mb-0">Submenu Title <span class="text-rose-500">*</span></label>
             <input type="text" id="edit-sm-title" required value="${sm.title}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded font-semibold focus:outline-none focus:border-[#0284C7]" />
           </div>
           <div>
-            <label class="block text-xs font-semibold text-[#172B4D] mb-1">Submenu Key / Slug</label>
+            <label class="block text-xs font-semibold text-[#172B4D] mb-0">Submenu Key / Slug</label>
             <input type="text" id="edit-sm-slug" value="${sm.id}" class="w-full text-xs px-3 py-1.5 bg-[#EBECF0] border border-[#DFE1E6] rounded font-mono text-[#5E6C84]" readonly />
           </div>
         </form>
@@ -10541,16 +10511,16 @@ export const SetupView = {
       content: `
         <form class="space-y-3" onsubmit="return false;">
           <div>
-            <label class="block text-xs font-semibold text-[#172B4D] mb-1">Tab Label <span class="text-rose-500">*</span></label>
+            <label class="block text-xs font-semibold text-[#172B4D] mb-0">Tab Label <span class="text-rose-500">*</span></label>
             <input type="text" id="tab-label" required class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" placeholder="e.g. Catch Inward Register" />
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Tab Slug <span class="text-rose-500">*</span></label>
+              <label class="block text-xs font-semibold text-[#172B4D] mb-0">Tab Slug <span class="text-rose-500">*</span></label>
               <input type="text" id="tab-slug" required class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono lowercase focus:outline-none focus:border-[#0284C7]" placeholder="catch-inward" />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Mapping Type</label>
+              <label class="block text-xs font-semibold text-[#172B4D] mb-0">Mapping Type</label>
               <select id="tab-type" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="system">System Page</option>
                 <option value="dynamic-form">Dynamic Form</option>
@@ -10559,7 +10529,7 @@ export const SetupView = {
             </div>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-[#172B4D] mb-1">Badge Tag (Optional)</label>
+            <label class="block text-xs font-semibold text-[#172B4D] mb-0">Badge Tag (Optional)</label>
             <input type="text" id="tab-badge" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" placeholder="e.g. 5 New" />
           </div>
         </form>
@@ -10602,16 +10572,16 @@ export const SetupView = {
       content: `
         <form class="space-y-3" onsubmit="return false;">
           <div>
-            <label class="block text-xs font-semibold text-[#172B4D] mb-1">Tab Label <span class="text-rose-500">*</span></label>
+            <label class="block text-xs font-semibold text-[#172B4D] mb-0">Tab Label <span class="text-rose-500">*</span></label>
             <input type="text" id="edit-tab-label" required value="${tab.label}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded font-semibold focus:outline-none focus:border-[#0284C7]" />
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Route Hash <span class="text-rose-500">*</span></label>
+              <label class="block text-xs font-semibold text-[#172B4D] mb-0">Route Hash <span class="text-rose-500">*</span></label>
               <input type="text" id="edit-tab-route" required value="${tab.route}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono focus:outline-none focus:border-[#0284C7]" />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Mapping Type</label>
+              <label class="block text-xs font-semibold text-[#172B4D] mb-0">Mapping Type</label>
               <select id="edit-tab-type" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="system" ${tab.type === 'system' ? 'selected' : ''}>System Page</option>
                 <option value="dynamic-form" ${tab.type === 'dynamic-form' ? 'selected' : ''}>Dynamic Form</option>
@@ -10620,7 +10590,7 @@ export const SetupView = {
             </div>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-[#172B4D] mb-1">Badge Tag (Optional)</label>
+            <label class="block text-xs font-semibold text-[#172B4D] mb-0">Badge Tag (Optional)</label>
             <input type="text" id="edit-tab-badge" value="${tab.badge || ''}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" placeholder="e.g. 5 New" />
           </div>
         </form>
@@ -10740,7 +10710,7 @@ export const SetupView = {
                     <div class="grid grid-cols-2 gap-2.5">
                       ${sec.fields.map(f => `
                         <div class="${f.width}">
-                          <label class="block font-bold text-[11px] text-[#172B4D] mb-1">
+                          <label class="block font-bold text-[11px] text-[#172B4D] mb-0">
                             ${f.label} ${f.required ? '<span class="text-[#BF2600]">*</span>' : ''}
                           </label>
 
@@ -10852,13 +10822,13 @@ export const SetupView = {
       <form id="af-form" class="space-y-3 text-xs">
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-[#172B4D] mb-1">Target Section *</label>
+            <label class="block font-bold text-[#172B4D] mb-0">Target Section *</label>
             <select id="af-sec" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg">
               ${formConfig.sections.map(s => `<option value="${s.id}">${s.title}</option>`).join('')}
             </select>
           </div>
           <div>
-            <label class="block font-bold text-[#172B4D] mb-1">Field Type *</label>
+            <label class="block font-bold text-[#172B4D] mb-0">Field Type *</label>
             <select id="af-type" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg">
               <option value="text">Text Input</option>
               <option value="number">Number Input</option>
@@ -10872,22 +10842,22 @@ export const SetupView = {
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-[#172B4D] mb-1">Field Label *</label>
+            <label class="block font-bold text-[#172B4D] mb-0">Field Label *</label>
             <input type="text" id="af-label" required class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg" placeholder="e.g. Salinity / PPT" />
           </div>
           <div>
-            <label class="block font-bold text-[#172B4D] mb-1">Field Key *</label>
+            <label class="block font-bold text-[#172B4D] mb-0">Field Key *</label>
             <input type="text" id="af-key" required class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg font-mono" placeholder="salinityPpt" />
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-[#172B4D] mb-1">Placeholder Text</label>
+            <label class="block font-bold text-[#172B4D] mb-0">Placeholder Text</label>
             <input type="text" id="af-placeholder" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg" placeholder="e.g. 15 PPT" />
           </div>
           <div>
-            <label class="block font-bold text-[#172B4D] mb-1">Grid Width</label>
+            <label class="block font-bold text-[#172B4D] mb-0">Grid Width</label>
             <select id="af-width" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg">
               <option value="col-span-1">Half Width (50%)</option>
               <option value="col-span-2">Full Width (100%)</option>
@@ -11287,7 +11257,7 @@ export const SetupView = {
     Modal.show('Publish Configuration Live', `
       <div class="space-y-3 text-xs">
         <div>
-          <label class="block font-bold text-[#172B4D] mb-1">Release Summary Notes</label>
+          <label class="block font-bold text-[#172B4D] mb-0">Release Summary Notes</label>
           <input type="text" id="pub-note" class="w-full px-2.5 py-1.5 border border-[#DFE1E6] rounded-lg" placeholder="e.g. Updated CAA upload validation rule" />
         </div>
         <div class="flex items-center justify-end gap-2 pt-2 border-t border-[#EBECF0]">

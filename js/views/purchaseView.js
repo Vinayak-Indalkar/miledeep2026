@@ -23,13 +23,13 @@ export const PurchaseView = {
   ],
 
   bookingsList: [
-    { sNo: 1, bookingNo: 'PB-2026-089', bookingStation: 'Bhimavaram Center #1', bookingDate: '2026-10-04', species: 'Vannamei Shrimp', purchaseType: 'Direct Farmer Procurement', vehicleNo: 'AP 37 TE 4821', driverName: 'G. Narayana', grader: 'B. Venkatesh', agent: 'Coastal Marine Agency', farmLocation: 'Pond #4B & 5A, Akividu', supplier: 'Godavari Coastal Aqua Farms', bookingCount: '40 Count', bookingWeight: 2000, bookingRate: 440, arrivalPlant: 'DFL UNIT-5 (JPT)', remarks: 'Grade quality A, direct early morning harvest.', expectedDate: '2026-10-04', advancePaid: '$ 3,000', status: 'FULFILLED' },
-    { sNo: 2, bookingNo: 'PB-2026-092', bookingStation: 'Kakinada Sea Intake #2', bookingDate: '2026-10-03', species: 'Black Tiger Shrimp', purchaseType: 'Hatchery Buyback Contract', vehicleNo: 'AP 05 TX 9102', driverName: 'M. Srinu', grader: 'K. Ramu', agent: 'Sagar Marine Brokers', farmLocation: 'Kakinada Bay Cage 1', supplier: 'Sagar Marine Hatcheries & Cultivators', bookingCount: '20 Count', bookingWeight: 3500, bookingRate: 620, arrivalPlant: 'DFL UNIT-3 (PSP)', remarks: 'Export batch benchmark rate locked.', expectedDate: '2026-10-03', advancePaid: '$ 5,000', status: 'FULFILLED' },
-    { sNo: 3, bookingNo: 'PB-2026-095', bookingStation: 'Machilipatnam Delta #3', bookingDate: '2026-10-05', species: 'Vannamei Shrimp', purchaseType: 'Direct Farmer Procurement', vehicleNo: 'AP 16 TZ 3390', driverName: 'Ch. Prasad', grader: 'M. Nagesh', agent: 'Direct Farmer', farmLocation: 'Krishna Delta Cluster #9', supplier: 'Krishna Delta Prawn Harvesters', bookingCount: '50 Count', bookingWeight: 4000, bookingRate: 380, arrivalPlant: 'DFL UNIT-4 (PND)', remarks: 'Direct farmer pond harvest with aerated crates.', expectedDate: '2026-10-05', advancePaid: '$ 4,500', status: 'FULFILLED' },
-    { sNo: 4, bookingNo: 'PB-2026-102', bookingStation: 'Bhimavaram Center #1', bookingDate: '2026-10-08', species: 'Vannamei Shrimp', purchaseType: 'Agent Procurement Order', vehicleNo: 'AP 37 TE 8812', driverName: 'K. Subba Rao', grader: 'B. Venkatesh', agent: 'Delta Seafood Associates', farmLocation: 'Pond #14, Undi Road', supplier: 'Godavari Coastal Aqua Farms', bookingCount: '30 Count', bookingWeight: 3200, bookingRate: 460, arrivalPlant: 'DFL UNIT-5 (JPT)', remarks: 'Agent booking agreement signed.', expectedDate: '2026-10-08', advancePaid: '$ 0', status: 'CONFIRMED' },
-    { sNo: 5, bookingNo: 'PB-2026-105', bookingStation: 'Amalapuram Harvesters #4', bookingDate: '2026-10-09', species: 'Vannamei Shrimp', purchaseType: 'Direct Farmer Procurement', vehicleNo: 'AP 04 TT 5619', driverName: 'D. Rambabu', grader: 'G. Suribabu', agent: 'Direct Farmer', farmLocation: 'Konaseema Coastal Pond #3', supplier: 'Konaseema Marine Harvesters', bookingCount: '45 Count', bookingWeight: 2800, bookingRate: 410, arrivalPlant: 'DFL UNIT-6 (JPT-II)', remarks: 'Pond sample tested negative for antibiotics.', expectedDate: '2026-10-09', advancePaid: '$ 2,500', status: 'CONFIRMED' },
-    { sNo: 6, bookingNo: 'PB-2026-108', bookingStation: 'Ongole Coastal Hub #1', bookingDate: '2026-10-10', species: 'Black Tiger Shrimp', purchaseType: 'Corporate Feed-Linked Booking', vehicleNo: 'AP 26 TV 1104', driverName: 'Y. Brahmaiah', grader: 'K. Ramu', agent: 'Nellore Aqua Syndicate', farmLocation: 'Nellore Block #12 Pond A', supplier: 'Nellore Brackish Aqua Cultivators', bookingCount: '25 Count', bookingWeight: 5000, bookingRate: 590, arrivalPlant: 'DFL UNIT-2 (KKD)', remarks: 'Feed linked contract with high yield estimation.', expectedDate: '2026-10-10', advancePaid: '$ 6,000', status: 'PENDING' },
-    { sNo: 7, bookingNo: 'PB-2026-110', bookingStation: 'Visakhapatnam Gate Dock', bookingDate: '2026-10-11', species: 'Asian Seabass (Barramundi)', purchaseType: 'Spot Market Purchase', vehicleNo: 'AP 31 TH 7741', driverName: 'P. Appa Rao', grader: 'M. Nagesh', agent: 'East Coast Brokers', farmLocation: 'Deep Sea Cage #7', supplier: 'East Coast Aqua Society', bookingCount: '500-800 g/pc', bookingWeight: 1800, bookingRate: 320, arrivalPlant: 'DFL UNIT-1 (VSP)', remarks: 'Live harvest intake to dock.', expectedDate: '2026-10-11', advancePaid: '$ 1,500', status: 'PENDING' }
+    { sNo: 1, bookingNo: 'PB-2026-089', bookingStation: 'Bhimavaram Center #1', bookingDate: '2026-10-04', species: 'Vannamei Shrimp', purchaseType: 'Direct Farmer Procurement', vehicleNo: 'AP 37 TE 4821', driverName: 'G. Narayana', grader: 'B. Venkatesh', agent: 'Coastal Marine Agency', farmLocation: 'Pond #4B & 5A, Akividu', supplier: 'Godavari Coastal Aqua Farms', bookingCount: '40 Count', bookingWeight: 2000, bookingRate: 440, arrivalPlant: 'DFL UNIT-5 (JPT)', remarks: 'Grade quality A, direct early morning harvest.', expectedDate: '2026-10-04', advancePaid: '₹ 2,40,000', status: 'FULFILLED' },
+    { sNo: 2, bookingNo: 'PB-2026-092', bookingStation: 'Kakinada Sea Intake #2', bookingDate: '2026-10-03', species: 'Black Tiger Shrimp', purchaseType: 'Hatchery Buyback Contract', vehicleNo: 'AP 05 TX 9102', driverName: 'M. Srinu', grader: 'K. Ramu', agent: 'Sagar Marine Brokers', farmLocation: 'Kakinada Bay Cage 1', supplier: 'Sagar Marine Hatcheries & Cultivators', bookingCount: '20 Count', bookingWeight: 3500, bookingRate: 620, arrivalPlant: 'DFL UNIT-3 (PSP)', remarks: 'Export batch benchmark rate locked.', expectedDate: '2026-10-03', advancePaid: '₹ 4,00,000', status: 'FULFILLED' },
+    { sNo: 3, bookingNo: 'PB-2026-095', bookingStation: 'Machilipatnam Delta #3', bookingDate: '2026-10-05', species: 'Vannamei Shrimp', purchaseType: 'Direct Farmer Procurement', vehicleNo: 'AP 16 TZ 3390', driverName: 'Ch. Prasad', grader: 'M. Nagesh', agent: 'Direct Farmer', farmLocation: 'Krishna Delta Cluster #9', supplier: 'Krishna Delta Prawn Harvesters', bookingCount: '50 Count', bookingWeight: 4000, bookingRate: 380, arrivalPlant: 'DFL UNIT-4 (PND)', remarks: 'Direct farmer pond harvest with aerated crates.', expectedDate: '2026-10-05', advancePaid: '₹ 3,60,000', status: 'FULFILLED' },
+    { sNo: 4, bookingNo: 'PB-2026-102', bookingStation: 'Bhimavaram Center #1', bookingDate: '2026-10-08', species: 'Vannamei Shrimp', purchaseType: 'Agent Procurement Order', vehicleNo: 'AP 37 TE 8812', driverName: 'K. Subba Rao', grader: 'B. Venkatesh', agent: 'Delta Seafood Associates', farmLocation: 'Pond #14, Undi Road', supplier: 'Godavari Coastal Aqua Farms', bookingCount: '30 Count', bookingWeight: 3200, bookingRate: 460, arrivalPlant: 'DFL UNIT-5 (JPT)', remarks: 'Agent booking agreement signed.', expectedDate: '2026-10-08', advancePaid: '₹ 0', status: 'CONFIRMED' },
+    { sNo: 5, bookingNo: 'PB-2026-105', bookingStation: 'Amalapuram Harvesters #4', bookingDate: '2026-10-09', species: 'Vannamei Shrimp', purchaseType: 'Direct Farmer Procurement', vehicleNo: 'AP 04 TT 5619', driverName: 'D. Rambabu', grader: 'G. Suribabu', agent: 'Direct Farmer', farmLocation: 'Konaseema Coastal Pond #3', supplier: 'Konaseema Marine Harvesters', bookingCount: '45 Count', bookingWeight: 2800, bookingRate: 410, arrivalPlant: 'DFL UNIT-6 (JPT-II)', remarks: 'Pond sample tested negative for antibiotics.', expectedDate: '2026-10-09', advancePaid: '₹ 2,00,000', status: 'CONFIRMED' },
+    { sNo: 6, bookingNo: 'PB-2026-108', bookingStation: 'Ongole Coastal Hub #1', bookingDate: '2026-10-10', species: 'Black Tiger Shrimp', purchaseType: 'Corporate Feed-Linked Booking', vehicleNo: 'AP 26 TV 1104', driverName: 'Y. Brahmaiah', grader: 'K. Ramu', agent: 'Nellore Aqua Syndicate', farmLocation: 'Nellore Block #12 Pond A', supplier: 'Nellore Brackish Aqua Cultivators', bookingCount: '25 Count', bookingWeight: 5000, bookingRate: 590, arrivalPlant: 'DFL UNIT-2 (KKD)', remarks: 'Feed linked contract with high yield estimation.', expectedDate: '2026-10-10', advancePaid: '₹ 5,00,000', status: 'PENDING' },
+    { sNo: 7, bookingNo: 'PB-2026-110', bookingStation: 'Visakhapatnam Gate Dock', bookingDate: '2026-10-11', species: 'Asian Seabass (Barramundi)', purchaseType: 'Spot Market Purchase', vehicleNo: 'AP 31 TH 7741', driverName: 'P. Appa Rao', grader: 'M. Nagesh', agent: 'East Coast Brokers', farmLocation: 'Deep Sea Cage #7', supplier: 'East Coast Aqua Society', bookingCount: '500-800 g/pc', bookingWeight: 1800, bookingRate: 320, arrivalPlant: 'DFL UNIT-1 (VSP)', remarks: 'Live harvest intake to dock.', expectedDate: '2026-10-11', advancePaid: '₹ 1,20,000', status: 'PENDING' }
   ],
 
   rmArrivalsList: [
@@ -281,7 +281,7 @@ export const PurchaseView = {
     container.innerHTML = `
       <div class="space-y-4 animate-fade-in">
         <!-- Top Page Title Header -->
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-0">
           <div>
             <h1 class="text-xl font-extrabold text-[#172B4D]">Raw Material Dashboard</h1>
           </div>
@@ -310,7 +310,7 @@ export const PurchaseView = {
           <!-- Collapsible Filter Inputs Grid -->
           <div id="rm-filter-body" class="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs transition-all duration-200">
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SPECIES</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SPECIES</label>
               <select class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option>All Species (Select)</option>
                 <option selected>Vannamei (VM)</option>
@@ -320,7 +320,7 @@ export const PurchaseView = {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">CENTER</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">CENTER</label>
               <select class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option>All Centers (Select)</option>
                 <option>Bhimavaram Center #1</option>
@@ -330,7 +330,7 @@ export const PurchaseView = {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">PLANT</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">PLANT</label>
               <select class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option>All Plants (Select)</option>
                 <option>DFL UNIT-5 (JPT)</option>
@@ -341,14 +341,14 @@ export const PurchaseView = {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">FROM DATE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">FROM DATE</label>
               <div class="erp-date-wrapper">
                 <input type="date" value="2026-10-05" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()" />
               </div>
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">TO DATE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">TO DATE</label>
               <div class="erp-date-wrapper">
                 <input type="date" value="2026-10-06" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()" />
               </div>
@@ -509,8 +509,8 @@ export const PurchaseView = {
                   <div class=" font-bold text-base text-[#17191c] mt-0.5">142,500 KG</div>
                 </div>
                 <div class="bg-white p-2.5 rounded border border-[#EBECF0]">
-                  <span class="text-[#6B778C] text-[11px]">TOTAL VALUE (INR / USD)</span>
-                  <div class=" font-bold text-base text-[#006644] mt-0.5">₹ 5.51 Cr <span class="text-xs text-[#5E6C84]">($664k)</span></div>
+                  <span class="text-[#6B778C] text-[11px]">TOTAL VALUE (INR)</span>
+                  <div class=" font-bold text-base text-[#006644] mt-0.5">₹ 5.51 Cr </div>
                 </div>
               </div>
               <div class="mt-3 p-2 bg-[#F0F9FF] text-[#00A4B7] rounded text-[11px] flex justify-between items-center font-medium">
@@ -897,7 +897,7 @@ export const PurchaseView = {
     container.innerHTML = `
       <div class="space-y-4 animate-fade-in text-[#172B4D]">
         <!-- Top Page Title Header -->
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-0">
           <div>
             <h1 class="text-xl font-extrabold text-[#172B4D]">Commercial Dashboard</h1>
           </div>
@@ -926,7 +926,7 @@ export const PurchaseView = {
           <!-- Collapsible Filter Inputs Grid -->
           <div id="comm-filter-body" class="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs transition-all duration-200">
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">PURCHASE STATION</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">PURCHASE STATION</label>
               <select id="comm-station-filter" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Purchase Station</option>
                 <option value="SKM">Srikakulam Station (SKM)</option>
@@ -938,7 +938,7 @@ export const PurchaseView = {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">YEAR</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">YEAR</label>
               <select id="comm-year-filter" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="2026">2026</option>
                 <option value="2025">2025</option>
@@ -947,7 +947,7 @@ export const PurchaseView = {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">MONTH</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">MONTH</label>
               <select id="comm-month-filter" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="October">October</option>
                 <option value="September">September</option>
@@ -965,14 +965,14 @@ export const PurchaseView = {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">FROM DATE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">FROM DATE</label>
               <div class="erp-date-wrapper">
                 <input type="date" id="comm-from-date" value="2026-10-01" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()">
               </div>
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">TO DATE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">TO DATE</label>
               <div class="erp-date-wrapper">
                 <input type="date" id="comm-to-date" value="2026-10-06" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()">
               </div>
@@ -1479,7 +1479,7 @@ export const PurchaseView = {
     container.innerHTML = `
       <div class="space-y-4 animate-fade-in">
         <!-- Header with Title -->
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-0">
           <div>
             <h1 class="text-xl font-extrabold text-[#172B4D]">Lot Tracking</h1>
           </div>
@@ -1508,7 +1508,7 @@ export const PurchaseView = {
           <!-- Collapsible Filter Inputs Grid (5 columns) -->
           <div id="lot-top-filter-body" class="dt-top-filter-body mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs transition-all duration-200">
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">PURCHASE STATION</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">PURCHASE STATION</label>
               <select id="lot-station-filter" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Purchase Station</option>
                 <option value="SKM">Srikakulam Station (SKM)</option>
@@ -1520,7 +1520,7 @@ export const PurchaseView = {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SPECIES</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SPECIES</label>
               <select id="lot-species-filter" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Species (Select)</option>
                 <option value="Vannamei">Vannamei (VM)</option>
@@ -1530,7 +1530,7 @@ export const PurchaseView = {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">MONTH</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">MONTH</label>
               <select id="lot-month-filter" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Months</option>
                 <option value="October" selected>October</option>
@@ -1549,7 +1549,7 @@ export const PurchaseView = {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">YEAR</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">YEAR</label>
               <select id="lot-year-filter" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Years</option>
                 <option value="2026" selected>2026</option>
@@ -1716,7 +1716,7 @@ export const PurchaseView = {
   renderBookings(container) {
     container.innerHTML = `
       <div class="space-y-4 animate-fade-in">
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-0">
           <div>
             <h1 class="text-xl font-extrabold text-[#172B4D]">Bookings</h1>
           </div>
@@ -1751,7 +1751,7 @@ export const PurchaseView = {
           <!-- Collapsible Filter Inputs Grid -->
           <div id="booking-top-filter-body" class="dt-top-filter-body mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs transition-all duration-200">
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT PURCHASE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT PURCHASE</label>
               <select id="booking-top-purchase-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Purchases (Select)</option>
                 <option value="Direct Farmer Procurement">Direct Farmer Procurement</option>
@@ -1763,7 +1763,7 @@ export const PurchaseView = {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT ARRIVAL PLANT</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT ARRIVAL PLANT</label>
               <select id="booking-top-plant-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Arrival Plants (Select)</option>
                 <option value="DFL UNIT-1 (VSP)">DFL UNIT-1 (VSP)</option>
@@ -1776,7 +1776,7 @@ export const PurchaseView = {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">DATE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">DATE</label>
               <div class="erp-date-wrapper">
                 <input type="date" id="booking-top-date-input" value="2026-10-06" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()">
               </div>
@@ -1812,8 +1812,7 @@ export const PurchaseView = {
       totalsContainer.innerHTML = `
         <div class="bg-white rounded-xl border border-[#DFE1E6] p-4 shadow-xs">
           <div class="flex items-center justify-between pb-2 mb-3 border-b border-[#EBECF0]">
-            <div class="flex items-center gap-2">
-              <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            <div class="flex items-center">
               <h3 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Bookings Total Summary</h3>
             </div>
             <span class="text-xs text-[#5E6C84]">Showing totals for <strong class="text-[#172B4D]">${count}</strong> ${count === 1 ? 'Booking' : 'Bookings'}</span>
@@ -2035,7 +2034,7 @@ export const PurchaseView = {
     container.innerHTML = `
       <div class="space-y-4 animate-fade-in">
         <!-- Header with Title and Create Button -->
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-0">
           <div>
             <h1 class="text-xl font-extrabold text-[#172B4D]">Raw Material Arrivals</h1>
           </div>
@@ -2070,14 +2069,14 @@ export const PurchaseView = {
           <!-- Collapsible Filter Inputs Grid -->
           <div id="rm-top-filter-body" class="dt-top-filter-body mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs transition-all duration-200">
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">DATE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">DATE</label>
               <div class="erp-date-wrapper">
                 <input type="date" id="rm-top-date-input" value="2026-10-06" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()">
               </div>
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">COMPANY</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">COMPANY</label>
               <select id="rm-top-company-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Companies</option>
                 <option value="DEVI FISHERIES LIMITED" selected>DEVI FISHERIES LIMITED</option>
@@ -2087,7 +2086,7 @@ export const PurchaseView = {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SPECIES</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SPECIES</label>
               <select id="rm-top-species-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">Select Species</option>
                 <option value="Vannamei (VM)">Vannamei (VM)</option>
@@ -2097,7 +2096,7 @@ export const PurchaseView = {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">PLANT</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">PLANT</label>
               <select id="rm-top-plant-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">Select Plant</option>
                 <option value="DFL UNIT-1 (VSP)">DFL UNIT-1 (VSP)</option>
@@ -2110,7 +2109,7 @@ export const PurchaseView = {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">CENTER</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">CENTER</label>
               <select id="rm-top-center-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">Select Center</option>
                 <option value="Bhimavaram Center #1">Bhimavaram Center #1</option>
@@ -2123,17 +2122,17 @@ export const PurchaseView = {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">WEIGHT</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">WEIGHT</label>
               <input type="text" id="rm-top-weight-input" placeholder="Enter Weight" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">AMOUNT</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">AMOUNT</label>
               <input type="text" id="rm-top-amount-input" placeholder="Enter Amount" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">AVERAGE RATE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">AVERAGE RATE</label>
               <input type="text" id="rm-top-avgrate-input" placeholder="Enter Average Rate" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
             </div>
 
@@ -2166,8 +2165,7 @@ export const PurchaseView = {
       totalsContainer.innerHTML = `
         <div class="bg-white rounded-xl border border-[#DFE1E6] p-4 shadow-xs">
           <div class="flex items-center justify-between pb-2 mb-3 border-b border-[#EBECF0]">
-            <div class="flex items-center gap-2">
-              <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            <div class="flex items-center">
               <h3 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Raw Material Arrivals Total Summary</h3>
             </div>
             <span class="text-xs text-[#5E6C84]">Showing totals for <strong class="text-[#172B4D]">${count}</strong> ${count === 1 ? 'Arrival' : 'Arrivals'}</span>
@@ -2426,7 +2424,7 @@ export const PurchaseView = {
     container.innerHTML = `
       <div class="space-y-4 animate-fade-in">
         <!-- Header with Title and Create Button -->
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-0">
           <div>
             <h1 class="text-xl font-extrabold text-[#172B4D]">Arrivals Register</h1>
           </div>
@@ -2461,8 +2459,7 @@ export const PurchaseView = {
       totalsContainer.innerHTML = `
         <div class="bg-white rounded-xl border border-[#DFE1E6] p-4 shadow-xs">
           <div class="flex items-center justify-between pb-2 mb-3 border-b border-[#EBECF0]">
-            <div class="flex items-center gap-2">
-              <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            <div class="flex items-center">
               <h3 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Arrivals Total Summary</h3>
             </div>
             <span class="text-xs text-[#5E6C84]">Showing totals for <strong class="text-[#172B4D]">${count}</strong> ${count === 1 ? 'Arrival' : 'Arrivals'}</span>
@@ -2662,7 +2659,7 @@ export const PurchaseView = {
           <div id="bill-top-filter-body" class="dt-top-filter-body mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs transition-all duration-200">
             <!-- 1. Select Purchase -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT PURCHASE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT PURCHASE</label>
               <select id="bill-top-purchase-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Purchases</option>
                 <option value="Direct Farmer Procurement">Direct Farmer Procurement</option>
@@ -2675,7 +2672,7 @@ export const PurchaseView = {
 
             <!-- 2. Select Arrival Plant -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT ARRIVAL PLANT</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT ARRIVAL PLANT</label>
               <select id="bill-top-plant-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Arrival Plants</option>
                 <option value="DFL UNIT-1 (VSP)">DFL UNIT-1 (VSP)</option>
@@ -2689,7 +2686,7 @@ export const PurchaseView = {
 
             <!-- 3. From Date -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">FROM DATE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">FROM DATE</label>
               <div class="erp-date-wrapper">
                 <input type="date" id="bill-top-from-date" value="2026-10-07" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()">
               </div>
@@ -2697,7 +2694,7 @@ export const PurchaseView = {
 
             <!-- 4. To Date -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">TO DATE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">TO DATE</label>
               <div class="erp-date-wrapper">
                 <input type="date" id="bill-top-to-date" value="2026-10-07" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()">
               </div>
@@ -2705,7 +2702,7 @@ export const PurchaseView = {
 
             <!-- 5. Select Supplier -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT SUPPLIER</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT SUPPLIER</label>
               <select id="bill-top-supplier-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Suppliers</option>
                 <option value="Godavari Coastal Aqua Farms">Godavari Coastal Aqua Farms</option>
@@ -2721,7 +2718,7 @@ export const PurchaseView = {
 
             <!-- 6. Select Agent -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT AGENT</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT AGENT</label>
               <select id="bill-top-agent-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Agents</option>
                 <option value="Coastal Marine Agency">Coastal Marine Agency</option>
@@ -2735,7 +2732,7 @@ export const PurchaseView = {
 
             <!-- 7. Status -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">STATUS</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">STATUS</label>
               <select id="bill-top-status-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="Pending" selected>Pending</option>
                 <option value="ALL">All Status</option>
@@ -2838,7 +2835,7 @@ export const PurchaseView = {
           header: 'Total Bill Amount', 
           render: (v, row) => {
             const amt = v || row.totalAmountInr || 0;
-            const usd = row.totalAmountUsd ? `($ ${row.totalAmountUsd.toLocaleString()})` : '';
+            const usd = '';
             return `
               <div>
                 <span class="font-bold text-[#172B4D]">₹ ${amt.toLocaleString()}</span>
@@ -3032,7 +3029,7 @@ export const PurchaseView = {
           <div id="ctx-top-filter-body" class="dt-top-filter-body mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs transition-all duration-200">
             <!-- 1. Select Center -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT CENTER</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT CENTER</label>
               <select id="ctx-top-center-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Centers</option>
                 <option value="Bhimavaram Center #1">Bhimavaram Center #1</option>
@@ -3046,7 +3043,7 @@ export const PurchaseView = {
 
             <!-- 2. Select Type -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT TYPE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT TYPE</label>
               <select id="ctx-top-type-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Types</option>
                 <option value="PURCHASE_PAYABLE">Purchase Payable</option>
@@ -3060,7 +3057,7 @@ export const PurchaseView = {
 
             <!-- 3. Select Supplier -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT SUPPLIER</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT SUPPLIER</label>
               <select id="ctx-top-supplier-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Suppliers</option>
                 <option value="Sri Sai Aqua Farms">Sri Sai Aqua Farms</option>
@@ -3076,7 +3073,7 @@ export const PurchaseView = {
 
             <!-- 4. Select Agent -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT AGENT</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT AGENT</label>
               <select id="ctx-top-agent-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Agents</option>
                 <option value="Direct Farmer">Direct Farmer</option>
@@ -3090,7 +3087,7 @@ export const PurchaseView = {
 
             <!-- 5. Date -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">DATE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">DATE</label>
               <div class="erp-date-wrapper w-full">
                 <input type="date" id="ctx-top-date" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()">
               </div>
@@ -3190,8 +3187,8 @@ export const PurchaseView = {
         },
         { 
           field: 'amountUsd', 
-          header: 'Amount (USD)', 
-          render: (v) => `<span class="text-[#006644] font-bold">$ ${(parseFloat(v) || 0).toLocaleString()}</span>` 
+          header: 'Amount (INR)', 
+          render: (v) => `<span class="text-[#006644] font-bold">₹ ${(parseFloat(v) || 0).toLocaleString('en-IN')}</span>` 
         },
         { 
           field: 'type', 
@@ -3332,7 +3329,7 @@ export const PurchaseView = {
     container.innerHTML = `
       <div class="space-y-4 animate-fade-in">
         <!-- Page Title Header -->
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-0">
           <div>
             <h1 class="text-xl font-extrabold text-[#172B4D]">Payments</h1>
           </div>
@@ -3362,7 +3359,7 @@ export const PurchaseView = {
           <div id="pay-top-filter-body" class="dt-top-filter-body mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs transition-all duration-200">
             <!-- 1. Select Center -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT CENTER</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT CENTER</label>
               <select id="pay-top-center-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Centers</option>
                 <option value="Bhimavaram Center #1">Bhimavaram Center #1</option>
@@ -3376,7 +3373,7 @@ export const PurchaseView = {
 
             <!-- 2. Select Type -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT TYPE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT TYPE</label>
               <select id="pay-top-type-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Types</option>
                 <option value="PURCHASE_PAYABLE">Purchase Payable</option>
@@ -3389,7 +3386,7 @@ export const PurchaseView = {
 
             <!-- 3. Select Supplier -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT SUPPLIER</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT SUPPLIER</label>
               <select id="pay-top-supplier-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Suppliers</option>
                 <option value="Sri Sai Aqua Farms">Sri Sai Aqua Farms</option>
@@ -3405,7 +3402,7 @@ export const PurchaseView = {
 
             <!-- 4. Select Agent -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT AGENT</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT AGENT</label>
               <select id="pay-top-agent-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Agents</option>
                 <option value="Direct Farmer">Direct Farmer</option>
@@ -3419,7 +3416,7 @@ export const PurchaseView = {
 
             <!-- 5. Select Arrival Plant -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT ARRIVAL PLANT</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT ARRIVAL PLANT</label>
               <select id="pay-top-plant-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Arrival Plants</option>
                 <option value="DFL UNIT-1 (VSP)">DFL UNIT-1 (VSP)</option>
@@ -3433,7 +3430,7 @@ export const PurchaseView = {
 
             <!-- 6. Select Payment Mode -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT PAYMENT MODE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT PAYMENT MODE</label>
               <select id="pay-top-mode-select" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Payment Modes</option>
                 <option value="RTGS">RTGS / Bank Wire</option>
@@ -3445,7 +3442,7 @@ export const PurchaseView = {
 
             <!-- 7. From Date -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">FROM DATE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">FROM DATE</label>
               <div class="erp-date-wrapper w-full">
                 <input type="date" id="pay-top-from-date" value="2026-10-01" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()">
               </div>
@@ -3453,7 +3450,7 @@ export const PurchaseView = {
 
             <!-- 8. To Date -->
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">TO DATE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">TO DATE</label>
               <div class="erp-date-wrapper w-full">
                 <input type="date" id="pay-top-to-date" value="2026-10-07" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()">
               </div>
@@ -3553,8 +3550,8 @@ export const PurchaseView = {
         },
         { 
           field: 'amountUsd', 
-          header: 'Amount (USD)', 
-          render: (v) => `<span class="text-[#006644] font-bold">$ ${(parseFloat(v) || 0).toLocaleString()}</span>` 
+          header: 'Amount (INR)', 
+          render: (v) => `<span class="text-[#006644] font-bold">₹ ${(parseFloat(v) || 0).toLocaleString('en-IN')}</span>` 
         },
         { 
           field: 'status', 
@@ -3702,7 +3699,7 @@ export const PurchaseView = {
   renderBillDatePayment(container) {
     container.innerHTML = `
       <div class="space-y-4 animate-fade-in">
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-0">
           <div>
             <h1 class="text-xl font-extrabold text-[#172B4D]">Payment Vouchers</h1>
           </div>
@@ -3730,7 +3727,7 @@ export const PurchaseView = {
         { field: 'paymentMode', header: 'Payment Mode' },
         { field: 'bankRef', header: 'Bank UTR Ref', render: (v) => `<span class="text-xs">${v}</span>` },
         { field: 'amountInr', header: 'Paid INR', render: (v) => `<span class="font-bold text-[#172B4D]">₹ ${v.toLocaleString()}</span>` },
-        { field: 'amountUsd', header: 'Paid USD', render: (v) => `<span class="font-bold text-[#006644]">$ ${v.toLocaleString()}</span>` },
+        { field: 'amountUsd', header: 'Paid USD', render: (v) => `<span class="font-bold text-[#006644]">₹ ${(v || 0).toLocaleString('en-IN')}</span>` },
         { field: 'status', header: 'Status', type: 'status' }
       ],
       actions: [
@@ -5298,7 +5295,7 @@ export const PurchaseView = {
       content: `
         <form id="create-booking-form" class="space-y-4 text-xs">
           <!-- General Information Section -->
-          <div class="bg-[#FAFBFC] p-3.5 rounded-lg border border-[#DFE1E6] space-y-3">
+          <div class="bg-transparent p-0 border-0 space-y-3">
             <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2">
               <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">General Information</span>
             </div>
@@ -5306,7 +5303,7 @@ export const PurchaseView = {
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               <!-- Booking Station -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Booking Station
                 </label>
                 <select id="newbkg-station" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]">
@@ -5322,7 +5319,7 @@ export const PurchaseView = {
 
               <!-- Species -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Species
                 </label>
                 <select id="newbkg-species" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]">
@@ -5336,7 +5333,7 @@ export const PurchaseView = {
 
               <!-- Purchase Type -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Purchase Type
                 </label>
                 <select id="newbkg-purchasetype" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]">
@@ -5351,7 +5348,7 @@ export const PurchaseView = {
 
               <!-- Booking Number -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Booking Number
                 </label>
                 <input type="text" id="newbkg-no" value="PB-2026-${Math.floor(100 + Math.random() * 900)}" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg font-bold text-[#172B4D] focus:outline-none focus:border-[#0284C7]" placeholder="e.g. PB-2026-115" />
@@ -5359,7 +5356,7 @@ export const PurchaseView = {
 
               <!-- Vehicle Number -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Vehicle Number
                 </label>
                 <input type="text" id="newbkg-vehno" placeholder="e.g. AP 37 TE 4821" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]" />
@@ -5367,7 +5364,7 @@ export const PurchaseView = {
 
               <!-- Driver Name -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Driver Name
                 </label>
                 <input type="text" id="newbkg-driver" placeholder="e.g. G. Narayana" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]" />
@@ -5375,7 +5372,7 @@ export const PurchaseView = {
 
               <!-- Grader Name -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Grader Name
                 </label>
                 <input type="text" id="newbkg-grader" placeholder="e.g. B. Venkatesh" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]" />
@@ -5383,7 +5380,7 @@ export const PurchaseView = {
 
               <!-- Booking Date -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Booking Date
                 </label>
                 <div class="erp-date-wrapper">
@@ -5393,7 +5390,7 @@ export const PurchaseView = {
 
               <!-- Farm Location -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Farm Location
                 </label>
                 <input type="text" id="newbkg-farmloc" placeholder="e.g. Bhimavaram Cluster #4 / Pond #12" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]" />
@@ -5401,7 +5398,7 @@ export const PurchaseView = {
 
               <!-- Suppliers -->
               <div class="sm:col-span-2 lg:col-span-3">
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Suppliers
                 </label>
                 <select id="newbkg-supplier" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]">
@@ -5426,7 +5423,7 @@ export const PurchaseView = {
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <!-- Agent Name -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">
                   Agent Name
                 </label>
                 <input type="text" id="newbkg-agent" placeholder="e.g. Coastal Marine Agency / Direct" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]" />
@@ -5434,7 +5431,7 @@ export const PurchaseView = {
 
               <!-- Remarks -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">
                   Remarks
                 </label>
                 <textarea id="newbkg-remarks" rows="2" placeholder="e.g. Harvest scheduled for 4:00 AM, ice boxes ready..." class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]"></textarea>
@@ -5451,7 +5448,7 @@ export const PurchaseView = {
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <!-- Booking Count -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Booking Count
                 </label>
                 <input type="text" id="newbkg-count" placeholder="e.g. 40 Count (30-40 pcs/kg)" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg font-bold text-[#172B4D] focus:outline-none focus:border-[#0284C7]" />
@@ -5459,7 +5456,7 @@ export const PurchaseView = {
 
               <!-- Booking Weight (Kgs) -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Booking Weight (Kgs)
                 </label>
                 <input type="number" id="newbkg-weight" placeholder="e.g. 3500" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg font-extrabold text-[#006644] focus:outline-none focus:border-[#0284C7]" />
@@ -5467,7 +5464,7 @@ export const PurchaseView = {
 
               <!-- Booking Rate -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Booking Rate (₹ / KG)
                 </label>
                 <input type="number" id="newbkg-rate" placeholder="e.g. 440" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg font-extrabold text-[#172B4D] focus:outline-none focus:border-[#0284C7]" />
@@ -5527,7 +5524,7 @@ export const PurchaseView = {
               bookingRate: bookingRate,
               arrivalPlant: mappedPlant,
               expectedDate: bookingDate,
-              advancePaid: '$ 0',
+              advancePaid: '₹ 0',
               status: 'CONFIRMED'
             };
 
@@ -5568,7 +5565,7 @@ export const PurchaseView = {
       content: `
         <form id="edit-booking-form" class="space-y-4 text-xs">
           <!-- General Information Section -->
-          <div class="bg-[#FAFBFC] p-3.5 rounded-lg border border-[#DFE1E6] space-y-3">
+          <div class="bg-transparent p-0 border-0 space-y-3">
             <div class="flex items-center justify-between border-b border-[#EBECF0] pb-2">
               <span class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">General Information</span>
             </div>
@@ -5576,7 +5573,7 @@ export const PurchaseView = {
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               <!-- Booking Station -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Booking Station
                 </label>
                 <select id="editbkg-station" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]">
@@ -5591,7 +5588,7 @@ export const PurchaseView = {
 
               <!-- Species -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Species
                 </label>
                 <select id="editbkg-species" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]">
@@ -5604,7 +5601,7 @@ export const PurchaseView = {
 
               <!-- Purchase Type -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Purchase Type
                 </label>
                 <select id="editbkg-purchasetype" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]">
@@ -5618,7 +5615,7 @@ export const PurchaseView = {
 
               <!-- Booking Number -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Booking Number
                 </label>
                 <input type="text" id="editbkg-no" value="${booking.bookingNo}" readonly class="w-full text-xs px-2.5 py-2 bg-[#EBECF0] border border-[#DFE1E6] rounded-lg font-bold text-[#172B4D]" />
@@ -5626,7 +5623,7 @@ export const PurchaseView = {
 
               <!-- Vehicle Number -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Vehicle Number
                 </label>
                 <input type="text" id="editbkg-vehno" value="${booking.vehicleNo || 'AP 37 TE 4821'}" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]" />
@@ -5634,7 +5631,7 @@ export const PurchaseView = {
 
               <!-- Driver Name -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Driver Name
                 </label>
                 <input type="text" id="editbkg-driver" value="${booking.driverName || 'G. Narayana'}" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]" />
@@ -5642,7 +5639,7 @@ export const PurchaseView = {
 
               <!-- Grader Name -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Grader Name
                 </label>
                 <input type="text" id="editbkg-grader" value="${booking.grader || 'B. Venkatesh'}" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]" />
@@ -5650,7 +5647,7 @@ export const PurchaseView = {
 
               <!-- Booking Date -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Booking Date
                 </label>
                 <div class="erp-date-wrapper">
@@ -5660,7 +5657,7 @@ export const PurchaseView = {
 
               <!-- Farm Location -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Farm Location
                 </label>
                 <input type="text" id="editbkg-farmloc" value="${booking.farmLocation || booking.pond || 'Bhimavaram Cluster #4'}" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]" />
@@ -5668,7 +5665,7 @@ export const PurchaseView = {
 
               <!-- Suppliers -->
               <div class="sm:col-span-2 lg:col-span-3">
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Suppliers
                 </label>
                 <select id="editbkg-supplier" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]">
@@ -5692,7 +5689,7 @@ export const PurchaseView = {
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <!-- Agent Name -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">
                   Agent Name
                 </label>
                 <input type="text" id="editbkg-agent" value="${booking.agent || ''}" placeholder="e.g. Coastal Marine Agency" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]" />
@@ -5700,7 +5697,7 @@ export const PurchaseView = {
 
               <!-- Remarks -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">
                   Remarks
                 </label>
                 <textarea id="editbkg-remarks" rows="2" placeholder="e.g. Harvest notes..." class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded-lg focus:outline-none focus:border-[#0284C7]">${booking.remarks || ''}</textarea>
@@ -5717,7 +5714,7 @@ export const PurchaseView = {
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <!-- Booking Count -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Booking Count
                 </label>
                 <input type="text" id="editbkg-count" value="${booking.bookingCount || '40 Count'}" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg font-bold text-[#172B4D] focus:outline-none focus:border-[#0284C7]" />
@@ -5725,7 +5722,7 @@ export const PurchaseView = {
 
               <!-- Booking Weight (Kgs) -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Booking Weight (Kgs)
                 </label>
                 <input type="number" id="editbkg-weight" value="${booking.bookingWeight || booking.bookedQty || 0}" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg font-extrabold text-[#006644] focus:outline-none focus:border-[#0284C7]" />
@@ -5733,7 +5730,7 @@ export const PurchaseView = {
 
               <!-- Booking Rate -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">
                   Booking Rate (₹ / KG)
                 </label>
                 <input type="number" id="editbkg-rate" value="${booking.bookingRate || 420}" class="w-full text-xs px-2.5 py-2 bg-white border border-[#DFE1E6] rounded-lg font-extrabold text-[#172B4D] focus:outline-none focus:border-[#0284C7]" />
@@ -6153,11 +6150,11 @@ export const PurchaseView = {
           </div>
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Rate (INR / KG)</label>
+              <label class="block text-xs font-semibold text-[#172B4D] mb-0">Base Rate (INR / KG)</label>
               <input type="number" id="newrate-inr" value="350" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded " />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Rate (USD / KG)</label>
+              <label class="block text-xs font-semibold text-[#172B4D] mb-0">Ceiling Rate (INR / KG)</label>
               <input type="number" step="0.05" id="newrate-usd" value="4.25" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded " />
             </div>
           </div>
@@ -6202,11 +6199,11 @@ export const PurchaseView = {
         <form class="space-y-3">
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Rate (INR / KG)</label>
+              <label class="block text-xs font-semibold text-[#172B4D] mb-0">Base Rate (INR / KG)</label>
               <input type="number" id="editrate-inr" value="${rate.rateInr}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded " />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-[#172B4D] mb-1">Rate (USD / KG)</label>
+              <label class="block text-xs font-semibold text-[#172B4D] mb-0">Ceiling Rate (INR / KG)</label>
               <input type="number" step="0.05" id="editrate-usd" value="${rate.rateUsd}" class="w-full text-xs px-3 py-1.5 bg-white border border-[#DFE1E6] rounded " />
             </div>
           </div>
@@ -6549,69 +6546,68 @@ export const PurchaseView = {
       content: `
         <form class="space-y-4 text-xs" onsubmit="return false;">
           <!-- Top Section: Read-Only / Auto-Populated Fields (11 Fields) -->
-          <div class="bg-[#FAFBFC] border border-[#EBECF0] rounded-xl p-4 shadow-2xs">
-            <div class="flex items-center gap-2 mb-3 pb-2 border-b border-[#EBECF0]">
-              <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <div class="bg-transparent border-0 p-0 shadow-none">
+            <div class="flex items-center mb-3 pb-2 border-b border-[#EBECF0]">
               <h3 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Arrival &amp; Bill Information (Read-Only / Auto-Populated)</h3>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
               <!-- 1. Species -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Species</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Species</label>
                 <input type="text" id="bill-add-species" value="${species}" readonly class="w-full text-xs px-2.5 py-1.5 bg-[#F4F5F7] border border-[#DFE1E6] rounded font-semibold text-[#172B4D] cursor-not-allowed select-none" />
               </div>
 
               <!-- 2. Purchase Station -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Purchase Station</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Purchase Station</label>
                 <input type="text" id="bill-add-purchase-station" value="${purchaseStation}" readonly class="w-full text-xs px-2.5 py-1.5 bg-[#F4F5F7] border border-[#DFE1E6] rounded font-semibold text-[#172B4D] cursor-not-allowed select-none" />
               </div>
 
               <!-- 3. Processing Station -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Processing Station</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Processing Station</label>
                 <input type="text" id="bill-add-processing-station" value="${processingStation}" readonly class="w-full text-xs px-2.5 py-1.5 bg-[#F4F5F7] border border-[#DFE1E6] rounded font-semibold text-[#172B4D] cursor-not-allowed select-none" />
               </div>
 
               <!-- 4. Purchase Type -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Purchase Type</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Purchase Type</label>
                 <input type="text" id="bill-add-purchase-type" value="${purchaseType}" readonly class="w-full text-xs px-2.5 py-1.5 bg-[#F4F5F7] border border-[#DFE1E6] rounded font-semibold text-[#172B4D] cursor-not-allowed select-none" />
               </div>
 
               <!-- 5. Bill Number -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Bill Number</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Bill Number</label>
                 <input type="text" id="bill-add-bill-number" value="${billNumber}" readonly class="w-full text-xs px-2.5 py-1.5 bg-[#F4F5F7] border border-[#DFE1E6] rounded font-bold text-[#17191c] cursor-not-allowed select-none" />
               </div>
 
               <!-- 6. Vehicle Number -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Vehicle Number</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Vehicle Number</label>
                 <input type="text" id="bill-add-vehicle-number" value="${vehicleNumber}" readonly class="w-full text-xs px-2.5 py-1.5 bg-[#F4F5F7] border border-[#DFE1E6] rounded font-semibold text-[#172B4D] cursor-not-allowed select-none" />
               </div>
 
               <!-- 7. Driver Name -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Driver Name</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Driver Name</label>
                 <input type="text" id="bill-add-driver-name" value="${driverName}" readonly class="w-full text-xs px-2.5 py-1.5 bg-[#F4F5F7] border border-[#DFE1E6] rounded font-semibold text-[#172B4D] cursor-not-allowed select-none" />
               </div>
 
               <!-- 8. Grader Name -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Grader Name</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Grader Name</label>
                 <input type="text" id="bill-add-grader-name" value="${graderName}" readonly class="w-full text-xs px-2.5 py-1.5 bg-[#F4F5F7] border border-[#DFE1E6] rounded font-semibold text-[#172B4D] cursor-not-allowed select-none" />
               </div>
 
               <!-- 9. Purchase Date -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Purchase Date</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Purchase Date</label>
                 <input type="text" id="bill-add-purchase-date" value="${purchaseDate}" readonly class="w-full text-xs px-2.5 py-1.5 bg-[#F4F5F7] border border-[#DFE1E6] rounded font-semibold text-[#172B4D] cursor-not-allowed select-none" />
               </div>
 
-              <!-- 10. Agent Name (Dropdown) -->
+              <!-- 10. Agent Name -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Agent Name <span class="text-[#0284C7] font-normal">(Dropdown)</span></label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Agent Name</label>
                 <select id="bill-add-agent" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7] font-semibold text-[#172B4D]">
                   <option value="ADITYA AQUA FARMS" ${agentName === 'ADITYA AQUA FARMS' ? 'selected' : ''}>ADITYA AQUA FARMS</option>
                   <option value="Coastal Marine Agency" ${agentName === 'Coastal Marine Agency' ? 'selected' : ''}>Coastal Marine Agency</option>
@@ -6625,22 +6621,21 @@ export const PurchaseView = {
 
               <!-- 11. Farm Location -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Farm Location</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Farm Location</label>
                 <input type="text" id="bill-add-farm-location" value="${farmLocation}" readonly class="w-full text-xs px-2.5 py-1.5 bg-[#F4F5F7] border border-[#DFE1E6] rounded font-semibold text-[#172B4D] cursor-not-allowed select-none" />
               </div>
             </div>
           </div>
 
           <!-- Middle Section: Editable Fields -->
-          <div class="bg-white border border-[#DFE1E6] rounded-xl p-4 shadow-2xs">
-            <div class="flex items-center gap-2 mb-3 pb-2 border-b border-[#EBECF0]">
-              <svg class="w-4 h-4 text-[#006644]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+          <div class="bg-transparent border-0 p-0 shadow-none">
+            <div class="flex items-center mb-3 pb-2 border-b border-[#EBECF0]">
               <h3 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Settlement Parameters (Editable)</h3>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               <!-- 1. Supplier Name - Dropdown (K.GOPAL NAIDU--AFCPN8806J) -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">Supplier Name <span class="text-red-500">*</span></label>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">Supplier Name <span class="text-red-500">*</span></label>
                 <select id="bill-add-supplier" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-bold text-[#172B4D] focus:outline-none focus:border-[#0284C7]">
                   <option value="K.GOPAL NAIDU--AFCPN8806J" ${supplierName.includes('GOPAL') ? 'selected' : ''}>K.GOPAL NAIDU--AFCPN8806J</option>
                   <option value="Godavari Coastal Aqua Farms" ${supplierName.includes('Godavari') ? 'selected' : ''}>Godavari Coastal Aqua Farms</option>
@@ -6657,7 +6652,7 @@ export const PurchaseView = {
 
               <!-- 2. Addition/Deduction Per KG * - Number Input (0.00) - Required -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">Addition/Deduction Per KG <span class="text-red-500">*</span></label>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">Addition/Deduction Per KG <span class="text-red-500">*</span></label>
                 <div class="relative">
                   <span class="absolute left-2.5 top-1.5 text-xs font-bold text-[#5E6C84]">₹</span>
                   <input type="number" step="0.01" id="bill-add-deduction" value="${additionDeduction.toFixed(2)}" placeholder="0.00" required class="w-full text-xs pl-7 pr-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-bold text-[#17191c] focus:outline-none focus:border-[#0284C7]" />
@@ -6667,7 +6662,7 @@ export const PurchaseView = {
 
               <!-- 3. Remarks - Text Input (Enter Remarks) -->
               <div>
-                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-1">Remarks</label>
+                <label class="block text-[11px] font-bold text-[#172B4D] uppercase tracking-wider mb-0">Remarks</label>
                 <input type="text" id="bill-add-remarks" placeholder="Enter Remarks" value="${remarks}" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" />
               </div>
             </div>
@@ -6676,8 +6671,7 @@ export const PurchaseView = {
           <!-- Bottom Section: Table Columns (8 Columns) -->
           <div class="border border-[#EBECF0] rounded-xl overflow-hidden shadow-2xs">
             <div class="px-4 py-2.5 bg-[#FAFBFC] border-b border-[#EBECF0] flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              <div class="flex items-center">
                 <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Bill Variety &amp; Pricing Calculation</h4>
               </div>
               <span class="text-[11px] text-[#5E6C84]">${items.length} Line Item${items.length > 1 ? 's' : ''}</span>
@@ -6921,9 +6915,8 @@ export const PurchaseView = {
           </div>
 
           <!-- Section 1: Auto-Populated & Read-Only Information (11 Fields) -->
-          <div class="bg-[#FAFBFC] border border-[#EBECF0] rounded-xl p-4 shadow-2xs">
-            <div class="flex items-center gap-2 mb-2 pb-1.5 border-b border-[#EBECF0]">
-              <svg class="w-3.5 h-3.5 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <div class="bg-transparent border-0 p-0 shadow-none">
+            <div class="flex items-center mb-2 pb-1.5 border-b border-[#EBECF0]">
               <h4 class="text-[11px] font-bold text-[#172B4D] uppercase tracking-wider">Arrival &amp; Bill Information</h4>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -6975,9 +6968,8 @@ export const PurchaseView = {
           </div>
 
           <!-- Section 2: Added & Editable Settlement Parameters -->
-          <div class="bg-white border border-[#EBECF0] rounded-xl p-4 shadow-2xs">
-            <div class="flex items-center gap-2 mb-2 pb-1.5 border-b border-[#EBECF0]">
-              <svg class="w-3.5 h-3.5 text-[#006644]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <div class="bg-transparent border-0 p-0 shadow-none">
+            <div class="flex items-center mb-2 pb-1.5 border-b border-[#EBECF0]">
               <h4 class="text-[11px] font-bold text-[#172B4D] uppercase tracking-wider">Settlement &amp; Supplier Parameters</h4>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -7095,7 +7087,7 @@ export const PurchaseView = {
       content: `
         <div class="space-y-4 text-xs">
           <!-- Top Form Fields Card (5 Fields - View Mode) -->
-          <div class="bg-[#FAFBFC] border border-[#EBECF0] rounded-xl p-4 shadow-2xs">
+          <div class="bg-transparent border-0 p-0 shadow-none">
             <div class="flex items-center justify-between pb-3 mb-3 border-b border-[#EBECF0]">
               <div class="flex items-center gap-2">
                 <span class="font-extrabold text-sm text-[#172B4D]">${txn.txnId}</span>
@@ -7150,8 +7142,7 @@ export const PurchaseView = {
           <!-- Table Section (10 Columns matching exact specification) -->
           <div class="border border-[#EBECF0] rounded-xl overflow-hidden shadow-2xs">
             <div class="px-4 py-2.5 bg-[#FAFBFC] border-b border-[#EBECF0] flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <div class="flex items-center">
                 <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Settlement Invoices &amp; Bills</h4>
               </div>
               <span class="text-[11px] text-[#5E6C84]">1 Invoice attached</span>
@@ -7272,11 +7263,11 @@ export const PurchaseView = {
       content: `
         <form class="space-y-4">
           <!-- Top Form Fields Card (5 Fields) -->
-          <div class="bg-[#FAFBFC] border border-[#EBECF0] rounded-xl p-4 shadow-2xs">
+          <div class="bg-transparent border-0 p-0 shadow-none">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs">
               <!-- 1. Payment Mode - Dropdown (Select) -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Payment Mode</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Payment Mode</label>
                 <select id="modal-pay-mode" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                   <option value="">Select</option>
                   <option value="NEFT" selected>NEFT</option>
@@ -7289,25 +7280,25 @@ export const PurchaseView = {
 
               <!-- 2. Voucher No - Text Input (Enter Voucher No) -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Voucher No</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Voucher No</label>
                 <input type="text" id="modal-pay-voucher-no" placeholder="Enter Voucher No" value="VCH-2026-9041" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" />
               </div>
 
               <!-- 3. Cheque/NEFT.No - Text Input (Enter Cheque/NEFT.No) -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Cheque/NEFT.No</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Cheque/NEFT.No</label>
                 <input type="text" id="modal-pay-cheque-neft" placeholder="Enter Cheque/NEFT.No" value="NEFT-9912048" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" />
               </div>
 
               <!-- 4. Amount - Text Input (11000.00) -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Amount</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Amount</label>
                 <input type="text" id="modal-pay-amount" placeholder="11000.00" value="11000.00" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-bold text-[#172B4D] focus:outline-none focus:border-[#0284C7]" />
               </div>
 
               <!-- 5. Comments - Text Input (Enter Comments) -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Comments</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Comments</label>
                 <input type="text" id="modal-pay-comments" placeholder="Enter Comments" value="Harvest settlement payment for pond intake" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" />
               </div>
             </div>
@@ -7316,8 +7307,7 @@ export const PurchaseView = {
           <!-- Table Section (10 Columns matching exact specification) -->
           <div class="border border-[#EBECF0] rounded-xl overflow-hidden shadow-2xs">
             <div class="px-4 py-2.5 bg-[#FAFBFC] border-b border-[#EBECF0] flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <div class="flex items-center">
                 <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Settlement Invoices &amp; Bills</h4>
               </div>
               <span class="text-[11px] text-[#5E6C84]">1 Invoice attached</span>
@@ -7538,11 +7528,11 @@ export const PurchaseView = {
       content: `
         <form class="space-y-4">
           <!-- Top Form Fields Card (5 Fields in Edit Mode) -->
-          <div class="bg-[#FAFBFC] border border-[#EBECF0] rounded-xl p-4 shadow-2xs">
+          <div class="bg-transparent border-0 p-0 shadow-none">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs">
               <!-- 1. Payment Mode - Dropdown (Select) -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Payment Mode</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Payment Mode</label>
                 <select id="edit-pay-mode" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                   <option value="">Select</option>
                   <option value="NEFT" ${mode === 'NEFT' ? 'selected' : ''}>NEFT</option>
@@ -7555,25 +7545,25 @@ export const PurchaseView = {
 
               <!-- 2. Voucher No - Text Input (Enter Voucher No) -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Voucher No</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Voucher No</label>
                 <input type="text" id="edit-pay-voucher-no" placeholder="Enter Voucher No" value="${voucherNo}" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" />
               </div>
 
               <!-- 3. Cheque/NEFT.No - Text Input (Enter Cheque/NEFT.No) -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Cheque/NEFT.No</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Cheque/NEFT.No</label>
                 <input type="text" id="edit-pay-cheque-neft" placeholder="Enter Cheque/NEFT.No" value="${chqNeft}" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" />
               </div>
 
               <!-- 4. Amount - Text Input -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Amount</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Amount</label>
                 <input type="text" id="edit-pay-amount" placeholder="11000.00" value="${initialAmt.toFixed(2)}" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-bold text-[#172B4D] focus:outline-none focus:border-[#0284C7]" />
               </div>
 
               <!-- 5. Comments - Text Input (Enter Comments) -->
               <div>
-                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">Comments</label>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">Comments</label>
                 <input type="text" id="edit-pay-comments" placeholder="Enter Comments" value="${comments}" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" />
               </div>
             </div>
@@ -7582,8 +7572,7 @@ export const PurchaseView = {
           <!-- Table Section (10 Columns matching exact specification) -->
           <div class="border border-[#EBECF0] rounded-xl overflow-hidden shadow-2xs">
             <div class="px-4 py-2.5 bg-[#FAFBFC] border-b border-[#EBECF0] flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-[#0284C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <div class="flex items-center">
                 <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Settlement Invoices &amp; Bills</h4>
               </div>
               <span class="text-[11px] text-[#5E6C84]">1 Invoice attached</span>
@@ -7837,7 +7826,7 @@ export const PurchaseView = {
           </div>
           <div class="p-3 bg-[#E3FCEF] border border-[#ABF5D1] rounded flex justify-between items-center">
             <span class="text-[#006644] font-bold">Total Paid Amount</span>
-            <span class="text-base font-extrabold text-[#006644]">₹ ${(payment.amountInr || 0).toLocaleString()} ($ ${(payment.amountUsd || 0).toLocaleString()})</span>
+            <span class="text-base font-extrabold text-[#006644]">₹ ${(payment.amountInr || 0).toLocaleString('en-IN')}</span>
           </div>
         </div>
       `,

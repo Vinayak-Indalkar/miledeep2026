@@ -9,6 +9,7 @@ const css = fs.readFileSync(path.join(__dirname, 'css', 'app.css'), 'utf-8');
 const logos = fs.readFileSync(path.join(__dirname, 'js', 'data', 'logos.js'), 'utf-8');
 const mockData = fs.readFileSync(path.join(__dirname, 'js', 'data', 'mockData.js'), 'utf-8');
 const toast = fs.readFileSync(path.join(__dirname, 'js', 'components', 'toast.js'), 'utf-8');
+const uiEnhancements = fs.readFileSync(path.join(__dirname, 'js', 'components', 'uiEnhancements.js'), 'utf-8');
 const modal = fs.readFileSync(path.join(__dirname, 'js', 'components', 'modal.js'), 'utf-8');
 const table = fs.readFileSync(path.join(__dirname, 'js', 'components', 'table.js'), 'utf-8');
 const emptyState = fs.readFileSync(path.join(__dirname, 'js', 'components', 'emptyState.js'), 'utf-8');
@@ -54,6 +55,7 @@ const combinedJS = `
 
   // Components
   ${cleanCode(toast)}
+  ${cleanCode(uiEnhancements)}
   ${cleanCode(modal)}
   ${cleanCode(table)}
   ${cleanCode(emptyState)}

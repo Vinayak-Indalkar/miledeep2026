@@ -33,7 +33,7 @@ export const SuperAdminDashboardView = {
     const state = SetupView.state || {};
     const allCompanies = state.companies || [
       { id: 'CMP-001', code: 'DFL', shortName: 'DFL', name: 'Devi Fisheries Limited', dbHost: 'localhost:3306', dbName: 'devi_erp', dbUser: 'root', plants: ['Unit-1 VSP', 'Unit-2 Nellore', 'Unit-3 Kakinada'], status: 'Active', country: 'India', currency: 'INR' },
-      { id: 'CMP-002', code: 'CME', shortName: 'CME', name: 'Coastal Marine Exports', dbHost: '192.168.1.105:3306', dbName: 'cme_db', dbUser: 'cme_admin', plants: ['Chennai Plant A', 'Tuticorin Dock Unit'], status: 'Active', country: 'India', currency: 'USD' },
+      { id: 'CMP-002', code: 'CME', shortName: 'CME', name: 'Coastal Marine Exports', dbHost: '192.168.1.105:3306', dbName: 'cme_db', dbUser: 'cme_admin', plants: ['Chennai Plant A', 'Tuticorin Dock Unit'], status: 'Active', country: 'India', currency: 'INR' },
       { id: 'CMP-003', code: 'BPF', shortName: 'BPF', name: 'Bay Pride Foods', dbHost: 'cloud-rds.devi.internal:3306', dbName: 'baypride_erp', dbUser: 'bpf_svc', plants: ['Singapore Port Unit', 'Jurong Cold Chain Hub'], status: 'Active', country: 'Singapore', currency: 'SGD' }
     ];
 

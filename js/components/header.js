@@ -102,7 +102,7 @@ export const Header = {
           <!-- User Profile Dropdown -->
           <div class="relative pl-1 border-l border-[#E2E8F0]">
             <button id="user-menu-btn" class="flex items-center gap-2 px-2 py-1 rounded-full hover:bg-[#F8FAFC] transition-colors cursor-pointer">
-              <img src="${ERP_DATA.currentUser.avatar}" alt="Avatar" class="w-7 h-7 rounded-full object-cover ring-1 ring-[#E2E8F0]" />
+              <img src="${ERP_DATA.currentUser.avatar}" alt="Avatar" class="w-10 h-10 min-w-[40px] min-h-[40px] rounded-full object-cover ring-1 ring-[#E2E8F0]" style="width: 40px; height: 40px; min-width: 40px; min-height: 40px;" />
               <div class="hidden lg:flex flex-col text-left">
                 <span class="text-xs font-semibold text-[#0F172A] leading-tight">${ERP_DATA.currentUser.name}</span>
                 <span class="text-[10px] text-[#64748B] leading-tight" id="user-role-badge">${ERP_DATA.currentUser.role}</span>
@@ -283,7 +283,7 @@ export const Header = {
     if (switchRoleBtn) {
       switchRoleBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const nextRole = isSuperAdmin ? 'Admin' : 'Super Admin';
+        const nextRole = ERP_DATA.currentUser?.role === 'Super Admin' ? 'Admin' : 'Super Admin';
         setCurrentUserRole(nextRole);
         const existing = document.getElementById('erp-app-shell');
         if (existing) existing.remove();

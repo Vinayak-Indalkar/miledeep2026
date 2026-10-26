@@ -66,7 +66,7 @@ export const LoginView = {
               <!-- Sign In Form -->
               <form id="login-form" class="space-y-4">
                 <div>
-                  <label class="block text-xs font-semibold text-[#172B4D] mb-1.5">Email</label>
+                  <label class="block text-xs font-semibold text-[#172B4D] mb-0">Email</label>
                   <input 
                     type="text" 
                     id="login-email" 
@@ -77,7 +77,7 @@ export const LoginView = {
                 </div>
 
                 <div>
-                  <label class="block text-xs font-semibold text-[#172B4D] mb-1.5">Password</label>
+                  <label class="block text-xs font-semibold text-[#172B4D] mb-0">Password</label>
                   <div class="relative flex items-center">
                     <input 
                       type="password" 

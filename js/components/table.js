@@ -13,12 +13,14 @@ export class DataTable {
     filterable = true,
     selectable = false,
     actions = [],
+    actionsTitle = 'Actions',
     bulkActions = [],
     exportable = true,
     showCopy = false,
     tableTitle = '',
     topFilterTitle = '',
     hideTopFilterBar = true,
+    minWidth = null,
     onRowClick = null,
     onDataChange = null
   }) {
@@ -33,6 +35,7 @@ export class DataTable {
     this.filterable = filterable;
     this.selectable = false;
     this.actions = actions;
+    this.actionsTitle = actionsTitle;
     this.bulkActions = bulkActions;
     this.exportable = exportable;
     this.showCopy = showCopy;
@@ -40,6 +43,7 @@ export class DataTable {
     this.topFilterTitle = topFilterTitle || tableTitle || 'DATA EXPLORER & RECORDS';
     this.hideTopFilterBar = hideTopFilterBar;
     this.isFilterCollapsed = false;
+    this.minWidth = minWidth;
     this.onRowClick = onRowClick;
     
     this.searchTerm = '';
@@ -174,8 +178,8 @@ export class DataTable {
             <div class="inline-flex items-center" style="gap: 8px; display: inline-flex;">
               <button 
                 type="button" 
-                class="dt-action-btn dt-top-filter-reset-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" 
-                style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;"
+                class="dt-top-filter-reset-btn w-[30px] h-[30px] min-w-[30px] min-h-[30px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-full transition-colors cursor-pointer select-none" 
+                style="width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 9999px; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;"
                 title="Reset all filters" 
                 aria-label="Reset all filters"
               >
@@ -184,8 +188,8 @@ export class DataTable {
 
               <button 
                 type="button" 
-                class="dt-action-btn dt-top-filter-toggle-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" 
-                style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;"
+                class="dt-top-filter-toggle-btn w-[30px] h-[30px] min-w-[30px] min-h-[30px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-full transition-colors cursor-pointer select-none" 
+                style="width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 9999px; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;"
                 title="Hide Filter" 
                 aria-label="Hide Filter"
               >
@@ -197,7 +201,7 @@ export class DataTable {
           <!-- Collapsible Filter Inputs Grid -->
           <div class="dt-top-filter-body mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs transition-all duration-200" style="margin-top: 12px !important;">
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT CENTER</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT CENTER</label>
               <select class="dt-top-center-select w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Centers (Select)</option>
                 <option value="Bhimavaram Center #1">Bhimavaram Center #1</option>
@@ -210,7 +214,7 @@ export class DataTable {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT SUPPLIER</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT SUPPLIER</label>
               <select class="dt-top-supplier-select w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Suppliers (Select)</option>
                 <option value="Godavari Coastal Aqua Farms">Godavari Coastal Aqua Farms</option>
@@ -223,7 +227,7 @@ export class DataTable {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">SELECT ARRIVAL PLANT</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SELECT ARRIVAL PLANT</label>
               <select class="dt-top-plant-select w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
                 <option value="ALL">All Arrival Plants (Select)</option>
                 <option value="DFL UNIT-1 (VSP)">DFL UNIT-1 (VSP)</option>
@@ -236,9 +240,9 @@ export class DataTable {
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-1">DATE</label>
+              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">DATE</label>
               <div class="erp-date-wrapper">
-                <input type="date" value="2026-10-06" class="dt-top-date-input erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()" />
+                <input type="date" value="2026-10-06" class="dt-top-date-input erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" />
               </div>
             </div>
 
@@ -277,15 +281,15 @@ export class DataTable {
                 </button>
 
                 <div id="dt-download-dropdown" class="hidden absolute right-0 mt-1.5 w-36 bg-white rounded-lg shadow-xl border border-[#DFE1E6] py-1 z-50 text-xs select-none">
-                  <button type="button" id="dt-opt-excel" class="w-full text-left px-3 py-2 hover:bg-[#F4F5F7] flex items-center gap-2.5 text-[#172B4D] transition-colors cursor-pointer">
+                  <button type="button" id="dt-opt-excel" class="w-full text-left px-3 py-2 hover:bg-[#F4F5F7] flex items-center gap-2.5 text-[#172B4D] transition-colors cursor-pointer rounded-none" style="border-radius: 0 !important; justify-content: flex-start !important;">
                     <svg class="w-4 h-4 text-[#107C41] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     <span class="font-semibold text-xs text-[#172B4D]">Excel</span>
                   </button>
-                  <button type="button" id="dt-opt-csv" class="w-full text-left px-3 py-2 hover:bg-[#F4F5F7] flex items-center gap-2.5 text-[#172B4D] transition-colors cursor-pointer border-t border-[#EBECF0]">
+                  <button type="button" id="dt-opt-csv" class="w-full text-left px-3 py-2 hover:bg-[#F4F5F7] flex items-center gap-2.5 text-[#172B4D] transition-colors cursor-pointer border-t border-[#EBECF0] rounded-none" style="border-radius: 0 !important; justify-content: flex-start !important;">
                     <svg class="w-4 h-4 text-[#00A4B7] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     <span class="font-semibold text-xs text-[#172B4D]">CSV</span>
                   </button>
-                  <button type="button" id="dt-opt-pdf" class="w-full text-left px-3 py-2 hover:bg-[#F4F5F7] flex items-center gap-2.5 text-[#172B4D] transition-colors cursor-pointer border-t border-[#EBECF0]">
+                  <button type="button" id="dt-opt-pdf" class="w-full text-left px-3 py-2 hover:bg-[#F4F5F7] flex items-center gap-2.5 text-[#172B4D] transition-colors cursor-pointer border-t border-[#EBECF0] rounded-none" style="border-radius: 0 !important; justify-content: flex-start !important;">
                     <svg class="w-4 h-4 text-[#D32F2F] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     <span class="font-semibold text-xs text-[#172B4D]">PDF</span>
                   </button>
@@ -330,7 +334,7 @@ export class DataTable {
 
           <!-- Table Container -->
           <div class="overflow-x-auto min-h-[220px]">
-            <table class="erp-table">
+            <table class="erp-table" ${this.minWidth ? `style="min-width: ${this.minWidth} !important;"` : ''}>
               <thead>
                 <tr id="dt-thead-row"></tr>
               </thead>
@@ -392,8 +396,8 @@ export class DataTable {
     if (this.actions.length > 0) {
       const actionsW = this.colWidths['__actions__'] ? `style="width: ${this.colWidths['__actions__']}px; min-width: ${this.colWidths['__actions__']}px; overflow: visible !important;"` : 'style="min-width: 130px; overflow: visible !important;"';
       html += `
-        <th class="text-right sticky-action-col relative" data-field="__actions__" ${actionsW}>
-          <div class="pr-2">Actions</div>
+        <th class="text-center sticky-action-col relative" data-field="__actions__" ${actionsW}>
+          <div class="text-center w-full">${this.actionsTitle || 'Actions'}</div>
           <div class="dt-col-resizer" title="Drag to resize column (Double-click to reset)"></div>
         </th>
       `;
@@ -549,8 +553,8 @@ export class DataTable {
       });
 
       if (this.actions.length > 0) {
-        rowsHtml += `<td class="text-right whitespace-nowrap sticky-action-col" style="min-width: 130px; overflow: visible !important;">`;
-        rowsHtml += `<div class="inline-flex items-center justify-end" style="gap: 8px; display: inline-flex;">`;
+        rowsHtml += `<td class="text-center whitespace-nowrap sticky-action-col" style="min-width: 130px; text-align: center !important; overflow: visible !important;">`;
+        rowsHtml += `<div class="inline-flex items-center justify-center w-full" style="gap: 8px; display: inline-flex;">`;
         this.actions.forEach((act, actIdx) => {
           const actLabel = typeof act.label === 'function' ? act.label(row) : (act.label || '');
           let actIcon = typeof act.icon === 'function' ? act.icon(row) : (act.icon || actLabel);
@@ -566,8 +570,8 @@ export class DataTable {
               type="button"
               data-action-idx="${actIdx}" 
               data-key="${keyVal}" 
-              class="dt-action-btn w-7 h-7 min-w-[28px] min-h-[28px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-none transition-colors cursor-pointer select-none" 
-              style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 0; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;"
+              class="dt-action-btn w-[30px] h-[30px] min-w-[30px] min-h-[30px] inline-flex items-center justify-center bg-white hover:bg-[#F0F9FF] border border-[#CBD5E1] hover:border-[#0284C7] text-[#334155] hover:text-[#0284C7] rounded-full transition-colors cursor-pointer select-none" 
+              style="width: 30px; height: 30px; min-width: 30px; min-height: 30px; border-radius: 9999px; border: 1px solid #CBD5E1; background: #ffffff; color: #334155; display: inline-flex; align-items: center; justify-content: center; padding: 0;"
               title="${actLabel}" 
               aria-label="${actLabel}"
             >
@@ -656,7 +660,7 @@ export class DataTable {
         <!-- Page navigation buttons -->
         <div class="flex items-center gap-1.5">
           <!-- Previous page button -->
-          <button type="button" id="dt-page-prev" class="w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all ${
+          <button type="button" id="dt-page-prev" style="padding: 0 !important; width: 36px !important; height: 36px !important;" class="w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all ${
             this.currentPage === 1 ? 'opacity-40 cursor-not-allowed hover:border-[#CBD5E1] hover:text-[#64748B]' : 'cursor-pointer'
           }" title="Previous page" aria-label="Previous page" ${this.currentPage === 1 ? 'disabled' : ''}>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
@@ -666,7 +670,7 @@ export class DataTable {
           ${pagesHtml}
 
           <!-- Next page button -->
-          <button type="button" id="dt-page-next" class="w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all ${
+          <button type="button" id="dt-page-next" style="padding: 0 !important; width: 36px !important; height: 36px !important;" class="w-9 h-9 min-w-[36px] flex items-center justify-center bg-white border border-[#CBD5E1] rounded-xl text-[#64748B] hover:text-[#0284C7] hover:border-[#0284C7] transition-all ${
             this.currentPage >= totalPages ? 'opacity-40 cursor-not-allowed hover:border-[#CBD5E1] hover:text-[#64748B]' : 'cursor-pointer'
           }" title="Next page" aria-label="Next page" ${this.currentPage >= totalPages ? 'disabled' : ''}>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
