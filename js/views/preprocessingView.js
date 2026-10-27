@@ -3315,17 +3315,8 @@ export const PreprocessingView = {
 
           <!-- 2. ITEMIZED BILLS & LOTS TABLE SECTION -->
           <div class="space-y-2 mt-4">
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Arrival Bill / Lot Inspection Table</h4>
-                
-              </div>
-              <div>
-                <button type="button" id="btn-add-rm-lot" class="btn-primary border-0 px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer shadow-xs bg-[#00A4B7] hover:bg-[#008F9F] text-white">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                  <span>Add Bill / Lot</span>
-                </button>
-              </div>
+                        <div class="mb-2">
+              <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Arrival Bill / Lot Inspection Table</h4>
             </div>
 
             <!-- Dynamic Table Container -->
@@ -3827,17 +3818,8 @@ export const PreprocessingView = {
 
           <!-- 2. ITEMIZED BILLS & LOTS TABLE SECTION -->
           <div class="space-y-2 mt-4">
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Arrival Bill / Lot Inspection Table</h4>
-                
-              </div>
-              <div>
-                <button type="button" id="btn-add-erm-lot" class="btn-primary border-0 px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer shadow-xs bg-[#00A4B7] hover:bg-[#008F9F] text-white">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                  <span>Add Bill / Lot</span>
-                </button>
-              </div>
+                        <div class="mb-2">
+              <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Arrival Bill / Lot Inspection Table</h4>
             </div>
 
             <!-- Dynamic Table Container -->
