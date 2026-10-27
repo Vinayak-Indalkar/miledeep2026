@@ -4590,38 +4590,8 @@ export const PreprocessingView = {
 
   // Show Generate De-Heading Track ID Modal
   showGenerateDeheadingTrackModal(container) {
-    let lotRows = [
-      {
-        sNo: 1,
-        billNo: 'BILL-2026-0891',
-        variety: 'Vannamei (White Shrimp)',
-        count: 40,
-        weight: 1250.00,
-        sampleHoQty: 2.00,
-        noOfPcs: 84,
-        sampleHlQty: 1.32
-      },
-      {
-        sNo: 2,
-        billNo: 'BILL-2026-0892',
-        variety: 'Black Tiger (P. Monodon)',
-        count: 30,
-        weight: 850.00,
-        sampleHoQty: 2.00,
-        noOfPcs: 60,
-        sampleHlQty: 1.30
-      },
-      {
-        sNo: 3,
-        billNo: 'BILL-2026-0893',
-        variety: 'Vannamei (White Shrimp)',
-        count: 50,
-        weight: 1420.00,
-        sampleHoQty: 2.00,
-        noOfPcs: 98,
-        sampleHlQty: 1.34
-      }
-    ];
+    // Initially empty cutting table lots; loaded upon clicking Save above table
+    let lotRows = [];
 
     const varietiesList = [
       'Vannamei (White Shrimp)',
@@ -4633,6 +4603,44 @@ export const PreprocessingView = {
     ];
 
     const buildDhLotsTableHtml = () => {
+      if (lotRows.length === 0) {
+        return `
+          <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+            <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+              <table class="w-full text-left text-xs border-collapse" style="min-width: 1150px;">
+                <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                  <tr>
+                    <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                    <th class="py-2.5 px-3 min-w-[140px]">Bill No</th>
+                    <th class="py-2.5 px-3 min-w-[170px]">Variety</th>
+                    <th class="py-2.5 px-2 min-w-[90px] text-right">Count</th>
+                    <th class="py-2.5 px-2 min-w-[125px] text-right">Weight</th>
+                    <th class="py-2.5 px-2 min-w-[110px] text-right">Sample HO Qty</th>
+                    <th class="py-2.5 px-2 min-w-[110px] text-right">Count/Noof Pcs</th>
+                    <th class="py-2.5 px-2 min-w-[150px] text-right">Sample HL Qty / Body Yield</th>
+                    <th class="py-2.5 px-3 min-w-[95px] text-right">Yield</th>
+                    <th class="py-2.5 px-2 w-16 text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="dh-lots-tbody">
+                  <tr>
+                    <td colspan="10" class="text-center py-16 text-[#6B778C]">
+                      <div class="flex flex-col items-center justify-center gap-2.5">
+                        <div class="w-12 h-12 rounded-full bg-[#F4F5F7] border border-[#DFE1E6] flex items-center justify-center">
+                          <svg class="w-6 h-6 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                        </div>
+                        <span class="font-bold text-sm text-[#334155]">No Data Available</span>
+                        <span class="text-xs text-[#64748B]">Click "Save" above to verify primary details and display de-heading cutting table lots.</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }
+
       let totalWeight = 0;
       let totalSampleHoQty = 0;
       let totalPcs = 0;
@@ -4830,19 +4838,18 @@ export const PreprocessingView = {
             </div>
           </div>
 
+          <!-- Save Button Bar above De-Heading Cutting Table Lots & Yield Table -->
+          <div class="flex items-center justify-end pt-2 pb-1">
+            <button type="button" id="btn-save-dh-track" class="btn-primary rounded-full px-5 py-1.5 text-xs font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border-0">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+              <span>Save</span>
+            </button>
+          </div>
+
           <!-- 2. ITEMIZED BILLS & LOTS TABLE SECTION -->
-          <div class="space-y-2 mt-4">
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">De-Heading Cutting Table Lots & Yield Table</h4>
-                
-              </div>
-              <div>
-                <button type="button" id="btn-add-dh-lot" class="btn-primary border-0 px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer shadow-xs bg-[#00A4B7] hover:bg-[#008F9F] text-white">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                  <span>Add Bill / Lot</span>
-                </button>
-              </div>
+          <div class="space-y-2 mt-2">
+            <div class="mb-2">
+              <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">De-Heading Cutting Table Lots & Yield Table</h4>
             </div>
 
             <!-- Dynamic Table Container -->
@@ -4853,75 +4860,7 @@ export const PreprocessingView = {
         </form>
       `,
       footerButtons: [
-        { label: 'Cancel', type: 'secondary', onClick: (m) => m.close() },
-        {
-          label: 'Generate & Register',
-          type: 'primary',
-          onClick: (m) => {
-            const plant = document.getElementById('ndht-plant')?.value || 'DFL UNIT-5 (JPT)';
-            const arrDate = document.getElementById('ndht-arrival-date')?.value || '2026-10-07';
-            const trackId = document.getElementById('ndht-trackid')?.value || `TRK-DH-2026-${Math.floor(920 + Math.random() * 70)}`;
-            const dhDate = document.getElementById('ndht-dehead-date')?.value || '2026-10-07';
-            const shift = document.getElementById('ndht-shift')?.value || 'Shift A (Day)';
-            const sup = document.getElementById('ndht-supervisor')?.value || 'Laxmi Narayana';
-            const rem = document.getElementById('ndht-remarks')?.value || 'Deheading lot registered';
-
-            // Extract table lot inputs
-            const currentLots = [];
-            const rows = document.querySelectorAll('#dh-lots-tbody tr.dh-lot-row');
-            rows.forEach((row, idx) => {
-              const billNo = row.querySelector('.dh-lot-bill')?.value || `BILL-2026-089${idx + 1}`;
-              const variety = row.querySelector('.dh-lot-variety')?.value || 'Vannamei (White Shrimp)';
-              const count = parseFloat(row.querySelector('.dh-lot-count')?.value) || 0;
-              const weight = parseFloat(row.querySelector('.dh-lot-weight')?.value) || 0;
-              const sampleHoQty = parseFloat(row.querySelector('.dh-lot-sample-ho')?.value) || 0;
-              const noOfPcs = parseInt(row.querySelector('.dh-lot-pcs')?.value, 10) || 0;
-              const sampleHlQty = parseFloat(row.querySelector('.dh-lot-sample-hl')?.value) || 0;
-              const yieldPct = sampleHoQty > 0 ? Number(((sampleHlQty / sampleHoQty) * 100).toFixed(1)) : 0;
-
-              currentLots.push({
-                sNo: idx + 1,
-                billNo,
-                variety,
-                count,
-                weight,
-                sampleHoQty,
-                noOfPcs,
-                sampleHlQty,
-                yield: yieldPct
-              });
-            });
-
-            Modal.confirm({
-              title: 'Confirm De-Heading Track ID Generation',
-              message: `Are you sure you want to generate De-Heading Track ID <strong class="text-[#00A4B7]">${trackId}</strong> for <strong>${plant}</strong> with <strong>${currentLots.length} cutting lot(s)</strong>?`,
-              confirmText: 'Yes, Generate Track ID',
-              cancelText: 'Cancel',
-              isDestructive: false,
-              onConfirm: () => {
-                const newEntry = {
-                  sNo: 1,
-                  id: trackId,
-                  trackId: trackId,
-                  productionPlant: plant,
-                  arrivalDate: arrDate,
-                  deheadingDate: dhDate,
-                  shift: shift,
-                  supervisor: sup,
-                  remarks: rem,
-                  status: 'ACTIVE',
-                  lots: currentLots
-                };
-
-                this.state.deheadingTrackIds.forEach(r => { if (r.sNo) r.sNo += 1; });
-                this.state.deheadingTrackIds.unshift(newEntry);
-
-                Toast.show(`De-Heading Track ID ${trackId} generated successfully with ${currentLots.length} lot(s)`, 'success', 'Track ID Registered');
-                this.renderDeheadingTrackIdScreen(container);
-              }
-            });
-          }
-        }
+        { label: 'Cancel', type: 'secondary', onClick: (m) => m.close() }
       ]
     });
 
@@ -5024,26 +4963,129 @@ export const PreprocessingView = {
 
     bindDhTableEvents();
 
-    // Add New Lot Row Button
-    const addLotBtn = modalEl.querySelector('#btn-add-dh-lot');
-    addLotBtn?.addEventListener('click', () => {
-      const nextNum = 890 + lotRows.length + 1;
-      lotRows.push({
-        sNo: lotRows.length + 1,
-        billNo: `BILL-2026-0${nextNum}`,
-        variety: 'Vannamei (White Shrimp)',
-        count: 40,
-        weight: 1000.00,
-        sampleHoQty: 2.00,
-        noOfPcs: 80,
-        sampleHlQty: 1.32
-      });
+    // Save De-Heading Track ID Button: verifies primary details, populates lots table, and saves record
+    let registeredDhEntry = null;
+
+    const saveDhBtn = modalEl.querySelector('#btn-save-dh-track');
+    saveDhBtn?.addEventListener('click', () => {
+      const plant = document.getElementById('ndht-plant')?.value || 'DFL UNIT-5 (JPT)';
+      const arrDate = document.getElementById('ndht-arrival-date')?.value || '2026-10-07';
+      const trackId = (document.getElementById('ndht-trackid')?.value || '').trim() || `TRK-DH-2026-${Math.floor(920 + Math.random() * 70)}`;
+      const dhDate = document.getElementById('ndht-dehead-date')?.value || '2026-10-07';
+      const shift = document.getElementById('ndht-shift')?.value || 'Shift A (Day)';
+      const sup = document.getElementById('ndht-supervisor')?.value || 'Laxmi Narayana';
+      const rem = (document.getElementById('ndht-remarks')?.value || '').trim();
+
+      if (!trackId) {
+        Toast.show('Please provide a Track ID', 'warning');
+        return;
+      }
+
+      // If lots are not yet loaded, populate the deheading cutting table lots
+      if (lotRows.length === 0) {
+        lotRows = [
+          {
+            sNo: 1,
+            billNo: 'BILL-2026-0891',
+            variety: 'Vannamei (White Shrimp)',
+            count: 40,
+            weight: 1250.00,
+            sampleHoQty: 2.00,
+            noOfPcs: 84,
+            sampleHlQty: 1.32
+          },
+          {
+            sNo: 2,
+            billNo: 'BILL-2026-0892',
+            variety: 'Black Tiger (P. Monodon)',
+            count: 30,
+            weight: 850.00,
+            sampleHoQty: 2.00,
+            noOfPcs: 60,
+            sampleHlQty: 1.30
+          },
+          {
+            sNo: 3,
+            billNo: 'BILL-2026-0893',
+            variety: 'Vannamei (White Shrimp)',
+            count: 50,
+            weight: 1420.00,
+            sampleHoQty: 2.00,
+            noOfPcs: 98,
+            sampleHlQty: 1.34
+          }
+        ];
+      } else {
+        // Collect current lots from table inputs
+        const currentLots = [];
+        const rows = document.querySelectorAll('#dh-lots-tbody tr.dh-lot-row');
+        rows.forEach((row, idx) => {
+          const billNo = row.querySelector('.dh-lot-bill')?.value || `BILL-2026-089${idx + 1}`;
+          const variety = row.querySelector('.dh-lot-variety')?.value || 'Vannamei (White Shrimp)';
+          const count = parseFloat(row.querySelector('.dh-lot-count')?.value) || 0;
+          const weight = parseFloat(row.querySelector('.dh-lot-weight')?.value) || 0;
+          const sampleHoQty = parseFloat(row.querySelector('.dh-lot-sample-ho')?.value) || 0;
+          const noOfPcs = parseInt(row.querySelector('.dh-lot-pcs')?.value, 10) || 0;
+          const sampleHlQty = parseFloat(row.querySelector('.dh-lot-sample-hl')?.value) || 0;
+          const yieldPct = sampleHoQty > 0 ? Number(((sampleHlQty / sampleHoQty) * 100).toFixed(1)) : 0;
+
+          currentLots.push({
+            sNo: idx + 1,
+            billNo,
+            variety,
+            count,
+            weight,
+            sampleHoQty,
+            noOfPcs,
+            sampleHlQty,
+            yield: yieldPct
+          });
+        });
+        lotRows = currentLots;
+      }
+
+      // Display the De-Heading Cutting Table Lots & Yield Table data
       const tableWrapper = modalEl.querySelector('#dh-lots-table-wrapper');
       if (tableWrapper) {
         tableWrapper.innerHTML = buildDhLotsTableHtml();
         bindDhTableEvents();
-        Toast.show('New cutting table lot added', 'success');
       }
+
+      // Register or update De-Heading Track ID entry in state
+      if (!registeredDhEntry) {
+        registeredDhEntry = {
+          sNo: 1,
+          id: trackId,
+          trackId: trackId,
+          productionPlant: plant,
+          arrivalDate: arrDate,
+          deheadingDate: dhDate,
+          shift: shift,
+          supervisor: sup,
+          remarks: rem,
+          status: 'ACTIVE',
+          lots: JSON.parse(JSON.stringify(lotRows))
+        };
+
+        this.state.deheadingTrackIds.forEach(r => { if (r.sNo) r.sNo += 1; });
+        this.state.deheadingTrackIds.unshift(registeredDhEntry);
+
+        Toast.show(`De-Heading Track ID ${trackId} saved. Cutting table lots data loaded.`, 'success', 'Track ID Saved');
+      } else {
+        registeredDhEntry.productionPlant = plant;
+        registeredDhEntry.arrivalDate = arrDate;
+        registeredDhEntry.trackId = trackId;
+        registeredDhEntry.id = trackId;
+        registeredDhEntry.deheadingDate = dhDate;
+        registeredDhEntry.shift = shift;
+        registeredDhEntry.supervisor = sup;
+        registeredDhEntry.remarks = rem;
+        registeredDhEntry.lots = JSON.parse(JSON.stringify(lotRows));
+
+        Toast.show(`De-Heading Track ID ${registeredDhEntry.trackId} updated successfully`, 'success', 'Changes Saved');
+      }
+
+      this.renderDeheadingTrackIdScreen(container);
     });
   },
 
@@ -5092,6 +5134,44 @@ export const PreprocessingView = {
     ];
 
     const buildEditDhLotsTableHtml = () => {
+      if (lotRows.length === 0) {
+        return `
+          <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+            <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+              <table class="w-full text-left text-xs border-collapse" style="min-width: 1150px;">
+                <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                  <tr>
+                    <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                    <th class="py-2.5 px-3 min-w-[140px]">Bill No</th>
+                    <th class="py-2.5 px-3 min-w-[170px]">Variety</th>
+                    <th class="py-2.5 px-2 min-w-[90px] text-right">Count</th>
+                    <th class="py-2.5 px-2 min-w-[125px] text-right">Weight</th>
+                    <th class="py-2.5 px-2 min-w-[110px] text-right">Sample HO Qty</th>
+                    <th class="py-2.5 px-2 min-w-[110px] text-right">Count/Noof Pcs</th>
+                    <th class="py-2.5 px-2 min-w-[150px] text-right">Sample HL Qty / Body Yield</th>
+                    <th class="py-2.5 px-3 min-w-[95px] text-right">Yield</th>
+                    <th class="py-2.5 px-2 w-16 text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="edh-lots-tbody">
+                  <tr>
+                    <td colspan="10" class="text-center py-16 text-[#6B778C]">
+                      <div class="flex flex-col items-center justify-center gap-2.5">
+                        <div class="w-12 h-12 rounded-full bg-[#F4F5F7] border border-[#DFE1E6] flex items-center justify-center">
+                          <svg class="w-6 h-6 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                        </div>
+                        <span class="font-bold text-sm text-[#334155]">No Data Available</span>
+                        <span class="text-xs text-[#64748B]">Click "Save" above to verify primary details and display de-heading cutting table lots.</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }
+
       let totalWeight = 0;
       let totalSampleHoQty = 0;
       let totalPcs = 0;
@@ -5289,19 +5369,18 @@ export const PreprocessingView = {
             </div>
           </div>
 
+          <!-- Save Button Bar above De-Heading Cutting Table Lots & Yield Table -->
+          <div class="flex items-center justify-end pt-2 pb-1">
+            <button type="button" id="btn-save-edh-track" class="btn-primary rounded-full px-5 py-1.5 text-xs font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border-0">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+              <span>Save</span>
+            </button>
+          </div>
+
           <!-- 2. ITEMIZED BILLS & LOTS TABLE SECTION -->
-          <div class="space-y-2 mt-4">
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">De-Heading Cutting Table Lots & Yield Table</h4>
-                
-              </div>
-              <div>
-                <button type="button" id="btn-add-edh-lot" class="btn-primary border-0 px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer shadow-xs bg-[#00A4B7] hover:bg-[#008F9F] text-white">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                  <span>Add Bill / Lot</span>
-                </button>
-              </div>
+          <div class="space-y-2 mt-2">
+            <div class="mb-2">
+              <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">De-Heading Cutting Table Lots & Yield Table</h4>
             </div>
 
             <!-- Dynamic Table Container -->
@@ -5476,26 +5555,61 @@ export const PreprocessingView = {
 
     bindEditDhTableEvents();
 
-    // Add New Lot Row Button
-    const addLotBtn = modalEl.querySelector('#btn-add-edh-lot');
-    addLotBtn?.addEventListener('click', () => {
-      const nextNum = 890 + lotRows.length + 1;
-      lotRows.push({
-        sNo: lotRows.length + 1,
-        billNo: `BILL-2026-0${nextNum}`,
-        variety: 'Vannamei (White Shrimp)',
-        count: 40,
-        weight: 1000.00,
-        sampleHoQty: 2.00,
-        noOfPcs: 80,
-        sampleHlQty: 1.32
-      });
-      const tableWrapper = modalEl.querySelector('#edh-lots-table-wrapper');
-      if (tableWrapper) {
-        tableWrapper.innerHTML = buildEditDhLotsTableHtml();
-        bindEditDhTableEvents();
-        Toast.show('New cutting table lot added', 'success');
+    // Save Edited De-Heading Track ID Button
+    const saveEdhBtn = modalEl.querySelector('#btn-save-edh-track');
+    saveEdhBtn?.addEventListener('click', () => {
+      const plant = document.getElementById('edht-plant')?.value || row.productionPlant;
+      const arrDate = document.getElementById('edht-arrival-date')?.value || row.arrivalDate;
+      const trackId = (document.getElementById('edht-trackid')?.value || row.trackId || '').trim();
+      const dhDate = document.getElementById('edht-dehead-date')?.value || row.deheadingDate;
+      const shift = document.getElementById('edht-shift')?.value || row.shift;
+      const sup = document.getElementById('edht-supervisor')?.value || row.supervisor;
+      const rem = (document.getElementById('edht-remarks')?.value || row.remarks || '').trim();
+
+      if (!trackId) {
+        Toast.show('Please provide a Track ID', 'warning');
+        return;
       }
+
+      // Extract table lot inputs
+      const currentLots = [];
+      const rows = document.querySelectorAll('#edh-lots-tbody tr.edh-lot-row');
+      rows.forEach((r, idx) => {
+        const billNo = r.querySelector('.edh-lot-bill')?.value || `BILL-2026-089${idx + 1}`;
+        const variety = r.querySelector('.edh-lot-variety')?.value || 'Vannamei (White Shrimp)';
+        const count = parseFloat(r.querySelector('.edh-lot-count')?.value) || 0;
+        const weight = parseFloat(r.querySelector('.edh-lot-weight')?.value) || 0;
+        const sampleHoQty = parseFloat(r.querySelector('.edh-lot-sample-ho')?.value) || 0;
+        const noOfPcs = parseInt(r.querySelector('.edh-lot-pcs')?.value, 10) || 0;
+        const sampleHlQty = parseFloat(r.querySelector('.edh-lot-sample-hl')?.value) || 0;
+        const yieldPct = sampleHoQty > 0 ? Number(((sampleHlQty / sampleHoQty) * 100).toFixed(1)) : 0;
+
+        currentLots.push({
+          sNo: idx + 1,
+          billNo,
+          variety,
+          count,
+          weight,
+          sampleHoQty,
+          noOfPcs,
+          sampleHlQty,
+          yield: yieldPct
+        });
+      });
+
+      row.productionPlant = plant;
+      row.arrivalDate = arrDate;
+      row.trackId = trackId;
+      row.id = trackId;
+      row.deheadingDate = dhDate;
+      row.shift = shift;
+      row.supervisor = sup;
+      row.remarks = rem;
+      row.lots = currentLots;
+
+      Modal.close();
+      this.renderDeheadingTrackIdScreen(container);
+      Toast.show(`De-Heading Track ID ${row.trackId} updated successfully`, 'success');
     });
   },
 
