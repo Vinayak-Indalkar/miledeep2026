@@ -36,7 +36,7 @@ export const TabBar = {
           role="tablist" 
           aria-label="${submenu.title} views" 
           id="${containerId}-tablist" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch; scrollbar-width: thin;"
-          class="flex items-center gap-2 overflow-x-auto bg-transparent p-0 border-b-0 rounded-xl scrollbar-thin"
+          class="flex items-center gap-1 overflow-x-auto bg-transparent p-0 border-b border-[#DFE1E6] scrollbar-thin"
         >
           ${submenu.tabs.map(tab => {
             const isActive = tab.id === currentTabId;
@@ -48,7 +48,7 @@ export const TabBar = {
                 aria-selected="${isActive ? 'true' : 'false'}"
                 tabindex="${isActive ? '0' : '-1'}"
                 aria-controls="panel-${tab.id}"
-                class="select-none px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap transition-all rounded-full flex items-center gap-1.5 outline-none border-0 ${isActive ? 'tab-active bg-[#00A4B7] text-white font-bold shadow-xs' : 'text-[#475569] hover:text-[#0F172A] hover:bg-[#F1F5F9] bg-transparent'}"
+                class="select-none px-4 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 outline-none bg-transparent -mb-[1px] border-b-2 ${isActive ? 'tab-active text-[#00A4B7] border-[#00A4B7] font-bold' : 'text-[#5E6C84] hover:text-[#172B4D] border-transparent hover:border-[#DFE1E6]'}"
               >
                 <span class="select-none">${tab.label}</span>
               </a>
@@ -75,13 +75,13 @@ export const TabBar = {
       tablistEl.querySelectorAll('[role="tab"]').forEach(t => {
         t.setAttribute('aria-selected', 'false');
         t.tabIndex = -1;
-        t.classList.remove('tab-active', 'bg-[#00A4B7]', 'text-white', 'font-bold', 'shadow-xs');
-        t.classList.add('text-[#475569]', 'hover:text-[#0F172A]', 'hover:bg-[#F1F5F9]', 'bg-transparent');
+        t.classList.remove('tab-active', 'text-[#00A4B7]', 'border-[#00A4B7]', 'font-bold');
+        t.classList.add('text-[#5E6C84]', 'hover:text-[#172B4D]', 'border-transparent', 'hover:border-[#DFE1E6]');
       });
       clicked.setAttribute('aria-selected', 'true');
       clicked.tabIndex = 0;
-      clicked.classList.remove('text-[#475569]', 'hover:text-[#0F172A]', 'hover:bg-[#F1F5F9]', 'bg-transparent');
-      clicked.classList.add('tab-active', 'bg-[#00A4B7]', 'text-white', 'font-bold', 'shadow-xs');
+      clicked.classList.remove('text-[#5E6C84]', 'hover:text-[#172B4D]', 'border-transparent', 'hover:border-[#DFE1E6]');
+      clicked.classList.add('tab-active', 'text-[#00A4B7]', 'border-[#00A4B7]', 'font-bold');
     });
   },
 

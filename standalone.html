@@ -265,7 +265,7 @@ div:has(> [role="tab"]) {
   -webkit-overflow-scrolling: touch !important;
   background-color: transparent !important;
   background: transparent !important;
-  border-bottom: none !important;
+  border-bottom: 1px solid #DFE1E6 !important;
   border: none !important;
   box-shadow: none !important;
   padding: 0 0 6px 0 !important;
@@ -400,22 +400,23 @@ div:has(> [role="tab"])::-webkit-scrollbar-thumb:hover {
   transform: scale(0.98) !important;
 }
 
-/* Capsule Tab - Active state is a pill with pure white text and teal background */
+/* Text Tab Button with Active Line Indicator Below */
 .tab-active,
 a.tab-active,
 button.tab-active,
 a[role="tab"][aria-selected="true"],
 [role="tab"][aria-selected="true"] {
-  background-color: #00A4B7 !important;
-  background: #00A4B7 !important;
-  color: #FFFFFF !important;
-  border-radius: 9999px !important;
+  background-color: transparent !important;
+  background: transparent !important;
+  color: #00A4B7 !important;
+  border-radius: 0 !important;
   border: none !important;
-  border-bottom: none !important;
+  border-bottom: 2px solid #00A4B7 !important;
   font-weight: 700 !important;
   user-select: none !important;
   -webkit-user-select: none !important;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+  box-shadow: none !important;
+  margin-bottom: -1px !important;
 }
 .tab-active *,
 a.tab-active *,
@@ -424,23 +425,31 @@ button.tab-active *,
 [role="tab"][aria-selected="true"] span {
   background-color: transparent !important;
   background: transparent !important;
-  color: #FFFFFF !important;
+  color: #00A4B7 !important;
   user-select: none !important;
   -webkit-user-select: none !important;
 }
 
 [role="tab"] {
-  border-radius: 9999px !important;
+  border-radius: 0 !important;
   border: none !important;
-  border-bottom: none !important;
+  border-bottom: 2px solid transparent !important;
+  background-color: transparent !important;
+  background: transparent !important;
+  color: #5E6C84 !important;
   user-select: none !important;
   -webkit-user-select: none !important;
   transition: all 0.15s ease-in-out !important;
+  margin-bottom: -1px !important;
+  padding: 8px 14px !important;
+  box-shadow: none !important;
 }
 
 [role="tab"]:not([aria-selected="true"]):not(.tab-active):hover {
-  background-color: #F1F5F9 !important;
-  color: #0F172A !important;
+  background-color: transparent !important;
+  background: transparent !important;
+  color: #172B4D !important;
+  border-bottom: 2px solid #DFE1E6 !important;
 }
 
 [role="tab"]:focus:not(:focus-visible) {
@@ -555,17 +564,18 @@ button.tab-active *,
 
 /* Tab active */
 .tab-active {
-  background-color: #00A4B7 !important;
-  background: #00A4B7 !important;
-  color: #FFFFFF !important;
-  border-radius: 9999px !important;
+  background-color: transparent !important;
+  background: transparent !important;
+  color: #00A4B7 !important;
+  border-radius: 0 !important;
   border: none !important;
-  border-bottom: none !important;
+  border-bottom: 2px solid #00A4B7 !important;
   font-weight: 700 !important;
+  margin-bottom: -1px !important;
 }
 .tab-active span {
   background-color: transparent !important;
-  color: #FFFFFF !important;
+  color: #00A4B7 !important;
 }
 
 /* Drawer & Modal Transitions */
@@ -660,6 +670,39 @@ button.tab-active *,
 input[type="date"] {
   width: 100%;
   cursor: pointer;
+  text-transform: uppercase !important;
+}
+/* Show DD-MM-YYYY in uppercase across all WebKit/Chromium date fields */
+input[type="date"],
+input[type="datetime-local"],
+input[type="month"],
+.erp-date-input {
+  text-transform: uppercase !important;
+}
+input[type="date"]::-webkit-datetime-edit,
+input[type="date"]::-webkit-datetime-edit-fields-wrapper,
+input[type="date"]::-webkit-datetime-edit-text,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field,
+input[type="datetime-local"]::-webkit-datetime-edit,
+input[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper,
+input[type="datetime-local"]::-webkit-datetime-edit-text,
+input[type="datetime-local"]::-webkit-datetime-edit-month-field,
+input[type="datetime-local"]::-webkit-datetime-edit-day-field,
+input[type="datetime-local"]::-webkit-datetime-edit-year-field,
+input[type="month"]::-webkit-datetime-edit,
+input[type="month"]::-webkit-datetime-edit-fields-wrapper,
+input[type="month"]::-webkit-datetime-edit-text,
+input[type="month"]::-webkit-datetime-edit-month-field,
+input[type="month"]::-webkit-datetime-edit-year-field,
+.erp-date-input::-webkit-datetime-edit,
+.erp-date-input::-webkit-datetime-edit-fields-wrapper,
+.erp-date-input::-webkit-datetime-edit-text,
+.erp-date-input::-webkit-datetime-edit-month-field,
+.erp-date-input::-webkit-datetime-edit-day-field,
+.erp-date-input::-webkit-datetime-edit-year-field {
+  text-transform: uppercase !important;
 }
 /* Ensure redundant custom SVG date icon is hidden to prevent double icons */
 .erp-date-icon {
@@ -681,24 +724,26 @@ input[type="month"]::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
 }
 
-/* Active Tab: Capsule */
+/* Active Tab: Text button with active line below */
 .tab-active,
 a.tab-active,
 a.tab-active:visited,
 a[role="tab"][aria-selected="true"],
 [role="tab"][aria-selected="true"] {
-  background-color: #00A4B7 !important;
-  background: #00A4B7 !important;
-  color: #FFFFFF !important;
-  border-radius: 9999px !important;
+  background-color: transparent !important;
+  background: transparent !important;
+  color: #00A4B7 !important;
+  border-radius: 0 !important;
   border: none !important;
-  border-bottom: none !important;
+  border-bottom: 2px solid #00A4B7 !important;
   font-weight: 700 !important;
+  margin-bottom: -1px !important;
+  box-shadow: none !important;
 }
 .tab-active *,
 [role="tab"][aria-selected="true"] * {
   background-color: transparent !important;
-  color: #FFFFFF !important;
+  color: #00A4B7 !important;
 }
 
 .btn-primary {
@@ -7382,7 +7427,7 @@ const TabBar = {
           role="tablist" 
           aria-label="${submenu.title} views" 
           id="${containerId}-tablist" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch; scrollbar-width: thin;"
-          class="flex items-center gap-2 overflow-x-auto bg-transparent p-0 border-b-0 rounded-xl scrollbar-thin"
+          class="flex items-center gap-1 overflow-x-auto bg-transparent p-0 border-b border-[#DFE1E6] scrollbar-thin"
         >
           ${submenu.tabs.map(tab => {
             const isActive = tab.id === currentTabId;
@@ -7394,7 +7439,7 @@ const TabBar = {
                 aria-selected="${isActive ? 'true' : 'false'}"
                 tabindex="${isActive ? '0' : '-1'}"
                 aria-controls="panel-${tab.id}"
-                class="select-none px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap transition-all rounded-full flex items-center gap-1.5 outline-none border-0 ${isActive ? 'tab-active bg-[#00A4B7] text-white font-bold shadow-xs' : 'text-[#475569] hover:text-[#0F172A] hover:bg-[#F1F5F9] bg-transparent'}"
+                class="select-none px-4 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 outline-none bg-transparent -mb-[1px] border-b-2 ${isActive ? 'tab-active text-[#00A4B7] border-[#00A4B7] font-bold' : 'text-[#5E6C84] hover:text-[#172B4D] border-transparent hover:border-[#DFE1E6]'}"
               >
                 <span class="select-none">${tab.label}</span>
               </a>
@@ -7421,13 +7466,13 @@ const TabBar = {
       tablistEl.querySelectorAll('[role="tab"]').forEach(t => {
         t.setAttribute('aria-selected', 'false');
         t.tabIndex = -1;
-        t.classList.remove('tab-active', 'bg-[#00A4B7]', 'text-white', 'font-bold', 'shadow-xs');
-        t.classList.add('text-[#475569]', 'hover:text-[#0F172A]', 'hover:bg-[#F1F5F9]', 'bg-transparent');
+        t.classList.remove('tab-active', 'text-[#00A4B7]', 'border-[#00A4B7]', 'font-bold');
+        t.classList.add('text-[#5E6C84]', 'hover:text-[#172B4D]', 'border-transparent', 'hover:border-[#DFE1E6]');
       });
       clicked.setAttribute('aria-selected', 'true');
       clicked.tabIndex = 0;
-      clicked.classList.remove('text-[#475569]', 'hover:text-[#0F172A]', 'hover:bg-[#F1F5F9]', 'bg-transparent');
-      clicked.classList.add('tab-active', 'bg-[#00A4B7]', 'text-white', 'font-bold', 'shadow-xs');
+      clicked.classList.remove('text-[#5E6C84]', 'hover:text-[#172B4D]', 'border-transparent', 'hover:border-[#DFE1E6]');
+      clicked.classList.add('tab-active', 'text-[#00A4B7]', 'border-[#00A4B7]', 'font-bold');
     });
   },
 
