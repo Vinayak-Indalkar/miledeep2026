@@ -3044,42 +3044,8 @@ export const PreprocessingView = {
 
   // Show Generate RM Track ID Modal
   showGenerateRmTrackModal(container) {
-    // Initial sample lots for inward arrival
-    let lotRows = [
-      {
-        sNo: 1,
-        billNo: 'BILL-2026-0891',
-        variety: 'Vannamei (White Shrimp)',
-        count: 40,
-        headOnWeight: 1250.00,
-        recvCount: 42,
-        recvWeight: 1242.50,
-        sampleHoQty: 2.50,
-        noOfPcs: 105
-      },
-      {
-        sNo: 2,
-        billNo: 'BILL-2026-0892',
-        variety: 'Black Tiger (P. Monodon)',
-        count: 30,
-        headOnWeight: 850.00,
-        recvCount: 30,
-        recvWeight: 855.00,
-        sampleHoQty: 2.00,
-        noOfPcs: 60
-      },
-      {
-        sNo: 3,
-        billNo: 'BILL-2026-0893',
-        variety: 'Vannamei (White Shrimp)',
-        count: 50,
-        headOnWeight: 1420.00,
-        recvCount: 48,
-        recvWeight: 1410.00,
-        sampleHoQty: 3.00,
-        noOfPcs: 144
-      }
-    ];
+    // Initially empty arrival lots; loaded upon clicking Save above table
+    let lotRows = [];
 
     const varietiesList = [
       'Vannamei (White Shrimp)',
@@ -3091,6 +3057,46 @@ export const PreprocessingView = {
     ];
 
     const buildLotsTableHtml = () => {
+      if (lotRows.length === 0) {
+        return `
+          <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+            <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+              <table class="w-full text-left text-xs border-collapse" style="min-width: 1250px;">
+                <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                  <tr>
+                    <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                    <th class="py-2.5 px-3 min-w-[145px]">Bill No</th>
+                    <th class="py-2.5 px-3 min-w-[170px]">Variety</th>
+                    <th class="py-2.5 px-2 min-w-[95px] text-right">Count</th>
+                    <th class="py-2.5 px-2 min-w-[125px] text-right">Head on Weight</th>
+                    <th class="py-2.5 px-2 min-w-[95px] text-right">Recv Count</th>
+                    <th class="py-2.5 px-2 min-w-[125px] text-right">Recv Weight</th>
+                    <th class="py-2.5 px-2 min-w-[110px] text-right">Sample HO Qty</th>
+                    <th class="py-2.5 px-2 min-w-[95px] text-right">No Of Pcs</th>
+                    <th class="py-2.5 px-3 min-w-[100px] text-right">Count Diff</th>
+                    <th class="py-2.5 px-3 min-w-[115px] text-right">Qty Diff</th>
+                    <th class="py-2.5 px-2 w-16 text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="rm-lots-tbody">
+                  <tr>
+                    <td colspan="12" class="text-center py-16 text-[#6B778C]">
+                      <div class="flex flex-col items-center justify-center gap-2.5">
+                        <div class="w-12 h-12 rounded-full bg-[#F4F5F7] border border-[#DFE1E6] flex items-center justify-center">
+                          <svg class="w-6 h-6 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                        </div>
+                        <span class="font-bold text-sm text-[#334155]">No Data Available</span>
+                        <span class="text-xs text-[#64748B]">Click "Save" above to verify primary details and display arrival bill/lot inspection data.</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }
+
       let totalHoWeight = 0;
       let totalRecvWeight = 0;
       let totalSampleQty = 0;
@@ -3313,14 +3319,18 @@ export const PreprocessingView = {
             </div>
           </div>
 
+          <!-- Save Button Bar above Arrival Bill / Lot Inspection Table -->
+          <div class="flex items-center justify-end pt-2 pb-1">
+            <button type="button" id="btn-save-rm-track" class="btn-primary rounded-full px-5 py-1.5 text-xs font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border-0">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+              <span>Save</span>
+            </button>
+          </div>
+
           <!-- 2. ITEMIZED BILLS & LOTS TABLE SECTION -->
-          <div class="space-y-2 mt-4">
-            <div class="flex items-center justify-between mb-2">
+          <div class="space-y-2 mt-2">
+            <div class="mb-2">
               <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Arrival Bill / Lot Inspection Table</h4>
-              <button type="button" id="btn-save-rm-track" class="btn-primary rounded-full px-5 py-1.5 text-xs font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border-0">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                <span>Save</span>
-              </button>
             </div>
 
             <!-- Dynamic Table Container -->
@@ -3446,7 +3456,9 @@ export const PreprocessingView = {
 
     bindTableEvents();
 
-    // Save RM Track ID Button
+    // Save RM Track ID Button: verifies primary details, populates lots table, and saves record
+    let registeredEntry = null;
+
     const saveRmBtn = modalEl.querySelector('#btn-save-rm-track');
     saveRmBtn?.addEventListener('click', () => {
       const plant = document.getElementById('nrm-plant')?.value || 'DFL UNIT-5 (JPT)';
@@ -3462,64 +3474,125 @@ export const PreprocessingView = {
         return;
       }
 
-      // Extract table lot inputs
-      const currentLots = [];
-      const rows = document.querySelectorAll('#rm-lots-tbody tr.lot-row');
-      rows.forEach((row, idx) => {
-        const billNo = row.querySelector('.lot-bill-input')?.value || `BILL-2026-089${idx + 1}`;
-        const variety = row.querySelector('.lot-variety-select')?.value || 'Vannamei (White Shrimp)';
-        const count = parseFloat(row.querySelector('.lot-count-input')?.value) || 0;
-        const headOnWeight = parseFloat(row.querySelector('.lot-howeight-input')?.value) || 0;
-        const recvCount = parseFloat(row.querySelector('.lot-recvcount-input')?.value) || 0;
-        const recvWeight = parseFloat(row.querySelector('.lot-recvweight-input')?.value) || 0;
-        const sampleHoQty = parseFloat(row.querySelector('.lot-sampleqty-input')?.value) || 0;
-        const noOfPcs = parseInt(row.querySelector('.lot-nopcs-input')?.value, 10) || 0;
-        const countDiff = Number((recvCount - count).toFixed(1));
-        const qtyDiff = Number((recvWeight - headOnWeight).toFixed(2));
+      // If lots are not yet loaded, populate the arrival inspection lots
+      if (lotRows.length === 0) {
+        lotRows = [
+          {
+            sNo: 1,
+            billNo: 'BILL-2026-0891',
+            variety: 'Vannamei (White Shrimp)',
+            count: 40,
+            headOnWeight: 1250.00,
+            recvCount: 42,
+            recvWeight: 1242.50,
+            sampleHoQty: 2.50,
+            noOfPcs: 105
+          },
+          {
+            sNo: 2,
+            billNo: 'BILL-2026-0892',
+            variety: 'Black Tiger (P. Monodon)',
+            count: 30,
+            headOnWeight: 850.00,
+            recvCount: 30,
+            recvWeight: 855.00,
+            sampleHoQty: 2.00,
+            noOfPcs: 60
+          },
+          {
+            sNo: 3,
+            billNo: 'BILL-2026-0893',
+            variety: 'Vannamei (White Shrimp)',
+            count: 50,
+            headOnWeight: 1420.00,
+            recvCount: 48,
+            recvWeight: 1410.00,
+            sampleHoQty: 3.00,
+            noOfPcs: 144
+          }
+        ];
+      } else {
+        // Collect current lots from table inputs
+        const currentLots = [];
+        const rows = document.querySelectorAll('#rm-lots-tbody tr.lot-row');
+        rows.forEach((row, idx) => {
+          const billNo = row.querySelector('.lot-bill-input')?.value || `BILL-2026-089${idx + 1}`;
+          const variety = row.querySelector('.lot-variety-select')?.value || 'Vannamei (White Shrimp)';
+          const count = parseFloat(row.querySelector('.lot-count-input')?.value) || 0;
+          const headOnWeight = parseFloat(row.querySelector('.lot-howeight-input')?.value) || 0;
+          const recvCount = parseFloat(row.querySelector('.lot-recvcount-input')?.value) || 0;
+          const recvWeight = parseFloat(row.querySelector('.lot-recvweight-input')?.value) || 0;
+          const sampleHoQty = parseFloat(row.querySelector('.lot-sampleqty-input')?.value) || 0;
+          const noOfPcs = parseInt(row.querySelector('.lot-nopcs-input')?.value, 10) || 0;
+          const countDiff = Number((recvCount - count).toFixed(1));
+          const qtyDiff = Number((recvWeight - headOnWeight).toFixed(2));
 
-        currentLots.push({
-          sNo: idx + 1,
-          billNo,
-          variety,
-          count,
-          headOnWeight,
-          recvCount,
-          recvWeight,
-          sampleHoQty,
-          noOfPcs,
-          countDiff,
-          qtyDiff
+          currentLots.push({
+            sNo: idx + 1,
+            billNo,
+            variety,
+            count,
+            headOnWeight,
+            recvCount,
+            recvWeight,
+            sampleHoQty,
+            noOfPcs,
+            countDiff,
+            qtyDiff
+          });
         });
-      });
+        lotRows = currentLots;
+      }
 
-      const seq = Math.floor(810 + Math.random() * 180);
-      const generatedId = format.includes('PLANT') 
-        ? `TRK-${plant.split(' ')[1]}-2026-${seq}`
-        : format.includes('RFID')
-        ? `RFID-RM-2026-${seq}`
-        : `TRK-RM-2026-${seq}`;
+      // Display the Arrival Bill / Lot Inspection Table data
+      const tableWrapper = modalEl.querySelector('#rm-lots-table-wrapper');
+      if (tableWrapper) {
+        tableWrapper.innerHTML = buildLotsTableHtml();
+        bindTableEvents();
+      }
 
-      const newEntry = {
-        sNo: 1,
-        id: generatedId,
-        trackId: generatedId,
-        productionPlant: plant,
-        arrivalDate: arrDate,
-        vehicleNumber: vehicle,
-        trackCodeFormat: format,
-        sealNumber: seal,
-        supervisor: sup,
-        remarks: rem,
-        status: 'ACTIVE',
-        lots: currentLots
-      };
+      // Register or update RM Track ID entry in state
+      if (!registeredEntry) {
+        const seq = Math.floor(810 + Math.random() * 180);
+        const generatedId = format.includes('PLANT') 
+          ? `TRK-${plant.split(' ')[1]}-2026-${seq}`
+          : format.includes('RFID')
+          ? `RFID-RM-2026-${seq}`
+          : `TRK-RM-2026-${seq}`;
 
-      this.state.rmTrackIds.forEach(r => { if (r.sNo) r.sNo += 1; });
-      this.state.rmTrackIds.unshift(newEntry);
+        registeredEntry = {
+          sNo: 1,
+          id: generatedId,
+          trackId: generatedId,
+          productionPlant: plant,
+          arrivalDate: arrDate,
+          vehicleNumber: vehicle,
+          trackCodeFormat: format,
+          sealNumber: seal,
+          supervisor: sup,
+          remarks: rem,
+          status: 'ACTIVE',
+          lots: JSON.parse(JSON.stringify(lotRows))
+        };
 
-      Modal.close();
+        this.state.rmTrackIds.forEach(r => { if (r.sNo) r.sNo += 1; });
+        this.state.rmTrackIds.unshift(registeredEntry);
+
+        Toast.show(`RM Track ID ${generatedId} saved. Arrival bill / lot inspection data loaded.`, 'success', 'Track ID Saved');
+      } else {
+        registeredEntry.productionPlant = plant;
+        registeredEntry.arrivalDate = arrDate;
+        registeredEntry.vehicleNumber = vehicle;
+        registeredEntry.trackCodeFormat = format;
+        registeredEntry.sealNumber = seal;
+        registeredEntry.supervisor = sup;
+        registeredEntry.remarks = rem;
+        registeredEntry.lots = JSON.parse(JSON.stringify(lotRows));
+
+        Toast.show(`RM Track ID ${registeredEntry.trackId} updated successfully`, 'success', 'Changes Saved');
+      }
+
       this.renderRmReceivedTrackIdScreen(container);
-      Toast.show(`RM Track ID ${generatedId} saved successfully with ${currentLots.length} lot(s)`, 'success', 'Track ID Saved');
     });
   },
 
@@ -3571,6 +3644,46 @@ export const PreprocessingView = {
     ];
 
     const buildEditRmLotsTableHtml = () => {
+      if (lotRows.length === 0) {
+        return `
+          <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+            <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+              <table class="w-full text-left text-xs border-collapse" style="min-width: 1250px;">
+                <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                  <tr>
+                    <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                    <th class="py-2.5 px-3 min-w-[145px]">Bill No</th>
+                    <th class="py-2.5 px-3 min-w-[170px]">Variety</th>
+                    <th class="py-2.5 px-2 min-w-[95px] text-right">Count</th>
+                    <th class="py-2.5 px-2 min-w-[125px] text-right">Head on Weight</th>
+                    <th class="py-2.5 px-2 min-w-[95px] text-right">Recv Count</th>
+                    <th class="py-2.5 px-2 min-w-[125px] text-right">Recv Weight</th>
+                    <th class="py-2.5 px-2 min-w-[110px] text-right">Sample HO Qty</th>
+                    <th class="py-2.5 px-2 min-w-[95px] text-right">No Of Pcs</th>
+                    <th class="py-2.5 px-3 min-w-[100px] text-right">Count Diff</th>
+                    <th class="py-2.5 px-3 min-w-[115px] text-right">Qty Diff</th>
+                    <th class="py-2.5 px-2 w-16 text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="erm-lots-tbody">
+                  <tr>
+                    <td colspan="12" class="text-center py-16 text-[#6B778C]">
+                      <div class="flex flex-col items-center justify-center gap-2.5">
+                        <div class="w-12 h-12 rounded-full bg-[#F4F5F7] border border-[#DFE1E6] flex items-center justify-center">
+                          <svg class="w-6 h-6 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                        </div>
+                        <span class="font-bold text-sm text-[#334155]">No Data Available</span>
+                        <span class="text-xs text-[#64748B]">Click "Save" above to verify primary details and display arrival bill/lot inspection data.</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }
+
       let totalHoWeight = 0;
       let totalRecvWeight = 0;
       let totalSampleQty = 0;
@@ -3793,14 +3906,18 @@ export const PreprocessingView = {
             </div>
           </div>
 
+          <!-- Save Button Bar above Arrival Bill / Lot Inspection Table -->
+          <div class="flex items-center justify-end pt-2 pb-1">
+            <button type="button" id="btn-save-erm-track" class="btn-primary rounded-full px-5 py-1.5 text-xs font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border-0">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+              <span>Save</span>
+            </button>
+          </div>
+
           <!-- 2. ITEMIZED BILLS & LOTS TABLE SECTION -->
-          <div class="space-y-2 mt-4">
-            <div class="flex items-center justify-between mb-2">
+          <div class="space-y-2 mt-2">
+            <div class="mb-2">
               <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Arrival Bill / Lot Inspection Table</h4>
-              <button type="button" id="btn-save-erm-track" class="btn-primary rounded-full px-5 py-1.5 text-xs font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border-0">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                <span>Save</span>
-              </button>
             </div>
 
             <!-- Dynamic Table Container -->
