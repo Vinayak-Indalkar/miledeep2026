@@ -156,9 +156,20 @@ export const UIEnhancements = {
     if (hasSearch) {
       html += `
         <div class="erp-dropdown-search-wrapper p-2 border-b border-[#E2E8F0] bg-[#F8FAFC]">
-          <div class="relative flex items-center">
-            <svg class="w-3.5 h-3.5 absolute left-2.5 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-            <input type="text" id="erp-dropdown-search-input" placeholder="Search..." class="w-full text-xs pl-8 pr-2.5 py-1.5 bg-white border border-[#CBD5E1] rounded-lg focus:outline-none focus:border-[#00A4B7]">
+          <div class="relative flex items-center w-full">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none text-[#94A3B8]">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+            </span>
+            <input 
+              type="text" 
+              id="erp-dropdown-search-input" 
+              placeholder="Search..." 
+              autocomplete="off" 
+              spellcheck="false" 
+              class="w-full text-xs pl-8 pr-2.5 py-1.5 bg-white border border-[#CBD5E1] rounded-lg focus:outline-none focus:border-[#00A4B7]"
+            />
           </div>
         </div>
       `;
@@ -220,12 +231,35 @@ export const UIEnhancements = {
       const searchInput = this.dropdownEl.querySelector('#erp-dropdown-search-input');
       if (searchInput) {
         setTimeout(() => searchInput.focus(), 50);
+        searchInput.addEventListener('click', (e) => e.stopPropagation());
+        searchInput.addEventListener('mousedown', (e) => e.stopPropagation());
+        searchInput.addEventListener('keydown', (e) => {
+          e.stopPropagation();
+          if (e.key === 'Escape') {
+            this.closeDropdown();
+          }
+        });
         searchInput.addEventListener('input', (e) => {
-          const val = e.target.value.toLowerCase();
+          const val = e.target.value.toLowerCase().trim();
+          let visibleCount = 0;
           this.dropdownEl.querySelectorAll('.erp-dropdown-item').forEach(item => {
             const text = item.textContent.toLowerCase();
-            item.style.display = text.includes(val) ? 'flex' : 'none';
+            const matches = text.includes(val);
+            item.style.display = matches ? 'flex' : 'none';
+            if (matches) visibleCount++;
           });
+          let noResultsEl = this.dropdownEl.querySelector('.erp-dropdown-no-results');
+          if (visibleCount === 0) {
+            if (!noResultsEl) {
+              noResultsEl = document.createElement('div');
+              noResultsEl.className = 'erp-dropdown-no-results px-3 py-3 text-xs text-[#94A3B8] text-center italic';
+              noResultsEl.textContent = 'No matching options';
+              this.dropdownEl.querySelector('.erp-dropdown-items-container').appendChild(noResultsEl);
+            }
+            noResultsEl.style.display = 'block';
+          } else if (noResultsEl) {
+            noResultsEl.style.display = 'none';
+          }
         });
       }
     }

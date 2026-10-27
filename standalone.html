@@ -2192,6 +2192,41 @@ div:has(> h1) {
   border-radius: 4px !important;
 }
 
+/* Dropdown Search Input UI */
+.erp-dropdown-search-wrapper {
+  background-color: #F8FAFC !important;
+  border-bottom: 1px solid #E2E8F0 !important;
+  padding: 8px !important;
+}
+#erp-dropdown-search-input {
+  min-height: 32px !important;
+  height: 32px !important;
+  padding: 4px 10px 4px 30px !important;
+  font-size: 12px !important;
+  line-height: 20px !important;
+  border-radius: 6px !important;
+  border: 1px solid #CBD5E1 !important;
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  box-shadow: none !important;
+  width: 100% !important;
+  text-transform: none !important;
+}
+#erp-dropdown-search-input:hover {
+  border-color: #94A3B8 !important;
+}
+#erp-dropdown-search-input:focus {
+  border-color: #00A4B7 !important;
+  box-shadow: 0 0 0 2px rgba(0, 164, 183, 0.15) !important;
+  outline: none !important;
+}
+#erp-dropdown-search-input::placeholder {
+  color: #94A3B8 !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  text-transform: none !important;
+}
+
 /* 3. Global Custom Calendar Datepicker */
 .erp-global-calendar-popup {
   position: fixed !important;
@@ -4668,9 +4703,20 @@ const UIEnhancements = {
     if (hasSearch) {
       html += `
         <div class="erp-dropdown-search-wrapper p-2 border-b border-[#E2E8F0] bg-[#F8FAFC]">
-          <div class="relative flex items-center">
-            <svg class="w-3.5 h-3.5 absolute left-2.5 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-            <input type="text" id="erp-dropdown-search-input" placeholder="Search..." class="w-full text-xs pl-8 pr-2.5 py-1.5 bg-white border border-[#CBD5E1] rounded-lg focus:outline-none focus:border-[#00A4B7]">
+          <div class="relative flex items-center w-full">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none text-[#94A3B8]">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+            </span>
+            <input 
+              type="text" 
+              id="erp-dropdown-search-input" 
+              placeholder="Search..." 
+              autocomplete="off" 
+              spellcheck="false" 
+              class="w-full text-xs pl-8 pr-2.5 py-1.5 bg-white border border-[#CBD5E1] rounded-lg focus:outline-none focus:border-[#00A4B7]"
+            />
           </div>
         </div>
       `;
@@ -4732,12 +4778,35 @@ const UIEnhancements = {
       const searchInput = this.dropdownEl.querySelector('#erp-dropdown-search-input');
       if (searchInput) {
         setTimeout(() => searchInput.focus(), 50);
+        searchInput.addEventListener('click', (e) => e.stopPropagation());
+        searchInput.addEventListener('mousedown', (e) => e.stopPropagation());
+        searchInput.addEventListener('keydown', (e) => {
+          e.stopPropagation();
+          if (e.key === 'Escape') {
+            this.closeDropdown();
+          }
+        });
         searchInput.addEventListener('input', (e) => {
-          const val = e.target.value.toLowerCase();
+          const val = e.target.value.toLowerCase().trim();
+          let visibleCount = 0;
           this.dropdownEl.querySelectorAll('.erp-dropdown-item').forEach(item => {
             const text = item.textContent.toLowerCase();
-            item.style.display = text.includes(val) ? 'flex' : 'none';
+            const matches = text.includes(val);
+            item.style.display = matches ? 'flex' : 'none';
+            if (matches) visibleCount++;
           });
+          let noResultsEl = this.dropdownEl.querySelector('.erp-dropdown-no-results');
+          if (visibleCount === 0) {
+            if (!noResultsEl) {
+              noResultsEl = document.createElement('div');
+              noResultsEl.className = 'erp-dropdown-no-results px-3 py-3 text-xs text-[#94A3B8] text-center italic';
+              noResultsEl.textContent = 'No matching options';
+              this.dropdownEl.querySelector('.erp-dropdown-items-container').appendChild(noResultsEl);
+            }
+            noResultsEl.style.display = 'block';
+          } else if (noResultsEl) {
+            noResultsEl.style.display = 'none';
+          }
         });
       }
     }
