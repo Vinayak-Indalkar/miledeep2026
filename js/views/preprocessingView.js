@@ -3479,18 +3479,6 @@ export const PreprocessingView = {
       size: 'full',
       content: `
         <div class="space-y-4 text-xs">
-          <!-- Top summary badge card -->
-          <div class="bg-[#F0F9FF] border border-[#BAE6FD] rounded-xl p-4 flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <span class="text-[11px] font-bold text-[#0284C7] uppercase tracking-wider block">Raw Material Track Code</span>
-              <span class="text-lg font-mono font-extrabold text-[#0C4A6E] mt-0.5 block">${row.trackId}</span>
-            </div>
-            <div class="flex items-center gap-3">
-              <span class="lozenge lozenge-success">REGISTRY ACTIVE</span>
-              <span class="text-xs font-semibold text-[#5E6C84] bg-white px-3 py-1 rounded-full border border-[#DFE1E6]">${row.arrivalDate}</span>
-            </div>
-          </div>
-
           <!-- Key Details Grid -->
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-[#F8FAFC] p-3.5 rounded-xl border border-[#DFE1E6]">
             <div>
