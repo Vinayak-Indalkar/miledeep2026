@@ -8908,143 +8908,473 @@ export const PreprocessingView = {
   showAddHonTransferModal(container) {
     const nextTrackId = `TRK-TRF-2026-${Math.floor(410 + Math.random() * 80)}`;
 
+    const plantsList = [
+      'DFL UNIT-5 (JPT)',
+      'DFL UNIT-3 (PSP)',
+      'DFL UNIT-4 (PND)',
+      'DFL UNIT-1 (VSP)',
+      'DFL UNIT-6 (JPT-II)',
+      'DFL UNIT-2 (KKD)'
+    ];
+
+    // Initially empty transfer items; loaded upon clicking Save above table
+    let transferRows = [];
+
+    const buildHonTransferTableHtml = () => {
+      if (transferRows.length === 0) {
+        return `
+          <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+            <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+              <table class="w-full text-left text-xs border-collapse" style="min-width: 1450px;">
+                <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                  <tr>
+                    <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                    <th class="py-2.5 px-3 min-w-[130px]">Arrival Date</th>
+                    <th class="py-2.5 px-3 min-w-[130px]">Bill Date</th>
+                    <th class="py-2.5 px-3 min-w-[140px]">Bill Number</th>
+                    <th class="py-2.5 px-3 min-w-[150px]">Production Plant</th>
+                    <th class="py-2.5 px-2 min-w-[110px] text-center">Purchase Count</th>
+                    <th class="py-2.5 px-2 min-w-[120px] text-right">Purchase Weight</th>
+                    <th class="py-2.5 px-3 min-w-[150px]">Rm Production plant</th>
+                    <th class="py-2.5 px-3 min-w-[130px]">Transfer Date</th>
+                    <th class="py-2.5 px-2 min-w-[120px] text-right">VA Weight Qty</th>
+                    <th class="py-2.5 px-2 w-16 text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="hon-transfer-lots-tbody">
+                  <tr>
+                    <td colspan="11" class="text-center py-16 text-[#6B778C]">
+                      <div class="flex flex-col items-center justify-center gap-2.5">
+                        <div class="w-12 h-12 rounded-full bg-[#F4F5F7] border border-[#DFE1E6] flex items-center justify-center">
+                          <svg class="w-6 h-6 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                        </div>
+                        <span class="font-bold text-sm text-[#334155]">No Data Available</span>
+                        <span class="text-xs text-[#64748B]">Click "Save" above to verify transfer details and display HON quantity transfer items.</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }
+
+      let totalPurchaseWeight = 0;
+      let totalVaWeight = 0;
+
+      const rowsHtml = transferRows.map((item, idx) => {
+        const pWt = Number(item.purchaseWeight) || 0;
+        const vaWt = Number(item.vaWeightQty) || 0;
+        totalPurchaseWeight += pWt;
+        totalVaWeight += vaWt;
+
+        return `
+          <tr class="hover:bg-[#F8FAFC] transition-colors hon-trf-row" data-index="${idx}">
+            <!-- 1. S.No -->
+            <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">
+              ${idx + 1}
+            </td>
+
+            <!-- 2. Arrival Date -->
+            <td class="py-2 px-2">
+              <div class="erp-date-wrapper">
+                <input type="date" class="htrf-arr-date erp-date-input w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${item.arrivalDate || '2026-10-07'}" onclick="this.showPicker ? this.showPicker() : this.focus()" />
+              </div>
+            </td>
+
+            <!-- 3. Bill Date -->
+            <td class="py-2 px-2">
+              <div class="erp-date-wrapper">
+                <input type="date" class="htrf-bill-date erp-date-input w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${item.billDate || '2026-10-06'}" onclick="this.showPicker ? this.showPicker() : this.focus()" />
+              </div>
+            </td>
+
+            <!-- 4. Bill Number -->
+            <td class="py-2 px-2.5">
+              <input type="text" class="htrf-bill-no font-mono font-bold text-[#00A4B7] w-full text-xs px-2.5 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${item.billNumber || ''}" placeholder="BILL-2026-..." />
+            </td>
+
+            <!-- 5. Production Plant -->
+            <td class="py-2 px-2">
+              <select class="htrf-plant w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded font-semibold text-[#172B4D] focus:outline-none focus:border-[#00A4B7]">
+                ${plantsList.map(p => `<option value="${p}" ${item.productionPlant === p ? 'selected' : ''}>${p}</option>`).join('')}
+              </select>
+            </td>
+
+            <!-- 6. Purchase Count -->
+            <td class="py-2 px-2">
+              <input type="text" class="htrf-count font-mono text-center w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${item.purchaseCount || '40 Count'}" placeholder="40 Count" />
+            </td>
+
+            <!-- 7. Purchase Weight -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.01" class="htrf-pweight font-mono font-bold text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${item.purchaseWeight ?? ''}" placeholder="0.00" />
+            </td>
+
+            <!-- 8. Rm Production plant -->
+            <td class="py-2 px-2">
+              <select class="htrf-rmplant w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded font-medium text-[#172B4D] focus:outline-none focus:border-[#00A4B7]">
+                ${plantsList.map(p => `<option value="${p}" ${item.rmProductionPlant === p ? 'selected' : ''}>${p}</option>`).join('')}
+              </select>
+            </td>
+
+            <!-- 9. Transfer Date -->
+            <td class="py-2 px-2">
+              <div class="erp-date-wrapper">
+                <input type="date" class="htrf-trf-date erp-date-input w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${item.transferDate || '2026-10-07'}" onclick="this.showPicker ? this.showPicker() : this.focus()" />
+              </div>
+            </td>
+
+            <!-- 10. VA Weight Qty -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.01" class="htrf-vaweight font-mono font-bold text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded text-[#00875A] focus:outline-none focus:border-[#00A4B7]" value="${item.vaWeightQty ?? ''}" placeholder="0.00" />
+            </td>
+
+            <!-- 11. Actions -->
+            <td class="py-2.5 px-2 text-center">
+              <button type="button" class="btn-del-htrf-row w-7 h-7 rounded-full inline-flex items-center justify-center text-[#FF5630] hover:bg-[#FFEBE6] transition-colors cursor-pointer" title="Delete Row" data-index="${idx}">
+                <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      return `
+        <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+          <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+            <table class="w-full text-left text-xs border-collapse" style="min-width: 1450px;">
+              <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                <tr>
+                  <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                  <th class="py-2.5 px-3 min-w-[130px]">Arrival Date</th>
+                  <th class="py-2.5 px-3 min-w-[130px]">Bill Date</th>
+                  <th class="py-2.5 px-3 min-w-[140px]">Bill Number</th>
+                  <th class="py-2.5 px-3 min-w-[150px]">Production Plant</th>
+                  <th class="py-2.5 px-2 min-w-[110px] text-center">Purchase Count</th>
+                  <th class="py-2.5 px-2 min-w-[120px] text-right">Purchase Weight</th>
+                  <th class="py-2.5 px-3 min-w-[150px]">Rm Production plant</th>
+                  <th class="py-2.5 px-3 min-w-[130px]">Transfer Date</th>
+                  <th class="py-2.5 px-2 min-w-[120px] text-right">VA Weight Qty</th>
+                  <th class="py-2.5 px-2 w-16 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="hon-transfer-lots-tbody" class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                ${rowsHtml}
+              </tbody>
+              <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                <tr>
+                  <td colspan="6" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Aggregates:</td>
+                  <td id="htrf-tot-pweight" class="py-3 px-2 text-right font-mono text-sm text-[#0C4A6E]">${totalPurchaseWeight.toFixed(2)} Kgs</td>
+                  <td colspan="2"></td>
+                  <td id="htrf-tot-vaweight" class="py-3 px-2 text-right font-mono text-sm text-[#00875A]">${totalVaWeight.toFixed(2)} Kgs</td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      `;
+    };
+
     Modal.open({
       title: 'Add HON QTY Transfer After VA',
-      size: 'lg',
+      size: 'full',
       content: `
         <form id="form-add-hon-transfer" class="space-y-4" onsubmit="return false;">
-          <!-- 9 Form Input Fields -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs">
-            <!-- 1. PRODUCTION PLANT * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">PRODUCTION PLANT <span class="text-[#DE350B]">*</span></label>
-              <select id="nhnt-plant" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-semibold text-[#172B4D] focus:outline-none focus:border-[#0284C7]">
-                <option value="DFL UNIT-5 (JPT)" selected>DFL UNIT-5 (JPT)</option>
-                <option value="DFL UNIT-3 (PSP)">DFL UNIT-3 (PSP)</option>
-                <option value="DFL UNIT-4 (PND)">DFL UNIT-4 (PND)</option>
-                <option value="DFL UNIT-1 (VSP)">DFL UNIT-1 (VSP)</option>
-                <option value="DFL UNIT-6 (JPT-II)">DFL UNIT-6 (JPT-II)</option>
-                <option value="DFL UNIT-2 (KKD)">DFL UNIT-2 (KKD)</option>
-              </select>
+          <!-- 1. Header Registry Specification Section -->
+          <div class="bg-[#F8FAFC] p-4 rounded-xl border border-[#DFE1E6]">
+            <div class="mb-3 border-b border-[#E2E8F0] pb-2">
+              <span class="text-xs font-extrabold text-[#172B4D] uppercase tracking-wider">
+                HON QTY Transfer Primary Registry Details
+              </span>
             </div>
 
-            <!-- 2. TRANSFER PLANT * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">TRANSFER PLANT <span class="text-[#DE350B]">*</span></label>
-              <select id="nhnt-transfer-plant" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-semibold text-[#00A4B7] focus:outline-none focus:border-[#0284C7]">
-                <option value="DFL UNIT-3 (PSP)" selected>DFL UNIT-3 (PSP)</option>
-                <option value="DFL UNIT-5 (JPT)">DFL UNIT-5 (JPT)</option>
-                <option value="DFL UNIT-4 (PND)">DFL UNIT-4 (PND)</option>
-                <option value="DFL UNIT-1 (VSP)">DFL UNIT-1 (VSP)</option>
-                <option value="DFL UNIT-6 (JPT-II)">DFL UNIT-6 (JPT-II)</option>
-                <option value="DFL UNIT-2 (KKD)">DFL UNIT-2 (KKD)</option>
-              </select>
-            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs">
+              <!-- 1. PRODUCTION PLANT * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">PRODUCTION PLANT <span class="text-[#DE350B]">*</span></label>
+                <select id="nhnt-plant" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-semibold text-[#172B4D] focus:outline-none focus:border-[#0284C7]">
+                  <option value="DFL UNIT-5 (JPT)" selected>DFL UNIT-5 (JPT)</option>
+                  <option value="DFL UNIT-3 (PSP)">DFL UNIT-3 (PSP)</option>
+                  <option value="DFL UNIT-4 (PND)">DFL UNIT-4 (PND)</option>
+                  <option value="DFL UNIT-1 (VSP)">DFL UNIT-1 (VSP)</option>
+                  <option value="DFL UNIT-6 (JPT-II)">DFL UNIT-6 (JPT-II)</option>
+                  <option value="DFL UNIT-2 (KKD)">DFL UNIT-2 (KKD)</option>
+                </select>
+              </div>
 
-            <!-- 3. TRACK ID * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">TRACK ID <span class="text-[#DE350B]">*</span></label>
-              <input type="text" id="nhnt-trackid" value="${nextTrackId}" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono font-bold text-[#00A4B7] focus:outline-none focus:border-[#0284C7]" />
-            </div>
+              <!-- 2. TRANSFER PLANT * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">TRANSFER PLANT <span class="text-[#DE350B]">*</span></label>
+                <select id="nhnt-transfer-plant" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-semibold text-[#00A4B7] focus:outline-none focus:border-[#0284C7]">
+                  <option value="DFL UNIT-3 (PSP)" selected>DFL UNIT-3 (PSP)</option>
+                  <option value="DFL UNIT-5 (JPT)">DFL UNIT-5 (JPT)</option>
+                  <option value="DFL UNIT-4 (PND)">DFL UNIT-4 (PND)</option>
+                  <option value="DFL UNIT-1 (VSP)">DFL UNIT-1 (VSP)</option>
+                  <option value="DFL UNIT-6 (JPT-II)">DFL UNIT-6 (JPT-II)</option>
+                  <option value="DFL UNIT-2 (KKD)">DFL UNIT-2 (KKD)</option>
+                </select>
+              </div>
 
-            <!-- 4. ARRIVAL DATE * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">ARRIVAL DATE <span class="text-[#DE350B]">*</span></label>
-              <div class="erp-date-wrapper">
-                <input type="date" id="nhnt-arrival-date" value="2026-10-07" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()" />
+              <!-- 3. TRACK ID * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">TRACK ID <span class="text-[#DE350B]">*</span></label>
+                <input type="text" id="nhnt-trackid" value="${nextTrackId}" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono font-bold text-[#00A4B7] focus:outline-none focus:border-[#0284C7]" />
+              </div>
+
+              <!-- 4. ARRIVAL DATE * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">ARRIVAL DATE <span class="text-[#DE350B]">*</span></label>
+                <div class="erp-date-wrapper">
+                  <input type="date" id="nhnt-arrival-date" value="2026-10-07" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()" />
+                </div>
+              </div>
+
+              <!-- 5. TRANSFER DATE * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">TRANSFER DATE <span class="text-[#DE350B]">*</span></label>
+                <div class="erp-date-wrapper">
+                  <input type="date" id="nhnt-transfer-date" value="2026-10-07" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()" />
+                </div>
+              </div>
+
+              <!-- 6. ARRIVAL CODE * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">ARRIVAL CODE <span class="text-[#DE350B]">*</span></label>
+                <select id="nhnt-arrival-code" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-semibold text-[#172B4D] focus:outline-none focus:border-[#0284C7]">
+                  <option value="LOT-2026-00125" selected>LOT-2026-00125</option>
+                  <option value="LOT-2026-00126">LOT-2026-00126</option>
+                  <option value="LOT-2026-00127">LOT-2026-00127</option>
+                  <option value="LOT-2026-00128">LOT-2026-00128</option>
+                  <option value="LOT-2026-00129">LOT-2026-00129</option>
+                  <option value="LOT-2026-00130">LOT-2026-00130</option>
+                </select>
+              </div>
+
+              <!-- 7. HON COUNT * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">HON COUNT <span class="text-[#DE350B]">*</span></label>
+                <input type="text" id="nhnt-hon-count" value="42 Count" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-semibold focus:outline-none focus:border-[#0284C7]" />
+              </div>
+
+              <!-- 8. HON WEIGHT * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">HON WEIGHT <span class="text-[#DE350B]">*</span></label>
+                <input type="number" id="nhnt-hon-weight" value="1200" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-bold text-[#172B4D] focus:outline-none focus:border-[#0284C7]" />
+              </div>
+
+              <!-- 9. WEIGHT * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">WEIGHT <span class="text-[#DE350B]">*</span></label>
+                <input type="number" id="nhnt-weight" value="1180" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-extrabold text-[#00875A] focus:outline-none focus:border-[#0284C7]" />
               </div>
             </div>
+          </div>
 
-            <!-- 5. TRANSFER DATE * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">TRANSFER DATE <span class="text-[#DE350B]">*</span></label>
-              <div class="erp-date-wrapper">
-                <input type="date" id="nhnt-transfer-date" value="2026-10-07" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()" />
-              </div>
+          <!-- Save Button Bar above HON QTY Transfer Breakdown Table -->
+          <div class="flex items-center justify-end">
+            <button type="button" id="btn-save-hon-transfer" class="btn-primary rounded-full px-5 py-1.5 text-xs font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border-0">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <span>Save</span>
+            </button>
+          </div>
+
+          <!-- 2. HON QTY TRANSFER BREAKDOWN TABLE SECTION -->
+          <div class="space-y-2 mt-2">
+            <div class="mb-2">
+              <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider mb-0">HON QTY Transfer Breakdown Table</h4>
             </div>
 
-            <!-- 6. ARRIVAL CODE * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">ARRIVAL CODE <span class="text-[#DE350B]">*</span></label>
-              <select id="nhnt-arrival-code" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-semibold text-[#172B4D] focus:outline-none focus:border-[#0284C7]">
-                <option value="LOT-2026-00125" selected>LOT-2026-00125</option>
-                <option value="LOT-2026-00126">LOT-2026-00126</option>
-                <option value="LOT-2026-00127">LOT-2026-00127</option>
-                <option value="LOT-2026-00128">LOT-2026-00128</option>
-                <option value="LOT-2026-00129">LOT-2026-00129</option>
-                <option value="LOT-2026-00130">LOT-2026-00130</option>
-              </select>
-            </div>
-
-            <!-- 7. HON COUNT * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">HON COUNT <span class="text-[#DE350B]">*</span></label>
-              <input type="text" id="nhnt-hon-count" value="42 Count" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-semibold focus:outline-none focus:border-[#0284C7]" />
-            </div>
-
-            <!-- 8. HON WEIGHT * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">HON WEIGHT <span class="text-[#DE350B]">*</span></label>
-              <input type="number" id="nhnt-hon-weight" value="1200" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-bold text-[#172B4D] focus:outline-none focus:border-[#0284C7]" />
-            </div>
-
-            <!-- 9. WEIGHT * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">WEIGHT <span class="text-[#DE350B]">*</span></label>
-              <input type="number" id="nhnt-weight" value="1180" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-extrabold text-[#00875A] focus:outline-none focus:border-[#0284C7]" />
+            <div id="hon-transfer-lots-table-container">
+              ${buildHonTransferTableHtml()}
             </div>
           </div>
         </form>
       `,
       footerButtons: [
-        { label: 'Cancel', type: 'secondary', onClick: (m) => m.close() },
         {
-          label: 'Save & Transfer',
-          type: 'primary',
-          onClick: (m) => {
-            const plant = document.getElementById('nhnt-plant')?.value || 'DFL UNIT-5 (JPT)';
-            const tfPlant = document.getElementById('nhnt-transfer-plant')?.value || 'DFL UNIT-3 (PSP)';
-            const trackId = document.getElementById('nhnt-trackid')?.value || nextTrackId;
-            const arrDate = document.getElementById('nhnt-arrival-date')?.value || '2026-10-07';
-            const tfDate = document.getElementById('nhnt-transfer-date')?.value || '2026-10-07';
-            const arrCode = document.getElementById('nhnt-arrival-code')?.value || 'LOT-2026-00125';
-            const honCount = document.getElementById('nhnt-hon-count')?.value || '42 Count';
-            const honWeight = parseFloat(document.getElementById('nhnt-hon-weight')?.value) || 1200;
-            const weight = parseFloat(document.getElementById('nhnt-weight')?.value) || 1180;
-
-            Modal.confirm({
-              title: 'Confirm HON QTY Transfer',
-              message: `Are you sure you want to dispatch and transfer <strong>${weight.toLocaleString()} KG</strong> of lot <strong class="text-[#00A4B7]">${trackId}</strong> from <strong>${plant}</strong> to <strong>${tfPlant}</strong>?`,
-              confirmText: 'Yes, Confirm Transfer',
-              cancelText: 'Cancel',
-              isDestructive: false,
-              onConfirm: () => {
-                const newEntry = {
-                  sNo: 1,
-                  id: trackId,
-                  trackId: trackId,
-                  productionPlant: plant,
-                  transferPlant: tfPlant,
-                  arrivalDate: arrDate,
-                  transferDate: tfDate,
-                  arrivalCode: arrCode,
-                  honCount: honCount,
-                  honWeight: honWeight,
-                  weight: weight,
-                  status: 'TRANSFERRED'
-                };
-
-                this.state.honTransfers.forEach(r => { if (r.sNo) r.sNo += 1; });
-                this.state.honTransfers.unshift(newEntry);
-
-                Toast.show(`HON QTY Transfer ${trackId} registered successfully`, 'success', 'Transfer Dispatched');
-                this.renderHonQtyTransferScreen(container);
-              }
-            });
-          }
+          label: 'Cancel',
+          type: 'secondary',
+          class: 'btn btn-secondary rounded-full px-5 py-2 font-semibold',
+          onClick: (m) => m.close()
         }
       ]
     });
+
+    const readHonTableInputs = () => {
+      const containerEl = document.getElementById('hon-transfer-lots-table-container');
+      if (!containerEl) return;
+      const rows = containerEl.querySelectorAll('.hon-trf-row');
+      rows.forEach((rowEl) => {
+        const idx = parseInt(rowEl.getAttribute('data-index'), 10);
+        if (transferRows[idx]) {
+          transferRows[idx].arrivalDate = rowEl.querySelector('.htrf-arr-date')?.value || '';
+          transferRows[idx].billDate = rowEl.querySelector('.htrf-bill-date')?.value || '';
+          transferRows[idx].billNumber = rowEl.querySelector('.htrf-bill-no')?.value || '';
+          transferRows[idx].productionPlant = rowEl.querySelector('.htrf-plant')?.value || '';
+          transferRows[idx].purchaseCount = rowEl.querySelector('.htrf-count')?.value || '';
+          transferRows[idx].purchaseWeight = parseFloat(rowEl.querySelector('.htrf-pweight')?.value) || 0;
+          transferRows[idx].rmProductionPlant = rowEl.querySelector('.htrf-rmplant')?.value || '';
+          transferRows[idx].transferDate = rowEl.querySelector('.htrf-trf-date')?.value || '';
+          transferRows[idx].vaWeightQty = parseFloat(rowEl.querySelector('.htrf-vaweight')?.value) || 0;
+        }
+      });
+    };
+
+    const attachHonTableEvents = () => {
+      const containerEl = document.getElementById('hon-transfer-lots-table-container');
+      if (!containerEl) return;
+
+      const recalcTotals = () => {
+        let totalPurchaseWeight = 0;
+        let totalVaWeight = 0;
+
+        containerEl.querySelectorAll('.hon-trf-row').forEach(rowEl => {
+          const pWt = parseFloat(rowEl.querySelector('.htrf-pweight')?.value) || 0;
+          const vaWt = parseFloat(rowEl.querySelector('.htrf-vaweight')?.value) || 0;
+          totalPurchaseWeight += pWt;
+          totalVaWeight += vaWt;
+        });
+
+        const totPwtEl = document.getElementById('htrf-tot-pweight');
+        if (totPwtEl) totPwtEl.textContent = `${totalPurchaseWeight.toFixed(2)} Kgs`;
+
+        const totVawtEl = document.getElementById('htrf-tot-vaweight');
+        if (totVawtEl) totVawtEl.textContent = `${totalVaWeight.toFixed(2)} Kgs`;
+      };
+
+      containerEl.querySelectorAll('.htrf-pweight, .htrf-vaweight').forEach(input => {
+        input.addEventListener('input', recalcTotals);
+      });
+
+      containerEl.querySelectorAll('.btn-del-htrf-row').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt(e.currentTarget.getAttribute('data-index'), 10);
+          readHonTableInputs();
+          if (transferRows.length <= 1) {
+            Toast.show('At least one transfer row must be maintained', 'warning');
+            return;
+          }
+          transferRows.splice(idx, 1);
+          transferRows.forEach((r, i) => { r.sNo = i + 1; });
+          containerEl.innerHTML = buildHonTransferTableHtml();
+          attachHonTableEvents();
+        });
+      });
+    };
+
+    setTimeout(() => {
+      attachHonTableEvents();
+
+      // Save Button Handler: validates header, populates table data, saves transfer record
+      let registeredHonEntry = null;
+
+      const saveBtn = document.getElementById('btn-save-hon-transfer');
+      saveBtn?.addEventListener('click', () => {
+        const plant = document.getElementById('nhnt-plant')?.value || 'DFL UNIT-5 (JPT)';
+        const tfPlant = document.getElementById('nhnt-transfer-plant')?.value || 'DFL UNIT-3 (PSP)';
+        const trackId = (document.getElementById('nhnt-trackid')?.value || nextTrackId).trim();
+        const arrDate = document.getElementById('nhnt-arrival-date')?.value || '2026-10-07';
+        const tfDate = document.getElementById('nhnt-transfer-date')?.value || '2026-10-07';
+        const arrCode = document.getElementById('nhnt-arrival-code')?.value || 'LOT-2026-00125';
+        const honCount = document.getElementById('nhnt-hon-count')?.value || '42 Count';
+        const honWeight = parseFloat(document.getElementById('nhnt-hon-weight')?.value) || 1200;
+        const weight = parseFloat(document.getElementById('nhnt-weight')?.value) || 1180;
+
+        // If table has no rows yet, populate with transfer items on Save
+        if (transferRows.length === 0) {
+          transferRows = [
+            {
+              sNo: 1,
+              arrivalDate: arrDate,
+              billDate: '2026-10-06',
+              billNumber: 'BILL-2026-0891',
+              productionPlant: plant,
+              purchaseCount: '40 Count',
+              purchaseWeight: 1250.00,
+              rmProductionPlant: plant,
+              transferDate: tfDate,
+              vaWeightQty: 1150.00
+            },
+            {
+              sNo: 2,
+              arrivalDate: arrDate,
+              billDate: '2026-10-06',
+              billNumber: 'BILL-2026-0892',
+              productionPlant: plant,
+              purchaseCount: '30 Count',
+              purchaseWeight: 850.00,
+              rmProductionPlant: tfPlant,
+              transferDate: tfDate,
+              vaWeightQty: 780.00
+            },
+            {
+              sNo: 3,
+              arrivalDate: arrDate,
+              billDate: '2026-10-06',
+              billNumber: 'BILL-2026-0893',
+              productionPlant: plant,
+              purchaseCount: '50 Count',
+              purchaseWeight: 1420.00,
+              rmProductionPlant: 'DFL UNIT-4 (PND)',
+              transferDate: tfDate,
+              vaWeightQty: 1310.00
+            }
+          ];
+        } else {
+          readHonTableInputs();
+        }
+
+        // Render table rows in the HON QTY Transfer Breakdown Table
+        const containerEl = document.getElementById('hon-transfer-lots-table-container');
+        if (containerEl) {
+          containerEl.innerHTML = buildHonTransferTableHtml();
+          attachHonTableEvents();
+        }
+
+        const totalVaWeight = transferRows.reduce((sum, r) => sum + (Number(r.vaWeightQty) || 0), 0);
+        const totalPurchaseWeight = transferRows.reduce((sum, r) => sum + (Number(r.purchaseWeight) || 0), 0);
+
+        if (!registeredHonEntry) {
+          registeredHonEntry = {
+            sNo: 1,
+            id: trackId,
+            trackId: trackId,
+            productionPlant: plant,
+            transferPlant: tfPlant,
+            arrivalDate: arrDate,
+            transferDate: tfDate,
+            arrivalCode: arrCode,
+            honCount: honCount,
+            honWeight: totalPurchaseWeight || honWeight,
+            weight: totalVaWeight || weight,
+            transferItems: JSON.parse(JSON.stringify(transferRows)),
+            status: 'TRANSFERRED'
+          };
+
+          this.state.honTransfers.forEach(r => { if (r.sNo) r.sNo += 1; });
+          this.state.honTransfers.unshift(registeredHonEntry);
+
+          Toast.show(`HON QTY Transfer ${trackId} saved. Transfer items loaded.`, 'success', 'Transfer Saved');
+        } else {
+          registeredHonEntry.productionPlant = plant;
+          registeredHonEntry.transferPlant = tfPlant;
+          registeredHonEntry.arrivalDate = arrDate;
+          registeredHonEntry.transferDate = tfDate;
+          registeredHonEntry.arrivalCode = arrCode;
+          registeredHonEntry.honCount = honCount;
+          registeredHonEntry.honWeight = totalPurchaseWeight || honWeight;
+          registeredHonEntry.weight = totalVaWeight || weight;
+          registeredHonEntry.transferItems = JSON.parse(JSON.stringify(transferRows));
+
+          Toast.show(`HON QTY Transfer ${registeredHonEntry.trackId} updated successfully`, 'success', 'Changes Saved');
+        }
+
+        this.renderHonQtyTransferScreen(container);
+      });
+    }, 50);
   },
 
   // Show Edit HON QTY Transfer Modal
