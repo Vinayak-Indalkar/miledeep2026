@@ -20572,6 +20572,28 @@ const PreprocessingView = {
         </form>
       `,
       footerButtons: [
+        {
+          label: 'Delete',
+          type: 'danger',
+          onClick: (m) => {
+            Modal.confirm({
+              title: 'Delete Grading Track ID',
+              message: `Are you sure you want to delete Grading Track ID <strong class="text-[#00A4B7]">${row.trackId}</strong>? This action cannot be undone.`,
+              confirmText: 'Yes, Delete',
+              cancelText: 'Cancel',
+              isDestructive: true,
+              onConfirm: () => {
+                const idx = this.state.gradingTrackIds.findIndex(r => r.id === row.id || r.trackId === row.trackId);
+                if (idx !== -1) {
+                  this.state.gradingTrackIds.splice(idx, 1);
+                  this.renderGradingTrackIdScreen(container);
+                  Toast.show(`Grading Track ID ${row.trackId} deleted`, 'info');
+                }
+                m.close();
+              }
+            });
+          }
+        },
         { label: 'Cancel', type: 'secondary', onClick: (m) => m.close() },
         {
           label: 'Save Changes',
@@ -22692,24 +22714,30 @@ const PreprocessingView = {
   showGenerateGradingTrackModal(container) {
     const nextTrackId = `TRK-GR-2026-${Math.floor(710 + Math.random() * 80)}`;
     
-    // Initial crate row data for the embedded table
-    let modalCrateRows = [
-      {
-        sNo: 1,
-        variety: 'Vannamei (VM)',
-        hlCount: '21/25',
-        grade: 'Grade 1 (21/25)',
-        treatment: 'Non-Phosphate',
-        freezing: 'IQF Frozen',
-        noOfCrates: 25,
-        gradingQty: 500.0,
-        hlTubWeight: 20.0
-      }
-    ];
+    // Initially empty crate rows; displays empty state until added
+    let modalCrateRows = [];
 
     const renderModalCrateTable = () => {
       const tbody = document.getElementById('modal-crate-tbody');
       if (!tbody) return;
+
+      if (modalCrateRows.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="10" class="text-center py-16 text-[#6B778C]">
+              <div class="flex flex-col items-center justify-center gap-2.5">
+                <div class="w-12 h-12 rounded-full bg-[#F4F5F7] border border-[#DFE1E6] flex items-center justify-center">
+                  <svg class="w-6 h-6 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                </div>
+                <span class="font-bold text-sm text-[#334155]">No Data Available</span>
+                <span class="text-xs text-[#64748B]">There are currently no crate allocation rows in this table. Click "Add Crate Row" to allocate crates.</span>
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
       tbody.innerHTML = modalCrateRows.map((item, idx) => `
         <tr class="hover:bg-[#F9FAFB] transition-colors border-b border-[#EBECF0]">
           <td class="px-2.5 py-2 text-center text-[#5E6C84] font-semibold">${idx + 1}</td>
@@ -22775,10 +22803,6 @@ const PreprocessingView = {
       document.querySelectorAll('.btn-del-modal-crate-row').forEach(btn => {
         btn.addEventListener('click', (e) => {
           const idx = parseInt(btn.closest('button').dataset.idx, 10);
-          if (modalCrateRows.length <= 1) {
-            Toast.show('At least one crate table entry is required', 'warning');
-            return;
-          }
           modalCrateRows.splice(idx, 1);
           renderModalCrateTable();
         });
@@ -22787,7 +22811,7 @@ const PreprocessingView = {
 
     Modal.open({
       title: 'Generate Grading Track ID',
-      size: 'xl',
+      size: 'full',
       content: `
         <form id="form-gen-gr-track" class="space-y-4" onsubmit="return false;">
           <!-- 11 Form Input Fields -->
@@ -22916,6 +22940,23 @@ const PreprocessingView = {
         </form>
       `,
       footerButtons: [
+        {
+          label: 'Delete',
+          type: 'danger',
+          onClick: (m) => {
+            Modal.confirm({
+              title: 'Delete Draft',
+              message: 'Are you sure you want to delete and discard this Grading Track ID entry?',
+              confirmText: 'Yes, Delete',
+              cancelText: 'Cancel',
+              isDestructive: true,
+              onConfirm: () => {
+                m.close();
+                Toast.show('Grading Track ID draft deleted', 'info');
+              }
+            });
+          }
+        },
         { label: 'Cancel', type: 'secondary', onClick: (m) => m.close() },
         {
           label: 'Generate & Register',
@@ -23033,6 +23074,24 @@ const PreprocessingView = {
     const renderModalCrateTable = () => {
       const tbody = document.getElementById('edit-modal-crate-tbody');
       if (!tbody) return;
+
+      if (modalCrateRows.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="10" class="text-center py-16 text-[#6B778C]">
+              <div class="flex flex-col items-center justify-center gap-2.5">
+                <div class="w-12 h-12 rounded-full bg-[#F4F5F7] border border-[#DFE1E6] flex items-center justify-center">
+                  <svg class="w-6 h-6 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                </div>
+                <span class="font-bold text-sm text-[#334155]">No Data Available</span>
+                <span class="text-xs text-[#64748B]">There are currently no crate allocation rows in this table. Click "Add Crate Row" to allocate crates.</span>
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
       tbody.innerHTML = modalCrateRows.map((item, idx) => `
         <tr class="hover:bg-[#F9FAFB] transition-colors border-b border-[#EBECF0]">
           <td class="px-2.5 py-2 text-center text-[#5E6C84] font-semibold">${idx + 1}</td>
@@ -23108,7 +23167,7 @@ const PreprocessingView = {
 
     Modal.open({
       title: `Edit Grading Track ID: ${row.trackId}`,
-      size: 'xl',
+      size: 'full',
       content: `
         <form id="form-edit-gr-track" class="space-y-4" onsubmit="return false;">
           <!-- 11 Form Input Fields -->
