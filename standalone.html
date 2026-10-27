@@ -23889,50 +23889,8 @@ const PreprocessingView = {
   showGenerateVaTrackModal(container) {
     const nextTrackId = `TRK-VA-2026-${Math.floor(610 + Math.random() * 80)}`;
 
-    let lotRows = [
-      {
-        sNo: 1,
-        arrivalCode: 'LOT-2026-00125',
-        productionPlant: 'DFL UNIT-5 (JPT)',
-        soakingPlant: 'Soaking Line #1',
-        transactionDate: '2026-10-07',
-        shift: 'Shift A (Day)',
-        variety: 'Vannamei (White Shrimp)',
-        hlWtKgs: 1000.00,
-        hlCount: '21/25',
-        noOfCrates: 35,
-        vaOutQuantity: 920.00,
-        rejectionWeight: 15.00
-      },
-      {
-        sNo: 2,
-        arrivalCode: 'LOT-2026-00128',
-        productionPlant: 'DFL UNIT-5 (JPT)',
-        soakingPlant: 'Soaking Line #2',
-        transactionDate: '2026-10-07',
-        shift: 'Shift A (Day)',
-        variety: 'Black Tiger (P. Monodon)',
-        hlWtKgs: 800.00,
-        hlCount: '16/20',
-        noOfCrates: 28,
-        vaOutQuantity: 736.00,
-        rejectionWeight: 12.00
-      },
-      {
-        sNo: 3,
-        arrivalCode: 'LOT-2026-00130',
-        productionPlant: 'DFL UNIT-5 (JPT)',
-        soakingPlant: 'Pre-Treatment Tank A',
-        transactionDate: '2026-10-07',
-        shift: 'Shift B (Evening)',
-        variety: 'Vannamei (White Shrimp)',
-        hlWtKgs: 1200.00,
-        hlCount: '26/30',
-        noOfCrates: 42,
-        vaOutQuantity: 1104.00,
-        rejectionWeight: 18.00
-      }
-    ];
+    // Initially empty value addition lots; loaded upon clicking Save above table
+    let lotRows = [];
 
     const plantsList = [
       'DFL UNIT-5 (JPT)',
@@ -23967,6 +23925,48 @@ const PreprocessingView = {
     ];
 
     const buildVaLotsTableHtml = () => {
+      if (lotRows.length === 0) {
+        return `
+          <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+            <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+              <table class="w-full text-left text-xs border-collapse" style="min-width: 1550px;">
+                <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                  <tr>
+                    <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                    <th class="py-2.5 px-3 min-w-[130px]">Arrival Code</th>
+                    <th class="py-2.5 px-3 min-w-[150px]">Production Plant</th>
+                    <th class="py-2.5 px-3 min-w-[140px]">Soaking Plant</th>
+                    <th class="py-2.5 px-3 min-w-[130px]">Transaction Date</th>
+                    <th class="py-2.5 px-3 min-w-[125px]">Shift</th>
+                    <th class="py-2.5 px-3 min-w-[160px]">Variety</th>
+                    <th class="py-2.5 px-2 min-w-[110px] text-right">HL Wt(Kgs)</th>
+                    <th class="py-2.5 px-2 min-w-[90px] text-center">HL Count</th>
+                    <th class="py-2.5 px-2 min-w-[95px] text-right">No of Crates</th>
+                    <th class="py-2.5 px-2 min-w-[120px] text-right">VA Out Quantity</th>
+                    <th class="py-2.5 px-2 min-w-[110px] text-right">Rejection Weight</th>
+                    <th class="py-2.5 px-3 min-w-[95px] text-right">Yield</th>
+                    <th class="py-2.5 px-2 w-16 text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="va-lots-tbody">
+                  <tr>
+                    <td colspan="14" class="text-center py-16 text-[#6B778C]">
+                      <div class="flex flex-col items-center justify-center gap-2.5">
+                        <div class="w-12 h-12 rounded-full bg-[#F4F5F7] border border-[#DFE1E6] flex items-center justify-center">
+                          <svg class="w-6 h-6 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                        </div>
+                        <span class="font-bold text-sm text-[#334155]">No Data Available</span>
+                        <span class="text-xs text-[#64748B]">Click "Save" above to verify primary details and display value addition lots.</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }
+
       let totalHlWt = 0;
       let totalCrates = 0;
       let totalVaOut = 0;
@@ -24333,20 +24333,72 @@ const PreprocessingView = {
         this.showTransferPlantModal(trackId, totVaOut);
       });
 
-      // Save Button Handler
+      // Save Button Handler: verifies primary details, populates lots table, and saves record
+      let registeredVaEntry = null;
+
       const saveBtn = document.getElementById('btn-save-va-track');
       saveBtn?.addEventListener('click', () => {
         const plant = document.getElementById('nvat-plant')?.value || 'DFL UNIT-5 (JPT)';
-        const trackId = document.getElementById('nvat-trackid')?.value || nextTrackId;
+        const trackId = (document.getElementById('nvat-trackid')?.value || nextTrackId).trim();
         const vaDate = document.getElementById('nvat-va-date')?.value || '2026-10-07';
         const shift = document.getElementById('nvat-shift')?.value || 'Shift A (Day)';
         const supervisor = document.getElementById('nvat-supervisor')?.value || 'Laxmi Narayana';
 
-        readTableInputs();
-
+        // If lots are not yet loaded, populate the value addition lots
         if (lotRows.length === 0) {
-          Toast.show('Please keep at least one lot entry before saving', 'warning');
-          return;
+          lotRows = [
+            {
+              sNo: 1,
+              arrivalCode: 'LOT-2026-00125',
+              productionPlant: plant,
+              soakingPlant: 'Soaking Line #1',
+              transactionDate: vaDate,
+              shift: shift,
+              variety: 'Vannamei (White Shrimp)',
+              hlWtKgs: 1000.00,
+              hlCount: '21/25',
+              noOfCrates: 35,
+              vaOutQuantity: 920.00,
+              rejectionWeight: 15.00
+            },
+            {
+              sNo: 2,
+              arrivalCode: 'LOT-2026-00128',
+              productionPlant: plant,
+              soakingPlant: 'Soaking Line #2',
+              transactionDate: vaDate,
+              shift: shift,
+              variety: 'Black Tiger (P. Monodon)',
+              hlWtKgs: 800.00,
+              hlCount: '16/20',
+              noOfCrates: 28,
+              vaOutQuantity: 736.00,
+              rejectionWeight: 12.00
+            },
+            {
+              sNo: 3,
+              arrivalCode: 'LOT-2026-00130',
+              productionPlant: plant,
+              soakingPlant: 'Pre-Treatment Tank A',
+              transactionDate: vaDate,
+              shift: shift,
+              variety: 'Vannamei (White Shrimp)',
+              hlWtKgs: 1200.00,
+              hlCount: '26/30',
+              noOfCrates: 42,
+              vaOutQuantity: 1104.00,
+              rejectionWeight: 18.00
+            }
+          ];
+        } else {
+          readTableInputs();
+        }
+
+        // Render table data in the Value Addition Lots & Yield Breakdown table
+        const containerEl = document.getElementById('va-lots-table-container');
+        if (containerEl) {
+          containerEl.innerHTML = buildVaLotsTableHtml();
+          attachVaTableEvents();
         }
 
         const totalHlWt = lotRows.reduce((sum, r) => sum + (Number(r.hlWtKgs) || 0), 0);
@@ -24355,32 +24407,48 @@ const PreprocessingView = {
         const avgYield = totalHlWt > 0 ? Number(((totalVaOut / totalHlWt) * 100).toFixed(1)) : 0;
         const primaryVariety = lotRows[0]?.variety || 'Vannamei (VM)';
         const primaryHlCount = lotRows[0]?.hlCount || '21/25';
-        const primaryArrivalDate = lotRows[0]?.transactionDate || '2026-10-07';
+        const primaryArrivalDate = lotRows[0]?.transactionDate || vaDate;
 
-        const newEntry = {
-          sNo: 1,
-          id: trackId,
-          trackId: trackId,
-          productionPlant: plant,
-          arrivalDate: primaryArrivalDate,
-          valueAdditionDate: vaDate,
-          shift: shift,
-          supervisor: supervisor,
-          variety: primaryVariety,
-          hlCount: primaryHlCount,
-          crates: totalCrates,
-          hlWtKgs: totalHlWt,
-          vaOutQuantity: totalVaOut,
-          totals: `${avgYield}%`,
-          lotItems: JSON.parse(JSON.stringify(lotRows)),
-          status: 'IN_PROGRESS'
-        };
+        if (!registeredVaEntry) {
+          registeredVaEntry = {
+            sNo: 1,
+            id: trackId,
+            trackId: trackId,
+            productionPlant: plant,
+            arrivalDate: primaryArrivalDate,
+            valueAdditionDate: vaDate,
+            shift: shift,
+            supervisor: supervisor,
+            variety: primaryVariety,
+            hlCount: primaryHlCount,
+            crates: totalCrates,
+            hlWtKgs: totalHlWt,
+            vaOutQuantity: totalVaOut,
+            totals: `${avgYield}%`,
+            lotItems: JSON.parse(JSON.stringify(lotRows)),
+            status: 'IN_PROGRESS'
+          };
 
-        this.state.vaTrackIds.forEach(r => { if (r.sNo) r.sNo += 1; });
-        this.state.vaTrackIds.unshift(newEntry);
+          this.state.vaTrackIds.forEach(r => { if (r.sNo) r.sNo += 1; });
+          this.state.vaTrackIds.unshift(registeredVaEntry);
 
-        Modal.close();
-        Toast.show(`Value Addition Track ID ${trackId} saved successfully with ${lotRows.length} lot(s)`, 'success', 'Track ID Saved');
+          Toast.show(`Value Addition Track ID ${trackId} saved. Lots data loaded.`, 'success', 'Track ID Saved');
+        } else {
+          registeredVaEntry.productionPlant = plant;
+          registeredVaEntry.valueAdditionDate = vaDate;
+          registeredVaEntry.shift = shift;
+          registeredVaEntry.supervisor = supervisor;
+          registeredVaEntry.variety = primaryVariety;
+          registeredVaEntry.hlCount = primaryHlCount;
+          registeredVaEntry.crates = totalCrates;
+          registeredVaEntry.hlWtKgs = totalHlWt;
+          registeredVaEntry.vaOutQuantity = totalVaOut;
+          registeredVaEntry.totals = `${avgYield}%`;
+          registeredVaEntry.lotItems = JSON.parse(JSON.stringify(lotRows));
+
+          Toast.show(`Value Addition Track ID ${registeredVaEntry.trackId} updated successfully`, 'success', 'Changes Saved');
+        }
+
         this.renderValueAdditionTrackIdScreen(container);
       });
     }, 50);
@@ -24452,6 +24520,48 @@ const PreprocessingView = {
     ];
 
     const buildVaLotsTableHtml = () => {
+      if (lotRows.length === 0) {
+        return `
+          <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+            <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+              <table class="w-full text-left text-xs border-collapse" style="min-width: 1550px;">
+                <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                  <tr>
+                    <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                    <th class="py-2.5 px-3 min-w-[130px]">Arrival Code</th>
+                    <th class="py-2.5 px-3 min-w-[150px]">Production Plant</th>
+                    <th class="py-2.5 px-3 min-w-[140px]">Soaking Plant</th>
+                    <th class="py-2.5 px-3 min-w-[130px]">Transaction Date</th>
+                    <th class="py-2.5 px-3 min-w-[125px]">Shift</th>
+                    <th class="py-2.5 px-3 min-w-[160px]">Variety</th>
+                    <th class="py-2.5 px-2 min-w-[110px] text-right">HL Wt(Kgs)</th>
+                    <th class="py-2.5 px-2 min-w-[90px] text-center">HL Count</th>
+                    <th class="py-2.5 px-2 min-w-[95px] text-right">No of Crates</th>
+                    <th class="py-2.5 px-2 min-w-[120px] text-right">VA Out Quantity</th>
+                    <th class="py-2.5 px-2 min-w-[110px] text-right">Rejection Weight</th>
+                    <th class="py-2.5 px-3 min-w-[95px] text-right">Yield</th>
+                    <th class="py-2.5 px-2 w-16 text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="va-edit-lots-tbody">
+                  <tr>
+                    <td colspan="14" class="text-center py-16 text-[#6B778C]">
+                      <div class="flex flex-col items-center justify-center gap-2.5">
+                        <div class="w-12 h-12 rounded-full bg-[#F4F5F7] border border-[#DFE1E6] flex items-center justify-center">
+                          <svg class="w-6 h-6 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                        </div>
+                        <span class="font-bold text-sm text-[#334155]">No Data Available</span>
+                        <span class="text-xs text-[#64748B]">There are currently no lots in this table.</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }
+
       let totalHlWt = 0;
       let totalCrates = 0;
       let totalVaOut = 0;
