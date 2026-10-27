@@ -3242,13 +3242,9 @@ export const PreprocessingView = {
         <form id="form-gen-rm-track" class="space-y-4" onsubmit="return false;">
           <!-- 1. HEADER SPECIFICATION SECTION -->
           <div class="bg-[#F8FAFC] p-4 rounded-xl border border-[#DFE1E6]">
-            <div class="flex items-center justify-between mb-3 border-b border-[#E2E8F0] pb-2">
-              <span class="text-xs font-extrabold text-[#172B4D] uppercase tracking-wider flex items-center gap-1.5">
-                <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <div class="mb-3 border-b border-[#E2E8F0] pb-2">
+              <span class="text-xs font-extrabold text-[#172B4D] uppercase tracking-wider">
                 Track ID Primary Registry Details
-              </span>
-              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E0F2FE] text-[#0284C7] border border-[#BAE6FD]">
-                Gate Intake Inward
               </span>
             </div>
 
@@ -3322,7 +3318,7 @@ export const PreprocessingView = {
             <div class="flex flex-wrap items-center justify-between gap-2">
               <div>
                 <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Arrival Bill / Lot Inspection Table</h4>
-                <p class="text-[11px] text-[#5E6C84]">Itemized weights, count inspection, sample HO quantity, and automatic variance calculation</p>
+                
               </div>
               <div>
                 <button type="button" id="btn-add-rm-lot" class="btn-primary border-0 px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer shadow-xs bg-[#00A4B7] hover:bg-[#008F9F] text-white">
@@ -3758,13 +3754,9 @@ export const PreprocessingView = {
         <form id="form-edit-rm-track" class="space-y-4" onsubmit="return false;">
           <!-- 1. HEADER SPECIFICATION SECTION -->
           <div class="bg-[#F8FAFC] p-4 rounded-xl border border-[#DFE1E6]">
-            <div class="flex items-center justify-between mb-3 border-b border-[#E2E8F0] pb-2">
-              <span class="text-xs font-extrabold text-[#172B4D] uppercase tracking-wider flex items-center gap-1.5">
-                <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            <div class="mb-3 border-b border-[#E2E8F0] pb-2">
+              <span class="text-xs font-extrabold text-[#172B4D] uppercase tracking-wider">
                 Edit RM Track ID Registry Record
-              </span>
-              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E0F2FE] text-[#0284C7] border border-[#BAE6FD]">
-                ${row.trackId}
               </span>
             </div>
 
@@ -3838,7 +3830,7 @@ export const PreprocessingView = {
             <div class="flex flex-wrap items-center justify-between gap-2">
               <div>
                 <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Arrival Bill / Lot Inspection Table</h4>
-                <p class="text-[11px] text-[#5E6C84]">Itemized weights, count inspection, sample HO quantity, and automatic variance calculation</p>
+                
               </div>
               <div>
                 <button type="button" id="btn-add-erm-lot" class="btn-primary border-0 px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer shadow-xs bg-[#00A4B7] hover:bg-[#008F9F] text-white">
@@ -4648,13 +4640,9 @@ export const PreprocessingView = {
         <form id="form-gen-dh-track" class="space-y-4" onsubmit="return false;">
           <!-- 1. HEADER SPECIFICATION SECTION -->
           <div class="bg-[#F8FAFC] p-4 rounded-xl border border-[#DFE1E6]">
-            <div class="flex items-center justify-between mb-3 border-b border-[#E2E8F0] pb-2">
-              <span class="text-xs font-extrabold text-[#172B4D] uppercase tracking-wider flex items-center gap-1.5">
-                <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879a3 3 0 11-4.242-4.242L11 9m-4 4l-4 4"/></svg>
+            <div class="mb-3 border-b border-[#E2E8F0] pb-2">
+              <span class="text-xs font-extrabold text-[#172B4D] uppercase tracking-wider">
                 De-Heading Track ID Primary Registry Details
-              </span>
-              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E0F2FE] text-[#0284C7] border border-[#BAE6FD]">
-                Cutting Table Stage 1
               </span>
             </div>
 
@@ -4730,7 +4718,7 @@ export const PreprocessingView = {
             <div class="flex flex-wrap items-center justify-between gap-2">
               <div>
                 <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">De-Heading Cutting Table Lots & Yield Table</h4>
-                <p class="text-[11px] text-[#5E6C84]">Itemized weights, count/no of pcs, sample HL recovery, and automatic body yield calculation</p>
+                
               </div>
               <div>
                 <button type="button" id="btn-add-dh-lot" class="btn-primary border-0 px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer shadow-xs bg-[#00A4B7] hover:bg-[#008F9F] text-white">
@@ -5111,13 +5099,9 @@ export const PreprocessingView = {
         <form id="form-edit-dh-track" class="space-y-4" onsubmit="return false;">
           <!-- 1. HEADER SPECIFICATION SECTION -->
           <div class="bg-[#F8FAFC] p-4 rounded-xl border border-[#DFE1E6]">
-            <div class="flex items-center justify-between mb-3 border-b border-[#E2E8F0] pb-2">
-              <span class="text-xs font-extrabold text-[#172B4D] uppercase tracking-wider flex items-center gap-1.5">
-                <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            <div class="mb-3 border-b border-[#E2E8F0] pb-2">
+              <span class="text-xs font-extrabold text-[#172B4D] uppercase tracking-wider">
                 Edit De-Heading Registry Details
-              </span>
-              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E0F2FE] text-[#0284C7] border border-[#BAE6FD]">
-                ${row.trackId}
               </span>
             </div>
 
@@ -5193,7 +5177,7 @@ export const PreprocessingView = {
             <div class="flex flex-wrap items-center justify-between gap-2">
               <div>
                 <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">De-Heading Cutting Table Lots & Yield Table</h4>
-                <p class="text-[11px] text-[#5E6C84]">Itemized weights, count/no of pcs, sample HL recovery, and automatic body yield calculation</p>
+                
               </div>
               <div>
                 <button type="button" id="btn-add-edh-lot" class="btn-primary border-0 px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer shadow-xs bg-[#00A4B7] hover:bg-[#008F9F] text-white">
@@ -7208,13 +7192,9 @@ export const PreprocessingView = {
         <form id="form-gen-va-track" class="space-y-4" onsubmit="return false;">
           <!-- 1. HEADER SPECIFICATION SECTION -->
           <div class="bg-[#F8FAFC] p-4 rounded-xl border border-[#DFE1E6]">
-            <div class="flex items-center justify-between mb-3 border-b border-[#E2E8F0] pb-2">
-              <span class="text-xs font-extrabold text-[#172B4D] uppercase tracking-wider flex items-center gap-1.5">
-                <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            <div class="mb-3 border-b border-[#E2E8F0] pb-2">
+              <span class="text-xs font-extrabold text-[#172B4D] uppercase tracking-wider">
                 Value Addition Primary Track Code Registry
-              </span>
-              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E0F2FE] text-[#0284C7] border border-[#BAE6FD]">
-                Value Addition Stage 2
               </span>
             </div>
 
@@ -7282,7 +7262,7 @@ export const PreprocessingView = {
             <div class="flex items-center justify-between">
               <div>
                 <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider mb-0">Value Addition Lots &amp; Yield Breakdown</h4>
-                <p class="text-[11px] text-[#5E6C84] mb-0">Itemized line allocations, soaking plant assignments, and real-time output recovery yield</p>
+                
               </div>
               <button type="button" id="btn-add-va-lot-row" class="btn-primary px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer border-0 shadow-2xs hover:shadow-xs transition-all">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
@@ -7729,13 +7709,9 @@ export const PreprocessingView = {
         <form id="form-edit-va-track" class="space-y-4" onsubmit="return false;">
           <!-- 1. HEADER SPECIFICATION SECTION -->
           <div class="bg-[#F8FAFC] p-4 rounded-xl border border-[#DFE1E6]">
-            <div class="flex items-center justify-between mb-3 border-b border-[#E2E8F0] pb-2">
-              <span class="text-xs font-extrabold text-[#172B4D] uppercase tracking-wider flex items-center gap-1.5">
-                <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            <div class="mb-3 border-b border-[#E2E8F0] pb-2">
+              <span class="text-xs font-extrabold text-[#172B4D] uppercase tracking-wider">
                 Edit Value Addition Track Registry
-              </span>
-              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E0F2FE] text-[#0284C7] border border-[#BAE6FD]">
-                ${row.trackId}
               </span>
             </div>
 
@@ -7796,7 +7772,7 @@ export const PreprocessingView = {
             <div class="flex items-center justify-between">
               <div>
                 <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider mb-0">Value Addition Lots &amp; Yield Breakdown</h4>
-                <p class="text-[11px] text-[#5E6C84] mb-0">Itemized line allocations, soaking plant assignments, and real-time output recovery yield</p>
+                
               </div>
               <button type="button" id="btn-edit-add-va-lot-row" class="btn-primary px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer border-0 shadow-2xs hover:shadow-xs transition-all">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
