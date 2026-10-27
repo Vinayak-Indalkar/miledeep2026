@@ -424,14 +424,14 @@ export const UIEnhancements = {
 
     this.calendarEl.innerHTML = `
       <div class="erp-cal-header flex items-center justify-between pb-2 mb-2 border-b border-[#E2E8F0]">
-        <button type="button" id="erp-cal-prev-btn" class="w-7 h-7 rounded-full flex items-center justify-center text-[#475569] hover:bg-[#F1F5F9] hover:text-[#00A4B7] transition-colors" title="Previous Month">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        <button type="button" id="erp-cal-prev-btn" class="w-7 h-7 rounded-full flex items-center justify-center text-[#475569] hover:bg-[#F1F5F9] hover:text-[#00A4B7] transition-colors cursor-pointer" title="Previous Month" aria-label="Previous Month">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
         </button>
         <div class="text-xs font-bold text-[#0F172A] tracking-wide">
           ${monthNames[this.viewMonth]} ${this.viewYear}
         </div>
-        <button type="button" id="erp-cal-next-btn" class="w-7 h-7 rounded-full flex items-center justify-center text-[#475569] hover:bg-[#F1F5F9] hover:text-[#00A4B7] transition-colors" title="Next Month">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        <button type="button" id="erp-cal-next-btn" class="w-7 h-7 rounded-full flex items-center justify-center text-[#475569] hover:bg-[#F1F5F9] hover:text-[#00A4B7] transition-colors cursor-pointer" title="Next Month" aria-label="Next Month">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
         </button>
       </div>
 

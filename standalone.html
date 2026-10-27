@@ -1692,7 +1692,7 @@ button.dt-action-btn:not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn
 }
 
 /* 4. BUTTONS & CONTROLS - PILL GEOMETRY & WCAG CALIBRATED SYSTEM */
-button:not(.sidebar-mod-btn):not(#header-settings-btn):not(#header-notifications-btn):not(#header-help-btn):not(#user-menu-btn):not(.settings-dropdown-link):not([role="tab"]):not(#sidebar-edge-toggle-btn):not(.dt-action-btn):not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn):not(.btn-show-all-submenus):not(.btn-sub-edit):not(.btn-sub-toggle):not(.btn-sub-del):not(#toggle-pwd-btn):not(#toggle-usr-modal-password-btn):not(#toggle-asgn-db-pass-btn):not(.btn-toggle-cpwd):not(#dt-opt-excel):not(#dt-opt-csv):not(#dt-opt-pdf):not([id^="dt-opt-"]):not([class*="text-left"]):not(#dt-page-prev):not(#dt-page-next):not([id*="page-prev"]):not([id*="page-next"]):not(.dt-page-btn):not([class*="page-btn"]),
+button:not(.sidebar-mod-btn):not(#header-settings-btn):not(#header-notifications-btn):not(#header-help-btn):not(#user-menu-btn):not(.settings-dropdown-link):not([role="tab"]):not(#sidebar-edge-toggle-btn):not(.dt-action-btn):not(.dt-top-filter-reset-btn):not(.dt-top-filter-toggle-btn):not(.btn-show-all-submenus):not(.btn-sub-edit):not(.btn-sub-toggle):not(.btn-sub-del):not(#toggle-pwd-btn):not(#toggle-usr-modal-password-btn):not(#toggle-asgn-db-pass-btn):not(.btn-toggle-cpwd):not(#dt-opt-excel):not(#dt-opt-csv):not(#dt-opt-pdf):not([id^="dt-opt-"]):not([class*="text-left"]):not(#dt-page-prev):not(#dt-page-next):not([id*="page-prev"]):not([id*="page-next"]):not(.dt-page-btn):not([class*="page-btn"]):not(#erp-cal-prev-btn):not(#erp-cal-next-btn):not(#erp-cal-clear-btn):not(#erp-cal-today-btn):not(.erp-cal-day),
 .btn,
 .btn-primary,
 .btn-primary-deep,
@@ -2246,6 +2246,97 @@ div:has(> h1) {
 @keyframes calendarAnim {
   from { opacity: 0; transform: translateY(-4px) scale(0.98); }
   to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Calendar Header Navigation Buttons & Visible Chevrons */
+.erp-cal-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding-bottom: 8px !important;
+  margin-bottom: 8px !important;
+  border-bottom: 1px solid #E2E8F0 !important;
+}
+#erp-cal-prev-btn,
+#erp-cal-next-btn {
+  width: 28px !important;
+  min-width: 28px !important;
+  max-width: 28px !important;
+  height: 28px !important;
+  min-height: 28px !important;
+  max-height: 28px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 9999px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: transparent !important;
+  background: transparent !important;
+  border: 1px solid #E2E8F0 !important;
+  color: #334155 !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  transition: all 0.15s ease !important;
+  outline: none !important;
+}
+#erp-cal-prev-btn:hover,
+#erp-cal-next-btn:hover {
+  background-color: #F1F5F9 !important;
+  color: #00A4B7 !important;
+  border-color: #00A4B7 !important;
+}
+#erp-cal-prev-btn svg,
+#erp-cal-next-btn svg {
+  width: 16px !important;
+  min-width: 16px !important;
+  max-width: 16px !important;
+  height: 16px !important;
+  min-height: 16px !important;
+  max-height: 16px !important;
+  display: block !important;
+  stroke: #334155 !important;
+  stroke-width: 2.5 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  fill: none !important;
+  pointer-events: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+#erp-cal-prev-btn:hover svg,
+#erp-cal-next-btn:hover svg {
+  stroke: #00A4B7 !important;
+}
+
+#erp-cal-clear-btn,
+#erp-cal-today-btn {
+  min-height: 26px !important;
+  height: 26px !important;
+  padding: 2px 10px !important;
+  font-size: 11px !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+}
+#erp-cal-clear-btn {
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  color: #64748B !important;
+}
+#erp-cal-clear-btn:hover {
+  background: #FEE2E2 !important;
+  color: #EF4444 !important;
+}
+#erp-cal-today-btn {
+  background: #E6F7F9 !important;
+  border: 1px solid transparent !important;
+  color: #00A4B7 !important;
+  font-weight: 700 !important;
+}
+#erp-cal-today-btn:hover {
+  background: #CFF0F4 !important;
+  color: #008796 !important;
 }
 .erp-cal-day {
   width: 32px !important;
@@ -4971,14 +5062,14 @@ const UIEnhancements = {
 
     this.calendarEl.innerHTML = `
       <div class="erp-cal-header flex items-center justify-between pb-2 mb-2 border-b border-[#E2E8F0]">
-        <button type="button" id="erp-cal-prev-btn" class="w-7 h-7 rounded-full flex items-center justify-center text-[#475569] hover:bg-[#F1F5F9] hover:text-[#00A4B7] transition-colors" title="Previous Month">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        <button type="button" id="erp-cal-prev-btn" class="w-7 h-7 rounded-full flex items-center justify-center text-[#475569] hover:bg-[#F1F5F9] hover:text-[#00A4B7] transition-colors cursor-pointer" title="Previous Month" aria-label="Previous Month">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
         </button>
         <div class="text-xs font-bold text-[#0F172A] tracking-wide">
           ${monthNames[this.viewMonth]} ${this.viewYear}
         </div>
-        <button type="button" id="erp-cal-next-btn" class="w-7 h-7 rounded-full flex items-center justify-center text-[#475569] hover:bg-[#F1F5F9] hover:text-[#00A4B7] transition-colors" title="Next Month">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        <button type="button" id="erp-cal-next-btn" class="w-7 h-7 rounded-full flex items-center justify-center text-[#475569] hover:bg-[#F1F5F9] hover:text-[#00A4B7] transition-colors cursor-pointer" title="Next Month" aria-label="Next Month">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
         </button>
       </div>
 
