@@ -3320,7 +3320,7 @@ export const PreprocessingView = {
           </div>
 
           <!-- Save Button Bar above Arrival Bill / Lot Inspection Table -->
-          <div class="flex items-center justify-end pt-2 pb-1">
+          <div class="flex items-center justify-end">
             <button type="button" id="btn-save-rm-track" class="btn-primary rounded-full px-5 py-1.5 text-xs font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border-0">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
               <span>Save</span>
@@ -3907,7 +3907,7 @@ export const PreprocessingView = {
           </div>
 
           <!-- Save Button Bar above Arrival Bill / Lot Inspection Table -->
-          <div class="flex items-center justify-end pt-2 pb-1">
+          <div class="flex items-center justify-end">
             <button type="button" id="btn-save-erm-track" class="btn-primary rounded-full px-5 py-1.5 text-xs font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border-0">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
               <span>Save</span>
@@ -4839,7 +4839,7 @@ export const PreprocessingView = {
           </div>
 
           <!-- Save Button Bar above De-Heading Cutting Table Lots & Yield Table -->
-          <div class="flex items-center justify-end pt-2 pb-1">
+          <div class="flex items-center justify-end">
             <button type="button" id="btn-save-dh-track" class="btn-primary rounded-full px-5 py-1.5 text-xs font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border-0">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
               <span>Save</span>
@@ -5370,7 +5370,7 @@ export const PreprocessingView = {
           </div>
 
           <!-- Save Button Bar above De-Heading Cutting Table Lots & Yield Table -->
-          <div class="flex items-center justify-end pt-2 pb-1">
+          <div class="flex items-center justify-end">
             <button type="button" id="btn-save-edh-track" class="btn-primary rounded-full px-5 py-1.5 text-xs font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border-0">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
               <span>Save</span>
