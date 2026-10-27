@@ -20465,74 +20465,268 @@ const PreprocessingView = {
 
   // Show Generate De-Heading Track ID Modal
   showGenerateDeheadingTrackModal(container) {
+    let lotRows = [
+      {
+        sNo: 1,
+        billNo: 'BILL-2026-0891',
+        variety: 'Vannamei (White Shrimp)',
+        count: 40,
+        weight: 1250.00,
+        sampleHoQty: 2.00,
+        noOfPcs: 84,
+        sampleHlQty: 1.32
+      },
+      {
+        sNo: 2,
+        billNo: 'BILL-2026-0892',
+        variety: 'Black Tiger (P. Monodon)',
+        count: 30,
+        weight: 850.00,
+        sampleHoQty: 2.00,
+        noOfPcs: 60,
+        sampleHlQty: 1.30
+      },
+      {
+        sNo: 3,
+        billNo: 'BILL-2026-0893',
+        variety: 'Vannamei (White Shrimp)',
+        count: 50,
+        weight: 1420.00,
+        sampleHoQty: 2.00,
+        noOfPcs: 98,
+        sampleHlQty: 1.34
+      }
+    ];
+
+    const varietiesList = [
+      'Vannamei (White Shrimp)',
+      'Black Tiger (P. Monodon)',
+      'Freshwater Scampi',
+      'Pink Shrimp (Sea Caught)',
+      'Brown Shrimp',
+      'Flower Shrimp'
+    ];
+
+    const buildDhLotsTableHtml = () => {
+      let totalWeight = 0;
+      let totalSampleHoQty = 0;
+      let totalPcs = 0;
+      let totalSampleHlQty = 0;
+
+      const rowsHtml = lotRows.map((lot, idx) => {
+        const hoQty = Number(lot.sampleHoQty) || 0;
+        const hlQty = Number(lot.sampleHlQty) || 0;
+        const yieldPct = hoQty > 0 ? Number(((hlQty / hoQty) * 100).toFixed(1)) : 0;
+
+        totalWeight += Number(lot.weight) || 0;
+        totalSampleHoQty += hoQty;
+        totalPcs += Number(lot.noOfPcs) || 0;
+        totalSampleHlQty += hlQty;
+
+        const yieldColor = yieldPct >= 65 ? 'text-[#00875A]' : yieldPct >= 60 ? 'text-[#0284C7]' : 'text-[#DE350B]';
+
+        return `
+          <tr class="hover:bg-[#F8FAFC] transition-colors dh-lot-row" data-index="${idx}">
+            <!-- 1. S.No -->
+            <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">
+              ${idx + 1}
+            </td>
+
+            <!-- 2. Bill No -->
+            <td class="py-2 px-2.5">
+              <input type="text" class="dh-lot-bill font-mono font-bold text-[#00A4B7] w-full text-xs px-2.5 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.billNo || ''}" placeholder="BILL-2026-..." />
+            </td>
+
+            <!-- 3. Variety -->
+            <td class="py-2 px-2.5">
+              <select class="dh-lot-variety w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded font-medium text-[#172B4D] focus:outline-none focus:border-[#00A4B7]">
+                ${varietiesList.map(v => `<option value="${v}" ${lot.variety === v ? 'selected' : ''}>${v}</option>`).join('')}
+              </select>
+            </td>
+
+            <!-- 4. Count -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.5" class="dh-lot-count font-mono text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.count ?? ''}" placeholder="40" />
+            </td>
+
+            <!-- 5. Weight -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.01" class="dh-lot-weight font-mono font-bold text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.weight ?? ''}" placeholder="0.00" />
+            </td>
+
+            <!-- 6. Sample HO Qty -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.01" class="dh-lot-sample-ho font-mono font-semibold text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.sampleHoQty ?? ''}" placeholder="2.00" />
+            </td>
+
+            <!-- 7. Count/Noof Pcs -->
+            <td class="py-2 px-2">
+              <input type="number" step="1" class="dh-lot-pcs font-mono text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.noOfPcs ?? ''}" placeholder="80" />
+            </td>
+
+            <!-- 8. Sample HL Qty / Body Yield -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.01" class="dh-lot-sample-hl font-mono font-bold text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.sampleHlQty ?? ''}" placeholder="1.32" />
+            </td>
+
+            <!-- 9. Yield -->
+            <td class="py-2.5 px-3 text-right font-mono font-bold text-xs ${yieldColor} dh-row-yield">
+              ${yieldPct.toFixed(1)}%
+            </td>
+
+            <!-- 10. Actions -->
+            <td class="py-2.5 px-2 text-center">
+              <button type="button" class="btn-del-dh-row w-7 h-7 rounded-full inline-flex items-center justify-center text-[#FF5630] hover:bg-[#FFEBE6] transition-colors cursor-pointer" title="Delete Row" data-index="${idx}">
+                <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      const avgYield = totalSampleHoQty > 0 ? Number(((totalSampleHlQty / totalSampleHoQty) * 100).toFixed(1)) : 0;
+      const avgYieldColor = avgYield >= 65 ? 'text-[#00875A]' : 'text-[#0284C7]';
+
+      return `
+        <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+          <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+            <table class="w-full text-left text-xs border-collapse" style="min-width: 1150px;">
+              <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                <tr>
+                  <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                  <th class="py-2.5 px-3 min-w-[140px]">Bill No</th>
+                  <th class="py-2.5 px-3 min-w-[170px]">Variety</th>
+                  <th class="py-2.5 px-2 min-w-[90px] text-right">Count</th>
+                  <th class="py-2.5 px-2 min-w-[125px] text-right">Weight</th>
+                  <th class="py-2.5 px-2 min-w-[110px] text-right">Sample HO Qty</th>
+                  <th class="py-2.5 px-2 min-w-[110px] text-right">Count/Noof Pcs</th>
+                  <th class="py-2.5 px-2 min-w-[150px] text-right">Sample HL Qty / Body Yield</th>
+                  <th class="py-2.5 px-3 min-w-[95px] text-right">Yield</th>
+                  <th class="py-2.5 px-2 w-16 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="dh-lots-tbody" class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                ${rowsHtml}
+              </tbody>
+              <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                <tr>
+                  <td colspan="4" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Aggregates:</td>
+                  <td id="dh-tot-weight" class="py-3 px-2 text-right font-mono text-sm text-[#0C4A6E]">${totalWeight.toFixed(2)} Kgs</td>
+                  <td id="dh-tot-ho-qty" class="py-3 px-2 text-right font-mono text-sm text-[#475569]">${totalSampleHoQty.toFixed(2)} Kgs</td>
+                  <td id="dh-tot-pcs" class="py-3 px-2 text-right font-mono text-sm text-[#475569]">${totalPcs}</td>
+                  <td id="dh-tot-hl-qty" class="py-3 px-2 text-right font-mono text-sm text-[#00A4B7]">${totalSampleHlQty.toFixed(2)} Kgs</td>
+                  <td id="dh-tot-yield" class="py-3 px-3 text-right font-mono text-sm ${avgYieldColor}">${avgYield.toFixed(1)}%</td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      `;
+    };
+
     Modal.open({
       title: 'Generate De-Heading Track ID',
-      size: 'md',
+      size: 'full',
       content: `
         <form id="form-gen-dh-track" class="space-y-4" onsubmit="return false;">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-            <!-- 1. PRODUCTION PLANT * -->
-            <div class="sm:col-span-2">
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">PRODUCTION PLANT <span class="text-[#DE350B]">*</span></label>
-              <select id="ndht-plant" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-semibold text-[#172B4D] focus:outline-none focus:border-[#0284C7]">
-                <option value="DFL UNIT-5 (JPT)" selected>DFL UNIT-5 (JPT)</option>
-                <option value="DFL UNIT-3 (PSP)">DFL UNIT-3 (PSP)</option>
-                <option value="DFL UNIT-4 (PND)">DFL UNIT-4 (PND)</option>
-                <option value="DFL UNIT-1 (VSP)">DFL UNIT-1 (VSP)</option>
-                <option value="DFL UNIT-6 (JPT-II)">DFL UNIT-6 (JPT-II)</option>
-                <option value="DFL UNIT-2 (KKD)">DFL UNIT-2 (KKD)</option>
-              </select>
+          <!-- 1. HEADER SPECIFICATION SECTION -->
+          <div class="bg-[#F8FAFC] p-4 rounded-xl border border-[#DFE1E6]">
+            <div class="flex items-center justify-between mb-3 border-b border-[#E2E8F0] pb-2">
+              <span class="text-xs font-extrabold text-[#172B4D] uppercase tracking-wider flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879a3 3 0 11-4.242-4.242L11 9m-4 4l-4 4"/></svg>
+                De-Heading Track ID Primary Registry Details
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E0F2FE] text-[#0284C7] border border-[#BAE6FD]">
+                Cutting Table Stage 1
+              </span>
             </div>
 
-            <!-- 2. ARRIVAL DATE * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">ARRIVAL DATE <span class="text-[#DE350B]">*</span></label>
-              <div class="erp-date-wrapper">
-                <input type="date" id="ndht-arrival-date" value="2026-10-07" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()" />
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs">
+              <!-- 1. PRODUCTION PLANT * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">PRODUCTION PLANT <span class="text-[#DE350B]">*</span></label>
+                <select id="ndht-plant" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-semibold text-[#172B4D] focus:outline-none focus:border-[#0284C7]">
+                  <option value="DFL UNIT-5 (JPT)" selected>DFL UNIT-5 (JPT)</option>
+                  <option value="DFL UNIT-3 (PSP)">DFL UNIT-3 (PSP)</option>
+                  <option value="DFL UNIT-4 (PND)">DFL UNIT-4 (PND)</option>
+                  <option value="DFL UNIT-1 (VSP)">DFL UNIT-1 (VSP)</option>
+                  <option value="DFL UNIT-6 (JPT-II)">DFL UNIT-6 (JPT-II)</option>
+                  <option value="DFL UNIT-2 (KKD)">DFL UNIT-2 (KKD)</option>
+                </select>
+              </div>
+
+              <!-- 2. ARRIVAL DATE * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">ARRIVAL DATE <span class="text-[#DE350B]">*</span></label>
+                <div class="erp-date-wrapper">
+                  <input type="date" id="ndht-arrival-date" value="2026-10-07" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()" />
+                </div>
+              </div>
+
+              <!-- 3. TRACK ID * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">TRACK ID <span class="text-[#DE350B]">*</span></label>
+                <input type="text" id="ndht-trackid" value="TRK-DH-2026-${Math.floor(920 + Math.random() * 70)}" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono font-bold text-[#00A4B7] focus:outline-none focus:border-[#0284C7]" placeholder="e.g. TRK-DH-2026-920" />
+              </div>
+
+              <!-- 4. DE HEADING DATE * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">DE HEADING DATE <span class="text-[#DE350B]">*</span></label>
+                <div class="erp-date-wrapper">
+                  <input type="date" id="ndht-dehead-date" value="2026-10-07" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()" />
+                </div>
+              </div>
+
+              <!-- 5. SHIFT * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SHIFT <span class="text-[#DE350B]">*</span></label>
+                <select id="ndht-shift" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
+                  <option value="Shift A (Day)" selected>Shift A (Day)</option>
+                  <option value="Shift B (Evening)">Shift B (Evening)</option>
+                  <option value="Shift C (Night)">Shift C (Night)</option>
+                </select>
+              </div>
+
+              <!-- 6. SUPERVISOR * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SUPERVISOR <span class="text-[#DE350B]">*</span></label>
+                <select id="ndht-supervisor" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
+                  <option value="Laxmi Narayana" selected>Laxmi Narayana</option>
+                  <option value="K. Subba Rao">K. Subba Rao</option>
+                  <option value="Ch. Prasad">Ch. Prasad</option>
+                  <option value="Mallesh">Mallesh</option>
+                  <option value="D. Rambabu">D. Rambabu</option>
+                  <option value="G. Suribabu">G. Suribabu</option>
+                </select>
+              </div>
+
+              <!-- 7. REMARKS -->
+              <div class="sm:col-span-2">
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">REMARKS</label>
+                <input type="text" id="ndht-remarks" value="Standard cutting table yield verified, continuous chilled washline running." class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" placeholder="Deheading yield verification & cutting line pass..." />
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. ITEMIZED BILLS & LOTS TABLE SECTION -->
+          <div class="space-y-2 mt-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">De-Heading Cutting Table Lots & Yield Table</h4>
+                <p class="text-[11px] text-[#5E6C84]">Itemized weights, count/no of pcs, sample HL recovery, and automatic body yield calculation</p>
+              </div>
+              <div>
+                <button type="button" id="btn-add-dh-lot" class="btn-primary border-0 px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer shadow-xs bg-[#00A4B7] hover:bg-[#008F9F] text-white">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                  <span>Add Bill / Lot</span>
+                </button>
               </div>
             </div>
 
-            <!-- 3. TRACK ID * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">TRACK ID <span class="text-[#DE350B]">*</span></label>
-              <input type="text" id="ndht-trackid" value="TRK-DH-2026-${Math.floor(910 + Math.random() * 80)}" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono font-bold text-[#00A4B7] focus:outline-none focus:border-[#0284C7]" placeholder="e.g. TRK-DH-2026-910" />
-            </div>
-
-            <!-- 4. DE HEADING DATE * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">DE HEADING DATE <span class="text-[#DE350B]">*</span></label>
-              <div class="erp-date-wrapper">
-                <input type="date" id="ndht-dehead-date" value="2026-10-07" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()" />
-              </div>
-            </div>
-
-            <!-- 5. SHIFT * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SHIFT <span class="text-[#DE350B]">*</span></label>
-              <select id="ndht-shift" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
-                <option value="Shift A (Day)" selected>Shift A (Day)</option>
-                <option value="Shift B (Evening)">Shift B (Evening)</option>
-                <option value="Shift C (Night)">Shift C (Night)</option>
-              </select>
-            </div>
-
-            <!-- 6. SUPERVISOR * -->
-            <div class="sm:col-span-2">
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SUPERVISOR <span class="text-[#DE350B]">*</span></label>
-              <select id="ndht-supervisor" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
-                <option value="Laxmi Narayana" selected>Laxmi Narayana</option>
-                <option value="K. Subba Rao">K. Subba Rao</option>
-                <option value="Ch. Prasad">Ch. Prasad</option>
-                <option value="Mallesh">Mallesh</option>
-                <option value="D. Rambabu">D. Rambabu</option>
-                <option value="G. Suribabu">G. Suribabu</option>
-              </select>
-            </div>
-
-            <!-- 7. REMARKS -->
-            <div class="sm:col-span-2">
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">REMARKS</label>
-              <textarea id="ndht-remarks" rows="2" class="w-full text-xs p-2.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" placeholder="Deheading yield verification & cutting line pass...">Standard cutting table yield verified, cold chain continuous.</textarea>
+            <!-- Dynamic Table Container -->
+            <div id="dh-lots-table-wrapper">
+              ${buildDhLotsTableHtml()}
             </div>
           </div>
         </form>
@@ -20551,9 +20745,35 @@ const PreprocessingView = {
             const sup = document.getElementById('ndht-supervisor')?.value || 'Laxmi Narayana';
             const rem = document.getElementById('ndht-remarks')?.value || 'Deheading lot registered';
 
+            // Extract table lot inputs
+            const currentLots = [];
+            const rows = document.querySelectorAll('#dh-lots-tbody tr.dh-lot-row');
+            rows.forEach((row, idx) => {
+              const billNo = row.querySelector('.dh-lot-bill')?.value || `BILL-2026-089${idx + 1}`;
+              const variety = row.querySelector('.dh-lot-variety')?.value || 'Vannamei (White Shrimp)';
+              const count = parseFloat(row.querySelector('.dh-lot-count')?.value) || 0;
+              const weight = parseFloat(row.querySelector('.dh-lot-weight')?.value) || 0;
+              const sampleHoQty = parseFloat(row.querySelector('.dh-lot-sample-ho')?.value) || 0;
+              const noOfPcs = parseInt(row.querySelector('.dh-lot-pcs')?.value, 10) || 0;
+              const sampleHlQty = parseFloat(row.querySelector('.dh-lot-sample-hl')?.value) || 0;
+              const yieldPct = sampleHoQty > 0 ? Number(((sampleHlQty / sampleHoQty) * 100).toFixed(1)) : 0;
+
+              currentLots.push({
+                sNo: idx + 1,
+                billNo,
+                variety,
+                count,
+                weight,
+                sampleHoQty,
+                noOfPcs,
+                sampleHlQty,
+                yield: yieldPct
+              });
+            });
+
             Modal.confirm({
               title: 'Confirm De-Heading Track ID Generation',
-              message: `Are you sure you want to generate De-Heading Track ID <strong class="text-[#00A4B7]">${trackId}</strong> for <strong>${plant}</strong> (${shift})?`,
+              message: `Are you sure you want to generate De-Heading Track ID <strong class="text-[#00A4B7]">${trackId}</strong> for <strong>${plant}</strong> with <strong>${currentLots.length} cutting lot(s)</strong>?`,
               confirmText: 'Yes, Generate Track ID',
               cancelText: 'Cancel',
               isDestructive: false,
@@ -20568,19 +20788,141 @@ const PreprocessingView = {
                   shift: shift,
                   supervisor: sup,
                   remarks: rem,
-                  status: 'ACTIVE'
+                  status: 'ACTIVE',
+                  lots: currentLots
                 };
 
                 this.state.deheadingTrackIds.forEach(r => { if (r.sNo) r.sNo += 1; });
                 this.state.deheadingTrackIds.unshift(newEntry);
 
-                Toast.show(`De-Heading Track ID ${trackId} generated successfully`, 'success', 'Track ID Registered');
+                Toast.show(`De-Heading Track ID ${trackId} generated successfully with ${currentLots.length} lot(s)`, 'success', 'Track ID Registered');
                 this.renderDeheadingTrackIdScreen(container);
               }
             });
           }
         }
       ]
+    });
+
+    const modalEl = document.getElementById('erp-modal-root');
+    if (!modalEl) return;
+
+    const bindDhTableEvents = () => {
+      const tableWrapper = modalEl.querySelector('#dh-lots-table-wrapper');
+      if (!tableWrapper) return;
+
+      const recalculateDhAll = () => {
+        let totalWeight = 0;
+        let totalSampleHoQty = 0;
+        let totalPcs = 0;
+        let totalSampleHlQty = 0;
+
+        tableWrapper.querySelectorAll('tr.dh-lot-row').forEach(row => {
+          const idx = parseInt(row.dataset.index, 10);
+          const weight = parseFloat(row.querySelector('.dh-lot-weight')?.value) || 0;
+          const sampleHoQty = parseFloat(row.querySelector('.dh-lot-sample-ho')?.value) || 0;
+          const noOfPcs = parseInt(row.querySelector('.dh-lot-pcs')?.value, 10) || 0;
+          const sampleHlQty = parseFloat(row.querySelector('.dh-lot-sample-hl')?.value) || 0;
+
+          const yieldPct = sampleHoQty > 0 ? Number(((sampleHlQty / sampleHoQty) * 100).toFixed(1)) : 0;
+
+          totalWeight += weight;
+          totalSampleHoQty += sampleHoQty;
+          totalPcs += noOfPcs;
+          totalSampleHlQty += sampleHlQty;
+
+          const yieldEl = row.querySelector('.dh-row-yield');
+          if (yieldEl) {
+            yieldEl.textContent = `${yieldPct.toFixed(1)}%`;
+            yieldEl.className = `py-2.5 px-3 text-right font-mono font-bold text-xs dh-row-yield ${yieldPct >= 65 ? 'text-[#00875A]' : yieldPct >= 60 ? 'text-[#0284C7]' : 'text-[#DE350B]'}`;
+          }
+
+          if (!isNaN(idx) && lotRows[idx]) {
+            lotRows[idx].billNo = row.querySelector('.dh-lot-bill')?.value || '';
+            lotRows[idx].count = parseFloat(row.querySelector('.dh-lot-count')?.value) || 0;
+            lotRows[idx].weight = weight;
+            lotRows[idx].sampleHoQty = sampleHoQty;
+            lotRows[idx].noOfPcs = noOfPcs;
+            lotRows[idx].sampleHlQty = sampleHlQty;
+          }
+        });
+
+        const totWeightEl = tableWrapper.querySelector('#dh-tot-weight');
+        if (totWeightEl) totWeightEl.textContent = `${totalWeight.toFixed(2)} Kgs`;
+
+        const totHoQtyEl = tableWrapper.querySelector('#dh-tot-ho-qty');
+        if (totHoQtyEl) totHoQtyEl.textContent = `${totalSampleHoQty.toFixed(2)} Kgs`;
+
+        const totPcsEl = tableWrapper.querySelector('#dh-tot-pcs');
+        if (totPcsEl) totPcsEl.textContent = `${totalPcs}`;
+
+        const totHlQtyEl = tableWrapper.querySelector('#dh-tot-hl-qty');
+        if (totHlQtyEl) totHlQtyEl.textContent = `${totalSampleHlQty.toFixed(2)} Kgs`;
+
+        const avgYield = totalSampleHoQty > 0 ? Number(((totalSampleHlQty / totalSampleHoQty) * 100).toFixed(1)) : 0;
+        const totYieldEl = tableWrapper.querySelector('#dh-tot-yield');
+        if (totYieldEl) {
+          totYieldEl.textContent = `${avgYield.toFixed(1)}%`;
+          totYieldEl.className = `py-3 px-3 text-right font-mono text-sm ${avgYield >= 65 ? 'text-[#00875A]' : 'text-[#0284C7]'}`;
+        }
+      };
+
+      // Realtime input recalculation handler without losing focus
+      tableWrapper.querySelectorAll('input').forEach(inp => {
+        inp.addEventListener('input', recalculateDhAll);
+      });
+
+      // Variety select change handler
+      tableWrapper.querySelectorAll('.dh-lot-variety').forEach(sel => {
+        sel.addEventListener('change', () => {
+          const row = sel.closest('tr.dh-lot-row');
+          if (!row) return;
+          const idx = parseInt(row.dataset.index, 10);
+          if (!isNaN(idx) && lotRows[idx]) {
+            lotRows[idx].variety = sel.value;
+          }
+        });
+      });
+
+      // Delete Row Button
+      tableWrapper.querySelectorAll('.btn-del-dh-row').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.index, 10);
+          if (lotRows.length <= 1) {
+            Toast.show('At least one lot row is required for De-Heading Track ID registration', 'warning');
+            return;
+          }
+          lotRows.splice(idx, 1);
+          lotRows.forEach((item, i) => { item.sNo = i + 1; });
+          tableWrapper.innerHTML = buildDhLotsTableHtml();
+          bindDhTableEvents();
+          Toast.show('De-heading lot row removed', 'info');
+        });
+      });
+    };
+
+    bindDhTableEvents();
+
+    // Add New Lot Row Button
+    const addLotBtn = modalEl.querySelector('#btn-add-dh-lot');
+    addLotBtn?.addEventListener('click', () => {
+      const nextNum = 890 + lotRows.length + 1;
+      lotRows.push({
+        sNo: lotRows.length + 1,
+        billNo: `BILL-2026-0${nextNum}`,
+        variety: 'Vannamei (White Shrimp)',
+        count: 40,
+        weight: 1000.00,
+        sampleHoQty: 2.00,
+        noOfPcs: 80,
+        sampleHlQty: 1.32
+      });
+      const tableWrapper = modalEl.querySelector('#dh-lots-table-wrapper');
+      if (tableWrapper) {
+        tableWrapper.innerHTML = buildDhLotsTableHtml();
+        bindDhTableEvents();
+        Toast.show('New cutting table lot added', 'success');
+      }
     });
   },
 
@@ -20700,25 +21042,72 @@ const PreprocessingView = {
 
   // Show De-Heading Track Details Modal (Triggered on row click)
   showDeheadingTrackDetailsModal(row) {
+    const lots = row.lots || [
+      {
+        sNo: 1,
+        billNo: 'BILL-2026-0891',
+        variety: 'Vannamei (White Shrimp)',
+        count: 40,
+        weight: 1250.00,
+        sampleHoQty: 2.00,
+        noOfPcs: 84,
+        sampleHlQty: 1.32,
+        yield: 66.0
+      },
+      {
+        sNo: 2,
+        billNo: 'BILL-2026-0892',
+        variety: 'Black Tiger (P. Monodon)',
+        count: 30,
+        weight: 850.00,
+        sampleHoQty: 2.00,
+        noOfPcs: 60,
+        sampleHlQty: 1.30,
+        yield: 65.0
+      }
+    ];
+
+    let totWeight = 0;
+    let totSampleHo = 0;
+    let totPcs = 0;
+    let totSampleHl = 0;
+
+    const tableRowsHtml = lots.map((l, idx) => {
+      totWeight += Number(l.weight) || 0;
+      totSampleHo += Number(l.sampleHoQty) || 0;
+      totPcs += Number(l.noOfPcs) || 0;
+      totSampleHl += Number(l.sampleHlQty) || 0;
+
+      const yieldVal = Number(l.yield || (l.sampleHoQty > 0 ? (l.sampleHlQty / l.sampleHoQty * 100) : 0)).toFixed(1);
+      const yieldColor = Number(yieldVal) >= 65 ? 'text-[#00875A]' : 'text-[#0284C7]';
+
+      return `
+        <tr class="hover:bg-[#F8FAFC] transition-colors">
+          <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">${idx + 1}</td>
+          <td class="py-2.5 px-3 font-mono font-bold text-[#00A4B7]">${l.billNo}</td>
+          <td class="py-2.5 px-3 font-medium text-[#172B4D]">${l.variety}</td>
+          <td class="py-2.5 px-3 text-right font-mono font-semibold">${l.count}</td>
+          <td class="py-2.5 px-3 text-right font-mono font-bold text-[#0C4A6E]">${Number(l.weight).toFixed(2)}</td>
+          <td class="py-2.5 px-3 text-right font-mono text-[#5E6C84]">${Number(l.sampleHoQty).toFixed(2)}</td>
+          <td class="py-2.5 px-3 text-right font-mono text-[#5E6C84]">${l.noOfPcs}</td>
+          <td class="py-2.5 px-3 text-right font-mono font-bold text-[#00A4B7]">${Number(l.sampleHlQty).toFixed(2)}</td>
+          <td class="py-2.5 px-3 text-right font-mono font-bold ${yieldColor}">${yieldVal}%</td>
+          <td class="py-2.5 px-3 text-center">
+            <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">YIELD PASS</span>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    const overallYield = totSampleHo > 0 ? Number(((totSampleHl / totSampleHo) * 100).toFixed(1)) : 0;
+
     Modal.open({
-      title: `De-Heading Track ID Details: ${row.trackId}`,
-      size: 'md',
+      title: `De-Heading Track ID Registry: ${row.trackId}`,
+      size: 'full',
       content: `
         <div class="space-y-4 text-xs">
-          <!-- Top summary badge card -->
-          <div class="bg-[#F0F9FF] border border-[#BAE6FD] rounded-lg p-3.5 flex items-center justify-between">
-            <div>
-              <span class="text-[11px] font-bold text-[#0284C7] uppercase tracking-wider block">De-Heading Track Code</span>
-              <span class="text-base font-mono font-bold text-[#0C4A6E] mt-0.5 block">${row.trackId}</span>
-            </div>
-            <div class="text-right">
-              <span class="lozenge lozenge-success">STATUS ACTIVE</span>
-              <span class="text-[11px] text-[#5E6C84] block mt-1">${row.deheadingDate}</span>
-            </div>
-          </div>
-
           <!-- Key Details Grid -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-[#F4F5F7] p-3 rounded-lg border border-[#DFE1E6]">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-[#F8FAFC] p-3.5 rounded-xl border border-[#DFE1E6]">
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Production Plant</span>
               <span class="font-semibold text-[#172B4D] block mt-0.5">${row.productionPlant}</span>
@@ -20728,20 +21117,51 @@ const PreprocessingView = {
               <span class="font-medium text-[#172B4D] block mt-0.5">${row.arrivalDate}</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">De Heading Date</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">De-Heading Date</span>
               <span class="font-medium text-[#172B4D] block mt-0.5">${row.deheadingDate}</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Processing Shift</span>
-              <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-white border border-[#DFE1E6] text-[#42526E] inline-block mt-0.5">${row.shift}</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Production Shift</span>
+              <span class="font-semibold text-[#00A4B7] block mt-0.5">${row.shift}</span>
             </div>
-            <div class="sm:col-span-2">
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Assigned Supervisor</span>
-              <span class="font-medium text-[#172B4D] block mt-0.5">${row.supervisor}</span>
-            </div>
-            <div class="sm:col-span-2">
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Operational Remarks</span>
-              <span class="text-[#334155] block mt-0.5 bg-white p-2 rounded border border-[#DFE1E6]">${row.remarks || 'No remarks recorded'}</span>
+          </div>
+
+          <!-- Itemized De-Heading Lots Table -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">De-Heading Cutting Table Lots & Yield Verification</h4>
+            <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+              <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left text-xs border-collapse" style="min-width: 1100px;">
+                  <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                      <th class="py-2.5 px-3 min-w-[130px]">Bill No</th>
+                      <th class="py-2.5 px-3 min-w-[160px]">Variety</th>
+                      <th class="py-2.5 px-2 min-w-[90px] text-right">Count</th>
+                      <th class="py-2.5 px-2 min-w-[120px] text-right">Weight</th>
+                      <th class="py-2.5 px-2 min-w-[110px] text-right">Sample HO Qty</th>
+                      <th class="py-2.5 px-2 min-w-[110px] text-right">Count/Noof Pcs</th>
+                      <th class="py-2.5 px-2 min-w-[145px] text-right">Sample HL Qty / Body Yield</th>
+                      <th class="py-2.5 px-3 min-w-[90px] text-right">Yield</th>
+                      <th class="py-2.5 px-2 w-16 text-center">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                    ${tableRowsHtml}
+                  </tbody>
+                  <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                    <tr>
+                      <td colspan="4" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Aggregates:</td>
+                      <td class="py-3 px-2 text-right font-mono text-sm text-[#0C4A6E]">${totWeight.toFixed(2)} Kgs</td>
+                      <td class="py-3 px-2 text-right font-mono text-sm text-[#475569]">${totSampleHo.toFixed(2)} Kgs</td>
+                      <td class="py-3 px-2 text-right font-mono text-sm text-[#475569]">${totPcs}</td>
+                      <td class="py-3 px-2 text-right font-mono text-sm text-[#00A4B7]">${totSampleHl.toFixed(2)} Kgs</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm ${overallYield >= 65 ? 'text-[#00875A]' : 'text-[#0284C7]'}">${overallYield.toFixed(1)}%</td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -20752,8 +21172,7 @@ const PreprocessingView = {
     });
   },
 
-  // =========================================================================
-  // SCREEN 6: GRADING TRACKID (OPERATIONS TAB 5)
+    // SCREEN 6: GRADING TRACKID (OPERATIONS TAB 5)
   // =========================================================================
   renderGradingTrackIdScreen(container) {
     container.innerHTML = `

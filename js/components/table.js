@@ -1,6 +1,7 @@
 // Reusable Enterprise Data Table Component with Collapsible User-Friendly Top Filter Bar
 
 import { Toast } from './toast.js';
+import { Modal } from './modal.js';
 
 export class DataTable {
   constructor({
@@ -66,6 +67,46 @@ export class DataTable {
 
   getVisibleColumns() {
     return this.columns.filter(c => !this.hiddenColumns.has(c.field));
+  }
+
+  showRowDetails(row) {
+    const details = document.createElement('dl');
+    details.className = 'grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm';
+    this.columns.forEach(column => {
+      const field = document.createElement('div');
+      field.className = 'min-w-0 border-b border-[#DFE1E6] pb-3';
+      const label = document.createElement('dt');
+      label.className = 'text-xs font-semibold text-[#5E6C84] mb-1';
+      label.textContent = column.header || column.field;
+      const value = document.createElement('dd');
+      value.className = 'text-[#172B4D] whitespace-pre-wrap break-words';
+      const rawValue = row[column.field];
+      value.textContent = rawValue === null || rawValue === undefined || rawValue === ''
+        ? '-'
+        : typeof rawValue === 'object' ? JSON.stringify(rawValue, null, 2) : String(rawValue);
+      field.append(label, value);
+      details.appendChild(field);
+    });
+    Modal.open({
+      title: 'Record Details',
+      content: details.outerHTML,
+      size: 'lg',
+      footerButtons: [{ label: 'Close', type: 'secondary', onClick: modal => modal.close() }]
+    });
+  }
+
+  openRowDetails(row) {
+    if (!row) return;
+    if (typeof this.onRowClick === 'function') {
+      try {
+        this.onRowClick(row, this);
+      } catch (error) {
+        console.warn('Custom row details failed; showing standard record details.', error);
+      }
+    }
+    if (!document.querySelector('#erp-modal-root, #erp-drawer-root, [id^="modal-"].fixed, [role="dialog"]')) {
+      this.showRowDetails(row);
+    }
   }
 
   setData(newData) {
@@ -517,7 +558,7 @@ export class DataTable {
       const keyVal = row[this.keyField] || `row-${idx}`;
       const isSelected = this.selectedKeys.has(keyVal);
 
-      rowsHtml += `<tr data-key="${keyVal}" class="${isSelected ? 'bg-[#F4F5F7]' : ''} ${this.onRowClick ? 'cursor-pointer hover:bg-[#FAFBFC]' : ''}">`;
+      rowsHtml += `<tr data-key="${keyVal}" data-row-index="${startIdx + idx}" tabindex="0" aria-label="View record details" class="${isSelected ? 'bg-[#F4F5F7]' : ''} cursor-pointer hover:bg-[#FAFBFC]">`;
 
       if (this.selectable) {
         rowsHtml += `
@@ -961,17 +1002,18 @@ export class DataTable {
       });
     });
 
-    if (this.onRowClick) {
-      const rows = this.container.querySelectorAll('#dt-tbody tr[data-key]');
-      rows.forEach(tr => {
-        tr.addEventListener('click', (e) => {
-          if (e.target.tagName === 'INPUT' || e.target.closest('button')) return;
-          const key = tr.dataset.key;
-          const row = this.originalData.find((r, i) => (r[this.keyField] || `row-${i}`) === key);
-          this.onRowClick(row, this);
-        });
+    const rows = this.container.querySelectorAll('#dt-tbody tr[data-key]');
+    rows.forEach(tr => {
+      tr.addEventListener('click', event => {
+        if (event.target.closest('button, a, input, select, textarea, [contenteditable]')) return;
+        this.openRowDetails(this.filteredData[Number(tr.dataset.rowIndex)]);
       });
-    }
+      tr.addEventListener('keydown', event => {
+        if (event.target !== tr || !['Enter', ' '].includes(event.key)) return;
+        event.preventDefault();
+        this.openRowDetails(this.filteredData[Number(tr.dataset.rowIndex)]);
+      });
+    });
   }
 
   updateBulkBar() {
