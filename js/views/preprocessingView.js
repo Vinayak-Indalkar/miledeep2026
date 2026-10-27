@@ -2087,6 +2087,93 @@ export const PreprocessingView = {
     });
   },
 
+  showNewDeheadingModal(container) {
+    const today = new Date().toLocaleDateString('en-CA');
+    const fields = [
+      { name: 'arrivalCode', label: 'Arrival / Lot Code' },
+      { name: 'arrivalDate', label: 'Arrival Date', type: 'date', value: today },
+      { name: 'productionPlant', label: 'Production Plant', options: [...new Set(this.state.deheadingBatches.map(batch => batch.productionPlant))] },
+      { name: 'center', label: 'Center', options: [...new Set(this.state.deheadingBatches.map(batch => batch.center))] },
+      { name: 'deheadingStation', label: 'Deheading Station', options: [...new Set(this.state.deheadingBatches.map(batch => batch.deheadingStation))] },
+      { name: 'deheadingDate', label: 'Deheading Date', type: 'date', value: today },
+      { name: 'shift', label: 'Shift', options: ['Shift A (Day)', 'Shift B (Evening)', 'Shift C (Night)'] },
+      { name: 'supervisor', label: 'Supervisor', options: [...new Set(this.state.deheadingBatches.map(batch => batch.supervisor))] },
+      { name: 'species', label: 'Species', options: [...new Set(this.state.deheadingBatches.map(batch => batch.species))] },
+      { name: 'checkingCount2', label: 'Checking Count-2', type: 'number' },
+      { name: 'honCount', label: 'HON Count', type: 'number' },
+      { name: 'hlCount', label: 'HL Count', type: 'number' },
+      { name: 'honQuantityKgs', label: 'HON Quantity (Kgs)', type: 'number', min: '0.01' },
+      { name: 'hlQuantityKgs', label: 'HL Quantity (Kgs)', type: 'number', min: '0.01' },
+      { name: 'iceConsumption', label: 'Ice Consumption', optional: true },
+      { name: 'remarks', label: 'Remarks', optional: true }
+    ];
+    Modal.open({
+      title: 'Add Deheading',
+      size: 'lg',
+      content: `<form id="form-add-deheading" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+        ${fields.map(field => `<div>
+          <label for="ndh-${field.name}" class="block text-xs font-semibold mb-0">${field.label}${field.optional ? '' : ' *'}</label>
+          ${field.options
+            ? `<select id="ndh-${field.name}" name="${field.name}" class="w-full" required>${field.options.map(option => `<option></option>`).join('')}</select>`
+            : `<input id="ndh-${field.name}" name="${field.name}" type="${field.type || 'text'}" value="${field.value || ''}" ${field.type === 'number' ? `min="${field.min || '0'}" step="any"` : ''} ${field.optional ? '' : 'required'} class="w-full" />`}
+        </div>`).join('')}
+      </form>`,
+      footerButtons: [
+        { label: 'Cancel', type: 'secondary', onClick: modal => modal.close() },
+        { label: 'Save Deheading', type: 'primary', onClick: () => document.getElementById('form-add-deheading')?.requestSubmit() }
+      ]
+    });
+    const form = document.getElementById('form-add-deheading');
+    fields.filter(field => field.options).forEach(field => {
+      const select = form.elements.namedItem(field.name);
+      field.options.forEach((value, index) => {
+        select.options[index].textContent = value;
+        select.options[index].value = value;
+      });
+    });
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const values = Object.fromEntries(new FormData(form));
+      const inputWeight = Number(values.honQuantityKgs);
+      const outputWeight = Number(values.hlQuantityKgs);
+      if (outputWeight > inputWeight) {
+        Toast.show('HL quantity cannot exceed HON quantity', 'error');
+        return;
+      }
+      const yieldPct = Number((outputWeight / inputWeight * 100).toFixed(1));
+      const nextSequence = Math.max(100, ...this.state.deheadingBatches.map(batch => Number(batch.id.split('-').pop()) || 0)) + 1;
+      const entry = {
+        ...values,
+        id: `DH-${values.deheadingDate.slice(0, 4)}-${nextSequence}`,
+        lotNo: values.arrivalCode,
+        deheadingDate: values.deheadingDate.split('-').reverse().join('/'),
+        checkingCount2: Number(values.checkingCount2),
+        honCount: Number(values.honCount),
+        hlCount: Number(values.hlCount),
+        honQuantityKgs: inputWeight,
+        hlQuantityKgs: outputWeight,
+        inputHonWt: inputWeight,
+        outputDhWt: outputWeight,
+        yieldPct,
+        countNetYieldPct: yieldPct,
+        recoveryPct: yieldPct,
+        sampleYieldPct: yieldPct,
+        wasteHeadWt: inputWeight - outputWeight,
+        rejectionsWt: 0,
+        lineNo: values.deheadingStation,
+        operators: 0,
+        status: 'IN_PROGRESS',
+        startTime: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+        endTime: ''
+      };
+      this.state.deheadingBatches.unshift(entry);
+      this.state.deheadingBatches.forEach((batch, index) => { batch.sNo = index + 1; });
+      Modal.close();
+      this.renderDeheadingScreen(container);
+      Toast.show(`Deheading batch ${entry.id} added`, 'success');
+    });
+  },
+
   // =========================================================================
   // SCREEN 3: GRADING (OPERATIONS TAB 2)
   // =========================================================================
@@ -2694,72 +2781,297 @@ export const PreprocessingView = {
 
   // Show Generate RM Track ID Modal
   showGenerateRmTrackModal(container) {
+    // Initial sample lots for inward arrival
+    let lotRows = [
+      {
+        sNo: 1,
+        billNo: 'BILL-2026-0891',
+        variety: 'Vannamei (White Shrimp)',
+        count: 40,
+        headOnWeight: 1250.00,
+        recvCount: 42,
+        recvWeight: 1242.50,
+        sampleHoQty: 2.50,
+        noOfPcs: 105
+      },
+      {
+        sNo: 2,
+        billNo: 'BILL-2026-0892',
+        variety: 'Black Tiger (P. Monodon)',
+        count: 30,
+        headOnWeight: 850.00,
+        recvCount: 30,
+        recvWeight: 855.00,
+        sampleHoQty: 2.00,
+        noOfPcs: 60
+      },
+      {
+        sNo: 3,
+        billNo: 'BILL-2026-0893',
+        variety: 'Vannamei (White Shrimp)',
+        count: 50,
+        headOnWeight: 1420.00,
+        recvCount: 48,
+        recvWeight: 1410.00,
+        sampleHoQty: 3.00,
+        noOfPcs: 144
+      }
+    ];
+
+    const varietiesList = [
+      'Vannamei (White Shrimp)',
+      'Black Tiger (P. Monodon)',
+      'Freshwater Scampi',
+      'Pink Shrimp (Sea Caught)',
+      'Brown Shrimp',
+      'Flower Shrimp'
+    ];
+
+    const buildLotsTableHtml = () => {
+      let totalHoWeight = 0;
+      let totalRecvWeight = 0;
+      let totalSampleQty = 0;
+      let totalPcs = 0;
+      let totalQtyDiff = 0;
+
+      const rowsHtml = lotRows.map((lot, idx) => {
+        const countDiff = Number((lot.recvCount - lot.count).toFixed(1));
+        const qtyDiff = Number((lot.recvWeight - lot.headOnWeight).toFixed(2));
+
+        totalHoWeight += Number(lot.headOnWeight) || 0;
+        totalRecvWeight += Number(lot.recvWeight) || 0;
+        totalSampleQty += Number(lot.sampleHoQty) || 0;
+        totalPcs += Number(lot.noOfPcs) || 0;
+        totalQtyDiff += qtyDiff;
+
+        const countDiffClass = countDiff === 0 ? 'text-[#00875A]' : countDiff > 0 ? 'text-[#0284C7]' : 'text-[#DE350B]';
+        const qtyDiffClass = qtyDiff >= 0 ? 'text-[#00875A]' : 'text-[#DE350B]';
+
+        return `
+          <tr class="hover:bg-[#F8FAFC] transition-colors lot-row" data-index="${idx}">
+            <!-- 1. S.No -->
+            <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">
+              ${idx + 1}
+            </td>
+
+            <!-- 2. Bill No -->
+            <td class="py-2 px-2.5">
+              <input type="text" class="lot-bill-input font-mono font-bold text-[#00A4B7] w-full text-xs px-2.5 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.billNo || ''}" placeholder="BILL-2026-..." />
+            </td>
+
+            <!-- 3. Variety -->
+            <td class="py-2 px-2.5">
+              <select class="lot-variety-select w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded font-medium text-[#172B4D] focus:outline-none focus:border-[#00A4B7]">
+                ${varietiesList.map(v => `<option value="${v}" ${lot.variety === v ? 'selected' : ''}>${v}</option>`).join('')}
+              </select>
+            </td>
+
+            <!-- 4. Count -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.5" class="lot-count-input font-mono text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.count ?? ''}" placeholder="40" />
+            </td>
+
+            <!-- 5. Head on Weight -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.01" class="lot-howeight-input font-mono font-bold text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.headOnWeight ?? ''}" placeholder="0.00" />
+            </td>
+
+            <!-- 6. Recv Count -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.5" class="lot-recvcount-input font-mono text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.recvCount ?? ''}" placeholder="42" />
+            </td>
+
+            <!-- 7. Recv Weight -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.01" class="lot-recvweight-input font-mono font-bold text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.recvWeight ?? ''}" placeholder="0.00" />
+            </td>
+
+            <!-- 8. Sample HO Qty -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.01" class="lot-sampleqty-input font-mono text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.sampleHoQty ?? ''}" placeholder="2.5" />
+            </td>
+
+            <!-- 9. No Of Pcs -->
+            <td class="py-2 px-2">
+              <input type="number" step="1" class="lot-nopcs-input font-mono text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.noOfPcs ?? ''}" placeholder="100" />
+            </td>
+
+            <!-- 10. Count Diff -->
+            <td class="py-2.5 px-3 text-right font-mono font-bold text-xs ${countDiffClass} row-count-diff">
+              ${countDiff > 0 ? '+' : ''}${countDiff.toFixed(1)}
+            </td>
+
+            <!-- 11. Qty Diff -->
+            <td class="py-2.5 px-3 text-right font-mono font-bold text-xs ${qtyDiffClass} row-qty-diff">
+              ${qtyDiff > 0 ? '+' : ''}${qtyDiff.toFixed(2)} Kgs
+            </td>
+
+            <!-- 12. Actions -->
+            <td class="py-2.5 px-2 text-center">
+              <button type="button" class="btn-del-lot-row w-7 h-7 rounded-full inline-flex items-center justify-center text-[#FF5630] hover:bg-[#FFEBE6] transition-colors cursor-pointer" title="Delete Row" data-index="${idx}">
+                <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      const netQtyDiffClass = totalQtyDiff >= 0 ? 'text-[#00875A]' : 'text-[#DE350B]';
+
+      return `
+        <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+          <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+            <table class="w-full text-left text-xs border-collapse" style="min-width: 1250px;">
+              <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                <tr>
+                  <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                  <th class="py-2.5 px-3 min-w-[145px]">Bill No</th>
+                  <th class="py-2.5 px-3 min-w-[170px]">Variety</th>
+                  <th class="py-2.5 px-2 min-w-[95px] text-right">Count</th>
+                  <th class="py-2.5 px-2 min-w-[125px] text-right">Head on Weight</th>
+                  <th class="py-2.5 px-2 min-w-[95px] text-right">Recv Count</th>
+                  <th class="py-2.5 px-2 min-w-[125px] text-right">Recv Weight</th>
+                  <th class="py-2.5 px-2 min-w-[110px] text-right">Sample HO Qty</th>
+                  <th class="py-2.5 px-2 min-w-[95px] text-right">No Of Pcs</th>
+                  <th class="py-2.5 px-3 min-w-[100px] text-right">Count Diff</th>
+                  <th class="py-2.5 px-3 min-w-[115px] text-right">Qty Diff</th>
+                  <th class="py-2.5 px-2 w-16 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="rm-lots-tbody" class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                ${rowsHtml}
+              </tbody>
+              <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                <tr>
+                  <td colspan="4" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">
+                    Total Aggregates:
+                  </td>
+                  <td id="tot-ho-weight" class="py-3 px-2 text-right font-mono text-sm text-[#0C4A6E]">
+                    ${totalHoWeight.toFixed(2)} Kgs
+                  </td>
+                  <td></td>
+                  <td id="tot-recv-weight" class="py-3 px-2 text-right font-mono text-sm text-[#00A4B7]">
+                    ${totalRecvWeight.toFixed(2)} Kgs
+                  </td>
+                  <td id="tot-sample-qty" class="py-3 px-2 text-right font-mono text-sm text-[#475569]">
+                    ${totalSampleQty.toFixed(2)} Kgs
+                  </td>
+                  <td id="tot-pcs" class="py-3 px-2 text-right font-mono text-sm text-[#475569]">
+                    ${totalPcs}
+                  </td>
+                  <td></td>
+                  <td id="tot-qty-diff" class="py-3 px-3 text-right font-mono text-sm ${netQtyDiffClass}">
+                    ${totalQtyDiff > 0 ? '+' : ''}${totalQtyDiff.toFixed(2)} Kgs
+                  </td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      `;
+    };
+
     Modal.open({
       title: 'Generate RM Track ID',
-      size: 'md',
+      size: 'full',
       content: `
         <form id="form-gen-rm-track" class="space-y-4" onsubmit="return false;">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-            <!-- 1. PRODUCTION PLANT * -->
-            <div class="sm:col-span-2">
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">PRODUCTION PLANT <span class="text-[#DE350B]">*</span></label>
-              <select id="nrm-plant" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-semibold text-[#172B4D] focus:outline-none focus:border-[#0284C7]">
-                <option value="DFL UNIT-5 (JPT)" selected>DFL UNIT-5 (JPT)</option>
-                <option value="DFL UNIT-3 (PSP)">DFL UNIT-3 (PSP)</option>
-                <option value="DFL UNIT-4 (PND)">DFL UNIT-4 (PND)</option>
-                <option value="DFL UNIT-1 (VSP)">DFL UNIT-1 (VSP)</option>
-                <option value="DFL UNIT-6 (JPT-II)">DFL UNIT-6 (JPT-II)</option>
-                <option value="DFL UNIT-2 (KKD)">DFL UNIT-2 (KKD)</option>
-              </select>
+          <!-- 1. HEADER SPECIFICATION SECTION -->
+          <div class="bg-[#F8FAFC] p-4 rounded-xl border border-[#DFE1E6]">
+            <div class="flex items-center justify-between mb-3 border-b border-[#E2E8F0] pb-2">
+              <span class="text-xs font-extrabold text-[#172B4D] uppercase tracking-wider flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Track ID Primary Registry Details
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E0F2FE] text-[#0284C7] border border-[#BAE6FD]">
+                Gate Intake Inward
+              </span>
             </div>
 
-            <!-- 2. ARRIVAL DATE -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">ARRIVAL DATE</label>
-              <div class="erp-date-wrapper">
-                <input type="date" id="nrm-arrival-date" value="2026-10-07" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()" />
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs">
+              <!-- 1. PRODUCTION PLANT * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">PRODUCTION PLANT <span class="text-[#DE350B]">*</span></label>
+                <select id="nrm-plant" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-semibold text-[#172B4D] focus:outline-none focus:border-[#0284C7]">
+                  <option value="DFL UNIT-5 (JPT)" selected>DFL UNIT-5 (JPT)</option>
+                  <option value="DFL UNIT-3 (PSP)">DFL UNIT-3 (PSP)</option>
+                  <option value="DFL UNIT-4 (PND)">DFL UNIT-4 (PND)</option>
+                  <option value="DFL UNIT-1 (VSP)">DFL UNIT-1 (VSP)</option>
+                  <option value="DFL UNIT-6 (JPT-II)">DFL UNIT-6 (JPT-II)</option>
+                  <option value="DFL UNIT-2 (KKD)">DFL UNIT-2 (KKD)</option>
+                </select>
+              </div>
+
+              <!-- 2. ARRIVAL DATE -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">ARRIVAL DATE</label>
+                <div class="erp-date-wrapper">
+                  <input type="date" id="nrm-arrival-date" value="2026-10-07" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()" />
+                </div>
+              </div>
+
+              <!-- 3. VEHICLE NUMBER * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">VEHICLE NUMBER <span class="text-[#DE350B]">*</span></label>
+                <input type="text" id="nrm-vehicle" value="AP 16 TZ 5580" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono font-bold text-[#172B4D] focus:outline-none focus:border-[#0284C7]" placeholder="e.g. AP 16 TZ 5580" />
+              </div>
+
+              <!-- 4. TRACK CODE FORMAT * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">TRACK CODE FORMAT <span class="text-[#DE350B]">*</span></label>
+                <select id="nrm-format" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
+                  <option value="TRK-RM-[YYYY]-[SEQ]" selected>TRK-RM-[YYYY]-[SEQ] (Standard)</option>
+                  <option value="TRK-PLANT-[CODE]-[SEQ]">TRK-PLANT-[CODE]-[SEQ] (Plant Unique)</option>
+                  <option value="RFID-INTAKE-[BATCH]">RFID-INTAKE-[BATCH] (RFID Tagging)</option>
+                </select>
+              </div>
+
+              <!-- 5. SEAL NUMBER * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SEAL NUMBER <span class="text-[#DE350B]">*</span></label>
+                <input type="text" id="nrm-seal" value="SL-884940" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono font-semibold text-[#00875A] focus:outline-none focus:border-[#0284C7]" placeholder="e.g. SL-884940" />
+              </div>
+
+              <!-- 6. SUPERVISOR * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SUPERVISOR <span class="text-[#DE350B]">*</span></label>
+                <select id="nrm-supervisor" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
+                  <option value="Laxmi Narayana" selected>Laxmi Narayana</option>
+                  <option value="K. Subba Rao">K. Subba Rao</option>
+                  <option value="Ch. Prasad">Ch. Prasad</option>
+                  <option value="Mallesh">Mallesh</option>
+                  <option value="D. Rambabu">D. Rambabu</option>
+                  <option value="G. Suribabu">G. Suribabu</option>
+                </select>
+              </div>
+
+              <!-- 7. REMARKS -->
+              <div class="sm:col-span-2">
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">REMARKS</label>
+                <input type="text" id="nrm-remarks" value="Direct gate intake verified, seals intact and dock temperature compliant." class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" placeholder="Gate security inspection & temperature checks passed..." />
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. ITEMIZED BILLS & LOTS TABLE SECTION -->
+          <div class="space-y-2 mt-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Arrival Bill / Lot Inspection Table</h4>
+                <p class="text-[11px] text-[#5E6C84]">Itemized weights, count inspection, sample HO quantity, and automatic variance calculation</p>
+              </div>
+              <div>
+                <button type="button" id="btn-add-rm-lot" class="btn-primary border-0 px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer shadow-xs bg-[#00A4B7] hover:bg-[#008F9F] text-white">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                  <span>Add Bill / Lot</span>
+                </button>
               </div>
             </div>
 
-            <!-- 3. VEHICLE NUMBER * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">VEHICLE NUMBER <span class="text-[#DE350B]">*</span></label>
-              <input type="text" id="nrm-vehicle" value="AP 16 TZ 5580" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono font-bold text-[#172B4D] focus:outline-none focus:border-[#0284C7]" placeholder="e.g. AP 16 TZ 5580" />
-            </div>
-
-            <!-- 4. TRACK CODE FORMAT * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">TRACK CODE FORMAT <span class="text-[#DE350B]">*</span></label>
-              <select id="nrm-format" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
-                <option value="TRK-RM-[YYYY]-[SEQ]" selected>TRK-RM-[YYYY]-[SEQ] (Standard)</option>
-                <option value="TRK-PLANT-[CODE]-[SEQ]">TRK-PLANT-[CODE]-[SEQ] (Plant Unique)</option>
-                <option value="RFID-INTAKE-[BATCH]">RFID-INTAKE-[BATCH] (RFID Tagging)</option>
-              </select>
-            </div>
-
-            <!-- 5. SEAL NUMBER * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SEAL NUMBER <span class="text-[#DE350B]">*</span></label>
-              <input type="text" id="nrm-seal" value="SL-884940" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono font-semibold text-[#00875A] focus:outline-none focus:border-[#0284C7]" placeholder="e.g. SL-884940" />
-            </div>
-
-            <!-- 6. SUPERVISOR * -->
-            <div class="sm:col-span-2">
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SUPERVISOR <span class="text-[#DE350B]">*</span></label>
-              <select id="nrm-supervisor" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
-                <option value="Laxmi Narayana" selected>Laxmi Narayana</option>
-                <option value="K. Subba Rao">K. Subba Rao</option>
-                <option value="Ch. Prasad">Ch. Prasad</option>
-                <option value="Mallesh">Mallesh</option>
-                <option value="D. Rambabu">D. Rambabu</option>
-                <option value="G. Suribabu">G. Suribabu</option>
-              </select>
-            </div>
-
-            <!-- 7. REMARKS -->
-            <div class="sm:col-span-2">
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">REMARKS</label>
-              <textarea id="nrm-remarks" rows="2" class="w-full text-xs p-2.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" placeholder="Gate security inspection & temperature checks passed...">Gate security inspection and seal intact verification completed.</textarea>
+            <!-- Dynamic Table Container -->
+            <div id="rm-lots-table-wrapper">
+              ${buildLotsTableHtml()}
             </div>
           </div>
         </form>
@@ -2778,9 +3090,39 @@ export const PreprocessingView = {
             const sup = document.getElementById('nrm-supervisor')?.value || 'Laxmi Narayana';
             const rem = document.getElementById('nrm-remarks')?.value || 'Direct gate intake verified';
 
+            // Extract table lot inputs
+            const currentLots = [];
+            const rows = document.querySelectorAll('#rm-lots-tbody tr.lot-row');
+            rows.forEach((row, idx) => {
+              const billNo = row.querySelector('.lot-bill-input')?.value || `BILL-2026-089${idx + 1}`;
+              const variety = row.querySelector('.lot-variety-select')?.value || 'Vannamei (White Shrimp)';
+              const count = parseFloat(row.querySelector('.lot-count-input')?.value) || 0;
+              const headOnWeight = parseFloat(row.querySelector('.lot-howeight-input')?.value) || 0;
+              const recvCount = parseFloat(row.querySelector('.lot-recvcount-input')?.value) || 0;
+              const recvWeight = parseFloat(row.querySelector('.lot-recvweight-input')?.value) || 0;
+              const sampleHoQty = parseFloat(row.querySelector('.lot-sampleqty-input')?.value) || 0;
+              const noOfPcs = parseInt(row.querySelector('.lot-nopcs-input')?.value, 10) || 0;
+              const countDiff = Number((recvCount - count).toFixed(1));
+              const qtyDiff = Number((recvWeight - headOnWeight).toFixed(2));
+
+              currentLots.push({
+                sNo: idx + 1,
+                billNo,
+                variety,
+                count,
+                headOnWeight,
+                recvCount,
+                recvWeight,
+                sampleHoQty,
+                noOfPcs,
+                countDiff,
+                qtyDiff
+              });
+            });
+
             Modal.confirm({
               title: 'Confirm RM Track ID Generation',
-              message: `Are you sure you want to generate a new RM Track ID for vehicle <strong class="text-[#00A4B7]">${vehicle}</strong> at <strong>${plant}</strong>?`,
+              message: `Are you sure you want to generate a new RM Track ID for vehicle <strong class="text-[#00A4B7]">${vehicle}</strong> at <strong>${plant}</strong> with <strong>${currentLots.length} verified arrival lots</strong>?`,
               confirmText: 'Yes, Generate Track ID',
               cancelText: 'Cancel',
               isDestructive: false,
@@ -2803,19 +3145,154 @@ export const PreprocessingView = {
                   sealNumber: seal,
                   supervisor: sup,
                   remarks: rem,
-                  status: 'ACTIVE'
+                  status: 'ACTIVE',
+                  lots: currentLots
                 };
 
                 this.state.rmTrackIds.forEach(r => { if (r.sNo) r.sNo += 1; });
                 this.state.rmTrackIds.unshift(newEntry);
 
-                Toast.show(`RM Track ID ${generatedId} successfully generated and registered`, 'success', 'Track ID Active');
+                Toast.show(`RM Track ID ${generatedId} successfully generated with ${currentLots.length} lot(s)`, 'success', 'Track ID Active');
                 this.renderRmReceivedTrackIdScreen(container);
               }
             });
           }
         }
       ]
+    });
+
+    // Attach dynamic table event listeners
+    const modalEl = document.getElementById('erp-modal-root');
+    if (!modalEl) return;
+
+    const bindTableEvents = () => {
+      const tableWrapper = modalEl.querySelector('#rm-lots-table-wrapper');
+      if (!tableWrapper) return;
+
+      const recalculateAll = () => {
+        let totalHoWeight = 0;
+        let totalRecvWeight = 0;
+        let totalSampleQty = 0;
+        let totalPcs = 0;
+        let totalQtyDiff = 0;
+
+        tableWrapper.querySelectorAll('tr.lot-row').forEach(row => {
+          const idx = parseInt(row.dataset.index, 10);
+          const count = parseFloat(row.querySelector('.lot-count-input')?.value) || 0;
+          const headOnWeight = parseFloat(row.querySelector('.lot-howeight-input')?.value) || 0;
+          const recvCount = parseFloat(row.querySelector('.lot-recvcount-input')?.value) || 0;
+          const recvWeight = parseFloat(row.querySelector('.lot-recvweight-input')?.value) || 0;
+          const sampleHoQty = parseFloat(row.querySelector('.lot-sampleqty-input')?.value) || 0;
+          const noOfPcs = parseInt(row.querySelector('.lot-nopcs-input')?.value, 10) || 0;
+
+          const countDiff = Number((recvCount - count).toFixed(1));
+          const qtyDiff = Number((recvWeight - headOnWeight).toFixed(2));
+
+          totalHoWeight += headOnWeight;
+          totalRecvWeight += recvWeight;
+          totalSampleQty += sampleHoQty;
+          totalPcs += noOfPcs;
+          totalQtyDiff += qtyDiff;
+
+          const countDiffEl = row.querySelector('.row-count-diff');
+          if (countDiffEl) {
+            countDiffEl.textContent = `${countDiff > 0 ? '+' : ''}${countDiff.toFixed(1)}`;
+            countDiffEl.className = `py-2.5 px-3 text-right font-mono font-bold text-xs row-count-diff ${countDiff === 0 ? 'text-[#00875A]' : countDiff > 0 ? 'text-[#0284C7]' : 'text-[#DE350B]'}`;
+          }
+
+          const qtyDiffEl = row.querySelector('.row-qty-diff');
+          if (qtyDiffEl) {
+            qtyDiffEl.textContent = `${qtyDiff > 0 ? '+' : ''}${qtyDiff.toFixed(2)} Kgs`;
+            qtyDiffEl.className = `py-2.5 px-3 text-right font-mono font-bold text-xs row-qty-diff ${qtyDiff >= 0 ? 'text-[#00875A]' : 'text-[#DE350B]'}`;
+          }
+
+          if (!isNaN(idx) && lotRows[idx]) {
+            lotRows[idx].billNo = row.querySelector('.lot-bill-input')?.value || '';
+            lotRows[idx].count = count;
+            lotRows[idx].headOnWeight = headOnWeight;
+            lotRows[idx].recvCount = recvCount;
+            lotRows[idx].recvWeight = recvWeight;
+            lotRows[idx].sampleHoQty = sampleHoQty;
+            lotRows[idx].noOfPcs = noOfPcs;
+          }
+        });
+
+        const totHoEl = tableWrapper.querySelector('#tot-ho-weight');
+        if (totHoEl) totHoEl.textContent = `${totalHoWeight.toFixed(2)} Kgs`;
+
+        const totRecvEl = tableWrapper.querySelector('#tot-recv-weight');
+        if (totRecvEl) totRecvEl.textContent = `${totalRecvWeight.toFixed(2)} Kgs`;
+
+        const totSampleEl = tableWrapper.querySelector('#tot-sample-qty');
+        if (totSampleEl) totSampleEl.textContent = `${totalSampleQty.toFixed(2)} Kgs`;
+
+        const totPcsEl = tableWrapper.querySelector('#tot-pcs');
+        if (totPcsEl) totPcsEl.textContent = `${totalPcs}`;
+
+        const totDiffEl = tableWrapper.querySelector('#tot-qty-diff');
+        if (totDiffEl) {
+          totDiffEl.textContent = `${totalQtyDiff > 0 ? '+' : ''}${totalQtyDiff.toFixed(2)} Kgs`;
+          totDiffEl.className = `py-3 px-3 text-right font-mono text-sm ${totalQtyDiff >= 0 ? 'text-[#00875A]' : 'text-[#DE350B]'}`;
+        }
+      };
+
+      // Realtime input recalculation handler without re-rendering whole table
+      tableWrapper.querySelectorAll('input').forEach(inp => {
+        inp.addEventListener('input', recalculateAll);
+      });
+
+      // Variety select change handler
+      tableWrapper.querySelectorAll('.lot-variety-select').forEach(sel => {
+        sel.addEventListener('change', () => {
+          const row = sel.closest('tr.lot-row');
+          if (!row) return;
+          const idx = parseInt(row.dataset.index, 10);
+          if (!isNaN(idx) && lotRows[idx]) {
+            lotRows[idx].variety = sel.value;
+          }
+        });
+      });
+
+      // Delete Row Button
+      tableWrapper.querySelectorAll('.btn-del-lot-row').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.index, 10);
+          if (lotRows.length <= 1) {
+            Toast.show('At least one lot row is required for Track ID registration', 'warning');
+            return;
+          }
+          lotRows.splice(idx, 1);
+          lotRows.forEach((item, i) => { item.sNo = i + 1; });
+          tableWrapper.innerHTML = buildLotsTableHtml();
+          bindTableEvents();
+          Toast.show('Lot row removed', 'info');
+        });
+      });
+    };
+
+    bindTableEvents();
+
+    // Add New Lot Row Button
+    const addLotBtn = modalEl.querySelector('#btn-add-rm-lot');
+    addLotBtn?.addEventListener('click', () => {
+      const nextNum = 890 + lotRows.length + 1;
+      lotRows.push({
+        sNo: lotRows.length + 1,
+        billNo: `BILL-2026-0${nextNum}`,
+        variety: 'Vannamei (White Shrimp)',
+        count: 40,
+        headOnWeight: 1000.00,
+        recvCount: 40,
+        recvWeight: 1000.00,
+        sampleHoQty: 2.00,
+        noOfPcs: 80
+      });
+      const tableWrapper = modalEl.querySelector('#rm-lots-table-wrapper');
+      if (tableWrapper) {
+        tableWrapper.innerHTML = buildLotsTableHtml();
+        bindTableEvents();
+        Toast.show('New arrival lot added to table', 'success');
+      }
     });
   },
 
@@ -2932,40 +3409,97 @@ export const PreprocessingView = {
 
   // Show RM Track Details Modal (Triggered on row click)
   showRmTrackDetailsModal(row) {
+    const lots = row.lots || [
+      {
+        sNo: 1,
+        billNo: 'BILL-2026-0891',
+        variety: 'Vannamei (White Shrimp)',
+        count: 40,
+        headOnWeight: 1250.00,
+        recvCount: 42,
+        recvWeight: 1242.50,
+        sampleHoQty: 2.50,
+        noOfPcs: 105,
+        countDiff: 2.0,
+        qtyDiff: -7.50
+      },
+      {
+        sNo: 2,
+        billNo: 'BILL-2026-0892',
+        variety: 'Black Tiger (P. Monodon)',
+        count: 30,
+        headOnWeight: 850.00,
+        recvCount: 30,
+        recvWeight: 855.00,
+        sampleHoQty: 2.00,
+        noOfPcs: 60,
+        countDiff: 0.0,
+        qtyDiff: 5.00
+      }
+    ];
+
+    let totHoWeight = 0;
+    let totRecvWeight = 0;
+    let totSampleQty = 0;
+    let totPcs = 0;
+    let totQtyDiff = 0;
+
+    const tableRowsHtml = lots.map((l, idx) => {
+      totHoWeight += Number(l.headOnWeight) || 0;
+      totRecvWeight += Number(l.recvWeight) || 0;
+      totSampleQty += Number(l.sampleHoQty) || 0;
+      totPcs += Number(l.noOfPcs) || 0;
+      totQtyDiff += Number(l.qtyDiff) || 0;
+
+      const countDiffClass = l.countDiff === 0 ? 'text-[#00875A]' : l.countDiff > 0 ? 'text-[#0284C7]' : 'text-[#DE350B]';
+      const qtyDiffClass = l.qtyDiff >= 0 ? 'text-[#00875A]' : 'text-[#DE350B]';
+
+      return `
+        <tr class="hover:bg-[#F8FAFC] transition-colors">
+          <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">${idx + 1}</td>
+          <td class="py-2.5 px-3 font-mono font-bold text-[#00A4B7]">${l.billNo}</td>
+          <td class="py-2.5 px-3 font-medium text-[#172B4D]">${l.variety}</td>
+          <td class="py-2.5 px-3 text-right font-mono font-semibold">${l.count}</td>
+          <td class="py-2.5 px-3 text-right font-mono font-bold text-[#0C4A6E]">${Number(l.headOnWeight).toFixed(2)}</td>
+          <td class="py-2.5 px-3 text-right font-mono font-semibold">${l.recvCount}</td>
+          <td class="py-2.5 px-3 text-right font-mono font-bold text-[#00A4B7]">${Number(l.recvWeight).toFixed(2)}</td>
+          <td class="py-2.5 px-3 text-right font-mono text-[#5E6C84]">${Number(l.sampleHoQty).toFixed(2)}</td>
+          <td class="py-2.5 px-3 text-right font-mono text-[#5E6C84]">${l.noOfPcs}</td>
+          <td class="py-2.5 px-3 text-right font-mono font-bold ${countDiffClass}">${l.countDiff > 0 ? '+' : ''}${Number(l.countDiff).toFixed(1)}</td>
+          <td class="py-2.5 px-3 text-right font-mono font-bold ${qtyDiffClass}">${l.qtyDiff > 0 ? '+' : ''}${Number(l.qtyDiff).toFixed(2)} Kgs</td>
+          <td class="py-2.5 px-3 text-center">
+            <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">VERIFIED</span>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
     Modal.open({
-      title: `RM Track ID Details: ${row.trackId}`,
-      size: 'md',
+      title: `RM Track ID Registry: ${row.trackId}`,
+      size: 'full',
       content: `
         <div class="space-y-4 text-xs">
           <!-- Top summary badge card -->
-          <div class="bg-[#F0F9FF] border border-[#BAE6FD] rounded-lg p-3.5 flex items-center justify-between">
+          <div class="bg-[#F0F9FF] border border-[#BAE6FD] rounded-xl p-4 flex flex-wrap items-center justify-between gap-3">
             <div>
               <span class="text-[11px] font-bold text-[#0284C7] uppercase tracking-wider block">Raw Material Track Code</span>
-              <span class="text-base font-mono font-bold text-[#0C4A6E] mt-0.5 block">${row.trackId}</span>
+              <span class="text-lg font-mono font-extrabold text-[#0C4A6E] mt-0.5 block">${row.trackId}</span>
             </div>
-            <div class="text-right">
+            <div class="flex items-center gap-3">
               <span class="lozenge lozenge-success">REGISTRY ACTIVE</span>
-              <span class="text-[11px] text-[#5E6C84] block mt-1">${row.arrivalDate}</span>
+              <span class="text-xs font-semibold text-[#5E6C84] bg-white px-3 py-1 rounded-full border border-[#DFE1E6]">${row.arrivalDate}</span>
             </div>
           </div>
 
           <!-- Key Details Grid -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-[#F4F5F7] p-3 rounded-lg border border-[#DFE1E6]">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-[#F8FAFC] p-3.5 rounded-xl border border-[#DFE1E6]">
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Production Plant</span>
               <span class="font-semibold text-[#172B4D] block mt-0.5">${row.productionPlant}</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Arrival Date</span>
-              <span class="font-medium text-[#172B4D] block mt-0.5">${row.arrivalDate}</span>
-            </div>
-            <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Vehicle Number</span>
               <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${row.vehicleNumber}</span>
-            </div>
-            <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Track Code Format</span>
-              <span class="font-mono text-[#42526E] block mt-0.5">${row.trackCodeFormat}</span>
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Seal Number</span>
@@ -2975,9 +3509,48 @@ export const PreprocessingView = {
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Assigned Supervisor</span>
               <span class="font-medium text-[#172B4D] block mt-0.5">${row.supervisor}</span>
             </div>
-            <div class="sm:col-span-2">
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Operational Remarks</span>
-              <span class="text-[#334155] block mt-0.5 bg-white p-2 rounded border border-[#DFE1E6]">${row.remarks || 'No remarks recorded'}</span>
+          </div>
+
+          <!-- Itemized Lots Table -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Inward Arrival Lots & Quality Inspection Specifications</h4>
+            <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+              <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left text-xs border-collapse" style="min-width: 1200px;">
+                  <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                      <th class="py-2.5 px-3 min-w-[130px]">Bill No</th>
+                      <th class="py-2.5 px-3 min-w-[160px]">Variety</th>
+                      <th class="py-2.5 px-3 min-w-[90px] text-right">Count</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Head on Weight</th>
+                      <th class="py-2.5 px-3 min-w-[95px] text-right">Recv Count</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Recv Weight</th>
+                      <th class="py-2.5 px-3 min-w-[110px] text-right">Sample HO Qty</th>
+                      <th class="py-2.5 px-3 min-w-[90px] text-right">No Of Pcs</th>
+                      <th class="py-2.5 px-3 min-w-[100px] text-right">Count Diff</th>
+                      <th class="py-2.5 px-3 min-w-[110px] text-right">Qty Diff</th>
+                      <th class="py-2.5 px-3 w-20 text-center">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                    ${tableRowsHtml}
+                  </tbody>
+                  <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                    <tr>
+                      <td colspan="4" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Aggregates:</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#0C4A6E]">${totHoWeight.toFixed(2)} Kgs</td>
+                      <td></td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00A4B7]">${totRecvWeight.toFixed(2)} Kgs</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#475569]">${totSampleQty.toFixed(2)} Kgs</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#475569]">${totPcs}</td>
+                      <td></td>
+                      <td class="py-3 px-3 text-right font-mono text-sm ${totQtyDiff >= 0 ? 'text-[#00875A]' : 'text-[#DE350B]'}">${totQtyDiff > 0 ? '+' : ''}${totQtyDiff.toFixed(2)} Kgs</td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -2988,7 +3561,7 @@ export const PreprocessingView = {
     });
   },
 
-  renderDeheadingTrackIdScreen(container) {
+    renderDeheadingTrackIdScreen(container) {
     container.innerHTML = `
       <div class="space-y-4">
         <!-- Top Action Bar (No Subheading) -->

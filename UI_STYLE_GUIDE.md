@@ -294,3 +294,4 @@ For high-density tables with 10+ columns, apply horizontal overflow with a custo
 4. **Active Underline Tabs:** Submenu tabs use text styling with a 2px colored bottom line (`#00A4B7`) instead of bulky colored solid capsules.
 5. **Horizontal Scroll Accessibility:** Any data table wider than standard viewport has a forced visible scrollbar (`scrollbar-thin` / 8px) with `min-width: 1300px+`.
 6. **Date Standard:** Always display `DD-MM-YYYY` in uppercase for consistency across Chromium, WebKit, and mobile browsers.
+
