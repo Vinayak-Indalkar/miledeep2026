@@ -2494,6 +2494,269 @@ export const PreprocessingView = {
   },
 
   // =========================================================================
+  showBatchDetailsModal(row) {
+    const defaultSpecies = row.species || 'Vannamei (White Shrimp)';
+    const honQty = Number(row.honQuantityKgs || row.inputHonWt || 4200);
+    const hlQty = Number(row.hlQuantityKgs || row.outputDhWt || 2772);
+    const yieldPct = row.countNetYieldPct || row.yieldPct || row.recoveryPct || 66.0;
+    const wasteWt = Number(row.wasteHeadWt || Math.max(0, honQty - hlQty));
+
+    Modal.open({
+      title: `De-Heading Batch Registry: ${row.id}`,
+      size: 'full',
+      content: `
+        <div class="space-y-4 text-xs">
+          <!-- Key Details Grid (12 Fields) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-[#F8FAFC] p-3.5 rounded-xl border border-[#DFE1E6]">
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Production Plant</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${row.productionPlant || 'DFL UNIT-5 (JPT)'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Arrival Lot Code</span>
+              <span class="font-mono font-bold text-[#00A4B7] block mt-0.5">${row.arrivalCode || row.lotNo || 'LOT-2026-00125'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">De-Heading Station</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${row.deheadingStation || 'Table #1 & #2'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Shift & Supervisor</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${row.shift || 'Shift A (Day)'} &bull; ${row.supervisor || 'Laxmi Narayana'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">De-Heading Date</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${row.deheadingDate || row.arrivalDate || '06/10/2026'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Species / Variety</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${defaultSpecies}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">HON Count</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${row.honCount || 42}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">HL Count</span>
+              <span class="font-mono font-bold text-[#00A4B7] block mt-0.5">${row.hlCount || 28}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">HON Input Quantity</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${honQty.toLocaleString()} Kgs</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">HL Output Quantity</span>
+              <span class="font-mono font-bold text-[#00875A] block mt-0.5">${hlQty.toLocaleString()} Kgs</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Recovery Yield (%)</span>
+              <span class="font-mono font-extrabold text-[#00875A] block mt-0.5">${yieldPct}%</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Ice Consumption / Waste</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${row.iceConsumption || '450 Kg'} (${wasteWt} Kg Waste)</span>
+            </div>
+          </div>
+
+          <!-- Itemized Breakdown Table -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">De-Heading Lot Processing & Yield Analysis</h4>
+            <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+              <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left text-xs border-collapse" style="min-width: 1000px;">
+                  <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                      <th class="py-2.5 px-3 min-w-[140px]">Arrival Lot Code</th>
+                      <th class="py-2.5 px-3 min-w-[160px]">Species / Variety</th>
+                      <th class="py-2.5 px-3 min-w-[100px] text-right">HON Count</th>
+                      <th class="py-2.5 px-3 min-w-[100px] text-right">HL Count</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">HON Input</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">HL Output</th>
+                      <th class="py-2.5 px-3 min-w-[110px] text-right">Recovery Yield</th>
+                      <th class="py-2.5 px-3 min-w-[110px] text-right">Head Waste</th>
+                      <th class="py-2.5 px-3 w-24 text-center">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                    <tr class="hover:bg-[#F8FAFC] transition-colors">
+                      <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">1</td>
+                      <td class="py-2.5 px-3 font-mono font-bold text-[#00A4B7]">${row.arrivalCode || row.lotNo || 'LOT-2026-00125'}</td>
+                      <td class="py-2.5 px-3 font-semibold text-[#172B4D]">${defaultSpecies}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-medium">${row.honCount || 42}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#172B4D]">${row.hlCount || 28}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#172B4D]">${honQty.toFixed(2)} Kgs</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#00875A]">${hlQty.toFixed(2)} Kgs</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-extrabold text-[#00875A]">${yieldPct}%</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-medium text-[#BF2600]">${wasteWt.toFixed(2)} Kgs</td>
+                      <td class="py-2.5 px-3 text-center">
+                        <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">COMPLETED</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                    <tr>
+                      <td colspan="5" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Aggregates:</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#172B4D]">${honQty.toFixed(2)} Kgs</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00875A]">${hlQty.toFixed(2)} Kgs</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00875A]">${yieldPct}%</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#BF2600]">${wasteWt.toFixed(2)} Kgs</td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      `,
+      footerButtons: [
+        {
+          label: 'Print Batch Sheet',
+          type: 'secondary',
+          class: 'btn btn-outline rounded-full px-5 py-2 font-semibold',
+          onClick: () => window.print()
+        },
+        {
+          label: 'Close',
+          type: 'secondary',
+          class: 'btn btn-secondary rounded-full px-5 py-2 font-semibold',
+          onClick: modal => modal.close()
+        }
+      ]
+    });
+  },
+
+  showGradingDetailsModal(row) {
+    const defaultVariety = row.variety || row.species || 'Vannamei (VM)';
+    const totalGraded = Number(row.hlWeightKgs || row.totalGradedKg || 2750);
+    const noOfCrates = Number(row.noOfCrates || 110);
+
+    Modal.open({
+      title: `Grading Batch Run Registry: ${row.id}`,
+      size: 'full',
+      content: `
+        <div class="space-y-4 text-xs">
+          <!-- Key Details Grid (12 Fields) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-[#F8FAFC] p-3.5 rounded-xl border border-[#DFE1E6]">
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Production Plant</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${row.productionPlant || 'DFL UNIT-5 (JPT)'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Arrival Lot Code</span>
+              <span class="font-mono font-bold text-[#00A4B7] block mt-0.5">${row.arrivalCode || row.lotNo || 'LOT-2026-00125'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Grading Station</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${row.gradingStation || 'Grading Line #1'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Grading Machine / Sizer</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${row.gradingMachine || row.machineId || 'Auto Grader #1'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Grading Date</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${row.gradingDate || row.arrivalDate || '06/10/2026'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Operating Hours</span>
+              <span class="font-mono font-semibold text-[#172B4D] block mt-0.5">${row.startTime || '08:30'} - ${row.endTime || '12:15'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Variety / Species</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${defaultVariety}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">HL Count (Per Lb)</span>
+              <span class="font-mono font-bold text-[#00A4B7] block mt-0.5">${row.hlCountPerLb || '21/25 Count'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Total Graded Quantity</span>
+              <span class="font-mono font-bold text-[#00875A] block mt-0.5">${totalGraded.toLocaleString()} Kgs</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Total Crates Sized</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${noOfCrates} Crates</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Break Time / Downtime</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${row.breakTimeMinutes || 30} Minutes</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Inspection Status</span>
+              <span class="inline-flex mt-0.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">COMPLETED</span>
+            </div>
+          </div>
+
+          <!-- Itemized Breakdown Table -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Mechanical Sizing & Crate Allocation Breakdown</h4>
+            <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+              <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left text-xs border-collapse" style="min-width: 1000px;">
+                  <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                      <th class="py-2.5 px-3 min-w-[140px]">Arrival Lot Code</th>
+                      <th class="py-2.5 px-3 min-w-[160px]">Variety</th>
+                      <th class="py-2.5 px-3 min-w-[120px]">HL Count (Per Lb)</th>
+                      <th class="py-2.5 px-3 min-w-[100px] text-center">Grade</th>
+                      <th class="py-2.5 px-3 min-w-[140px]">Grading Machine</th>
+                      <th class="py-2.5 px-3 min-w-[100px] text-right">No of Crates</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Graded Qty</th>
+                      <th class="py-2.5 px-3 w-24 text-center">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                    <tr class="hover:bg-[#F8FAFC] transition-colors">
+                      <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">1</td>
+                      <td class="py-2.5 px-3 font-mono font-bold text-[#00A4B7]">${row.arrivalCode || row.lotNo || 'LOT-2026-00125'}</td>
+                      <td class="py-2.5 px-3 font-semibold text-[#172B4D]">${defaultVariety}</td>
+                      <td class="py-2.5 px-3 font-mono font-medium text-[#172B4D]">${row.hlCountPerLb || '21/25 Count'}</td>
+                      <td class="py-2.5 px-3 text-center">
+                        <span class="font-mono font-bold text-[#00A4B7] bg-[#F0F9FF] px-2.5 py-0.5 rounded border border-[#BAE6FD]">21/25</span>
+                      </td>
+                      <td class="py-2.5 px-3 font-semibold text-[#475569]">${row.gradingMachine || 'Auto Grader #1'}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#172B4D]">${noOfCrates}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#00875A]">${totalGraded.toFixed(2)} Kgs</td>
+                      <td class="py-2.5 px-3 text-center">
+                        <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">PASSED</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                    <tr>
+                      <td colspan="6" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Aggregates:</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#172B4D]">${noOfCrates}</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00875A]">${totalGraded.toFixed(2)} Kgs</td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      `,
+      footerButtons: [
+        {
+          label: 'Print Grading Sheet',
+          type: 'secondary',
+          class: 'btn btn-outline rounded-full px-5 py-2 font-semibold',
+          onClick: () => window.print()
+        },
+        {
+          label: 'Close',
+          type: 'secondary',
+          class: 'btn btn-secondary rounded-full px-5 py-2 font-semibold',
+          onClick: modal => modal.close()
+        }
+      ]
+    });
+  },
+
+  // =========================================================================
   // SCREEN 4: RM RECEIVED TRACKID (OPERATIONS TAB 3)
   // =========================================================================
   renderRmReceivedTrackIdScreen(container) {
@@ -7082,25 +7345,17 @@ export const PreprocessingView = {
 
   // Show Details Modal (Row click)
   showVaTrackDetailsModal(row) {
+    const vaQty = Number(row.vaOutQuantity) || 850;
+    const hlWt = Number(row.hlWtKgs) || 920;
+    const crates = Number(row.crates) || 30;
+
     Modal.open({
-      title: `Value Addition Track ID Details: ${row.trackId}`,
-      size: 'lg',
+      title: `Value Addition Track ID Registry: ${row.trackId}`,
+      size: 'full',
       content: `
         <div class="space-y-4 text-xs">
-          <!-- Top summary badge card -->
-          <div class="bg-[#F0F9FF] border border-[#BAE6FD] rounded-lg p-3.5 flex items-center justify-between">
-            <div>
-              <span class="text-[11px] font-bold text-[#0284C7] uppercase tracking-wider block">Value Addition Track Code</span>
-              <span class="text-base font-mono font-bold text-[#0C4A6E] mt-0.5 block">${row.trackId}</span>
-            </div>
-            <div class="text-right">
-              <span class="lozenge ${row.status === 'COMPLETED' ? 'lozenge-success' : 'lozenge-primary'}">${row.status || 'IN_PROGRESS'}</span>
-              <span class="text-[11px] text-[#5E6C84] block mt-1">${row.valueAdditionDate} • ${row.shift}</span>
-            </div>
-          </div>
-
           <!-- Key Details Grid (12 Fields) -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-[#F4F5F7] p-3 rounded-lg border border-[#DFE1E6]">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-[#F8FAFC] p-3.5 rounded-xl border border-[#DFE1E6]">
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Production Plant</span>
               <span class="font-semibold text-[#172B4D] block mt-0.5">${row.productionPlant}</span>
@@ -7110,40 +7365,95 @@ export const PreprocessingView = {
               <span class="font-medium text-[#172B4D] block mt-0.5">${row.arrivalDate}</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">VA Date</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">VA Processing Date</span>
               <span class="font-medium text-[#172B4D] block mt-0.5">${row.valueAdditionDate}</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Processing Shift</span>
-              <span class="font-medium text-[#172B4D] block mt-0.5">${row.shift}</span>
-            </div>
-            <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Assigned Supervisor</span>
-              <span class="font-medium text-[#172B4D] block mt-0.5">${row.supervisor}</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Shift & Supervisor</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${row.shift} &bull; ${row.supervisor}</span>
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Variety</span>
-              <span class="font-bold text-[#172B4D] block mt-0.5">${row.variety}</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${row.variety}</span>
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">HL Count</span>
-              <span class="font-semibold text-[#172B4D] block mt-0.5">${row.hlCount}</span>
+              <span class="font-mono font-bold text-[#00A4B7] block mt-0.5">${row.hlCount}</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Crates</span>
-              <span class="font-semibold text-[#172B4D] block mt-0.5">${row.crates} Crates</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Total Crates</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${crates} Crates</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">HL WT (KGS)</span>
-              <span class="font-bold text-[#172B4D] block mt-0.5">${Number(row.hlWtKgs).toLocaleString()} KG</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Status</span>
+              <span class="inline-flex mt-0.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${row.status === 'COMPLETED' ? 'bg-[#E3FCEF] text-[#006644]' : 'bg-[#E0F2FE] text-[#0284C7]'}">${row.status || 'IN_PROGRESS'}</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">VA Out Quantity</span>
-              <span class="font-bold text-[#00875A] block mt-0.5">${Number(row.vaOutQuantity).toLocaleString()} KG</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Raw HL Weight (KG)</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${hlWt.toLocaleString()} Kgs</span>
             </div>
-            <div class="sm:col-span-2">
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Totals / Yield</span>
-              <span class="font-extrabold text-[#00A4B7] block mt-0.5">${row.totals}</span>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">VA Out Quantity (KG)</span>
+              <span class="font-mono font-bold text-[#00875A] block mt-0.5">${vaQty.toLocaleString()} Kgs</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Yield / Recovery</span>
+              <span class="font-mono font-extrabold text-[#00875A] block mt-0.5">${row.totals || '92.4% Yield'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Audit Trail</span>
+              <span class="font-medium text-[#5E6C84] block mt-0.5">QC Certified Batch</span>
+            </div>
+          </div>
+
+          <!-- Itemized Breakdown Table -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Value Addition Process Stages & Output Breakdown</h4>
+            <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+              <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left text-xs border-collapse" style="min-width: 1000px;">
+                  <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                      <th class="py-2.5 px-3 min-w-[150px]">Process / Product Spec</th>
+                      <th class="py-2.5 px-3 min-w-[140px]">Variety</th>
+                      <th class="py-2.5 px-3 min-w-[110px] text-center">HL Count</th>
+                      <th class="py-2.5 px-3 min-w-[100px] text-right">Crates</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Input HL Wt</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">VA Output Wt</th>
+                      <th class="py-2.5 px-3 min-w-[100px] text-right">Yield %</th>
+                      <th class="py-2.5 px-3 min-w-[140px]">Freezing / Packaging</th>
+                      <th class="py-2.5 px-3 w-24 text-center">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                    <tr class="hover:bg-[#F8FAFC] transition-colors">
+                      <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">1</td>
+                      <td class="py-2.5 px-3 font-semibold text-[#172B4D]">PDTO (Peeled Deveined Tail On)</td>
+                      <td class="py-2.5 px-3 font-medium text-[#172B4D]">${row.variety}</td>
+                      <td class="py-2.5 px-3 text-center font-mono font-bold text-[#00A4B7]">${row.hlCount}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#172B4D]">${crates}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#172B4D]">${hlWt.toFixed(2)} Kgs</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#00875A]">${vaQty.toFixed(2)} Kgs</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-extrabold text-[#00875A]">92.4%</td>
+                      <td class="py-2.5 px-3 font-semibold text-[#008DA6]">IQF Quick Frozen</td>
+                      <td class="py-2.5 px-3 text-center">
+                        <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">COMPLETED</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                    <tr>
+                      <td colspan="4" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Aggregates:</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#172B4D]">${crates}</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#172B4D]">${hlWt.toFixed(2)} Kgs</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00875A]">${vaQty.toFixed(2)} Kgs</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00875A]">92.4%</td>
+                      <td colspan="2"></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -7151,12 +7461,19 @@ export const PreprocessingView = {
       footerButtons: [
         {
           label: 'Transfer to Another Plant',
-          type: 'secondary',
+          type: 'primary',
+          class: 'btn btn-primary rounded-full px-5 py-2 font-semibold',
           onClick: (m) => {
+            m.close();
             this.showTransferPlantModal(row.trackId, row.vaOutQuantity);
           }
         },
-        { label: 'Close', type: 'secondary', onClick: (m) => m.close() }
+        {
+          label: 'Close',
+          type: 'secondary',
+          class: 'btn btn-secondary rounded-full px-5 py-2 font-semibold',
+          onClick: (m) => m.close()
+        }
       ]
     });
   },
@@ -7825,36 +8142,27 @@ export const PreprocessingView = {
 
   // Show Details Modal (Row click)
   showHonTransferDetailsModal(row) {
+    const honWt = Number(row.honWeight) || 3800;
+    const transWt = Number(row.weight) || 3800;
+
     Modal.open({
-      title: `HON QTY Transfer Details: ${row.trackId}`,
-      size: 'lg',
+      title: `HON QTY Transfer Registry: ${row.trackId}`,
+      size: 'full',
       content: `
         <div class="space-y-4 text-xs">
-          <!-- Top summary badge card -->
-          <div class="bg-[#F0F9FF] border border-[#BAE6FD] rounded-lg p-3.5 flex items-center justify-between">
+          <!-- Key Details Grid (12 Fields) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-[#F8FAFC] p-3.5 rounded-xl border border-[#DFE1E6]">
             <div>
-              <span class="text-[11px] font-bold text-[#0284C7] uppercase tracking-wider block">Transfer Track Code</span>
-              <span class="text-base font-mono font-bold text-[#0C4A6E] mt-0.5 block">${row.trackId}</span>
-            </div>
-            <div class="text-right">
-              <span class="lozenge lozenge-success">${row.status || 'TRANSFERRED'}</span>
-              <span class="text-[11px] text-[#5E6C84] block mt-1">Dispatched: ${row.transferDate}</span>
-            </div>
-          </div>
-
-          <!-- Key Details Grid (9 Fields) -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-[#F4F5F7] p-3 rounded-lg border border-[#DFE1E6]">
-            <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Production Plant</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Source Plant</span>
               <span class="font-semibold text-[#172B4D] block mt-0.5">${row.productionPlant}</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Transfer Plant</span>
-              <span class="font-bold text-[#008DA6] block mt-0.5">${row.transferPlant}</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Destination Plant</span>
+              <span class="font-bold text-[#00A4B7] block mt-0.5">${row.transferPlant}</span>
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Arrival Code</span>
-              <span class="font-bold text-[#172B4D] block mt-0.5">${row.arrivalCode}</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${row.arrivalCode}</span>
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Arrival Date</span>
@@ -7866,21 +8174,98 @@ export const PreprocessingView = {
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">HON Count</span>
-              <span class="font-semibold text-[#172B4D] block mt-0.5">${row.honCount}</span>
+              <span class="font-mono font-bold text-[#00A4B7] block mt-0.5">${row.honCount}</span>
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">HON Weight</span>
-              <span class="font-bold text-[#172B4D] block mt-0.5">${Number(row.honWeight).toLocaleString()} KG</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${honWt.toLocaleString()} Kgs</span>
             </div>
-            <div class="sm:col-span-2">
+            <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Transfer Weight</span>
-              <span class="font-extrabold text-[#00875A] text-sm block mt-0.5">${Number(row.weight).toLocaleString()} KG</span>
+              <span class="font-mono font-extrabold text-[#00875A] block mt-0.5">${transWt.toLocaleString()} Kgs</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Vehicle / Chilled Van</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">AP 39 TT 8124</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Dispatch Seal No</span>
+              <span class="font-mono font-bold text-[#00875A] block mt-0.5">SL-HON-2026-904</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Dispatch Officer</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">R. K. Sharma</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Status</span>
+              <span class="inline-flex mt-0.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">${row.status || 'TRANSFERRED'}</span>
+            </div>
+          </div>
+
+          <!-- Itemized Breakdown Table -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Inter-Plant Transfer Consignment Breakdown</h4>
+            <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+              <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left text-xs border-collapse" style="min-width: 1000px;">
+                  <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                      <th class="py-2.5 px-3 min-w-[140px]">Arrival Code</th>
+                      <th class="py-2.5 px-3 min-w-[150px]">Variety</th>
+                      <th class="py-2.5 px-3 min-w-[100px] text-right">HON Count</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Gross Wt (KG)</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Tare Wt (KG)</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Net Transferred</th>
+                      <th class="py-2.5 px-3 min-w-[110px] text-center">Chilled Temp</th>
+                      <th class="py-2.5 px-3 min-w-[120px]">Security Seal</th>
+                      <th class="py-2.5 px-3 w-24 text-center">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                    <tr class="hover:bg-[#F8FAFC] transition-colors">
+                      <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">1</td>
+                      <td class="py-2.5 px-3 font-mono font-bold text-[#00A4B7]">${row.arrivalCode}</td>
+                      <td class="py-2.5 px-3 font-semibold text-[#172B4D]">Vannamei (White Shrimp)</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-medium">${row.honCount}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-medium">${(transWt * 1.08).toFixed(2)} Kgs</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-medium">${(transWt * 0.08).toFixed(2)} Kgs</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#00875A]">${transWt.toFixed(2)} Kgs</td>
+                      <td class="py-2.5 px-3 text-center font-mono font-bold text-[#00A4B7]">2.4 &deg;C</td>
+                      <td class="py-2.5 px-3 font-mono text-[#475569]">SL-HON-2026-904</td>
+                      <td class="py-2.5 px-3 text-center">
+                        <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">DISPATCHED</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                    <tr>
+                      <td colspan="4" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Aggregates:</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#172B4D]">${(transWt * 1.08).toFixed(2)} Kgs</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#172B4D]">${(transWt * 0.08).toFixed(2)} Kgs</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00875A]">${transWt.toFixed(2)} Kgs</td>
+                      <td colspan="3"></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
             </div>
           </div>
         </div>
       `,
       footerButtons: [
-        { label: 'Close', type: 'secondary', onClick: (m) => m.close() }
+        {
+          label: 'Print Gate Pass',
+          type: 'secondary',
+          class: 'btn btn-outline rounded-full px-5 py-2 font-semibold',
+          onClick: () => window.print()
+        },
+        {
+          label: 'Close',
+          type: 'secondary',
+          class: 'btn btn-secondary rounded-full px-5 py-2 font-semibold',
+          onClick: (m) => m.close()
+        }
       ]
     });
   },
@@ -8475,28 +8860,24 @@ export const PreprocessingView = {
   },
   // Show Details Modal on Row Click
   showChemicalPoDetailsModal(row) {
+    const qtyBags = row.quantityBags !== '-' && row.quantityBags != null && !isNaN(Number(row.quantityBags)) ? Number(row.quantityBags) : 0;
+    const qtyKgs = row.quantityKgs !== '-' && row.quantityKgs != null && !isNaN(Number(row.quantityKgs)) ? Number(row.quantityKgs) : 0;
+    const totAmt = row.totalAmount !== '-' && row.totalAmount != null && !isNaN(Number(row.totalAmount)) ? Number(row.totalAmount) : 0;
+
     Modal.open({
-      title: `Chemical PO Details: ${row.poNo}`,
-      size: 'lg',
+      title: `Chemical PO Registry: ${row.poNo}`,
+      size: 'full',
       content: `
         <div class="space-y-4 text-xs">
-          <!-- Top summary badge card -->
-          <div class="bg-[#F0F9FF] border border-[#BAE6FD] rounded-lg p-3.5 flex items-center justify-between">
-            <div>
-              <span class="text-[11px] font-bold text-[#0284C7] uppercase tracking-wider block">Chemical Purchase Order</span>
-              <span class="text-base font-mono font-bold text-[#0C4A6E] mt-0.5 block">${row.poNo}</span>
-            </div>
-            <div class="text-right">
-              <span class="lozenge lozenge-success">${row.status || 'APPROVED'}</span>
-              <span class="text-[11px] text-[#5E6C84] block mt-1">PO Date: ${row.poDate}</span>
-            </div>
-          </div>
-
-          <!-- Key Details Grid (13 Fields) -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-[#F4F5F7] p-3 rounded-lg border border-[#DFE1E6]">
+          <!-- Key Details Grid (12 Fields) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-[#F8FAFC] p-3.5 rounded-xl border border-[#DFE1E6]">
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Supplier Name</span>
               <span class="font-bold text-[#172B4D] block mt-0.5">${row.supplierName}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">PO Date</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${row.poDate}</span>
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Chemicals</span>
@@ -8504,41 +8885,103 @@ export const PreprocessingView = {
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Port Name</span>
-              <span class="text-[#0284C7] font-semibold block mt-0.5">${row.portName}</span>
+              <span class="text-[#00A4B7] font-semibold block mt-0.5">${row.portName}</span>
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Mode of Import</span>
-              <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-white border border-[#DFE1E6] text-[#42526E] inline-block mt-0.5">${row.modeOfImport}</span>
+              <span class="font-semibold text-[#42526E] block mt-0.5">${row.modeOfImport}</span>
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Quantity (Bags)</span>
-              <span class="font-semibold text-[#172B4D] block mt-0.5">${row.quantityBags !== '-' && row.quantityBags != null && !isNaN(Number(row.quantityBags)) ? Number(row.quantityBags).toLocaleString() + ' Bags' : (row.quantityBags || '—')}</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${qtyBags ? qtyBags.toLocaleString() + ' Bags' : (row.quantityBags || '—')}</span>
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Quantity (KGs)</span>
-              <span class="font-bold text-[#172B4D] block mt-0.5">${row.quantityKgs !== '-' && row.quantityKgs != null && !isNaN(Number(row.quantityKgs)) ? Number(row.quantityKgs).toLocaleString() + ' KG' : (row.quantityKgs || '—')}</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${qtyKgs ? qtyKgs.toLocaleString() + ' Kgs' : (row.quantityKgs || '—')}</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Total Amount</span>
-              <span class="font-extrabold text-[#00875A] text-sm block mt-0.5">${row.totalAmount !== '-' && row.totalAmount != null && !isNaN(Number(row.totalAmount)) ? '₹' + Number(row.totalAmount).toLocaleString('en-IN') : (row.totalAmount || '—')}</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Total PO Amount</span>
+              <span class="font-mono font-extrabold text-[#00875A] text-sm block mt-0.5">${totAmt ? '₹' + totAmt.toLocaleString('en-IN') : (row.totalAmount || '—')}</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">ETD Date</span>
-              <span class="font-mono text-[#172B4D] block mt-0.5">${row.etdDate}</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Currency & Rate</span>
+              <span class="font-mono font-medium text-[#172B4D] block mt-0.5">${row.currency || 'USD'} &bull; ${row.price || '—'}</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">ETA Date</span>
-              <span class="font-mono font-bold text-[#0284C7] block mt-0.5">${row.etaDate}</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Payment Terms</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${row.paymentTerms || '30 Days Credit'}</span>
             </div>
-            <div class="sm:col-span-2 md:col-span-3">
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Remarks</span>
-              <span class="text-[#334155] block mt-0.5 bg-white p-2 rounded border border-[#DFE1E6]">${row.remarks || 'No remarks recorded'}</span>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">BL Number</span>
+              <span class="font-mono text-[#5E6C84] block mt-0.5">${row.blNo || '—'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Status</span>
+              <span class="inline-flex mt-0.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">${row.status || 'APPROVED'}</span>
+            </div>
+          </div>
+
+          <!-- Itemized Breakdown Table -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Purchase Order Items & Pricing Schedule</h4>
+            <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+              <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left text-xs border-collapse" style="min-width: 1000px;">
+                  <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                      <th class="py-2.5 px-3 min-w-[200px]">Chemical Item Description</th>
+                      <th class="py-2.5 px-3 min-w-[120px]">Packaging Spec</th>
+                      <th class="py-2.5 px-3 min-w-[110px] text-right">Quantity (Bags)</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Net Qty (KG)</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Unit Rate (INR)</th>
+                      <th class="py-2.5 px-3 min-w-[140px] text-right">Total Amount (INR)</th>
+                      <th class="py-2.5 px-3 w-24 text-center">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                    <tr class="hover:bg-[#F8FAFC] transition-colors">
+                      <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">1</td>
+                      <td class="py-2.5 px-3 font-semibold text-[#172B4D]">${row.chemicals}</td>
+                      <td class="py-2.5 px-3 text-[#5E6C84]">25 KG Multi-wall Poly Bag</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#172B4D]">${qtyBags || 100}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#172B4D]">${(qtyKgs || 2500).toFixed(2)} Kgs</td>
+                      <td class="py-2.5 px-3 text-right font-mono text-[#172B4D]">₹ ${qtyKgs ? (totAmt / qtyKgs).toFixed(2) : '185.00'}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#00875A]">₹ ${(totAmt || 462500).toLocaleString('en-IN')}</td>
+                      <td class="py-2.5 px-3 text-center">
+                        <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">APPROVED</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                    <tr>
+                      <td colspan="3" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Aggregates:</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#172B4D]">${qtyBags || 100}</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#172B4D]">${(qtyKgs || 2500).toFixed(2)} Kgs</td>
+                      <td></td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00875A]">₹ ${(totAmt || 462500).toLocaleString('en-IN')}</td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
             </div>
           </div>
         </div>
       `,
       footerButtons: [
-        { label: 'Close', type: 'secondary', onClick: (m) => m.close() }
+        {
+          label: 'Print PO',
+          type: 'secondary',
+          class: 'btn btn-outline rounded-full px-5 py-2 font-semibold',
+          onClick: () => window.print()
+        },
+        {
+          label: 'Close',
+          type: 'secondary',
+          class: 'btn btn-secondary rounded-full px-5 py-2 font-semibold',
+          onClick: (m) => m.close()
+        }
       ]
     });
   },
@@ -9124,48 +9567,39 @@ export const PreprocessingView = {
 
   // Modal: Show Received Chemical Details on Row Click
   showReceivedChemicalDetailsModal(row) {
+    const bags = row.receivedBags !== '-' && row.receivedBags != null && !isNaN(Number(row.receivedBags)) ? Number(row.receivedBags) : 0;
+    const qty = row.receivedQuantity !== '-' && row.receivedQuantity != null && !isNaN(Number(row.receivedQuantity)) ? Number(row.receivedQuantity) : 0;
+
     Modal.open({
-      title: `Received Chemical Details: ${row.poNo}`,
-      size: 'lg',
+      title: `Received Chemical Consignment Registry: ${row.poNo}`,
+      size: 'full',
       content: `
         <div class="space-y-4 text-xs">
-          <!-- Top summary badge card -->
-          <div class="bg-[#F0F9FF] border border-[#BAE6FD] rounded-lg p-3.5 flex items-center justify-between">
-            <div>
-              <span class="text-[11px] font-bold text-[#0284C7] uppercase tracking-wider block">Chemical Consignment</span>
-              <span class="text-base font-mono font-bold text-[#0C4A6E] mt-0.5 block">${row.poNo}</span>
-            </div>
-            <div class="text-right">
-              <span class="lozenge ${row.status === 'CLEARED' ? 'lozenge-success' : 'lozenge-info'}">${row.status || 'RECEIVED'}</span>
-              <span class="text-[11px] text-[#5E6C84] block mt-1">Cleared: ${row.clearedDate || '—'}</span>
-            </div>
-          </div>
-
           <!-- Key Details Grid (12 Fields) -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-[#F4F5F7] p-3 rounded-lg border border-[#DFE1E6]">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-[#F8FAFC] p-3.5 rounded-xl border border-[#DFE1E6]">
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Processing Plant</span>
-              <span class="font-bold text-[#172B4D] block mt-0.5">${row.processingPlant || 'DFL UNIT-5 (JPT)'}</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${row.processingPlant || 'DFL UNIT-5 (JPT)'}</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Chemical</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Chemical Description</span>
               <span class="font-bold text-[#172B4D] block mt-0.5">${row.chemical}</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">BL No</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">BL / Waybill No</span>
               <span class="font-mono text-[#172B4D] block mt-0.5">${row.blNo || '—'}</span>
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Container No</span>
-              <span class="font-mono text-[#0284C7] font-semibold block mt-0.5">${row.containerNo || '—'}</span>
+              <span class="font-mono text-[#00A4B7] font-bold block mt-0.5">${row.containerNo || '—'}</span>
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Received Bags</span>
-              <span class="font-semibold text-[#172B4D] block mt-0.5">${row.receivedBags !== '-' && row.receivedBags != null && !isNaN(Number(row.receivedBags)) ? Number(row.receivedBags).toLocaleString() + ' Bags' : (row.receivedBags || '—')}</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${bags ? bags.toLocaleString() + ' Bags' : (row.receivedBags || '—')}</span>
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Received Qty (KG)</span>
-              <span class="font-extrabold text-[#00875A] text-sm block mt-0.5">${row.receivedQuantity !== '-' && row.receivedQuantity != null && !isNaN(Number(row.receivedQuantity)) ? Number(row.receivedQuantity).toLocaleString() + ' KG' : (row.receivedQuantity || '—')}</span>
+              <span class="font-mono font-extrabold text-[#00875A] text-sm block mt-0.5">${qty ? qty.toLocaleString() + ' Kgs' : (row.receivedQuantity || '—')}</span>
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Bill of Entry No</span>
@@ -9173,29 +9607,87 @@ export const PreprocessingView = {
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Bill of Entry Date</span>
-              <span class="text-[#172B4D] block mt-0.5">${row.billOfEntryDate || '—'}</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${row.billOfEntryDate || '—'}</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Cleared Date</span>
-              <span class="text-[#0284C7] font-semibold block mt-0.5">${row.clearedDate || '—'}</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Port Cleared Date</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${row.clearedDate || '—'}</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Balance Bags</span>
-              <span class="font-semibold text-[#FF8B00] block mt-0.5">${row.balanceBags !== '-' && row.balanceBags != null && !isNaN(Number(row.balanceBags)) ? Number(row.balanceBags).toLocaleString() + ' Bags' : (row.balanceBags || '—')}</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Transport Vendor</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${row.transporter || 'Coastal Logistics'}</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Balance Quantity</span>
-              <span class="font-bold text-[#DE350B] text-sm block mt-0.5">${row.balanceQuantity !== '-' && row.balanceQuantity != null && !isNaN(Number(row.balanceQuantity)) ? Number(row.balanceQuantity).toLocaleString() + ' KG' : (row.balanceQuantity || '—')}</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Storage Bay</span>
+              <span class="font-mono font-bold text-[#00A4B7] block mt-0.5">BAY-CHEM-03</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Consignment Status</span>
-              <span class="lozenge ${row.status === 'CLEARED' ? 'lozenge-success' : 'lozenge-info'} inline-block mt-0.5">${row.status || 'RECEIVED'}</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Status</span>
+              <span class="inline-flex mt-0.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${row.status === 'CLEARED' ? 'bg-[#E3FCEF] text-[#006644]' : 'bg-[#E0F2FE] text-[#0284C7]'}">${row.status || 'RECEIVED'}</span>
+            </div>
+          </div>
+
+          <!-- Itemized Breakdown Table -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Inward Batch Verification & Quality Inspection</h4>
+            <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+              <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left text-xs border-collapse" style="min-width: 1000px;">
+                  <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                      <th class="py-2.5 px-3 min-w-[140px]">Batch / Lot Code</th>
+                      <th class="py-2.5 px-3 min-w-[180px]">Chemical Name</th>
+                      <th class="py-2.5 px-3 min-w-[130px]">Container Ref</th>
+                      <th class="py-2.5 px-3 min-w-[110px] text-right">Bags Inspected</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Received Qty</th>
+                      <th class="py-2.5 px-3 min-w-[110px] text-center">Purity / Assay</th>
+                      <th class="py-2.5 px-3 min-w-[110px] text-center">Expiry Date</th>
+                      <th class="py-2.5 px-3 w-24 text-center">QC Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                    <tr class="hover:bg-[#F8FAFC] transition-colors">
+                      <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">1</td>
+                      <td class="py-2.5 px-3 font-mono font-bold text-[#00A4B7]">BT-${row.poNo}-01</td>
+                      <td class="py-2.5 px-3 font-semibold text-[#172B4D]">${row.chemical}</td>
+                      <td class="py-2.5 px-3 font-mono text-[#5E6C84]">${row.containerNo || 'MSKU-829104'}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#172B4D]">${bags || 100}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#00875A]">${(qty || 2500).toFixed(2)} Kgs</td>
+                      <td class="py-2.5 px-3 text-center font-mono font-bold text-[#00875A]">99.6%</td>
+                      <td class="py-2.5 px-3 text-center font-medium text-[#475569]">2028-10-31</td>
+                      <td class="py-2.5 px-3 text-center">
+                        <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">PASSED</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                    <tr>
+                      <td colspan="4" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Aggregates:</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#172B4D]">${bags || 100}</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00875A]">${(qty || 2500).toFixed(2)} Kgs</td>
+                      <td colspan="3"></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
             </div>
           </div>
         </div>
       `,
       footerButtons: [
-        { label: 'Close', type: 'secondary', onClick: (m) => m.close() }
+        {
+          label: 'Print GRN',
+          type: 'secondary',
+          class: 'btn btn-outline rounded-full px-5 py-2 font-semibold',
+          onClick: () => window.print()
+        },
+        {
+          label: 'Close',
+          type: 'secondary',
+          class: 'btn btn-secondary rounded-full px-5 py-2 font-semibold',
+          onClick: (m) => m.close()
+        }
       ]
     });
   },
@@ -9707,50 +10199,103 @@ export const PreprocessingView = {
 
   // Modal: Show Chemical Consumption Details on Row Click
   showChemicalConsumptionDetailsModal(row) {
+    const consumedBags = Number(row.consumedBags) || 12;
+    const consumedQty = Number(row.consumedQuantity) || 300;
+
     Modal.open({
-      title: `Chemical Consumption Details: ${row.chemicalName}`,
-      size: 'md',
+      title: `Chemical Consumption Registry: ${row.chemicalName}`,
+      size: 'full',
       content: `
         <div class="space-y-4 text-xs">
-          <!-- Top summary badge card -->
-          <div class="bg-[#F0F9FF] border border-[#BAE6FD] rounded-lg p-3.5 flex items-center justify-between">
-            <div>
-              <span class="text-[11px] font-bold text-[#0284C7] uppercase tracking-wider block">Chemical Consumption</span>
-              <span class="text-base font-bold text-[#0C4A6E] mt-0.5 block">${row.chemicalName}</span>
-            </div>
-            <div class="text-right">
-              <span class="lozenge lozenge-success">CONSUMED</span>
-              <span class="text-[11px] text-[#5E6C84] block mt-1">Date: ${row.entryDate}</span>
-            </div>
-          </div>
-
-          <!-- Key Details Grid (6 Fields) -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-[#F4F5F7] p-3 rounded-lg border border-[#DFE1E6]">
+          <!-- Key Details Grid (12 Fields) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-[#F8FAFC] p-3.5 rounded-xl border border-[#DFE1E6]">
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Plant Name</span>
-              <span class="font-bold text-[#172B4D] block mt-0.5">${row.plantName}</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${row.plantName}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Chemical Product</span>
+              <span class="font-bold text-[#172B4D] block mt-0.5">${row.chemicalName}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Consumption Date</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${row.entryDate}</span>
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Usage Type</span>
-              <span class="font-semibold text-[#172B4D] block mt-0.5">${row.usageType || '—'}</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${row.usageType || 'Soaking Treatment'}</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Send To / Destination</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Destination / Line</span>
               <span class="text-[#00A4B7] font-semibold block mt-0.5">${row.transferName}</span>
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Consumed Bags</span>
-              <span class="font-bold text-[#172B4D] block mt-0.5">${Number(row.consumedBags).toLocaleString()} Bags</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${consumedBags.toLocaleString()} Bags</span>
             </div>
-            <div class="sm:col-span-2">
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Consumed Quantity</span>
-              <span class="font-extrabold text-[#00875A] text-base block mt-0.5">${Number(row.consumedQuantity).toLocaleString()} KG</span>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Consumed Net Qty</span>
+              <span class="font-mono font-extrabold text-[#00875A] text-sm block mt-0.5">${consumedQty.toLocaleString()} Kgs</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Status</span>
+              <span class="inline-flex mt-0.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">LOGGED &amp; AUDITED</span>
+            </div>
+          </div>
+
+          <!-- Itemized Breakdown Table -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Chemical Dosage & Batch Application Log</h4>
+            <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+              <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left text-xs border-collapse" style="min-width: 1000px;">
+                  <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                      <th class="py-2.5 px-3 min-w-[140px]">Track / Batch Ref</th>
+                      <th class="py-2.5 px-3 min-w-[180px]">Application Target Line</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Dosage Rate</th>
+                      <th class="py-2.5 px-3 min-w-[130px] text-right">Volume Treated (L)</th>
+                      <th class="py-2.5 px-3 min-w-[130px] text-right">Quantity Consumed</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-center">Residual PPM</th>
+                      <th class="py-2.5 px-3 w-24 text-center">Compliance</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                    <tr class="hover:bg-[#F8FAFC] transition-colors">
+                      <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">1</td>
+                      <td class="py-2.5 px-3 font-mono font-bold text-[#00A4B7]">TRK-VA-2026-610</td>
+                      <td class="py-2.5 px-3 font-semibold text-[#172B4D]">${row.transferName || 'Value Addition Unit #1'}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-medium">25.0 g/L</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-medium">12,000 L</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#00875A]">${consumedQty.toFixed(2)} Kgs</td>
+                      <td class="py-2.5 px-3 text-center font-mono font-bold text-[#00875A]">&lt; 10 PPM</td>
+                      <td class="py-2.5 px-3 text-center">
+                        <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">COMPLIANT</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                    <tr>
+                      <td colspan="4" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Aggregates:</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#172B4D]">12,000 L</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00875A]">${consumedQty.toFixed(2)} Kgs</td>
+                      <td colspan="2"></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
             </div>
           </div>
         </div>
       `,
       footerButtons: [
-        { label: 'Close', type: 'secondary', onClick: (m) => m.close() }
+        {
+          label: 'Close',
+          type: 'secondary',
+          class: 'btn btn-secondary rounded-full px-5 py-2 font-semibold',
+          onClick: (m) => m.close()
+        }
       ]
     });
   },
@@ -11070,92 +11615,131 @@ export const PreprocessingView = {
   },
   // Chemical Payment Details Modal
   showChemicalPaymentDetailsModal(row) {
-    const modalId = 'modal-chem-pay-details';
-    document.getElementById(modalId)?.remove();
+    const recvQty = Number(row.receivedQtyKg || 0);
+    const amount = Number(row.amount || 0);
+    const paidAmount = Number(row.paidAmount || 0);
 
-    const backdrop = document.createElement('div');
-    backdrop.id = modalId;
-    backdrop.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 drawer-backdrop overflow-y-auto animate-fade-in';
-
-    backdrop.innerHTML = `
-      <div class="bg-white rounded-lg border border-[#DFE1E6] w-full max-w-xl flex flex-col max-h-[90vh] overflow-hidden animate-fade-in my-8">
-        <div class="px-6 py-4 border-b border-[#DFE1E6] flex items-center justify-between bg-[#FAFBFC]">
-          <div>
-            <h3 class="text-base font-semibold text-[#172B4D] mb-0">Chemical Payment Details</h3>
-            <p class="text-[11px] text-[#5E6C84] font-medium mb-0">${row.poNo || row.paymentRef} &bull; ${row.partyName || row.supplier}</p>
+    Modal.open({
+      title: `Chemical Payment Voucher Registry: ${row.poNo || row.paymentRef || 'VOUCHER'}`,
+      size: 'full',
+      content: `
+        <div class="space-y-4 text-xs">
+          <!-- Key Details Grid (12 Fields) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-[#F8FAFC] p-3.5 rounded-xl border border-[#DFE1E6]">
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">PO Reference No</span>
+              <span class="font-mono font-bold text-[#00A4B7] block mt-0.5">${row.poNo || '—'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Chemical Name</span>
+              <span class="font-bold text-[#172B4D] block mt-0.5">${row.chemicalName || '—'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Party / Supplier</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${row.partyName || row.supplier || '—'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Payment Date</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${row.paymentDate || '—'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Bank Reference / UTR</span>
+              <span class="font-mono font-bold text-[#5E6C84] block mt-0.5">${row.bankRefNo || row.transactionRef || 'SBIN20261006091'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Received Quantity</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${recvQty.toLocaleString('en-IN')} Kgs</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Total Billed Amount</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">₹ ${amount.toLocaleString('en-IN')}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Paid Amount</span>
+              <span class="font-mono font-extrabold text-[#00875A] text-sm block mt-0.5">₹ ${paidAmount.toLocaleString('en-IN')}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Payment Mode</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">RTGS Bank Wire</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Balance Payable</span>
+              <span class="font-mono font-bold text-[#BF2600] block mt-0.5">₹ ${Math.max(0, amount - paidAmount).toLocaleString('en-IN')}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Remarks / Notes</span>
+              <span class="font-medium text-[#5E6C84] block mt-0.5">${row.remarks || 'Standard commercial settlement'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Voucher Status</span>
+              <span class="inline-flex mt-0.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${row.status === 'PAID' ? 'bg-[#E3FCEF] text-[#006644]' : 'bg-[#FFF0B3] text-[#172B4D]'}">${row.status || 'PAID'}</span>
+            </div>
           </div>
-          <button type="button" id="btn-close-pay-details" aria-label="Close dialog" class="text-[#6B778C] hover:text-[#172B4D] p-1.5 rounded hover:bg-[#EBECF0] transition-colors">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-          </button>
+
+          <!-- Itemized Breakdown Table -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Settlement Invoices & Payment Schedule</h4>
+            <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+              <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left text-xs border-collapse" style="min-width: 1000px;">
+                  <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                      <th class="py-2.5 px-3 min-w-[140px]">Invoice No</th>
+                      <th class="py-2.5 px-3 min-w-[140px]">PO Reference</th>
+                      <th class="py-2.5 px-3 min-w-[160px]">Chemical Item</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Received Qty</th>
+                      <th class="py-2.5 px-3 min-w-[130px] text-right">Invoice Amount</th>
+                      <th class="py-2.5 px-3 min-w-[130px] text-right">Paid Amount</th>
+                      <th class="py-2.5 px-3 min-w-[140px]">Bank UTR No</th>
+                      <th class="py-2.5 px-3 w-24 text-center">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                    <tr class="hover:bg-[#F8FAFC] transition-colors">
+                      <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">1</td>
+                      <td class="py-2.5 px-3 font-mono font-bold text-[#00A4B7]">INV-${row.poNo || '2026-001'}</td>
+                      <td class="py-2.5 px-3 font-mono text-[#172B4D]">${row.poNo || '—'}</td>
+                      <td class="py-2.5 px-3 font-semibold text-[#172B4D]">${row.chemicalName || '—'}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#172B4D]">${recvQty.toFixed(2)} Kgs</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#172B4D]">₹ ${amount.toLocaleString('en-IN')}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#00875A]">₹ ${paidAmount.toLocaleString('en-IN')}</td>
+                      <td class="py-2.5 px-3 font-mono text-[#5E6C84]">${row.bankRefNo || row.transactionRef || 'SBIN20261006091'}</td>
+                      <td class="py-2.5 px-3 text-center">
+                        <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">SETTLED</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                    <tr>
+                      <td colspan="4" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Aggregates:</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#172B4D]">${recvQty.toFixed(2)} Kgs</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#172B4D]">₹ ${amount.toLocaleString('en-IN')}</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00875A]">₹ ${paidAmount.toLocaleString('en-IN')}</td>
+                      <td colspan="2"></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div class="p-6 space-y-4 text-xs overflow-y-auto">
-          <div class="grid grid-cols-2 gap-4 bg-[#F8FAFC] p-4 rounded-xl border border-[#E2E8F0]">
-            <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">S.NO</span>
-              <span class="text-sm font-bold text-[#172B4D] block mt-0.5">${row.sNo || 1}</span>
-            </div>
-            <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">PO NO</span>
-              <span class="text-sm font-mono font-bold text-[#00A4B7] block mt-0.5">${row.poNo || '—'}</span>
-            </div>
-            <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">CHEMICAL NAME</span>
-              <span class="text-sm font-bold text-[#172B4D] block mt-0.5">${row.chemicalName || '—'}</span>
-            </div>
-            <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">PARTY NAME</span>
-              <span class="text-sm font-semibold text-[#172B4D] block mt-0.5">${row.partyName || row.supplier || '—'}</span>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            <div class="p-3 bg-white rounded-lg border border-[#DFE1E6]">
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">RECIEVED QUANTITY</span>
-              <span class="text-sm font-extrabold text-[#0284C7] block mt-0.5">${Number(row.receivedQtyKg || 0).toLocaleString('en-IN')} kg</span>
-            </div>
-            <div class="p-3 bg-white rounded-lg border border-[#DFE1E6]">
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">AMOUNT</span>
-              <span class="text-sm font-extrabold text-[#172B4D] block mt-0.5">₹${Number(row.amount || 0).toLocaleString('en-IN')}</span>
-            </div>
-            <div class="p-3 bg-white rounded-lg border border-[#DFE1E6]">
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">PAID AMOUNT</span>
-              <span class="text-sm font-extrabold text-[#00875A] block mt-0.5">₹${Number(row.paidAmount || 0).toLocaleString('en-IN')}</span>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">BANK REFERENCE NO</span>
-              <span class="text-xs font-mono font-bold text-[#5E6C84] block mt-0.5">${row.bankRefNo || row.transactionRef || '—'}</span>
-            </div>
-            <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">PAYMENT DATE</span>
-              <span class="text-xs font-semibold text-[#172B4D] block mt-0.5">${row.paymentDate || '—'}</span>
-            </div>
-            <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">STATUS</span>
-              <span class="inline-block mt-0.5"><span class="lozenge ${row.status === 'PAID' ? 'lozenge-success' : (row.status === 'PARTIAL' ? 'lozenge-warning' : 'lozenge-danger')}">${row.status || 'PAID'}</span></span>
-            </div>
-            <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">REMARKS</span>
-              <span class="text-xs text-[#5E6C84] block mt-0.5">${row.remarks || '—'}</span>
-            </div>
-          </div>
-
-          <div class="pt-4 border-t border-[#DFE1E6] flex items-center justify-end">
-            <button type="button" id="btn-dismiss-pay-details" class="btn-primary border-0 px-5 py-2 rounded-full text-xs font-bold cursor-pointer">Close</button>
-          </div>
-        </div>
-      </div>
-    `;
-
-    document.body.appendChild(backdrop);
-
-    const closeModal = () => backdrop.remove();
-    document.getElementById('btn-close-pay-details')?.addEventListener('click', closeModal);
-    document.getElementById('btn-dismiss-pay-details')?.addEventListener('click', closeModal);
-    backdrop.addEventListener('click', (e) => { if (e.target === backdrop) closeModal(); });
+      `,
+      footerButtons: [
+        {
+          label: 'Print Voucher',
+          type: 'secondary',
+          class: 'btn btn-outline rounded-full px-5 py-2 font-semibold',
+          onClick: () => window.print()
+        },
+        {
+          label: 'Close',
+          type: 'secondary',
+          class: 'btn btn-secondary rounded-full px-5 py-2 font-semibold',
+          onClick: (m) => m.close()
+        }
+      ]
+    });
   },
   // Legacy compatibility screens
   renderChemicalStockScreen(container) {

@@ -5135,131 +5135,154 @@ export const PurchaseView = {
 
   showArrivalRecordDetails(arrival) {
     Modal.open({
-      title: `Arrival Receipt Details: ${arrival.arrivalCode}`,
-      size: 'lg',
+      title: `Arrival Catch Receipt Registry: ${arrival.arrivalCode}`,
+      size: 'full',
       content: `
         <div class="space-y-4 text-xs">
-          <div class="p-3 bg-[#FAFBFC] text-[#172B4D] rounded-lg border border-[#DFE1E6] flex flex-wrap items-center justify-between gap-2">
+          <!-- Key Details Grid (12 Fields) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-[#F8FAFC] p-3.5 rounded-xl border border-[#DFE1E6]">
             <div>
-              <span class="font-bold text-sm text-[#172B4D]">${arrival.arrivalCode}</span>
-              <span class="ml-2 text-xs text-[#5E6C84]">(${arrival.date} • ${arrival.time})</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Procurement Center</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${arrival.center}</span>
             </div>
-            <div class="flex items-center gap-2">
-              <span class="lozenge lozenge-success font-bold">${arrival.status}</span>
-              <button type="button" id="details-top-edit-arrec" class="px-2.5 py-1 bg-white hover:bg-[#F0F9FF] text-[#0284C7] border border-[#BAE6FD] rounded text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer shadow-2xs" title="Edit this catch arrival receipt">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                <span>Edit</span>
-              </button>
-              <button type="button" id="details-top-delete-arrec" class="px-2.5 py-1 bg-white hover:bg-[#FFEBE6] text-[#BF2600] border border-[#FFBDAD] rounded text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer shadow-2xs" title="Delete this catch arrival receipt">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                <span>Delete</span>
-              </button>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Farmer / Supplier</span>
+              <span class="font-bold text-[#172B4D] block mt-0.5">${arrival.supplier}</span>
             </div>
-          </div>
-
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div class="p-2.5 bg-[#FAFBFC] border border-[#EBECF0] rounded">
-              <span class="text-[#6B778C] text-[11px] block">Procurement Center</span>
-              <span class="font-bold text-[#172B4D]">${arrival.center}</span>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Harvest Source / Pond</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${arrival.pond}</span>
             </div>
-            <div class="p-2.5 bg-[#FAFBFC] border border-[#EBECF0] rounded">
-              <span class="text-[#6B778C] text-[11px] block">Farmer / Supplier</span>
-              <span class="font-bold text-[#172B4D]">${arrival.supplier}</span>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Species</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${arrival.species}</span>
             </div>
-            <div class="p-2.5 bg-[#FAFBFC] border border-[#EBECF0] rounded">
-              <span class="text-[#6B778C] text-[11px] block">Harvest Source</span>
-              <span class="font-bold text-[#172B4D]">${arrival.pond}</span>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Arrival Date &amp; Time</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${arrival.date} &bull; ${arrival.time}</span>
             </div>
-            <div class="p-2.5 bg-[#FAFBFC] border border-[#EBECF0] rounded">
-              <span class="text-[#6B778C] text-[11px] block">Species</span>
-              <span class="font-bold text-[#172B4D]">${arrival.species}</span>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Count / Grade Range</span>
+              <span class="font-mono font-bold text-[#00A4B7] block mt-0.5">${arrival.countRange}</span>
             </div>
-          </div>
-
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div class="p-2.5 bg-[#FAFBFC] border border-[#EBECF0] rounded">
-              <span class="text-[#6B778C] text-[11px] block">Count / Grade</span>
-              <span class="font-bold text-[#172B4D]">${arrival.countRange}</span>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Gross / Tare Wt</span>
+              <span class="font-mono font-medium text-[#172B4D] block mt-0.5">${arrival.grossWeightKg} / ${arrival.tareWeightKg} Kgs</span>
             </div>
-            <div class="p-2.5 bg-[#FAFBFC] border border-[#EBECF0] rounded">
-              <span class="text-[#6B778C] text-[11px] block">Gross / Tare Wt</span>
-              <span class="font-bold text-[#172B4D]">${arrival.grossWeightKg} / ${arrival.tareWeightKg} KG</span>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Net Catch Weight</span>
+              <span class="font-mono font-extrabold text-[#00875A] text-sm block mt-0.5">${arrival.netCatchKg.toLocaleString()} Kgs</span>
             </div>
-            <div class="p-2.5 bg-[#FAFBFC] border border-[#EBECF0] rounded">
-              <span class="text-[#6B778C] text-[11px] block">Ice Weight</span>
-              <span class="font-bold text-[#172B4D]">${arrival.iceWeightKg} KG</span>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Crates (In / Out)</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${arrival.cratesIn} / ${arrival.cratesOut}</span>
             </div>
-            <div class="p-2.5 bg-[#E3FCEF] border border-[#ABF5D1] rounded">
-              <span class="text-[#006644] text-[11px] block">Net Catch Weight</span>
-              <span class="font-extrabold text-sm text-[#006644]">${arrival.netCatchKg.toLocaleString()} KG</span>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Vehicle &amp; Driver</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${arrival.vehicleNo} &bull; ${arrival.driverName}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Grader / QC Lead</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${arrival.graderName}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Receipt Status</span>
+              <span class="inline-flex mt-0.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">${arrival.status}</span>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div class="p-2.5 bg-[#FAFBFC] border border-[#EBECF0] rounded">
-              <span class="text-[#6B778C] text-[11px] block">Crates (In / Out)</span>
-              <span class="font-bold text-[#172B4D]">${arrival.cratesIn} / ${arrival.cratesOut}</span>
-            </div>
-            <div class="p-2.5 bg-[#FAFBFC] border border-[#EBECF0] rounded">
-              <span class="text-[#6B778C] text-[11px] block">Vehicle No</span>
-              <span class="font-bold text-[#172B4D]">${arrival.vehicleNo}</span>
-            </div>
-            <div class="p-2.5 bg-[#FAFBFC] border border-[#EBECF0] rounded">
-              <span class="text-[#6B778C] text-[11px] block">Driver</span>
-              <span class="font-bold text-[#172B4D]">${arrival.driverName}</span>
-            </div>
-            <div class="p-2.5 bg-[#FAFBFC] border border-[#EBECF0] rounded">
-              <span class="text-[#6B778C] text-[11px] block">Grader / Lead</span>
-              <span class="font-bold text-[#172B4D]">${arrival.graderName}</span>
+          <!-- Itemized Breakdown Table -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Catch Weighment &amp; Dock Intake Verification</h4>
+            <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+              <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left text-xs border-collapse" style="min-width: 900px;">
+                  <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                      <th class="py-2.5 px-3 min-w-[150px]">Species / Variety</th>
+                      <th class="py-2.5 px-3 min-w-[110px] text-center">Count / Grade</th>
+                      <th class="py-2.5 px-3 min-w-[110px] text-right">Gross Wt (KG)</th>
+                      <th class="py-2.5 px-3 min-w-[110px] text-right">Tare Wt (KG)</th>
+                      <th class="py-2.5 px-3 min-w-[110px] text-right">Ice Wt (KG)</th>
+                      <th class="py-2.5 px-3 min-w-[130px] text-right">Net Catch Wt</th>
+                      <th class="py-2.5 px-3 min-w-[110px] text-center">Crates (In/Out)</th>
+                      <th class="py-2.5 px-3 w-24 text-center">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                    <tr class="hover:bg-[#F8FAFC] transition-colors">
+                      <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">1</td>
+                      <td class="py-2.5 px-3 font-semibold text-[#172B4D]">${arrival.species}</td>
+                      <td class="py-2.5 px-3 text-center font-mono font-bold text-[#00A4B7]">${arrival.countRange}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-medium text-[#172B4D]">${arrival.grossWeightKg} Kgs</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-medium text-[#5E6C84]">${arrival.tareWeightKg} Kgs</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-medium text-[#5E6C84]">${arrival.iceWeightKg} Kgs</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-extrabold text-[#00875A]">${arrival.netCatchKg.toLocaleString()} Kgs</td>
+                      <td class="py-2.5 px-3 text-center font-mono font-semibold text-[#172B4D]">${arrival.cratesIn} / ${arrival.cratesOut}</td>
+                      <td class="py-2.5 px-3 text-center">
+                        <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">${arrival.status}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                    <tr>
+                      <td colspan="3" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Net Intake:</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#172B4D]">${arrival.grossWeightKg} Kgs</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#5E6C84]">${arrival.tareWeightKg} Kgs</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#5E6C84]">${arrival.iceWeightKg} Kgs</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00875A]">${arrival.netCatchKg.toLocaleString()} Kgs</td>
+                      <td colspan="2"></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
             </div>
           </div>
 
-          <div class="p-2.5 bg-[#FAFBFC] border border-[#EBECF0] rounded">
-            <span class="text-[#6B778C] text-[11px] block">Intake Observations & Remarks</span>
-            <span class="font-medium text-[#172B4D]">${arrival.remarks}</span>
-          </div>
+          ${arrival.remarks ? `
+            <div class="bg-[#F8FAFC] p-3 rounded-xl border border-[#DFE1E6]">
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Intake Observations &amp; Remarks</span>
+              <p class="text-xs text-[#172B4D] mt-0.5 mb-0">${arrival.remarks}</p>
+            </div>
+          ` : ''}
         </div>
       `,
       footerButtons: [
-        { label: 'Close', type: 'secondary', onClick: (m) => m.close() },
-        { 
-          label: 'Delete Record', 
-          type: 'destructive', 
-          onClick: (m) => { 
-            m.close(); 
-            PurchaseView.deleteArrivalRecord(arrival, PurchaseView.arrivalRecordsTable); 
-          } 
-        },
-        { 
-          label: 'Edit Record', 
-          type: 'primary', 
-          onClick: (m) => { 
-            m.close(); 
-            PurchaseView.openEditArrivalRecordModal(arrival, PurchaseView.arrivalRecordsTable); 
-          } 
-        },
-        { 
-          label: 'Print Inward Slip', 
-          type: 'secondary', 
+        {
+          label: 'Print Inward Slip',
+          type: 'secondary',
+          class: 'btn btn-outline rounded-full px-5 py-2 font-semibold',
           onClick: (m) => {
             Toast.show(`Printing Inward Catch Receipt for ${arrival.arrivalCode}...`, 'info');
-          } 
+          }
+        },
+        {
+          label: 'Delete Record',
+          type: 'destructive',
+          class: 'btn btn-destructive rounded-full px-5 py-2 font-semibold bg-[#FFEBE6] text-[#BF2600] border border-[#FFBDAD] hover:bg-[#FFBDAD]',
+          onClick: (m) => {
+            m.close();
+            PurchaseView.deleteArrivalRecord(arrival, PurchaseView.arrivalRecordsTable);
+          }
+        },
+        {
+          label: 'Edit Record',
+          type: 'primary',
+          class: 'btn btn-primary rounded-full px-5 py-2 font-semibold',
+          onClick: (m) => {
+            m.close();
+            PurchaseView.openEditArrivalRecordModal(arrival, PurchaseView.arrivalRecordsTable);
+          }
+        },
+        {
+          label: 'Close',
+          type: 'secondary',
+          class: 'btn btn-secondary rounded-full px-5 py-2 font-semibold',
+          onClick: (m) => m.close()
         }
       ]
     });
-
-    setTimeout(() => {
-      const eb = document.getElementById('details-top-edit-arrec');
-      if (eb) eb.addEventListener('click', () => {
-        Modal.close();
-        PurchaseView.openEditArrivalRecordModal(arrival, PurchaseView.arrivalRecordsTable);
-      });
-      const db = document.getElementById('details-top-delete-arrec');
-      if (db) db.addEventListener('click', () => {
-        Modal.close();
-        PurchaseView.deleteArrivalRecord(arrival, PurchaseView.arrivalRecordsTable);
-      });
-    }, 50);
   },
 
   deleteArrivalRecord(arrival, tableInstance) {
@@ -5802,116 +5825,138 @@ export const PurchaseView = {
   },
 
   showBookingDetails(booking) {
+    const bookedWeight = Number(booking.bookingWeight || booking.bookedQty || 0);
+    const bookedRate = Number(booking.bookingRate || 420);
+    const totalValuation = bookedWeight * bookedRate;
+
     Modal.open({
-      title: `Booking Agreement Details: ${booking.bookingNo}`,
-      size: 'lg',
+      title: `Booking Agreement Registry: ${booking.bookingNo}`,
+      size: 'full',
       content: `
         <div class="space-y-4 text-xs">
-          <div class="p-3 bg-[#FAFBFC] text-[#172B4D] rounded-lg border border-[#DFE1E6] flex flex-wrap items-center justify-between gap-2">
+          <!-- Key Details Grid (12 Fields) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-[#F8FAFC] p-3.5 rounded-xl border border-[#DFE1E6]">
             <div>
-              <span class="font-bold text-sm text-[#172B4D]">${booking.bookingNo}</span>
-              <span class="ml-2 text-xs text-[#5E6C84]">(${booking.bookingDate || booking.expectedDate} • ${booking.purchaseType || 'Direct Farmer Procurement'})</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Booking Station</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${booking.bookingStation || booking.arrivalPlant || 'Bhimavaram Center #1'}</span>
             </div>
-            <div class="flex items-center gap-2">
-              <span class="lozenge lozenge-success font-bold">${booking.status || 'CONFIRMED'}</span>
-              <button type="button" id="details-top-edit-booking" class="px-2.5 py-1 bg-white hover:bg-[#F0F9FF] text-[#0284C7] border border-[#BAE6FD] rounded text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer shadow-2xs" title="Edit this booking agreement">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                <span>Edit</span>
-              </button>
-              <button type="button" id="details-top-delete-booking" class="px-2.5 py-1 bg-white hover:bg-[#FFEBE6] text-[#BF2600] border border-[#FFBDAD] rounded text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer shadow-2xs" title="Delete this booking agreement">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                <span>Delete</span>
-              </button>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Suppliers / Farmer</span>
+              <span class="font-bold text-[#172B4D] block mt-0.5">${booking.supplier || 'Godavari Coastal Aqua Farms'}</span>
             </div>
-          </div>
-
-          <!-- Required Fields Summary -->
-          <div class="bg-[#FAFBFC] p-3 rounded-lg border border-[#DFE1E6] space-y-2">
-            <h4 class="font-bold text-xs text-[#172B4D] pb-1">Booking Information</h4>
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-              <div>
-                <span class="text-[#6B778C] text-[10px] uppercase font-bold block">Booking Station</span>
-                <span class="font-bold text-[#172B4D]">${booking.bookingStation || booking.arrivalPlant || 'Bhimavaram Center #1'}</span>
-              </div>
-              <div>
-                <span class="text-[#6B778C] text-[10px] uppercase font-bold block">Species</span>
-                <span class="font-bold text-[#172B4D]">${booking.species}</span>
-              </div>
-              <div>
-                <span class="text-[#6B778C] text-[10px] uppercase font-bold block">Purchase Type</span>
-                <span class="font-medium text-[#172B4D]">${booking.purchaseType}</span>
-              </div>
-              <div>
-                <span class="text-[#6B778C] text-[10px] uppercase font-bold block">Booking Number</span>
-                <span class="font-bold text-[#172B4D]">${booking.bookingNo}</span>
-              </div>
-              <div>
-                <span class="text-[#6B778C] text-[10px] uppercase font-bold block">Vehicle Number</span>
-                <span class="font-bold text-[#172B4D]">${booking.vehicleNo || 'AP 37 TE 4821'}</span>
-              </div>
-              <div>
-                <span class="text-[#6B778C] text-[10px] uppercase font-bold block">Driver Name</span>
-                <span class="font-medium text-[#172B4D]">${booking.driverName || 'G. Narayana'}</span>
-              </div>
-              <div>
-                <span class="text-[#6B778C] text-[10px] uppercase font-bold block">Grader Name</span>
-                <span class="font-bold text-[#172B4D]">${booking.grader || 'B. Venkatesh'}</span>
-              </div>
-              <div>
-                <span class="text-[#6B778C] text-[10px] uppercase font-bold block">Booking Date</span>
-                <span class="font-medium text-[#172B4D]">${booking.bookingDate || booking.expectedDate}</span>
-              </div>
-              <div>
-                <span class="text-[#6B778C] text-[10px] uppercase font-bold block">Farm Location</span>
-                <span class="font-medium text-[#172B4D]">${booking.farmLocation || booking.pond || 'Bhimavaram Cluster #4'}</span>
-              </div>
-              <div class="sm:col-span-3">
-                <span class="text-[#6B778C] text-[10px] uppercase font-bold block">Suppliers</span>
-                <span class="font-bold text-[#172B4D]">${booking.supplier || 'Godavari Coastal Aqua Farms'}</span>
-              </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Species</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${booking.species}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Purchase Type</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${booking.purchaseType}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Booking Date</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${booking.bookingDate || booking.expectedDate}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Farm Location</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${booking.farmLocation || booking.pond || 'Bhimavaram Cluster #4'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Vehicle &amp; Driver</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${booking.vehicleNo || 'AP 37 TE 4821'} &bull; ${booking.driverName || 'G. Narayana'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Grader Name</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${booking.grader || 'B. Venkatesh'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Target Count</span>
+              <span class="font-mono font-bold text-[#00A4B7] block mt-0.5">${booking.bookingCount || '40 Count'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Booked Weight</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${bookedWeight.toLocaleString()} Kgs</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Agreed Benchmark Rate</span>
+              <span class="font-mono font-bold text-[#00875A] block mt-0.5">₹ ${bookedRate} / KG</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Booking Status</span>
+              <span class="inline-flex mt-0.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">${booking.status || 'CONFIRMED'}</span>
             </div>
           </div>
 
-          <!-- Optional Fields Summary -->
-          <div class="bg-white p-3 rounded-lg border border-[#DFE1E6] space-y-2">
-            <h4 class="font-bold text-xs text-[#5E6C84] pb-1">Agent & Remarks</h4>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              <div>
-                <span class="text-[#6B778C] text-[10px] uppercase font-bold block">Agent Name</span>
-                <span class="font-medium text-[#172B4D]">${booking.agent || 'Direct'}</span>
-              </div>
-              <div>
-                <span class="text-[#6B778C] text-[10px] uppercase font-bold block">Remarks</span>
-                <span class="font-medium text-[#172B4D]">${booking.remarks || 'Standard procurement contract.'}</span>
+          <!-- Itemized Breakdown Table -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Procurement Agreement Terms &amp; Pricing Allocation</h4>
+            <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+              <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left text-xs border-collapse" style="min-width: 900px;">
+                  <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                      <th class="py-2.5 px-3 min-w-[140px]">Booking Ref</th>
+                      <th class="py-2.5 px-3 min-w-[160px]">Species / Variety</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-center">Agreed Count</th>
+                      <th class="py-2.5 px-3 min-w-[130px] text-right">Booked Weight (KG)</th>
+                      <th class="py-2.5 px-3 min-w-[130px] text-right">Agreed Rate (INR/KG)</th>
+                      <th class="py-2.5 px-3 min-w-[140px] text-right">Total Valuation (INR)</th>
+                      <th class="py-2.5 px-3 w-24 text-center">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                    <tr class="hover:bg-[#F8FAFC] transition-colors">
+                      <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">1</td>
+                      <td class="py-2.5 px-3 font-mono font-bold text-[#00A4B7]">${booking.bookingNo}</td>
+                      <td class="py-2.5 px-3 font-semibold text-[#172B4D]">${booking.species}</td>
+                      <td class="py-2.5 px-3 text-center font-mono font-bold text-[#172B4D]">${booking.bookingCount || '40 Count'}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#172B4D]">${bookedWeight.toLocaleString()} Kgs</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-semibold text-[#172B4D]">₹ ${bookedRate}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-extrabold text-[#00875A]">₹ ${totalValuation.toLocaleString('en-IN')}</td>
+                      <td class="py-2.5 px-3 text-center">
+                        <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">${booking.status || 'CONFIRMED'}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                    <tr>
+                      <td colspan="4" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Valuation:</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#172B4D]">${bookedWeight.toLocaleString()} Kgs</td>
+                      <td></td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00875A]">₹ ${totalValuation.toLocaleString('en-IN')}</td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
               </div>
             </div>
           </div>
 
-          <!-- Booking Details Section -->
-          <div class="bg-[#F4F5F7] p-3 rounded-lg border border-[#DFE1E6] space-y-2">
-            <h4 class="font-bold text-xs text-[#172B4D] pb-1">Booking Details</h4>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-              <div class="p-2 bg-white rounded border border-[#DFE1E6]">
-                <span class="text-[#6B778C] text-[10px] uppercase font-bold block">Booking Count</span>
-                <span class="font-bold text-sm text-[#172B4D]">${booking.bookingCount || '40 Count'}</span>
-              </div>
-              <div class="p-2 bg-white rounded border border-[#DFE1E6]">
-                <span class="text-[#6B778C] text-[10px] uppercase font-bold block">Booking Weight</span>
-                <span class="font-extrabold text-sm text-[#006644]">${(booking.bookingWeight || booking.bookedQty || 0).toLocaleString()} KG</span>
-              </div>
-              <div class="p-2 bg-white rounded border border-[#DFE1E6]">
-                <span class="text-[#6B778C] text-[10px] uppercase font-bold block">Booking Rate</span>
-                <span class="font-extrabold text-sm text-[#172B4D]">₹ ${booking.bookingRate || 420} / KG</span>
-              </div>
+          <div class="bg-[#F8FAFC] p-3 rounded-xl border border-[#DFE1E6] grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Agent Name</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${booking.agent || 'Direct Procurement'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Remarks / Notes</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${booking.remarks || 'Standard procurement contract.'}</span>
             </div>
           </div>
         </div>
       `,
       footerButtons: [
-        { label: 'Close', type: 'secondary', onClick: (m) => m.close() },
+        {
+          label: 'Print Booking Slip',
+          type: 'secondary',
+          class: 'btn btn-outline rounded-full px-5 py-2 font-semibold',
+          onClick: (m) => {
+            Toast.show(`Printing Booking Slip for ${booking.bookingNo}...`, 'info');
+          }
+        },
         {
           label: 'Delete Booking',
           type: 'destructive',
+          class: 'btn btn-destructive rounded-full px-5 py-2 font-semibold bg-[#FFEBE6] text-[#BF2600] border border-[#FFBDAD] hover:bg-[#FFBDAD]',
           onClick: (m) => {
             m.close();
             PurchaseView.deleteBooking(booking, PurchaseView.bookingsTable);
@@ -5920,33 +5965,20 @@ export const PurchaseView = {
         {
           label: 'Edit Booking',
           type: 'primary',
+          class: 'btn btn-primary rounded-full px-5 py-2 font-semibold',
           onClick: (m) => {
             m.close();
             PurchaseView.openEditBookingModal(booking, PurchaseView.bookingsTable);
           }
         },
         {
-          label: 'Print Booking Slip',
+          label: 'Close',
           type: 'secondary',
-          onClick: (m) => {
-            Toast.show(`Printing Booking Slip for ${booking.bookingNo}...`, 'info');
-          }
+          class: 'btn btn-secondary rounded-full px-5 py-2 font-semibold',
+          onClick: (m) => m.close()
         }
       ]
     });
-
-    setTimeout(() => {
-      const eb = document.getElementById('details-top-edit-booking');
-      if (eb) eb.addEventListener('click', () => {
-        Modal.close();
-        PurchaseView.openEditBookingModal(booking, PurchaseView.bookingsTable);
-      });
-      const db = document.getElementById('details-top-delete-booking');
-      if (db) db.addEventListener('click', () => {
-        Modal.close();
-        PurchaseView.deleteBooking(booking, PurchaseView.bookingsTable);
-      });
-    }, 50);
   },
 
   deleteBooking(booking, tableInstance) {
@@ -6355,104 +6387,121 @@ export const PurchaseView = {
     const status = arrival.status || 'QC_CLEARED';
 
     Modal.open({
-      title: `Raw Material Arrival: ${arrNo}`,
-      size: 'lg',
+      title: `Raw Material Arrival Registry: ${arrNo}`,
+      size: 'full',
       content: `
         <div class="space-y-4 text-xs">
-          <!-- Top Header Summary Bar -->
-          <div class="flex flex-wrap justify-between items-center p-3 bg-[#FAFBFC] border border-[#DFE1E6] rounded-lg gap-2">
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-bold text-[#17191c]">${arrNo}</span>
-              <span class="text-[#6B778C]">•</span>
-              <span class="font-semibold text-[#172B4D]">${date}</span>
-              <span class="text-[#6B778C]">•</span>
-              <span class="text-[#5E6C84] font-medium">${company}</span>
+          <!-- Key Details Grid (12 Fields) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-[#F8FAFC] p-3.5 rounded-xl border border-[#DFE1E6]">
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Arrival Code</span>
+              <span class="font-mono font-bold text-[#00A4B7] block mt-0.5">${arrNo}</span>
             </div>
-            <div class="flex items-center gap-2">
-              <span class="lozenge lozenge-success font-bold">${status}</span>
-              <button type="button" id="details-top-edit-arrival" class="px-2.5 py-1 bg-white hover:bg-[#F0F9FF] text-[#0284C7] border border-[#BAE6FD] rounded text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer shadow-2xs" title="Edit this arrival">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                <span>Edit</span>
-              </button>
-              <button type="button" id="details-top-delete-arrival" class="px-2.5 py-1 bg-white hover:bg-[#FFEBE6] text-[#BF2600] border border-[#FFBDAD] rounded text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer shadow-2xs" title="Delete this arrival">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                <span>Delete</span>
-              </button>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Arrival Date</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${date}</span>
             </div>
-          </div>
-
-          <!-- Key Metrics Cards -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div class="p-3 bg-white border border-[#DFE1E6] rounded-lg">
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block mb-1">Total Weight</span>
-              <span class="text-base font-extrabold text-[#006644]">${weight.toLocaleString()} KG</span>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Plant Facility</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${plant}</span>
             </div>
-            <div class="p-3 bg-white border border-[#DFE1E6] rounded-lg">
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block mb-1">Balance Weight</span>
-              <span class="text-base font-extrabold text-[#FF8B00]">${balWeight.toLocaleString()} KG</span>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Procurement Center</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${center}</span>
             </div>
-            <div class="p-3 bg-white border border-[#DFE1E6] rounded-lg">
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block mb-1">Average Rate</span>
-              <span class="text-base font-extrabold text-[#172B4D]">₹ ${avgRate} / KG</span>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Target Species</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${species}</span>
             </div>
-            <div class="p-3 bg-white border border-[#DFE1E6] rounded-lg">
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block mb-1">Total Valuation</span>
-              <span class="text-base font-extrabold text-[#172B4D]">₹ ${amount.toLocaleString()}</span>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Vehicle &amp; Driver</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${arrival.vehicleNumber || 'AP 37 TE 9011'} &bull; ${arrival.driverName || 'K. Ramu'}</span>
             </div>
-          </div>
-
-          <!-- Structured Details Grid -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div class="p-3 bg-[#FAFBFC] border border-[#DFE1E6] rounded-lg space-y-2">
-              <div class="flex justify-between border-b border-[#EBECF0] pb-1.5">
-                <span class="text-[#6B778C]">Plant Facility:</span>
-                <span class="font-bold text-[#172B4D]">${plant}</span>
-              </div>
-              <div class="flex justify-between border-b border-[#EBECF0] pb-1.5">
-                <span class="text-[#6B778C]">Procurement Center:</span>
-                <span class="font-bold text-[#172B4D]">${center}</span>
-              </div>
-              <div class="flex justify-between border-b border-[#EBECF0] pb-1.5">
-                <span class="text-[#6B778C]">Target Species:</span>
-                <span class="font-bold text-[#172B4D]">${species}</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-[#6B778C]">Balance Amount:</span>
-                <span class="font-bold text-[#6554C0]">₹ ${balAmount.toLocaleString()}</span>
-              </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Total Received Wt</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${weight.toLocaleString()} Kgs</span>
             </div>
-
-            <div class="p-3 bg-[#FAFBFC] border border-[#DFE1E6] rounded-lg space-y-2">
-              <div class="flex justify-between border-b border-[#EBECF0] pb-1.5">
-                <span class="text-[#6B778C]">Vehicle Number:</span>
-                <span class="font-bold text-[#172B4D]">${arrival.vehicleNumber || 'AP 37 TE 9011'}</span>
-              </div>
-              <div class="flex justify-between border-b border-[#EBECF0] pb-1.5">
-                <span class="text-[#6B778C]">Driver Name:</span>
-                <span class="font-medium text-[#172B4D]">${arrival.driverName || 'K. Ramu'}</span>
-              </div>
-              <div class="flex justify-between border-b border-[#EBECF0] pb-1.5">
-                <span class="text-[#6B778C]">Linked Company:</span>
-                <span class="font-medium text-[#172B4D]">${company}</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-[#6B778C]">QC Inspection:</span>
-                <span class="font-bold text-[#006644]">HACCP Dock Verified</span>
-              </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Balance Weight</span>
+              <span class="font-mono font-bold text-[#00A4B7] block mt-0.5">${balWeight.toLocaleString()} Kgs</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Average Rate</span>
+              <span class="font-mono font-semibold text-[#172B4D] block mt-0.5">₹ ${avgRate} / KG</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Total Valuation</span>
+              <span class="font-mono font-extrabold text-[#00875A] text-sm block mt-0.5">₹ ${amount.toLocaleString('en-IN')}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Linked Company</span>
+              <span class="font-medium text-[#5E6C84] block mt-0.5">${company}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Status</span>
+              <span class="inline-flex mt-0.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">${status}</span>
             </div>
           </div>
 
-          <!-- Notes -->
-          <div class="p-3 bg-[#F4F5F7] rounded-lg text-[#42526E] border border-[#DFE1E6]">
-            <strong>Receiving Notes:</strong> ${arrival.remarks || 'Fresh raw material harvest intake recorded at dock weighbridge. Temp and ice ratio checked.'}
+          <!-- Itemized Breakdown Table -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Raw Material Weighment &amp; Valuation Breakdown</h4>
+            <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+              <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left text-xs border-collapse" style="min-width: 900px;">
+                  <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                      <th class="py-2.5 px-3 min-w-[150px]">Species / Variety</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Received Wt (KG)</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Balance Wt (KG)</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Average Rate</th>
+                      <th class="py-2.5 px-3 min-w-[140px] text-right">Total Amount (INR)</th>
+                      <th class="py-2.5 px-3 min-w-[140px] text-right">Balance Amount</th>
+                      <th class="py-2.5 px-3 w-24 text-center">QC Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                    <tr class="hover:bg-[#F8FAFC] transition-colors">
+                      <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">1</td>
+                      <td class="py-2.5 px-3 font-semibold text-[#172B4D]">${species}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#172B4D]">${weight.toLocaleString()} Kgs</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-medium text-[#00A4B7]">${balWeight.toLocaleString()} Kgs</td>
+                      <td class="py-2.5 px-3 text-right font-mono text-[#172B4D]">₹ ${avgRate}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-extrabold text-[#00875A]">₹ ${amount.toLocaleString('en-IN')}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#6554C0]">₹ ${balAmount.toLocaleString('en-IN')}</td>
+                      <td class="py-2.5 px-3 text-center">
+                        <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">PASSED</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                    <tr>
+                      <td colspan="2" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Aggregates:</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#172B4D]">${weight.toLocaleString()} Kgs</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00A4B7]">${balWeight.toLocaleString()} Kgs</td>
+                      <td></td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00875A]">₹ ${amount.toLocaleString('en-IN')}</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#6554C0]">₹ ${balAmount.toLocaleString('en-IN')}</td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-[#F8FAFC] p-3 rounded-xl border border-[#DFE1E6]">
+            <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Receiving Notes &amp; Observations</span>
+            <p class="text-xs text-[#172B4D] mt-0.5 mb-0">${arrival.remarks || 'Fresh raw material harvest intake recorded at dock weighbridge. Temp and ice ratio checked.'}</p>
           </div>
         </div>
       `,
       footerButtons: [
-        { label: 'Close', type: 'secondary', onClick: (m) => m.close() },
         {
           label: 'Delete Arrival',
           type: 'destructive',
+          class: 'btn btn-destructive rounded-full px-5 py-2 font-semibold bg-[#FFEBE6] text-[#BF2600] border border-[#FFBDAD] hover:bg-[#FFBDAD]',
           onClick: (m) => {
             m.close();
             PurchaseView.deleteArrival(arrival, PurchaseView.arrivalsTable);
@@ -6461,26 +6510,20 @@ export const PurchaseView = {
         {
           label: 'Edit Arrival',
           type: 'primary',
+          class: 'btn btn-primary rounded-full px-5 py-2 font-semibold',
           onClick: (m) => {
             m.close();
             PurchaseView.openEditArrivalModal(arrival, PurchaseView.arrivalsTable);
           }
+        },
+        {
+          label: 'Close',
+          type: 'secondary',
+          class: 'btn btn-secondary rounded-full px-5 py-2 font-semibold',
+          onClick: (m) => m.close()
         }
       ]
     });
-
-    setTimeout(() => {
-      const eb = document.getElementById('details-top-edit-arrival');
-      if (eb) eb.addEventListener('click', () => {
-        Modal.close();
-        PurchaseView.openEditArrivalModal(arrival, PurchaseView.arrivalsTable);
-      });
-      const db = document.getElementById('details-top-delete-arrival');
-      if (db) db.addEventListener('click', () => {
-        Modal.close();
-        PurchaseView.deleteArrival(arrival, PurchaseView.arrivalsTable);
-      });
-    }, 50);
   },
 
   downloadRecord(record) {
@@ -6895,182 +6938,137 @@ export const PurchaseView = {
     const totalAmt = bill.totalBillAmount || bill.totalAmountInr || items.reduce((sum, it) => sum + (parseFloat(it.totalValue) || 0), 0);
 
     Modal.open({
-      title: `Supplier Bill Summary: ${billNumber}`,
-      size: 'xl',
+      title: `Supplier Commercial Bill Registry: ${billNumber}`,
+      size: 'full',
       content: `
         <div class="space-y-4 text-xs">
-          <!-- Top Header Info Banner -->
-          <div class="p-3 bg-[#FAFBFC] text-[#172B4D] rounded-xl border border-[#DFE1E6] flex flex-wrap items-center justify-between gap-2 shadow-2xs">
-            <div class="flex items-center gap-2">
-              <span class="font-extrabold text-base text-[#17191c]">${billNumber}</span>
-              <span class="text-xs text-[#5E6C84]">(${purchaseDate})</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded text-[11px] font-bold ${status === 'Paid' ? 'bg-[#E3FCEF] text-[#006644] border border-[#ABF5D1]' : (status === 'Approved' ? 'bg-[#F0F9FF] text-[#0284C7] border border-[#BAE6FD]' : 'bg-[#FFF0B3] text-[#8F4D00] border border-[#FFE380]')}">${status}</span>
-              <button type="button" id="details-top-edit-bill" class="px-2.5 py-1 bg-white hover:bg-[#F0F9FF] text-[#0284C7] border border-[#BAE6FD] rounded text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer shadow-2xs" title="Edit bill details">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                <span>Edit / Update Bill</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Section 1: Auto-Populated & Read-Only Information (11 Fields) -->
-          <div class="bg-transparent border-0 p-0 shadow-none">
-            <div class="flex items-center mb-2 pb-1.5 border-b border-[#EBECF0]">
-              <h4 class="text-[11px] font-bold text-[#172B4D] uppercase tracking-wider">Arrival &amp; Bill Information</h4>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-              <div class="p-2 bg-white border border-[#EBECF0] rounded">
-                <span class="text-[#6B778C] text-[10px] block font-bold uppercase tracking-wider">Species</span>
-                <span class="font-bold text-[#172B4D]">${species}</span>
-              </div>
-              <div class="p-2 bg-white border border-[#EBECF0] rounded">
-                <span class="text-[#6B778C] text-[10px] block font-bold uppercase tracking-wider">Purchase Station</span>
-                <span class="font-semibold text-[#172B4D]">${purchaseStation}</span>
-              </div>
-              <div class="p-2 bg-white border border-[#EBECF0] rounded">
-                <span class="text-[#6B778C] text-[10px] block font-bold uppercase tracking-wider">Processing Station</span>
-                <span class="font-semibold text-[#172B4D]">${processingStation}</span>
-              </div>
-              <div class="p-2 bg-white border border-[#EBECF0] rounded">
-                <span class="text-[#6B778C] text-[10px] block font-bold uppercase tracking-wider">Purchase Type</span>
-                <span class="font-semibold text-[#172B4D]">${purchaseType}</span>
-              </div>
-              <div class="p-2 bg-white border border-[#EBECF0] rounded">
-                <span class="text-[#6B778C] text-[10px] block font-bold uppercase tracking-wider">Bill Number</span>
-                <span class="font-bold text-[#17191c]">${billNumber}</span>
-              </div>
-              <div class="p-2 bg-white border border-[#EBECF0] rounded">
-                <span class="text-[#6B778C] text-[10px] block font-bold uppercase tracking-wider">Vehicle Number</span>
-                <span class="font-semibold text-[#172B4D]">${vehicleNumber}</span>
-              </div>
-              <div class="p-2 bg-white border border-[#EBECF0] rounded">
-                <span class="text-[#6B778C] text-[10px] block font-bold uppercase tracking-wider">Driver Name</span>
-                <span class="font-semibold text-[#172B4D]">${driverName}</span>
-              </div>
-              <div class="p-2 bg-white border border-[#EBECF0] rounded">
-                <span class="text-[#6B778C] text-[10px] block font-bold uppercase tracking-wider">Grader Name</span>
-                <span class="font-semibold text-[#172B4D]">${graderName}</span>
-              </div>
-              <div class="p-2 bg-white border border-[#EBECF0] rounded">
-                <span class="text-[#6B778C] text-[10px] block font-bold uppercase tracking-wider">Purchase Date</span>
-                <span class="font-semibold text-[#172B4D]">${purchaseDate}</span>
-              </div>
-              <div class="p-2 bg-white border border-[#EBECF0] rounded">
-                <span class="text-[#6B778C] text-[10px] block font-bold uppercase tracking-wider">Agent Name</span>
-                <span class="font-bold text-[#172B4D]">${agentName}</span>
-              </div>
-              <div class="p-2 bg-white border border-[#EBECF0] rounded col-span-2 sm:col-span-1">
-                <span class="text-[#6B778C] text-[10px] block font-bold uppercase tracking-wider">Farm Location</span>
-                <span class="font-semibold text-[#172B4D]">${farmLocation}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Section 2: Added & Editable Settlement Parameters -->
-          <div class="bg-transparent border-0 p-0 shadow-none">
-            <div class="flex items-center mb-2 pb-1.5 border-b border-[#EBECF0]">
-              <h4 class="text-[11px] font-bold text-[#172B4D] uppercase tracking-wider">Settlement &amp; Supplier Parameters</h4>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div class="p-2.5 bg-[#FAFBFC] border border-[#EBECF0] rounded">
-                <span class="text-[#6B778C] text-[11px] block font-semibold uppercase tracking-wider">Supplier Name</span>
-                <span class="font-bold text-sm text-[#172B4D]">${supplierName}</span>
-              </div>
-              <div class="p-2.5 bg-[#FAFBFC] border border-[#EBECF0] rounded">
-                <span class="text-[#6B778C] text-[11px] block font-semibold uppercase tracking-wider">Addition / Deduction Per KG</span>
-                <span class="font-extrabold text-sm text-[#17191c]">₹ ${additionDeduction.toFixed(2)} / KG</span>
-              </div>
-              <div class="p-2.5 bg-[#FAFBFC] border border-[#EBECF0] rounded">
-                <span class="text-[#6B778C] text-[11px] block font-semibold uppercase tracking-wider">Remarks</span>
-                <span class="font-medium text-xs text-[#172B4D]">${remarks}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Section 3: Pricing Calculation Table (8 Columns) -->
-          <div class="border border-[#EBECF0] rounded-xl overflow-hidden shadow-2xs">
-            <div class="px-4 py-2 bg-[#FAFBFC] border-b border-[#EBECF0] flex items-center justify-between">
-              <h4 class="text-[11px] font-bold text-[#172B4D] uppercase tracking-wider">Pricing Calculation Breakdown</h4>
-              <span class="text-[11px] text-[#5E6C84]">${items.length} Record</span>
-            </div>
-            <div class="overflow-x-auto">
-              <table class="erp-table">
-                <thead class="bg-[#FAFBFC] border-b border-[#EBECF0] text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider whitespace-nowrap">
-                  <tr>
-                    <th class="px-3 py-2 text-center">S.No</th>
-                    <th class="px-3 py-2">Variety</th>
-                    <th class="px-3 py-2 text-center">Count</th>
-                    <th class="px-3 py-2 text-right">Weight</th>
-                    <th class="px-3 py-2 text-right">Master Rate</th>
-                    <th class="px-3 py-2 text-right">Harvest Com.</th>
-                    <th class="px-3 py-2 text-right">Rate</th>
-                    <th class="px-3 py-2 text-right">Total Value</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-[#EBECF0] bg-white text-xs">
-                  ${items.map((it, idx) => `
-                    <tr>
-                      <td class="px-3 py-2 text-center text-[#5E6C84]">${idx + 1}</td>
-                      <td class="px-3 py-2 font-bold text-[#172B4D]">${it.variety}</td>
-                      <td class="px-3 py-2 text-center font-semibold text-[#172B4D]">${it.count}</td>
-                      <td class="px-3 py-2 text-right font-medium text-[#172B4D]">${(parseFloat(it.weight) || 0).toLocaleString()} KG</td>
-                      <td class="px-3 py-2 text-right font-medium text-[#5E6C84]">₹ ${(parseFloat(it.masterRate) || 0).toFixed(2)}</td>
-                      <td class="px-3 py-2 text-right font-medium text-[#BF2600]">₹ ${(parseFloat(it.harvestCom) || 0).toFixed(2)}</td>
-                      <td class="px-3 py-2 text-right font-bold text-[#006644]">₹ ${(parseFloat(it.rate) || 0).toFixed(2)}</td>
-                      <td class="px-3 py-2 text-right font-extrabold text-[#172B4D]">₹ ${(parseFloat(it.totalValue) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-                <tfoot class="bg-[#F4F5F7] border-t-2 border-[#DFE1E6] text-xs font-bold text-[#172B4D]">
-                  <tr>
-                    <td colspan="3" class="px-3 py-2 text-right uppercase tracking-wider text-[#5E6C84]">Total:</td>
-                    <td class="px-3 py-2 text-right whitespace-nowrap">${totalWeight.toLocaleString()} KG</td>
-                    <td class="px-3 py-2 text-right text-[#5E6C84]">-</td>
-                    <td class="px-3 py-2 text-right text-[#5E6C84]">-</td>
-                    <td class="px-3 py-2 text-right text-[#5E6C84]">-</td>
-                    <td class="px-3 py-2 text-right text-[#006644] whitespace-nowrap">₹ ${totalAmt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-          </div>
-
-          <!-- Total Bill Amount Card -->
-          <div class="p-3 bg-[#E3FCEF] border border-[#ABF5D1] rounded-xl flex justify-between items-center shadow-2xs">
+          <!-- Key Details Grid (12 Fields) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-[#F8FAFC] p-3.5 rounded-xl border border-[#DFE1E6]">
             <div>
-              <span class="text-[#006644] font-bold block text-xs">Total Bill Amount</span>
-              <span class="text-[11px] text-[#5E6C84]">Calculated from variety, weight, rates &amp; adjustments</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Supplier Name</span>
+              <span class="font-bold text-[#172B4D] block mt-0.5">${supplierName}</span>
             </div>
-            <span class="text-lg font-extrabold text-[#006644]">₹ ${totalAmt.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Bill Number</span>
+              <span class="font-mono font-bold text-[#00A4B7] block mt-0.5">${billNumber}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Purchase Date</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${purchaseDate}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Purchase Station</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${purchaseStation}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Processing Station</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${processingStation}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Purchase Type &amp; Species</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${purchaseType} &bull; ${species}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Vehicle &amp; Driver</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${vehicleNumber} &bull; ${driverName}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Grader &amp; Agent</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${graderName} &bull; ${agentName}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Total Billed Weight</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${totalWeight.toLocaleString()} Kgs</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Additions / Deductions</span>
+              <span class="font-mono font-medium text-[#5E6C84] block mt-0.5">₹ ${additionDeduction.toFixed(2)}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Total Payable Valuation</span>
+              <span class="font-mono font-extrabold text-[#00875A] text-sm block mt-0.5">₹ ${totalAmt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Bill Status</span>
+              <span class="inline-flex mt-0.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${status === 'Paid' ? 'bg-[#E3FCEF] text-[#006644]' : (status === 'Approved' ? 'bg-[#F0F9FF] text-[#0284C7]' : 'bg-[#FFF0B3] text-[#8F4D00]')}">${status}</span>
+            </div>
+          </div>
+
+          <!-- Itemized Breakdown Table -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Line Item Commercial Pricing &amp; Harvest Valuation</h4>
+            <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+              <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left text-xs border-collapse" style="min-width: 1000px;">
+                  <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                      <th class="py-2.5 px-3 min-w-[160px]">Variety</th>
+                      <th class="py-2.5 px-3 min-w-[100px] text-right">Count</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Weight (KG)</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Master Rate</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Harvest Com</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Net Rate</th>
+                      <th class="py-2.5 px-3 min-w-[140px] text-right">Line Total Value</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                    ${items.map((it, idx) => `
+                      <tr class="hover:bg-[#F8FAFC] transition-colors">
+                        <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">${idx + 1}</td>
+                        <td class="py-2.5 px-3 font-semibold text-[#172B4D]">${it.variety}</td>
+                        <td class="py-2.5 px-3 text-right font-mono font-bold text-[#172B4D]">${it.count}</td>
+                        <td class="py-2.5 px-3 text-right font-mono font-bold text-[#172B4D]">${parseFloat(it.weight).toLocaleString()} Kgs</td>
+                        <td class="py-2.5 px-3 text-right font-mono text-[#5E6C84]">₹ ${parseFloat(it.masterRate).toFixed(2)}</td>
+                        <td class="py-2.5 px-3 text-right font-mono text-[#5E6C84]">₹ ${parseFloat(it.harvestCom || 0).toFixed(2)}</td>
+                        <td class="py-2.5 px-3 text-right font-mono font-bold text-[#00A4B7]">₹ ${parseFloat(it.rate).toFixed(2)}</td>
+                        <td class="py-2.5 px-3 text-right font-mono font-extrabold text-[#00875A]">₹ ${parseFloat(it.totalValue).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                  <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                    <tr>
+                      <td colspan="3" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Aggregates:</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#172B4D]">${totalWeight.toLocaleString()} Kgs</td>
+                      <td colspan="3"></td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00875A]">₹ ${totalAmt.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-[#F8FAFC] p-3 rounded-xl border border-[#DFE1E6]">
+            <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Commercial Remarks &amp; Settlement Terms</span>
+            <p class="text-xs text-[#172B4D] mt-0.5 mb-0">${remarks}</p>
           </div>
         </div>
       `,
       footerButtons: [
-        { label: 'Close', type: 'secondary', onClick: (m) => m.close() },
+        {
+          label: 'Download Record',
+          type: 'secondary',
+          class: 'btn btn-outline rounded-full px-5 py-2 font-semibold',
+          onClick: (m) => PurchaseView.downloadRecord(bill)
+        },
         {
           label: 'Edit / Update Bill',
           type: 'primary',
+          class: 'btn btn-primary rounded-full px-5 py-2 font-semibold',
           onClick: (m) => {
             m.close();
             PurchaseView.openAddBillDetailsModal(bill, PurchaseView.billsTable);
           }
         },
         {
-          label: 'Download Record',
+          label: 'Close',
           type: 'secondary',
-          onClick: (m) => PurchaseView.downloadRecord(bill)
+          class: 'btn btn-secondary rounded-full px-5 py-2 font-semibold',
+          onClick: (m) => m.close()
         }
       ]
     });
-
-    setTimeout(() => {
-      const eb = document.getElementById('details-top-edit-bill');
-      if (eb) eb.addEventListener('click', () => {
-        Modal.close();
-        PurchaseView.openAddBillDetailsModal(bill, PurchaseView.billsTable);
-      });
-    }, 50);
   },
 
     showTransactionDetails(txn) {
@@ -7082,145 +7080,121 @@ export const PurchaseView = {
     const comments = txn.description || 'Harvest settlement payment for pond intake';
 
     Modal.open({
-      title: `Commercial Transaction: ${txn.txnId}`,
-      size: 'xl',
+      title: `Commercial Transaction Registry: ${txn.txnId}`,
+      size: 'full',
       content: `
         <div class="space-y-4 text-xs">
-          <!-- Top Form Fields Card (5 Fields - View Mode) -->
-          <div class="bg-transparent border-0 p-0 shadow-none">
-            <div class="flex items-center justify-between pb-3 mb-3 border-b border-[#EBECF0]">
-              <div class="flex items-center gap-2">
-                <span class="font-extrabold text-sm text-[#172B4D]">${txn.txnId}</span>
-                <span class="text-xs text-[#5E6C84]">(${txn.date || txn.rawDate || '06-10-2026'})</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-[#E3FCEF] text-[#006644] border border-[#ABF5D1]">${txn.status || 'SETTLED'}</span>
-                <button type="button" id="details-top-edit-txn" class="px-2.5 py-1 bg-white hover:bg-[#F0F9FF] text-[#0284C7] border border-[#BAE6FD] rounded text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer shadow-2xs" title="Edit this transaction">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                  <span>Edit</span>
-                </button>
-                <button type="button" id="details-top-delete-txn" class="px-2.5 py-1 bg-white hover:bg-[#FFEBE6] text-[#BF2600] border border-[#FFBDAD] rounded text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer shadow-2xs" title="Delete this transaction">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                  <span>Delete</span>
-                </button>
-              </div>
+          <!-- Key Details Grid (12 Fields) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-[#F8FAFC] p-3.5 rounded-xl border border-[#DFE1E6]">
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Transaction ID</span>
+              <span class="font-mono font-bold text-[#00A4B7] block mt-0.5">${txn.txnId}</span>
             </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Transaction Date</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${txn.date || txn.rawDate || '06-10-2026'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Supplier Name</span>
+              <span class="font-bold text-[#172B4D] block mt-0.5">${txn.supplier}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Payment Mode</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${mode}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Voucher No</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${voucherNo}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Bank Ref / UTR No</span>
+              <span class="font-mono font-bold text-[#5E6C84] block mt-0.5">${chqNeft}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Gross Amount</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">₹ ${amt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Settled Amount</span>
+              <span class="font-mono font-extrabold text-[#00875A] text-sm block mt-0.5">₹ ${amt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Procurement Center</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${txn.center || 'Bhimavaram Center #1'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Agent Name</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${txn.agent || 'Direct'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Linked Bill No</span>
+              <span class="font-mono font-bold text-[#00A4B7] block mt-0.5">${billNo}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Status</span>
+              <span class="inline-flex mt-0.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">${txn.status || 'SETTLED'}</span>
+            </div>
+          </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs">
-              <!-- 1. Payment Mode -->
-              <div class="p-2.5 bg-white border border-[#DFE1E6] rounded">
-                <span class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0.5">Payment Mode</span>
-                <span class="font-bold text-[#172B4D]">${mode}</span>
-              </div>
-
-              <!-- 2. Voucher No -->
-              <div class="p-2.5 bg-white border border-[#DFE1E6] rounded">
-                <span class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0.5">Voucher No</span>
-                <span class="font-bold text-[#17191c]">${voucherNo}</span>
-              </div>
-
-              <!-- 3. Cheque/NEFT.No -->
-              <div class="p-2.5 bg-white border border-[#DFE1E6] rounded">
-                <span class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0.5">Cheque/NEFT.No</span>
-                <span class="font-bold text-[#172B4D]">${chqNeft}</span>
-              </div>
-
-              <!-- 4. Amount -->
-              <div class="p-2.5 bg-white border border-[#DFE1E6] rounded">
-                <span class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0.5">Amount</span>
-                <span class="font-bold text-[#006644]">₹ ${amt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-              </div>
-
-              <!-- 5. Comments -->
-              <div class="p-2.5 bg-white border border-[#DFE1E6] rounded">
-                <span class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0.5">Comments</span>
-                <span class="text-[#172B4D] truncate block" title="${comments}">${comments}</span>
+          <!-- Itemized Breakdown Table -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Settlement Invoices &amp; Bills Ledger</h4>
+            <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+              <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left text-xs border-collapse" style="min-width: 1000px;">
+                  <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                      <th class="py-2.5 px-3 min-w-[140px]">Bill No</th>
+                      <th class="py-2.5 px-3 min-w-[110px]">Bill Date</th>
+                      <th class="py-2.5 px-3 min-w-[160px]">Supplier Name</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Total Bill Amt</th>
+                      <th class="py-2.5 px-3 min-w-[100px] text-right">TDS</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Paid Amount</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Balance Value</th>
+                      <th class="py-2.5 px-3 w-24 text-center">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                    <tr class="hover:bg-[#F8FAFC] transition-colors">
+                      <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">1</td>
+                      <td class="py-2.5 px-3 font-mono font-bold text-[#00A4B7]">${billNo}</td>
+                      <td class="py-2.5 px-3 text-[#172B4D]">${txn.date || '06-10-2026'}</td>
+                      <td class="py-2.5 px-3 font-semibold text-[#172B4D]">${txn.supplier}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#172B4D]">₹ ${amt.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                      <td class="py-2.5 px-3 text-right font-mono text-[#5E6C84]">₹ 0.00</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-bold text-[#00875A]">₹ ${amt.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                      <td class="py-2.5 px-3 text-right font-mono text-[#5E6C84]">₹ 0.00</td>
+                      <td class="py-2.5 px-3 text-center">
+                        <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">SETTLED</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                    <tr>
+                      <td colspan="4" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Aggregates:</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#172B4D]">₹ ${amt.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                      <td></td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00875A]">₹ ${amt.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                      <td colspan="2"></td>
+                    </tr>
+                  </tfoot>
+                </table>
               </div>
             </div>
           </div>
 
-          <!-- Table Section (10 Columns matching exact specification) -->
-          <div class="border border-[#EBECF0] rounded-xl overflow-hidden shadow-2xs">
-            <div class="px-4 py-2.5 bg-[#FAFBFC] border-b border-[#EBECF0] flex items-center justify-between">
-              <div class="flex items-center">
-                <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Settlement Invoices &amp; Bills</h4>
-              </div>
-              <span class="text-[11px] text-[#5E6C84]">1 Invoice attached</span>
-            </div>
-            <div class="overflow-x-auto">
-              <table class="erp-table">
-                <thead class="bg-[#FAFBFC] border-b border-[#EBECF0] text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider whitespace-nowrap">
-                  <tr>
-                    <th class="px-3 py-2.5">Bill No.</th>
-                    <th class="px-3 py-2.5">Bill Date</th>
-                    <th class="px-3 py-2.5">Supplier Name</th>
-                    <th class="px-3 py-2.5 text-right">Total Bill Amount</th>
-                    <th class="px-3 py-2.5 text-right">TDS</th>
-                    <th class="px-3 py-2.5 text-right">Bill Amt</th>
-                    <th class="px-3 py-2.5 text-right">Already Paid</th>
-                    <th class="px-3 py-2.5 text-right">Balance Value</th>
-                    <th class="px-3 py-2.5 text-right">Amount</th>
-                    <th class="px-3 py-2.5 text-right">Remainings</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-[#EBECF0] bg-white text-xs">
-                  <tr class="hover:bg-[#F4F5F7] transition-colors">
-                    <td class="px-3 py-2.5 font-bold text-[#17191c] whitespace-nowrap">${billNo}</td>
-                    <td class="px-3 py-2.5 whitespace-nowrap">${txn.date || '06-10-2026'}</td>
-                    <td class="px-3 py-2.5 font-semibold text-[#172B4D] whitespace-nowrap">${txn.supplier}</td>
-                    <td class="px-3 py-2.5 text-right font-medium whitespace-nowrap">${amt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                    <td class="px-3 py-2.5 text-right text-[#5E6C84] whitespace-nowrap">0.00</td>
-                    <td class="px-3 py-2.5 text-right font-medium whitespace-nowrap">${amt}</td>
-                    <td class="px-3 py-2.5 text-right text-[#5E6C84] whitespace-nowrap">0</td>
-                    <td class="px-3 py-2.5 text-right font-bold text-[#172B4D] whitespace-nowrap">${amt.toFixed(2)}</td>
-                    <td class="px-3 py-2.5 text-right font-bold text-[#006644] whitespace-nowrap">${amt.toFixed(2)}</td>
-                    <td class="px-3 py-2.5 text-right font-bold text-[#5E6C84] whitespace-nowrap">0.00</td>
-                  </tr>
-                </tbody>
-                <tfoot class="bg-[#F4F5F7] border-t-2 border-[#DFE1E6] text-xs font-bold text-[#172B4D]">
-                  <tr>
-                    <td colspan="3" class="px-3 py-2.5 text-right uppercase tracking-wider text-[#5E6C84]">Total:</td>
-                    <td class="px-3 py-2.5 text-right whitespace-nowrap">${amt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                    <td class="px-3 py-2.5 text-right text-[#5E6C84] whitespace-nowrap">0.00</td>
-                    <td class="px-3 py-2.5 text-right whitespace-nowrap">${amt}</td>
-                    <td class="px-3 py-2.5 text-right text-[#5E6C84] whitespace-nowrap">0</td>
-                    <td class="px-3 py-2.5 text-right whitespace-nowrap">${amt.toFixed(2)}</td>
-                    <td class="px-3 py-2.5 text-right text-[#006644] whitespace-nowrap">${amt.toFixed(2)}</td>
-                    <td class="px-3 py-2.5 text-right text-[#5E6C84] whitespace-nowrap">0.00</td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-
-            <!-- Total Amount Summary Bar Below the Table -->
-            <div class="px-4 py-3 bg-[#FAFBFC] border-t border-[#EBECF0] flex flex-wrap items-center justify-between gap-3">
-              <div class="flex items-center gap-2">
-                <span class="text-xs font-semibold text-[#5E6C84]">Settlement Invoices &amp; Bills Total:</span>
-                <span class="text-xs font-bold text-[#172B4D] bg-[#EBECF0] px-2 py-0.5 rounded">1 Record</span>
-              </div>
-              <div class="flex items-center gap-6">
-                <div class="text-right">
-                  <span class="text-[10px] font-bold uppercase tracking-wider text-[#5E6C84] block">Total Bill Amount</span>
-                  <span class="text-xs font-bold text-[#172B4D]">₹ ${amt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                </div>
-                <div class="text-right">
-                  <span class="text-[10px] font-bold uppercase tracking-wider text-[#5E6C84] block">Balance Value</span>
-                  <span class="text-xs font-bold text-[#172B4D]">₹ ${amt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                </div>
-                <div class="text-right pl-3 border-l border-[#DFE1E6]">
-                  <span class="text-[11px] font-bold uppercase tracking-wider text-[#17191c] block">Total Amount</span>
-                  <span class="text-base font-extrabold text-[#006644]">₹ ${amt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                </div>
-              </div>
-            </div>
+          <div class="bg-[#F8FAFC] p-3 rounded-xl border border-[#DFE1E6]">
+            <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Transaction Comments &amp; Audit Trail</span>
+            <p class="text-xs text-[#172B4D] mt-0.5 mb-0">${comments}</p>
           </div>
         </div>
       `,
       footerButtons: [
-        { label: 'Close', type: 'secondary', onClick: (m) => m.close() },
         {
           label: 'Delete Transaction',
           type: 'destructive',
+          class: 'btn btn-destructive rounded-full px-5 py-2 font-semibold bg-[#FFEBE6] text-[#BF2600] border border-[#FFBDAD] hover:bg-[#FFBDAD]',
           onClick: (m) => {
             m.close();
             PurchaseView.deleteTransaction(txn, PurchaseView.commercialTxnsTable);
@@ -7229,6 +7203,7 @@ export const PurchaseView = {
         {
           label: 'Edit Transaction',
           type: 'primary',
+          class: 'btn btn-primary rounded-full px-5 py-2 font-semibold',
           onClick: (m) => {
             m.close();
             PurchaseView.openEditTransactionModal(txn, PurchaseView.commercialTxnsTable);
@@ -7237,23 +7212,17 @@ export const PurchaseView = {
         {
           label: 'Download Record',
           type: 'secondary',
+          class: 'btn btn-outline rounded-full px-5 py-2 font-semibold',
           onClick: (m) => PurchaseView.downloadRecord(txn)
+        },
+        {
+          label: 'Close',
+          type: 'secondary',
+          class: 'btn btn-secondary rounded-full px-5 py-2 font-semibold',
+          onClick: (m) => m.close()
         }
       ]
     });
-
-    setTimeout(() => {
-      const eb = document.getElementById('details-top-edit-txn');
-      if (eb) eb.addEventListener('click', () => {
-        Modal.close();
-        PurchaseView.openEditTransactionModal(txn, PurchaseView.commercialTxnsTable);
-      });
-      const db = document.getElementById('details-top-delete-txn');
-      if (db) db.addEventListener('click', () => {
-        Modal.close();
-        PurchaseView.deleteTransaction(txn, PurchaseView.commercialTxnsTable);
-      });
-    }, 50);
   },
 
   openAddTransactionModal(tableInstance) {
@@ -7784,57 +7753,99 @@ export const PurchaseView = {
   },
 
   showPaymentDetails(payment) {
+    const amt = Number(payment.amountInr || 0);
+
     Modal.open({
-      title: `Payment Voucher: ${payment.voucherNo}`,
-      size: 'md',
+      title: `Payment Voucher Registry: ${payment.voucherNo}`,
+      size: 'full',
       content: `
         <div class="space-y-4 text-xs">
-          <div class="p-3 bg-[#FAFBFC] text-[#172B4D] rounded-lg border border-[#DFE1E6] flex flex-wrap items-center justify-between gap-2">
+          <!-- Key Details Grid (8 Fields) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-[#F8FAFC] p-3.5 rounded-xl border border-[#DFE1E6]">
             <div>
-              <span class="font-bold text-sm text-[#172B4D]">${payment.voucherNo}</span>
-              <span class="ml-2 text-xs text-[#5E6C84]">(${payment.paymentDate})</span>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Voucher Number</span>
+              <span class="font-mono font-bold text-[#00A4B7] block mt-0.5">${payment.voucherNo}</span>
             </div>
-            <div class="flex items-center gap-2">
-              <span class="lozenge lozenge-success font-bold">${payment.status}</span>
-              <button type="button" id="details-top-edit-payment" class="px-2.5 py-1 bg-white hover:bg-[#F0F9FF] text-[#0284C7] border border-[#BAE6FD] rounded text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer shadow-2xs" title="Edit this payment voucher">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                <span>Edit</span>
-              </button>
-              <button type="button" id="details-top-delete-payment" class="px-2.5 py-1 bg-white hover:bg-[#FFEBE6] text-[#BF2600] border border-[#FFBDAD] rounded text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer shadow-2xs" title="Delete this payment voucher">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                <span>Delete</span>
-              </button>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Payment Date</span>
+              <span class="font-medium text-[#172B4D] block mt-0.5">${payment.paymentDate}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Beneficiary Supplier</span>
+              <span class="font-bold text-[#172B4D] block mt-0.5">${payment.supplierName}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Against Bill No</span>
+              <span class="font-mono font-bold text-[#172B4D] block mt-0.5">${payment.billNo}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Payment Mode</span>
+              <span class="font-semibold text-[#172B4D] block mt-0.5">${payment.paymentMode || 'RTGS Wire'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Bank Ref / UTR</span>
+              <span class="font-mono font-bold text-[#5E6C84] block mt-0.5">${payment.bankRef || 'SBIN20261006091'}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Total Paid Amount</span>
+              <span class="font-mono font-extrabold text-[#00875A] text-sm block mt-0.5">₹ ${amt.toLocaleString('en-IN')}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Voucher Status</span>
+              <span class="inline-flex mt-0.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">${payment.status}</span>
             </div>
           </div>
-          <div class="grid grid-cols-2 gap-3">
-            <div class="p-2.5 bg-[#FAFBFC] border border-[#EBECF0] rounded">
-              <span class="text-[#6B778C] text-[11px] block">Beneficiary Supplier</span>
-              <span class="font-bold text-[#172B4D]">${payment.supplierName}</span>
+
+          <!-- Itemized Breakdown Table -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Commercial Payment Allocation &amp; Banking Record</h4>
+            <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+              <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left text-xs border-collapse" style="min-width: 900px;">
+                  <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                      <th class="py-2.5 px-3 min-w-[140px]">Voucher No</th>
+                      <th class="py-2.5 px-3 min-w-[140px]">Linked Bill No</th>
+                      <th class="py-2.5 px-3 min-w-[180px]">Beneficiary Supplier</th>
+                      <th class="py-2.5 px-3 min-w-[130px]">Payment Mode</th>
+                      <th class="py-2.5 px-3 min-w-[160px]">Bank UTR Reference</th>
+                      <th class="py-2.5 px-3 min-w-[140px] text-right">Net Paid (INR)</th>
+                      <th class="py-2.5 px-3 w-24 text-center">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                    <tr class="hover:bg-[#F8FAFC] transition-colors">
+                      <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">1</td>
+                      <td class="py-2.5 px-3 font-mono font-bold text-[#00A4B7]">${payment.voucherNo}</td>
+                      <td class="py-2.5 px-3 font-mono text-[#172B4D]">${payment.billNo}</td>
+                      <td class="py-2.5 px-3 font-semibold text-[#172B4D]">${payment.supplierName}</td>
+                      <td class="py-2.5 px-3 font-medium text-[#475569]">${payment.paymentMode || 'RTGS Wire'}</td>
+                      <td class="py-2.5 px-3 font-mono text-[#5E6C84]">${payment.bankRef || 'SBIN20261006091'}</td>
+                      <td class="py-2.5 px-3 text-right font-mono font-extrabold text-[#00875A]">₹ ${amt.toLocaleString('en-IN')}</td>
+                      <td class="py-2.5 px-3 text-center">
+                        <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">${payment.status}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                    <tr>
+                      <td colspan="6" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Net Paid:</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00875A]">₹ ${amt.toLocaleString('en-IN')}</td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
             </div>
-            <div class="p-2.5 bg-[#FAFBFC] border border-[#EBECF0] rounded">
-              <span class="text-[#6B778C] text-[11px] block">Against Bill No</span>
-              <span class="font-bold text-[#172B4D]">${payment.billNo}</span>
-            </div>
-            <div class="p-2.5 bg-[#FAFBFC] border border-[#EBECF0] rounded">
-              <span class="text-[#6B778C] text-[11px] block">Payment Mode</span>
-              <span class="font-bold text-[#172B4D]">${payment.paymentMode || 'RTGS Wire'}</span>
-            </div>
-            <div class="p-2.5 bg-[#FAFBFC] border border-[#EBECF0] rounded">
-              <span class="text-[#6B778C] text-[11px] block">Bank Ref / UTR</span>
-              <span class="font-bold text-[#172B4D]">${payment.bankRef || 'SBIN20261006091'}</span>
-            </div>
-          </div>
-          <div class="p-3 bg-[#E3FCEF] border border-[#ABF5D1] rounded flex justify-between items-center">
-            <span class="text-[#006644] font-bold">Total Paid Amount</span>
-            <span class="text-base font-extrabold text-[#006644]">₹ ${(payment.amountInr || 0).toLocaleString('en-IN')}</span>
           </div>
         </div>
       `,
       footerButtons: [
-        { label: 'Close', type: 'secondary', onClick: (m) => m.close() },
         {
           label: 'Delete Voucher',
           type: 'destructive',
+          class: 'btn btn-destructive rounded-full px-5 py-2 font-semibold bg-[#FFEBE6] text-[#BF2600] border border-[#FFBDAD] hover:bg-[#FFBDAD]',
           onClick: (m) => {
             m.close();
             PurchaseView.deletePayment(payment, PurchaseView.paymentsTable);
@@ -7843,6 +7854,7 @@ export const PurchaseView = {
         {
           label: 'Edit Voucher',
           type: 'primary',
+          class: 'btn btn-primary rounded-full px-5 py-2 font-semibold',
           onClick: (m) => {
             m.close();
             PurchaseView.openEditPaymentModal(payment, PurchaseView.paymentsTable);
@@ -7851,23 +7863,17 @@ export const PurchaseView = {
         {
           label: 'Download Record',
           type: 'secondary',
+          class: 'btn btn-outline rounded-full px-5 py-2 font-semibold',
           onClick: (m) => PurchaseView.downloadRecord(payment)
+        },
+        {
+          label: 'Close',
+          type: 'secondary',
+          class: 'btn btn-secondary rounded-full px-5 py-2 font-semibold',
+          onClick: (m) => m.close()
         }
       ]
     });
-
-    setTimeout(() => {
-      const eb = document.getElementById('details-top-edit-payment');
-      if (eb) eb.addEventListener('click', () => {
-        Modal.close();
-        PurchaseView.openEditPaymentModal(payment, PurchaseView.paymentsTable);
-      });
-      const db = document.getElementById('details-top-delete-payment');
-      if (db) db.addEventListener('click', () => {
-        Modal.close();
-        PurchaseView.deletePayment(payment, PurchaseView.paymentsTable);
-      });
-    }, 50);
   },
 
   openEditPaymentModal(payment, tableInstance) {
