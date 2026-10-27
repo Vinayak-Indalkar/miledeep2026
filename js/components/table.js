@@ -535,13 +535,16 @@ export class DataTable {
 
     if (this.filteredData.length === 0) {
       const colSpan = visibleCols.length + (this.selectable ? 1 : 0) + (this.actions.length > 0 ? 1 : 0);
+      const isCompletelyEmpty = this.originalData.length === 0;
       tbody.innerHTML = `
         <tr>
-          <td colspan="${colSpan}" class="text-center py-12 text-[#6B778C]">
-            <div class="flex flex-col items-center justify-center gap-2">
-              <svg class="w-8 h-8 text-[#A5ADBA]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
-              <span class="font-medium">No matching records found</span>
-              <span class="text-xs text-[#8993A4]">Try adjusting your search or active filters</span>
+          <td colspan="${colSpan}" class="text-center py-16 text-[#6B778C]">
+            <div class="flex flex-col items-center justify-center gap-2.5">
+              <div class="w-12 h-12 rounded-full bg-[#F4F5F7] border border-[#DFE1E6] flex items-center justify-center">
+                <svg class="w-6 h-6 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+              </div>
+              <span class="font-bold text-sm text-[#334155]">${isCompletelyEmpty ? 'No Data Available' : 'No matching records found'}</span>
+              <span class="text-xs text-[#64748B]">${isCompletelyEmpty ? 'No records have been registered in this table yet.' : 'Try adjusting your search criteria or active filters'}</span>
             </div>
           </td>
         </tr>

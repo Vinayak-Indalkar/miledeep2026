@@ -3315,8 +3315,12 @@ export const PreprocessingView = {
 
           <!-- 2. ITEMIZED BILLS & LOTS TABLE SECTION -->
           <div class="space-y-2 mt-4">
-                        <div class="mb-2">
+            <div class="flex items-center justify-between mb-2">
               <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Arrival Bill / Lot Inspection Table</h4>
+              <button type="button" id="btn-save-rm-track" class="btn-primary rounded-full px-5 py-1.5 text-xs font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border-0">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <span>Save</span>
+              </button>
             </div>
 
             <!-- Dynamic Table Container -->
@@ -3327,87 +3331,7 @@ export const PreprocessingView = {
         </form>
       `,
       footerButtons: [
-        { label: 'Cancel', type: 'secondary', onClick: (m) => m.close() },
-        {
-          label: 'Generate & Register',
-          type: 'primary',
-          onClick: (m) => {
-            const plant = document.getElementById('nrm-plant')?.value || 'DFL UNIT-5 (JPT)';
-            const arrDate = document.getElementById('nrm-arrival-date')?.value || '2026-10-07';
-            const vehicle = document.getElementById('nrm-vehicle')?.value || 'AP 16 TZ 5580';
-            const format = document.getElementById('nrm-format')?.value || 'TRK-RM-[YYYY]-[SEQ]';
-            const seal = document.getElementById('nrm-seal')?.value || 'SL-884940';
-            const sup = document.getElementById('nrm-supervisor')?.value || 'Laxmi Narayana';
-            const rem = document.getElementById('nrm-remarks')?.value || 'Direct gate intake verified';
-
-            // Extract table lot inputs
-            const currentLots = [];
-            const rows = document.querySelectorAll('#rm-lots-tbody tr.lot-row');
-            rows.forEach((row, idx) => {
-              const billNo = row.querySelector('.lot-bill-input')?.value || `BILL-2026-089${idx + 1}`;
-              const variety = row.querySelector('.lot-variety-select')?.value || 'Vannamei (White Shrimp)';
-              const count = parseFloat(row.querySelector('.lot-count-input')?.value) || 0;
-              const headOnWeight = parseFloat(row.querySelector('.lot-howeight-input')?.value) || 0;
-              const recvCount = parseFloat(row.querySelector('.lot-recvcount-input')?.value) || 0;
-              const recvWeight = parseFloat(row.querySelector('.lot-recvweight-input')?.value) || 0;
-              const sampleHoQty = parseFloat(row.querySelector('.lot-sampleqty-input')?.value) || 0;
-              const noOfPcs = parseInt(row.querySelector('.lot-nopcs-input')?.value, 10) || 0;
-              const countDiff = Number((recvCount - count).toFixed(1));
-              const qtyDiff = Number((recvWeight - headOnWeight).toFixed(2));
-
-              currentLots.push({
-                sNo: idx + 1,
-                billNo,
-                variety,
-                count,
-                headOnWeight,
-                recvCount,
-                recvWeight,
-                sampleHoQty,
-                noOfPcs,
-                countDiff,
-                qtyDiff
-              });
-            });
-
-            Modal.confirm({
-              title: 'Confirm RM Track ID Generation',
-              message: `Are you sure you want to generate a new RM Track ID for vehicle <strong class="text-[#00A4B7]">${vehicle}</strong> at <strong>${plant}</strong> with <strong>${currentLots.length} verified arrival lots</strong>?`,
-              confirmText: 'Yes, Generate Track ID',
-              cancelText: 'Cancel',
-              isDestructive: false,
-              onConfirm: () => {
-                const seq = Math.floor(810 + Math.random() * 180);
-                const generatedId = format.includes('PLANT') 
-                  ? `TRK-${plant.split(' ')[1]}-2026-${seq}`
-                  : format.includes('RFID')
-                  ? `RFID-RM-2026-${seq}`
-                  : `TRK-RM-2026-${seq}`;
-
-                const newEntry = {
-                  sNo: 1,
-                  id: generatedId,
-                  trackId: generatedId,
-                  productionPlant: plant,
-                  arrivalDate: arrDate,
-                  vehicleNumber: vehicle,
-                  trackCodeFormat: format,
-                  sealNumber: seal,
-                  supervisor: sup,
-                  remarks: rem,
-                  status: 'ACTIVE',
-                  lots: currentLots
-                };
-
-                this.state.rmTrackIds.forEach(r => { if (r.sNo) r.sNo += 1; });
-                this.state.rmTrackIds.unshift(newEntry);
-
-                Toast.show(`RM Track ID ${generatedId} successfully generated with ${currentLots.length} lot(s)`, 'success', 'Track ID Active');
-                this.renderRmReceivedTrackIdScreen(container);
-              }
-            });
-          }
-        }
+        { label: 'Cancel', type: 'secondary', onClick: (m) => m.close() }
       ]
     });
 
@@ -3522,27 +3446,80 @@ export const PreprocessingView = {
 
     bindTableEvents();
 
-    // Add New Lot Row Button
-    const addLotBtn = modalEl.querySelector('#btn-add-rm-lot');
-    addLotBtn?.addEventListener('click', () => {
-      const nextNum = 890 + lotRows.length + 1;
-      lotRows.push({
-        sNo: lotRows.length + 1,
-        billNo: `BILL-2026-0${nextNum}`,
-        variety: 'Vannamei (White Shrimp)',
-        count: 40,
-        headOnWeight: 1000.00,
-        recvCount: 40,
-        recvWeight: 1000.00,
-        sampleHoQty: 2.00,
-        noOfPcs: 80
-      });
-      const tableWrapper = modalEl.querySelector('#rm-lots-table-wrapper');
-      if (tableWrapper) {
-        tableWrapper.innerHTML = buildLotsTableHtml();
-        bindTableEvents();
-        Toast.show('New arrival lot added to table', 'success');
+    // Save RM Track ID Button
+    const saveRmBtn = modalEl.querySelector('#btn-save-rm-track');
+    saveRmBtn?.addEventListener('click', () => {
+      const plant = document.getElementById('nrm-plant')?.value || 'DFL UNIT-5 (JPT)';
+      const arrDate = document.getElementById('nrm-arrival-date')?.value || '2026-10-07';
+      const vehicle = (document.getElementById('nrm-vehicle')?.value || '').trim();
+      const format = document.getElementById('nrm-format')?.value || 'TRK-RM-[YYYY]-[SEQ]';
+      const seal = (document.getElementById('nrm-seal')?.value || '').trim();
+      const sup = document.getElementById('nrm-supervisor')?.value || 'Laxmi Narayana';
+      const rem = (document.getElementById('nrm-remarks')?.value || '').trim();
+
+      if (!vehicle) {
+        Toast.show('Please enter a Vehicle Number', 'warning');
+        return;
       }
+
+      // Extract table lot inputs
+      const currentLots = [];
+      const rows = document.querySelectorAll('#rm-lots-tbody tr.lot-row');
+      rows.forEach((row, idx) => {
+        const billNo = row.querySelector('.lot-bill-input')?.value || `BILL-2026-089${idx + 1}`;
+        const variety = row.querySelector('.lot-variety-select')?.value || 'Vannamei (White Shrimp)';
+        const count = parseFloat(row.querySelector('.lot-count-input')?.value) || 0;
+        const headOnWeight = parseFloat(row.querySelector('.lot-howeight-input')?.value) || 0;
+        const recvCount = parseFloat(row.querySelector('.lot-recvcount-input')?.value) || 0;
+        const recvWeight = parseFloat(row.querySelector('.lot-recvweight-input')?.value) || 0;
+        const sampleHoQty = parseFloat(row.querySelector('.lot-sampleqty-input')?.value) || 0;
+        const noOfPcs = parseInt(row.querySelector('.lot-nopcs-input')?.value, 10) || 0;
+        const countDiff = Number((recvCount - count).toFixed(1));
+        const qtyDiff = Number((recvWeight - headOnWeight).toFixed(2));
+
+        currentLots.push({
+          sNo: idx + 1,
+          billNo,
+          variety,
+          count,
+          headOnWeight,
+          recvCount,
+          recvWeight,
+          sampleHoQty,
+          noOfPcs,
+          countDiff,
+          qtyDiff
+        });
+      });
+
+      const seq = Math.floor(810 + Math.random() * 180);
+      const generatedId = format.includes('PLANT') 
+        ? `TRK-${plant.split(' ')[1]}-2026-${seq}`
+        : format.includes('RFID')
+        ? `RFID-RM-2026-${seq}`
+        : `TRK-RM-2026-${seq}`;
+
+      const newEntry = {
+        sNo: 1,
+        id: generatedId,
+        trackId: generatedId,
+        productionPlant: plant,
+        arrivalDate: arrDate,
+        vehicleNumber: vehicle,
+        trackCodeFormat: format,
+        sealNumber: seal,
+        supervisor: sup,
+        remarks: rem,
+        status: 'ACTIVE',
+        lots: currentLots
+      };
+
+      this.state.rmTrackIds.forEach(r => { if (r.sNo) r.sNo += 1; });
+      this.state.rmTrackIds.unshift(newEntry);
+
+      Modal.close();
+      this.renderRmReceivedTrackIdScreen(container);
+      Toast.show(`RM Track ID ${generatedId} saved successfully with ${currentLots.length} lot(s)`, 'success', 'Track ID Saved');
     });
   },
 
@@ -3818,8 +3795,12 @@ export const PreprocessingView = {
 
           <!-- 2. ITEMIZED BILLS & LOTS TABLE SECTION -->
           <div class="space-y-2 mt-4">
-                        <div class="mb-2">
+            <div class="flex items-center justify-between mb-2">
               <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Arrival Bill / Lot Inspection Table</h4>
+              <button type="button" id="btn-save-erm-track" class="btn-primary rounded-full px-5 py-1.5 text-xs font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border-0">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <span>Save</span>
+              </button>
             </div>
 
             <!-- Dynamic Table Container -->
@@ -4008,27 +3989,64 @@ export const PreprocessingView = {
 
     bindEditRmTableEvents();
 
-    // Add New Lot Row Button
-    const addLotBtn = modalEl.querySelector('#btn-add-erm-lot');
-    addLotBtn?.addEventListener('click', () => {
-      const nextNum = 890 + lotRows.length + 1;
-      lotRows.push({
-        sNo: lotRows.length + 1,
-        billNo: `BILL-2026-0${nextNum}`,
-        variety: 'Vannamei (White Shrimp)',
-        count: 40,
-        headOnWeight: 1000.00,
-        recvCount: 40,
-        recvWeight: 1000.00,
-        sampleHoQty: 2.00,
-        noOfPcs: 80
-      });
-      const tableWrapper = modalEl.querySelector('#erm-lots-table-wrapper');
-      if (tableWrapper) {
-        tableWrapper.innerHTML = buildEditRmLotsTableHtml();
-        bindEditRmTableEvents();
-        Toast.show('New arrival lot added to table', 'success');
+    // Save Edited RM Track ID Button
+    const saveErmBtn = modalEl.querySelector('#btn-save-erm-track');
+    saveErmBtn?.addEventListener('click', () => {
+      const plant = document.getElementById('erm-plant')?.value || row.productionPlant;
+      const arrDate = document.getElementById('erm-arrival-date')?.value || row.arrivalDate;
+      const vehicle = (document.getElementById('erm-vehicle')?.value || row.vehicleNumber || '').trim();
+      const format = document.getElementById('erm-format')?.value || row.trackCodeFormat;
+      const seal = (document.getElementById('erm-seal')?.value || row.sealNumber || '').trim();
+      const sup = document.getElementById('erm-supervisor')?.value || row.supervisor;
+      const rem = (document.getElementById('erm-remarks')?.value || row.remarks || '').trim();
+
+      if (!vehicle) {
+        Toast.show('Please enter a Vehicle Number', 'warning');
+        return;
       }
+
+      // Extract table lot inputs
+      const currentLots = [];
+      const rows = document.querySelectorAll('#erm-lots-tbody tr.erm-lot-row');
+      rows.forEach((r, idx) => {
+        const billNo = r.querySelector('.erm-lot-bill')?.value || `BILL-2026-089${idx + 1}`;
+        const variety = r.querySelector('.erm-lot-variety')?.value || 'Vannamei (White Shrimp)';
+        const count = parseFloat(r.querySelector('.erm-lot-count')?.value) || 0;
+        const headOnWeight = parseFloat(r.querySelector('.erm-lot-howeight')?.value) || 0;
+        const recvCount = parseFloat(r.querySelector('.erm-lot-recvcount')?.value) || 0;
+        const recvWeight = parseFloat(r.querySelector('.erm-lot-recvweight')?.value) || 0;
+        const sampleHoQty = parseFloat(r.querySelector('.erm-lot-sampleqty')?.value) || 0;
+        const noOfPcs = parseInt(r.querySelector('.erm-lot-nopcs')?.value, 10) || 0;
+        const countDiff = Number((recvCount - count).toFixed(1));
+        const qtyDiff = Number((recvWeight - headOnWeight).toFixed(2));
+
+        currentLots.push({
+          sNo: idx + 1,
+          billNo,
+          variety,
+          count,
+          headOnWeight,
+          recvCount,
+          recvWeight,
+          sampleHoQty,
+          noOfPcs,
+          countDiff,
+          qtyDiff
+        });
+      });
+
+      row.productionPlant = plant;
+      row.arrivalDate = arrDate;
+      row.vehicleNumber = vehicle;
+      row.trackCodeFormat = format;
+      row.sealNumber = seal;
+      row.supervisor = sup;
+      row.remarks = rem;
+      row.lots = currentLots;
+
+      Modal.close();
+      this.renderRmReceivedTrackIdScreen(container);
+      Toast.show(`RM Track ID ${row.trackId} updated successfully`, 'success');
     });
   },
 
