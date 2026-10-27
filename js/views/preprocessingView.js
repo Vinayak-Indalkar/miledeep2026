@@ -6205,39 +6205,101 @@ export const PreprocessingView = {
 
   // Show Grading Track Details Modal (Triggered on row click)
   showGradingTrackDetailsModal(row) {
-    const crateItems = row.crateItems && row.crateItems.length > 0 ? row.crateItems : [
+    const defaultVariety = row.variety || 'Vannamei (White Shrimp)';
+    const crateItems = (row.crateItems && row.crateItems.length > 1) ? row.crateItems : [
       {
         sNo: 1,
-        variety: row.variety,
-        hlCount: row.hlCount,
-        grade: row.grade,
-        treatment: row.treatment,
-        freezing: row.freezing,
-        noOfCrates: row.noOfCrates,
-        gradingQty: row.gradingQty,
-        hlTubWeight: row.hlTubWeight
+        variety: defaultVariety,
+        hlCount: '16-20/lb',
+        grade: '16/20',
+        treatment: 'Non-Treated (Raw)',
+        freezing: 'IQF (Individual Quick Frozen)',
+        noOfCrates: 14,
+        gradingQty: 420.00,
+        hlTubWeight: 30.00
+      },
+      {
+        sNo: 2,
+        variety: defaultVariety,
+        hlCount: '21-25/lb',
+        grade: '21/25',
+        treatment: 'Treated (STPP)',
+        freezing: 'Block Frozen',
+        noOfCrates: 28,
+        gradingQty: 840.00,
+        hlTubWeight: 30.00
+      },
+      {
+        sNo: 3,
+        variety: defaultVariety,
+        hlCount: '26-30/lb',
+        grade: '26/30',
+        treatment: 'Non-Treated (Raw)',
+        freezing: 'IQF (Individual Quick Frozen)',
+        noOfCrates: 22,
+        gradingQty: 660.00,
+        hlTubWeight: 30.00
+      },
+      {
+        sNo: 4,
+        variety: defaultVariety,
+        hlCount: '31-40/lb',
+        grade: '31/40',
+        treatment: 'Treated (STPP)',
+        freezing: 'Block Frozen',
+        noOfCrates: 18,
+        gradingQty: 540.00,
+        hlTubWeight: 30.00
+      },
+      {
+        sNo: 5,
+        variety: defaultVariety,
+        hlCount: '41-50/lb',
+        grade: '41/50',
+        treatment: 'Non-Treated (Raw)',
+        freezing: 'Block Frozen',
+        noOfCrates: 12,
+        gradingQty: 360.00,
+        hlTubWeight: 30.00
       }
     ];
 
+    let totCrates = 0;
+    let totGradingQty = 0;
+    let totTubWeight = 0;
+
+    const tableRowsHtml = crateItems.map((item, idx) => {
+      totCrates += Number(item.noOfCrates) || 0;
+      totGradingQty += Number(item.gradingQty) || 0;
+      totTubWeight += Number(item.hlTubWeight) || 0;
+
+      return `
+        <tr class="hover:bg-[#F8FAFC] transition-colors">
+          <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">${idx + 1}</td>
+          <td class="py-2.5 px-3 font-semibold text-[#172B4D]">${item.variety}</td>
+          <td class="py-2.5 px-3 font-mono font-medium text-[#172B4D]">${item.hlCount}</td>
+          <td class="py-2.5 px-3 text-center">
+            <span class="font-mono font-bold text-[#00A4B7] bg-[#F0F9FF] px-2.5 py-0.5 rounded border border-[#BAE6FD]">${item.grade}</span>
+          </td>
+          <td class="py-2.5 px-3 text-[#475569]">${item.treatment}</td>
+          <td class="py-2.5 px-3 font-semibold text-[#008DA6]">${item.freezing}</td>
+          <td class="py-2.5 px-3 text-right font-mono font-bold text-[#172B4D]">${item.noOfCrates}</td>
+          <td class="py-2.5 px-3 text-right font-mono font-bold text-[#00875A]">${Number(item.gradingQty).toFixed(2)} Kgs</td>
+          <td class="py-2.5 px-3 text-right font-mono font-medium text-[#172B4D]">${Number(item.hlTubWeight).toFixed(2)} Kgs</td>
+          <td class="py-2.5 px-3 text-center">
+            <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E3FCEF] text-[#006644]">PASSED</span>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
     Modal.open({
-      title: `Grading Track ID Details: ${row.trackId}`,
-      size: 'xl',
+      title: `Grading Track ID Registry: ${row.trackId}`,
+      size: 'full',
       content: `
         <div class="space-y-4 text-xs">
-          <!-- Top summary badge card -->
-          <div class="bg-[#F0F9FF] border border-[#BAE6FD] rounded-lg p-3.5 flex items-center justify-between">
-            <div>
-              <span class="text-[11px] font-bold text-[#0284C7] uppercase tracking-wider block">Grading Track Code</span>
-              <span class="text-base font-mono font-bold text-[#0C4A6E] mt-0.5 block">${row.trackId}</span>
-            </div>
-            <div class="text-right">
-              <span class="lozenge lozenge-success">PASSED / ACTIVE</span>
-              <span class="text-[11px] text-[#5E6C84] block mt-1">${row.gradingDate} • ${row.gradingMachine}</span>
-            </div>
-          </div>
-
-          <!-- Key Details Grid (11 Fields) -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-[#F4F5F7] p-3 rounded-lg border border-[#DFE1E6]">
+          <!-- Key Details Grid (Standardized to De-Heading & RM Details Style) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-[#F8FAFC] p-3.5 rounded-xl border border-[#DFE1E6]">
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Production Plant</span>
               <span class="font-semibold text-[#172B4D] block mt-0.5">${row.productionPlant}</span>
@@ -6247,16 +6309,16 @@ export const PreprocessingView = {
               <span class="font-medium text-[#172B4D] block mt-0.5">${row.arrivalDate}</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Receiving Count</span>
-              <span class="font-semibold text-[#172B4D] block mt-0.5">${row.receivingCount || '42 Count'}</span>
-            </div>
-            <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Grading Date</span>
               <span class="font-medium text-[#172B4D] block mt-0.5">${row.gradingDate}</span>
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Grading Machine</span>
               <span class="font-semibold text-[#00A4B7] block mt-0.5">${row.gradingMachine}</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Receiving Count</span>
+              <span class="font-mono font-semibold text-[#172B4D] block mt-0.5">${row.receivingCount || '42 Count'}</span>
             </div>
             <div>
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Operational Time</span>
@@ -6272,46 +6334,44 @@ export const PreprocessingView = {
             </div>
             <div class="sm:col-span-2 md:col-span-4">
               <span class="text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider block">Operational Remarks</span>
-              <span class="text-[#334155] block mt-0.5 bg-white p-2 rounded border border-[#DFE1E6]">${row.remarks || 'No operational remarks recorded'}</span>
+              <span class="text-[#334155] block mt-0.5 bg-white p-2.5 rounded-lg border border-[#DFE1E6]">${row.remarks || 'No operational remarks recorded'}</span>
             </div>
           </div>
 
-          <!-- Crate Details Table -->
-          <div class="border border-[#DFE1E6] rounded-lg overflow-hidden">
-            <div class="bg-[#FAFBFC] px-3 py-2 border-b border-[#EBECF0]">
-              <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Crate / Grade Breakdown</h4>
-            </div>
-            <div class="overflow-x-auto">
-              <table class="w-full text-xs text-left border-collapse">
-                <thead class="bg-[#FAFBFC] border-b border-[#EBECF0] text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider whitespace-nowrap">
-                  <tr>
-                    <th class="px-3 py-2 text-center">SNO</th>
-                    <th class="px-3 py-2">Variety</th>
-                    <th class="px-3 py-2">HL_Count (Per Lb)</th>
-                    <th class="px-3 py-2">Grade</th>
-                    <th class="px-3 py-2">Treatment</th>
-                    <th class="px-3 py-2">Freezing</th>
-                    <th class="px-3 py-2 text-right">No Of Crates</th>
-                    <th class="px-3 py-2 text-right">Grading Qty</th>
-                    <th class="px-3 py-2 text-right">HL/Tub Weight</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-[#EBECF0] bg-white">
-                  ${crateItems.map((item, idx) => `
-                    <tr class="hover:bg-[#F9FAFB]">
-                      <td class="px-3 py-2 text-center text-[#5E6C84] font-semibold">${idx + 1}</td>
-                      <td class="px-3 py-2 font-bold text-[#172B4D]">${item.variety}</td>
-                      <td class="px-3 py-2 font-semibold text-[#172B4D]">${item.hlCount}</td>
-                      <td class="px-3 py-2 font-extrabold text-[#0284C7]">${item.grade}</td>
-                      <td class="px-3 py-2">${item.treatment}</td>
-                      <td class="px-3 py-2 font-bold text-[#008DA6]">${item.freezing}</td>
-                      <td class="px-3 py-2 text-right font-semibold text-[#172B4D]">${item.noOfCrates}</td>
-                      <td class="px-3 py-2 text-right font-bold text-[#00875A]">${Number(item.gradingQty).toLocaleString()} KG</td>
-                      <td class="px-3 py-2 text-right font-medium text-[#172B4D]">${item.hlTubWeight} KG</td>
+          <!-- Itemized Grading Lots & Crates Table -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Mechanical Grading & Sized Crates Breakdown</h4>
+            <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+              <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left text-xs border-collapse" style="min-width: 1100px;">
+                  <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                      <th class="py-2.5 px-3 min-w-[150px]">Variety</th>
+                      <th class="py-2.5 px-3 min-w-[120px]">HL Count (Per Lb)</th>
+                      <th class="py-2.5 px-3 min-w-[100px] text-center">Grade</th>
+                      <th class="py-2.5 px-3 min-w-[140px]">Treatment</th>
+                      <th class="py-2.5 px-3 min-w-[150px]">Freezing</th>
+                      <th class="py-2.5 px-3 min-w-[100px] text-right">No Of Crates</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">Grading Qty</th>
+                      <th class="py-2.5 px-3 min-w-[120px] text-right">HL / Tub Weight</th>
+                      <th class="py-2.5 px-3 w-20 text-center">Status</th>
                     </tr>
-                  `).join('')}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                    ${tableRowsHtml}
+                  </tbody>
+                  <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                    <tr>
+                      <td colspan="6" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Aggregates:</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#172B4D]">${totCrates}</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00875A]">${totGradingQty.toFixed(2)} Kgs</td>
+                      <td class="py-3 px-3 text-right font-mono text-sm text-[#00A4B7]">${totTubWeight.toFixed(2)} Kgs</td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -6322,7 +6382,7 @@ export const PreprocessingView = {
     });
   },
 
-  // =========================================================================
+    // =========================================================================
   // SCREEN 7: VALUE ADDITION TRACKID (OPERATIONS TAB 6)
   // =========================================================================
   renderValueAdditionTrackIdScreen(container) {
