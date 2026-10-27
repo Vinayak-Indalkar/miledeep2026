@@ -19933,72 +19933,296 @@ const PreprocessingView = {
 
   // Show Edit RM Track ID Modal
   showEditRmTrackModal(row, container) {
+    let lotRows = row.lots && row.lots.length > 0 ? JSON.parse(JSON.stringify(row.lots)) : [
+      {
+        sNo: 1,
+        billNo: 'BILL-2026-0891',
+        variety: 'Vannamei (White Shrimp)',
+        count: 40,
+        headOnWeight: 1250.00,
+        recvCount: 42,
+        recvWeight: 1242.50,
+        sampleHoQty: 2.50,
+        noOfPcs: 105
+      },
+      {
+        sNo: 2,
+        billNo: 'BILL-2026-0892',
+        variety: 'Black Tiger (P. Monodon)',
+        count: 30,
+        headOnWeight: 850.00,
+        recvCount: 30,
+        recvWeight: 855.00,
+        sampleHoQty: 2.00,
+        noOfPcs: 60
+      },
+      {
+        sNo: 3,
+        billNo: 'BILL-2026-0893',
+        variety: 'Vannamei (White Shrimp)',
+        count: 50,
+        headOnWeight: 1420.00,
+        recvCount: 48,
+        recvWeight: 1410.00,
+        sampleHoQty: 3.00,
+        noOfPcs: 144
+      }
+    ];
+
+    const varietiesList = [
+      'Vannamei (White Shrimp)',
+      'Black Tiger (P. Monodon)',
+      'Freshwater Scampi',
+      'Pink Shrimp (Sea Caught)',
+      'Brown Shrimp',
+      'Flower Shrimp'
+    ];
+
+    const buildEditRmLotsTableHtml = () => {
+      let totalHoWeight = 0;
+      let totalRecvWeight = 0;
+      let totalSampleQty = 0;
+      let totalPcs = 0;
+      let totalQtyDiff = 0;
+
+      const rowsHtml = lotRows.map((lot, idx) => {
+        const countDiff = Number((lot.recvCount - lot.count).toFixed(1));
+        const qtyDiff = Number((lot.recvWeight - lot.headOnWeight).toFixed(2));
+
+        totalHoWeight += Number(lot.headOnWeight) || 0;
+        totalRecvWeight += Number(lot.recvWeight) || 0;
+        totalSampleQty += Number(lot.sampleHoQty) || 0;
+        totalPcs += Number(lot.noOfPcs) || 0;
+        totalQtyDiff += qtyDiff;
+
+        const countDiffClass = countDiff === 0 ? 'text-[#00875A]' : countDiff > 0 ? 'text-[#0284C7]' : 'text-[#DE350B]';
+        const qtyDiffClass = qtyDiff >= 0 ? 'text-[#00875A]' : 'text-[#DE350B]';
+
+        return `
+          <tr class="hover:bg-[#F8FAFC] transition-colors erm-lot-row" data-index="${idx}">
+            <!-- 1. S.No -->
+            <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">
+              ${idx + 1}
+            </td>
+
+            <!-- 2. Bill No -->
+            <td class="py-2 px-2.5">
+              <input type="text" class="erm-lot-bill font-mono font-bold text-[#00A4B7] w-full text-xs px-2.5 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.billNo || ''}" placeholder="BILL-2026-..." />
+            </td>
+
+            <!-- 3. Variety -->
+            <td class="py-2 px-2.5">
+              <select class="erm-lot-variety w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded font-medium text-[#172B4D] focus:outline-none focus:border-[#00A4B7]">
+                ${varietiesList.map(v => `<option value="${v}" ${lot.variety === v ? 'selected' : ''}>${v}</option>`).join('')}
+              </select>
+            </td>
+
+            <!-- 4. Count -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.5" class="erm-lot-count font-mono text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.count ?? ''}" placeholder="40" />
+            </td>
+
+            <!-- 5. Head on Weight -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.01" class="erm-lot-howeight font-mono font-bold text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.headOnWeight ?? ''}" placeholder="0.00" />
+            </td>
+
+            <!-- 6. Recv Count -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.5" class="erm-lot-recvcount font-mono text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.recvCount ?? ''}" placeholder="42" />
+            </td>
+
+            <!-- 7. Recv Weight -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.01" class="erm-lot-recvweight font-mono font-bold text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.recvWeight ?? ''}" placeholder="0.00" />
+            </td>
+
+            <!-- 8. Sample HO Qty -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.01" class="erm-lot-sampleqty font-mono text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.sampleHoQty ?? ''}" placeholder="2.5" />
+            </td>
+
+            <!-- 9. No Of Pcs -->
+            <td class="py-2 px-2">
+              <input type="number" step="1" class="erm-lot-nopcs font-mono text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.noOfPcs ?? ''}" placeholder="100" />
+            </td>
+
+            <!-- 10. Count Diff -->
+            <td class="py-2.5 px-3 text-right font-mono font-bold text-xs ${countDiffClass} erm-row-countdiff">
+              ${countDiff > 0 ? '+' : ''}${countDiff.toFixed(1)}
+            </td>
+
+            <!-- 11. Qty Diff -->
+            <td class="py-2.5 px-3 text-right font-mono font-bold text-xs ${qtyDiffClass} erm-row-qtydiff">
+              ${qtyDiff > 0 ? '+' : ''}${qtyDiff.toFixed(2)} Kgs
+            </td>
+
+            <!-- 12. Actions -->
+            <td class="py-2.5 px-2 text-center">
+              <button type="button" class="btn-del-erm-row w-7 h-7 rounded-full inline-flex items-center justify-center text-[#FF5630] hover:bg-[#FFEBE6] transition-colors cursor-pointer" title="Delete Row" data-index="${idx}">
+                <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      const netQtyDiffClass = totalQtyDiff >= 0 ? 'text-[#00875A]' : 'text-[#DE350B]';
+
+      return `
+        <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+          <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+            <table class="w-full text-left text-xs border-collapse" style="min-width: 1250px;">
+              <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                <tr>
+                  <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                  <th class="py-2.5 px-3 min-w-[145px]">Bill No</th>
+                  <th class="py-2.5 px-3 min-w-[170px]">Variety</th>
+                  <th class="py-2.5 px-2 min-w-[95px] text-right">Count</th>
+                  <th class="py-2.5 px-2 min-w-[125px] text-right">Head on Weight</th>
+                  <th class="py-2.5 px-2 min-w-[95px] text-right">Recv Count</th>
+                  <th class="py-2.5 px-2 min-w-[125px] text-right">Recv Weight</th>
+                  <th class="py-2.5 px-2 min-w-[110px] text-right">Sample HO Qty</th>
+                  <th class="py-2.5 px-2 min-w-[95px] text-right">No Of Pcs</th>
+                  <th class="py-2.5 px-3 min-w-[100px] text-right">Count Diff</th>
+                  <th class="py-2.5 px-3 min-w-[115px] text-right">Qty Diff</th>
+                  <th class="py-2.5 px-2 w-16 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="erm-lots-tbody" class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                ${rowsHtml}
+              </tbody>
+              <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                <tr>
+                  <td colspan="4" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">
+                    Total Aggregates:
+                  </td>
+                  <td id="erm-tot-ho-weight" class="py-3 px-2 text-right font-mono text-sm text-[#0C4A6E]">
+                    ${totalHoWeight.toFixed(2)} Kgs
+                  </td>
+                  <td></td>
+                  <td id="erm-tot-recv-weight" class="py-3 px-2 text-right font-mono text-sm text-[#00A4B7]">
+                    ${totalRecvWeight.toFixed(2)} Kgs
+                  </td>
+                  <td id="erm-tot-sample-qty" class="py-3 px-2 text-right font-mono text-sm text-[#475569]">
+                    ${totalSampleQty.toFixed(2)} Kgs
+                  </td>
+                  <td id="erm-tot-pcs" class="py-3 px-2 text-right font-mono text-sm text-[#475569]">
+                    ${totalPcs}
+                  </td>
+                  <td></td>
+                  <td id="erm-tot-qty-diff" class="py-3 px-3 text-right font-mono text-sm ${netQtyDiffClass}">
+                    ${totalQtyDiff > 0 ? '+' : ''}${totalQtyDiff.toFixed(2)} Kgs
+                  </td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      `;
+    };
+
     Modal.open({
       title: `Edit RM Track ID: ${row.trackId}`,
-      size: 'md',
+      size: 'full',
       content: `
         <form id="form-edit-rm-track" class="space-y-4" onsubmit="return false;">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-            <!-- 1. PRODUCTION PLANT * -->
-            <div class="sm:col-span-2">
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">PRODUCTION PLANT <span class="text-[#DE350B]">*</span></label>
-              <select id="erm-plant" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-semibold text-[#172B4D] focus:outline-none focus:border-[#0284C7]">
-                <option value="DFL UNIT-5 (JPT)" ${row.productionPlant === 'DFL UNIT-5 (JPT)' ? 'selected' : ''}>DFL UNIT-5 (JPT)</option>
-                <option value="DFL UNIT-3 (PSP)" ${row.productionPlant === 'DFL UNIT-3 (PSP)' ? 'selected' : ''}>DFL UNIT-3 (PSP)</option>
-                <option value="DFL UNIT-4 (PND)" ${row.productionPlant === 'DFL UNIT-4 (PND)' ? 'selected' : ''}>DFL UNIT-4 (PND)</option>
-                <option value="DFL UNIT-1 (VSP)" ${row.productionPlant === 'DFL UNIT-1 (VSP)' ? 'selected' : ''}>DFL UNIT-1 (VSP)</option>
-                <option value="DFL UNIT-6 (JPT-II)" ${row.productionPlant === 'DFL UNIT-6 (JPT-II)' ? 'selected' : ''}>DFL UNIT-6 (JPT-II)</option>
-                <option value="DFL UNIT-2 (KKD)" ${row.productionPlant === 'DFL UNIT-2 (KKD)' ? 'selected' : ''}>DFL UNIT-2 (KKD)</option>
-              </select>
+          <!-- 1. HEADER SPECIFICATION SECTION -->
+          <div class="bg-[#F8FAFC] p-4 rounded-xl border border-[#DFE1E6]">
+            <div class="flex items-center justify-between mb-3 border-b border-[#E2E8F0] pb-2">
+              <span class="text-xs font-extrabold text-[#172B4D] uppercase tracking-wider flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                Edit RM Track ID Registry Record
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E0F2FE] text-[#0284C7] border border-[#BAE6FD]">
+                ${row.trackId}
+              </span>
             </div>
 
-            <!-- 2. ARRIVAL DATE -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">ARRIVAL DATE</label>
-              <div class="erp-date-wrapper">
-                <input type="date" id="erm-arrival-date" value="${row.arrivalDate || '2026-10-06'}" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()" />
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs">
+              <!-- 1. PRODUCTION PLANT * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">PRODUCTION PLANT <span class="text-[#DE350B]">*</span></label>
+                <select id="erm-plant" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-semibold text-[#172B4D] focus:outline-none focus:border-[#0284C7]">
+                  <option value="DFL UNIT-5 (JPT)" ${row.productionPlant === 'DFL UNIT-5 (JPT)' ? 'selected' : ''}>DFL UNIT-5 (JPT)</option>
+                  <option value="DFL UNIT-3 (PSP)" ${row.productionPlant === 'DFL UNIT-3 (PSP)' ? 'selected' : ''}>DFL UNIT-3 (PSP)</option>
+                  <option value="DFL UNIT-4 (PND)" ${row.productionPlant === 'DFL UNIT-4 (PND)' ? 'selected' : ''}>DFL UNIT-4 (PND)</option>
+                  <option value="DFL UNIT-1 (VSP)" ${row.productionPlant === 'DFL UNIT-1 (VSP)' ? 'selected' : ''}>DFL UNIT-1 (VSP)</option>
+                  <option value="DFL UNIT-6 (JPT-II)" ${row.productionPlant === 'DFL UNIT-6 (JPT-II)' ? 'selected' : ''}>DFL UNIT-6 (JPT-II)</option>
+                  <option value="DFL UNIT-2 (KKD)" ${row.productionPlant === 'DFL UNIT-2 (KKD)' ? 'selected' : ''}>DFL UNIT-2 (KKD)</option>
+                </select>
+              </div>
+
+              <!-- 2. ARRIVAL DATE -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">ARRIVAL DATE</label>
+                <div class="erp-date-wrapper">
+                  <input type="date" id="erm-arrival-date" value="${row.arrivalDate || '2026-10-06'}" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()" />
+                </div>
+              </div>
+
+              <!-- 3. VEHICLE NUMBER * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">VEHICLE NUMBER <span class="text-[#DE350B]">*</span></label>
+                <input type="text" id="erm-vehicle" value="${row.vehicleNumber || ''}" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono font-bold text-[#172B4D] focus:outline-none focus:border-[#0284C7]" />
+              </div>
+
+              <!-- 4. TRACK CODE FORMAT * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">TRACK CODE FORMAT <span class="text-[#DE350B]">*</span></label>
+                <select id="erm-format" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
+                  <option value="TRK-RM-[YYYY]-[SEQ]" ${row.trackCodeFormat === 'TRK-RM-[YYYY]-[SEQ]' ? 'selected' : ''}>TRK-RM-[YYYY]-[SEQ] (Standard)</option>
+                  <option value="TRK-PLANT-[CODE]-[SEQ]" ${row.trackCodeFormat === 'TRK-PLANT-[CODE]-[SEQ]' ? 'selected' : ''}>TRK-PLANT-[CODE]-[SEQ] (Plant Unique)</option>
+                  <option value="RFID-INTAKE-[BATCH]" ${row.trackCodeFormat === 'RFID-INTAKE-[BATCH]' ? 'selected' : ''}>RFID-INTAKE-[BATCH] (RFID Tagging)</option>
+                </select>
+              </div>
+
+              <!-- 5. SEAL NUMBER * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SEAL NUMBER <span class="text-[#DE350B]">*</span></label>
+                <input type="text" id="erm-seal" value="${row.sealNumber || ''}" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono font-semibold text-[#00875A] focus:outline-none focus:border-[#0284C7]" />
+              </div>
+
+              <!-- 6. SUPERVISOR * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SUPERVISOR <span class="text-[#DE350B]">*</span></label>
+                <select id="erm-supervisor" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
+                  <option value="Laxmi Narayana" ${row.supervisor === 'Laxmi Narayana' ? 'selected' : ''}>Laxmi Narayana</option>
+                  <option value="K. Subba Rao" ${row.supervisor === 'K. Subba Rao' ? 'selected' : ''}>K. Subba Rao</option>
+                  <option value="Ch. Prasad" ${row.supervisor === 'Ch. Prasad' ? 'selected' : ''}>Ch. Prasad</option>
+                  <option value="Mallesh" ${row.supervisor === 'Mallesh' ? 'selected' : ''}>Mallesh</option>
+                  <option value="D. Rambabu" ${row.supervisor === 'D. Rambabu' ? 'selected' : ''}>D. Rambabu</option>
+                  <option value="G. Suribabu" ${row.supervisor === 'G. Suribabu' ? 'selected' : ''}>G. Suribabu</option>
+                </select>
+              </div>
+
+              <!-- 7. REMARKS -->
+              <div class="sm:col-span-2">
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">REMARKS</label>
+                <input type="text" id="erm-remarks" value="${row.remarks || ''}" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" placeholder="Gate security inspection & temperature checks passed..." />
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. ITEMIZED BILLS & LOTS TABLE SECTION -->
+          <div class="space-y-2 mt-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">Arrival Bill / Lot Inspection Table</h4>
+                <p class="text-[11px] text-[#5E6C84]">Itemized weights, count inspection, sample HO quantity, and automatic variance calculation</p>
+              </div>
+              <div>
+                <button type="button" id="btn-add-erm-lot" class="btn-primary border-0 px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer shadow-xs bg-[#00A4B7] hover:bg-[#008F9F] text-white">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                  <span>Add Bill / Lot</span>
+                </button>
               </div>
             </div>
 
-            <!-- 3. VEHICLE NUMBER * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">VEHICLE NUMBER <span class="text-[#DE350B]">*</span></label>
-              <input type="text" id="erm-vehicle" value="${row.vehicleNumber || ''}" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono font-bold text-[#172B4D] focus:outline-none focus:border-[#0284C7]" />
-            </div>
-
-            <!-- 4. TRACK CODE FORMAT * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">TRACK CODE FORMAT <span class="text-[#DE350B]">*</span></label>
-              <select id="erm-format" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
-                <option value="TRK-RM-[YYYY]-[SEQ]" ${row.trackCodeFormat === 'TRK-RM-[YYYY]-[SEQ]' ? 'selected' : ''}>TRK-RM-[YYYY]-[SEQ] (Standard)</option>
-                <option value="TRK-PLANT-[CODE]-[SEQ]" ${row.trackCodeFormat === 'TRK-PLANT-[CODE]-[SEQ]' ? 'selected' : ''}>TRK-PLANT-[CODE]-[SEQ] (Plant Unique)</option>
-                <option value="RFID-INTAKE-[BATCH]" ${row.trackCodeFormat === 'RFID-INTAKE-[BATCH]' ? 'selected' : ''}>RFID-INTAKE-[BATCH] (RFID Tagging)</option>
-              </select>
-            </div>
-
-            <!-- 5. SEAL NUMBER * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SEAL NUMBER <span class="text-[#DE350B]">*</span></label>
-              <input type="text" id="erm-seal" value="${row.sealNumber || ''}" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono font-semibold text-[#00875A] focus:outline-none focus:border-[#0284C7]" />
-            </div>
-
-            <!-- 6. SUPERVISOR * -->
-            <div class="sm:col-span-2">
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SUPERVISOR <span class="text-[#DE350B]">*</span></label>
-              <select id="erm-supervisor" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
-                <option value="Laxmi Narayana" ${row.supervisor === 'Laxmi Narayana' ? 'selected' : ''}>Laxmi Narayana</option>
-                <option value="K. Subba Rao" ${row.supervisor === 'K. Subba Rao' ? 'selected' : ''}>K. Subba Rao</option>
-                <option value="Ch. Prasad" ${row.supervisor === 'Ch. Prasad' ? 'selected' : ''}>Ch. Prasad</option>
-                <option value="Mallesh" ${row.supervisor === 'Mallesh' ? 'selected' : ''}>Mallesh</option>
-                <option value="D. Rambabu" ${row.supervisor === 'D. Rambabu' ? 'selected' : ''}>D. Rambabu</option>
-                <option value="G. Suribabu" ${row.supervisor === 'G. Suribabu' ? 'selected' : ''}>G. Suribabu</option>
-              </select>
-            </div>
-
-            <!-- 7. REMARKS -->
-            <div class="sm:col-span-2">
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">REMARKS</label>
-              <textarea id="erm-remarks" rows="2" class="w-full text-xs p-2.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">${row.remarks || ''}</textarea>
+            <!-- Dynamic Table Container -->
+            <div id="erm-lots-table-wrapper">
+              ${buildEditRmLotsTableHtml()}
             </div>
           </div>
         </form>
@@ -20017,9 +20241,39 @@ const PreprocessingView = {
             const sup = document.getElementById('erm-supervisor')?.value || row.supervisor;
             const rem = document.getElementById('erm-remarks')?.value || row.remarks;
 
+            // Extract table lot inputs
+            const currentLots = [];
+            const rows = document.querySelectorAll('#erm-lots-tbody tr.erm-lot-row');
+            rows.forEach((r, idx) => {
+              const billNo = r.querySelector('.erm-lot-bill')?.value || `BILL-2026-089${idx + 1}`;
+              const variety = r.querySelector('.erm-lot-variety')?.value || 'Vannamei (White Shrimp)';
+              const count = parseFloat(r.querySelector('.erm-lot-count')?.value) || 0;
+              const headOnWeight = parseFloat(r.querySelector('.erm-lot-howeight')?.value) || 0;
+              const recvCount = parseFloat(r.querySelector('.erm-lot-recvcount')?.value) || 0;
+              const recvWeight = parseFloat(r.querySelector('.erm-lot-recvweight')?.value) || 0;
+              const sampleHoQty = parseFloat(r.querySelector('.erm-lot-sampleqty')?.value) || 0;
+              const noOfPcs = parseInt(r.querySelector('.erm-lot-nopcs')?.value, 10) || 0;
+              const countDiff = Number((recvCount - count).toFixed(1));
+              const qtyDiff = Number((recvWeight - headOnWeight).toFixed(2));
+
+              currentLots.push({
+                sNo: idx + 1,
+                billNo,
+                variety,
+                count,
+                headOnWeight,
+                recvCount,
+                recvWeight,
+                sampleHoQty,
+                noOfPcs,
+                countDiff,
+                qtyDiff
+              });
+            });
+
             Modal.confirm({
               title: 'Confirm Modifications',
-              message: `Are you sure you want to update RM Track ID record <strong class="text-[#00A4B7]">${row.trackId}</strong>?`,
+              message: `Are you sure you want to update RM Track ID record <strong class="text-[#00A4B7]">${row.trackId}</strong> with ${currentLots.length} verified arrival lots?`,
               confirmText: 'Save Changes',
               cancelText: 'Cancel',
               isDestructive: false,
@@ -20031,6 +20285,7 @@ const PreprocessingView = {
                 row.sealNumber = seal;
                 row.supervisor = sup;
                 row.remarks = rem;
+                row.lots = currentLots;
 
                 Toast.show(`RM Track ID ${row.trackId} updated successfully`, 'success');
                 this.renderRmReceivedTrackIdScreen(container);
@@ -20040,9 +20295,142 @@ const PreprocessingView = {
         }
       ]
     });
+
+    const modalEl = document.getElementById('erp-modal-root');
+    if (!modalEl) return;
+
+    const bindEditRmTableEvents = () => {
+      const tableWrapper = modalEl.querySelector('#erm-lots-table-wrapper');
+      if (!tableWrapper) return;
+
+      const recalculateEditRmAll = () => {
+        let totalHoWeight = 0;
+        let totalRecvWeight = 0;
+        let totalSampleQty = 0;
+        let totalPcs = 0;
+        let totalQtyDiff = 0;
+
+        tableWrapper.querySelectorAll('tr.erm-lot-row').forEach(r => {
+          const idx = parseInt(r.dataset.index, 10);
+          const count = parseFloat(r.querySelector('.erm-lot-count')?.value) || 0;
+          const headOnWeight = parseFloat(r.querySelector('.erm-lot-howeight')?.value) || 0;
+          const recvCount = parseFloat(r.querySelector('.erm-lot-recvcount')?.value) || 0;
+          const recvWeight = parseFloat(r.querySelector('.erm-lot-recvweight')?.value) || 0;
+          const sampleHoQty = parseFloat(r.querySelector('.erm-lot-sampleqty')?.value) || 0;
+          const noOfPcs = parseInt(r.querySelector('.erm-lot-nopcs')?.value, 10) || 0;
+
+          const countDiff = Number((recvCount - count).toFixed(1));
+          const qtyDiff = Number((recvWeight - headOnWeight).toFixed(2));
+
+          totalHoWeight += headOnWeight;
+          totalRecvWeight += recvWeight;
+          totalSampleQty += sampleHoQty;
+          totalPcs += noOfPcs;
+          totalQtyDiff += qtyDiff;
+
+          const countDiffEl = r.querySelector('.erm-row-countdiff');
+          if (countDiffEl) {
+            countDiffEl.textContent = `${countDiff > 0 ? '+' : ''}${countDiff.toFixed(1)}`;
+            countDiffEl.className = `py-2.5 px-3 text-right font-mono font-bold text-xs erm-row-countdiff ${countDiff === 0 ? 'text-[#00875A]' : countDiff > 0 ? 'text-[#0284C7]' : 'text-[#DE350B]'}`;
+          }
+
+          const qtyDiffEl = r.querySelector('.erm-row-qtydiff');
+          if (qtyDiffEl) {
+            qtyDiffEl.textContent = `${qtyDiff > 0 ? '+' : ''}${qtyDiff.toFixed(2)} Kgs`;
+            qtyDiffEl.className = `py-2.5 px-3 text-right font-mono font-bold text-xs erm-row-qtydiff ${qtyDiff >= 0 ? 'text-[#00875A]' : 'text-[#DE350B]'}`;
+          }
+
+          if (!isNaN(idx) && lotRows[idx]) {
+            lotRows[idx].billNo = r.querySelector('.erm-lot-bill')?.value || '';
+            lotRows[idx].count = count;
+            lotRows[idx].headOnWeight = headOnWeight;
+            lotRows[idx].recvCount = recvCount;
+            lotRows[idx].recvWeight = recvWeight;
+            lotRows[idx].sampleHoQty = sampleHoQty;
+            lotRows[idx].noOfPcs = noOfPcs;
+          }
+        });
+
+        const totHoEl = tableWrapper.querySelector('#erm-tot-ho-weight');
+        if (totHoEl) totHoEl.textContent = `${totalHoWeight.toFixed(2)} Kgs`;
+
+        const totRecvEl = tableWrapper.querySelector('#erm-tot-recv-weight');
+        if (totRecvEl) totRecvEl.textContent = `${totalRecvWeight.toFixed(2)} Kgs`;
+
+        const totSampleEl = tableWrapper.querySelector('#erm-tot-sample-qty');
+        if (totSampleEl) totSampleEl.textContent = `${totalSampleQty.toFixed(2)} Kgs`;
+
+        const totPcsEl = tableWrapper.querySelector('#erm-tot-pcs');
+        if (totPcsEl) totPcsEl.textContent = `${totalPcs}`;
+
+        const totDiffEl = tableWrapper.querySelector('#erm-tot-qty-diff');
+        if (totDiffEl) {
+          totDiffEl.textContent = `${totalQtyDiff > 0 ? '+' : ''}${totalQtyDiff.toFixed(2)} Kgs`;
+          totDiffEl.className = `py-3 px-3 text-right font-mono text-sm ${totalQtyDiff >= 0 ? 'text-[#00875A]' : 'text-[#DE350B]'}`;
+        }
+      };
+
+      // Realtime input recalculation handler without losing focus
+      tableWrapper.querySelectorAll('input').forEach(inp => {
+        inp.addEventListener('input', recalculateEditRmAll);
+      });
+
+      // Variety select change handler
+      tableWrapper.querySelectorAll('.erm-lot-variety').forEach(sel => {
+        sel.addEventListener('change', () => {
+          const r = sel.closest('tr.erm-lot-row');
+          if (!r) return;
+          const idx = parseInt(r.dataset.index, 10);
+          if (!isNaN(idx) && lotRows[idx]) {
+            lotRows[idx].variety = sel.value;
+          }
+        });
+      });
+
+      // Delete Row Button
+      tableWrapper.querySelectorAll('.btn-del-erm-row').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.index, 10);
+          if (lotRows.length <= 1) {
+            Toast.show('At least one lot row is required for Track ID registration', 'warning');
+            return;
+          }
+          lotRows.splice(idx, 1);
+          lotRows.forEach((item, i) => { item.sNo = i + 1; });
+          tableWrapper.innerHTML = buildEditRmLotsTableHtml();
+          bindEditRmTableEvents();
+          Toast.show('Lot row removed', 'info');
+        });
+      });
+    };
+
+    bindEditRmTableEvents();
+
+    // Add New Lot Row Button
+    const addLotBtn = modalEl.querySelector('#btn-add-erm-lot');
+    addLotBtn?.addEventListener('click', () => {
+      const nextNum = 890 + lotRows.length + 1;
+      lotRows.push({
+        sNo: lotRows.length + 1,
+        billNo: `BILL-2026-0${nextNum}`,
+        variety: 'Vannamei (White Shrimp)',
+        count: 40,
+        headOnWeight: 1000.00,
+        recvCount: 40,
+        recvWeight: 1000.00,
+        sampleHoQty: 2.00,
+        noOfPcs: 80
+      });
+      const tableWrapper = modalEl.querySelector('#erm-lots-table-wrapper');
+      if (tableWrapper) {
+        tableWrapper.innerHTML = buildEditRmLotsTableHtml();
+        bindEditRmTableEvents();
+        Toast.show('New arrival lot added to table', 'success');
+      }
+    });
   },
 
-  // Show RM Track Details Modal (Triggered on row click)
+    // Show RM Track Details Modal (Triggered on row click)
   showRmTrackDetailsModal(row) {
     const lots = row.lots || [
       {
@@ -20928,74 +21316,268 @@ const PreprocessingView = {
 
   // Show Edit De-Heading Track ID Modal
   showEditDeheadingTrackModal(row, container) {
+    let lotRows = row.lots && row.lots.length > 0 ? JSON.parse(JSON.stringify(row.lots)) : [
+      {
+        sNo: 1,
+        billNo: 'BILL-2026-0891',
+        variety: 'Vannamei (White Shrimp)',
+        count: 40,
+        weight: 1250.00,
+        sampleHoQty: 2.00,
+        noOfPcs: 84,
+        sampleHlQty: 1.32
+      },
+      {
+        sNo: 2,
+        billNo: 'BILL-2026-0892',
+        variety: 'Black Tiger (P. Monodon)',
+        count: 30,
+        weight: 850.00,
+        sampleHoQty: 2.00,
+        noOfPcs: 60,
+        sampleHlQty: 1.30
+      },
+      {
+        sNo: 3,
+        billNo: 'BILL-2026-0893',
+        variety: 'Vannamei (White Shrimp)',
+        count: 50,
+        weight: 1420.00,
+        sampleHoQty: 2.00,
+        noOfPcs: 98,
+        sampleHlQty: 1.34
+      }
+    ];
+
+    const varietiesList = [
+      'Vannamei (White Shrimp)',
+      'Black Tiger (P. Monodon)',
+      'Freshwater Scampi',
+      'Pink Shrimp (Sea Caught)',
+      'Brown Shrimp',
+      'Flower Shrimp'
+    ];
+
+    const buildEditDhLotsTableHtml = () => {
+      let totalWeight = 0;
+      let totalSampleHoQty = 0;
+      let totalPcs = 0;
+      let totalSampleHlQty = 0;
+
+      const rowsHtml = lotRows.map((lot, idx) => {
+        const hoQty = Number(lot.sampleHoQty) || 0;
+        const hlQty = Number(lot.sampleHlQty) || 0;
+        const yieldPct = hoQty > 0 ? Number(((hlQty / hoQty) * 100).toFixed(1)) : 0;
+
+        totalWeight += Number(lot.weight) || 0;
+        totalSampleHoQty += hoQty;
+        totalPcs += Number(lot.noOfPcs) || 0;
+        totalSampleHlQty += hlQty;
+
+        const yieldColor = yieldPct >= 65 ? 'text-[#00875A]' : yieldPct >= 60 ? 'text-[#0284C7]' : 'text-[#DE350B]';
+
+        return `
+          <tr class="hover:bg-[#F8FAFC] transition-colors edh-lot-row" data-index="${idx}">
+            <!-- 1. S.No -->
+            <td class="py-2.5 px-3 text-center font-bold text-[#5E6C84] bg-[#FAFBFC] border-r border-[#E2E8F0]">
+              ${idx + 1}
+            </td>
+
+            <!-- 2. Bill No -->
+            <td class="py-2 px-2.5">
+              <input type="text" class="edh-lot-bill font-mono font-bold text-[#00A4B7] w-full text-xs px-2.5 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.billNo || ''}" placeholder="BILL-2026-..." />
+            </td>
+
+            <!-- 3. Variety -->
+            <td class="py-2 px-2.5">
+              <select class="edh-lot-variety w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded font-medium text-[#172B4D] focus:outline-none focus:border-[#00A4B7]">
+                ${varietiesList.map(v => `<option value="${v}" ${lot.variety === v ? 'selected' : ''}>${v}</option>`).join('')}
+              </select>
+            </td>
+
+            <!-- 4. Count -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.5" class="edh-lot-count font-mono text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.count ?? ''}" placeholder="40" />
+            </td>
+
+            <!-- 5. Weight -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.01" class="edh-lot-weight font-mono font-bold text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.weight ?? ''}" placeholder="0.00" />
+            </td>
+
+            <!-- 6. Sample HO Qty -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.01" class="edh-lot-sample-ho font-mono font-semibold text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.sampleHoQty ?? ''}" placeholder="2.00" />
+            </td>
+
+            <!-- 7. Count/Noof Pcs -->
+            <td class="py-2 px-2">
+              <input type="number" step="1" class="edh-lot-pcs font-mono text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.noOfPcs ?? ''}" placeholder="80" />
+            </td>
+
+            <!-- 8. Sample HL Qty / Body Yield -->
+            <td class="py-2 px-2">
+              <input type="number" step="0.01" class="edh-lot-sample-hl font-mono font-bold text-right w-full text-xs px-2 py-1.5 bg-white border border-[#CBD5E1] rounded focus:outline-none focus:border-[#00A4B7]" value="${lot.sampleHlQty ?? ''}" placeholder="1.32" />
+            </td>
+
+            <!-- 9. Yield -->
+            <td class="py-2.5 px-3 text-right font-mono font-bold text-xs ${yieldColor} edh-row-yield">
+              ${yieldPct.toFixed(1)}%
+            </td>
+
+            <!-- 10. Actions -->
+            <td class="py-2.5 px-2 text-center">
+              <button type="button" class="btn-del-edh-row w-7 h-7 rounded-full inline-flex items-center justify-center text-[#FF5630] hover:bg-[#FFEBE6] transition-colors cursor-pointer" title="Delete Row" data-index="${idx}">
+                <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      const avgYield = totalSampleHoQty > 0 ? Number(((totalSampleHlQty / totalSampleHoQty) * 100).toFixed(1)) : 0;
+      const avgYieldColor = avgYield >= 65 ? 'text-[#00875A]' : 'text-[#0284C7]';
+
+      return `
+        <div class="bg-white rounded-xl border border-[#DFE1E6] shadow-2xs overflow-hidden">
+          <div class="overflow-x-auto" style="overflow-x: auto !important; -webkit-overflow-scrolling: touch;">
+            <table class="w-full text-left text-xs border-collapse" style="min-width: 1150px;">
+              <thead class="bg-[#F8FAFC] border-b border-[#DFE1E6] text-[#475569] font-bold uppercase tracking-wider text-[11px]">
+                <tr>
+                  <th class="py-2.5 px-3 w-12 text-center">S.No</th>
+                  <th class="py-2.5 px-3 min-w-[140px]">Bill No</th>
+                  <th class="py-2.5 px-3 min-w-[170px]">Variety</th>
+                  <th class="py-2.5 px-2 min-w-[90px] text-right">Count</th>
+                  <th class="py-2.5 px-2 min-w-[125px] text-right">Weight</th>
+                  <th class="py-2.5 px-2 min-w-[110px] text-right">Sample HO Qty</th>
+                  <th class="py-2.5 px-2 min-w-[110px] text-right">Count/Noof Pcs</th>
+                  <th class="py-2.5 px-2 min-w-[150px] text-right">Sample HL Qty / Body Yield</th>
+                  <th class="py-2.5 px-3 min-w-[95px] text-right">Yield</th>
+                  <th class="py-2.5 px-2 w-16 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="edh-lots-tbody" class="divide-y divide-[#E2E8F0] text-[#1E293B]">
+                ${rowsHtml}
+              </tbody>
+              <tfoot class="bg-[#F8FAFC] border-t-2 border-[#DFE1E6] font-bold text-xs text-[#0F172A]">
+                <tr>
+                  <td colspan="4" class="py-3 px-3 text-right uppercase tracking-wider text-[#475569]">Total Aggregates:</td>
+                  <td id="edh-tot-weight" class="py-3 px-2 text-right font-mono text-sm text-[#0C4A6E]">${totalWeight.toFixed(2)} Kgs</td>
+                  <td id="edh-tot-ho-qty" class="py-3 px-2 text-right font-mono text-sm text-[#475569]">${totalSampleHoQty.toFixed(2)} Kgs</td>
+                  <td id="edh-tot-pcs" class="py-3 px-2 text-right font-mono text-sm text-[#475569]">${totalPcs}</td>
+                  <td id="edh-tot-hl-qty" class="py-3 px-2 text-right font-mono text-sm text-[#00A4B7]">${totalSampleHlQty.toFixed(2)} Kgs</td>
+                  <td id="edh-tot-yield" class="py-3 px-3 text-right font-mono text-sm ${avgYieldColor}">${avgYield.toFixed(1)}%</td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      `;
+    };
+
     Modal.open({
       title: `Edit De-Heading Track ID: ${row.trackId}`,
-      size: 'md',
+      size: 'full',
       content: `
         <form id="form-edit-dh-track" class="space-y-4" onsubmit="return false;">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-            <!-- 1. PRODUCTION PLANT * -->
-            <div class="sm:col-span-2">
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">PRODUCTION PLANT <span class="text-[#DE350B]">*</span></label>
-              <select id="edht-plant" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-semibold text-[#172B4D] focus:outline-none focus:border-[#0284C7]">
-                <option value="DFL UNIT-5 (JPT)" ${row.productionPlant === 'DFL UNIT-5 (JPT)' ? 'selected' : ''}>DFL UNIT-5 (JPT)</option>
-                <option value="DFL UNIT-3 (PSP)" ${row.productionPlant === 'DFL UNIT-3 (PSP)' ? 'selected' : ''}>DFL UNIT-3 (PSP)</option>
-                <option value="DFL UNIT-4 (PND)" ${row.productionPlant === 'DFL UNIT-4 (PND)' ? 'selected' : ''}>DFL UNIT-4 (PND)</option>
-                <option value="DFL UNIT-1 (VSP)" ${row.productionPlant === 'DFL UNIT-1 (VSP)' ? 'selected' : ''}>DFL UNIT-1 (VSP)</option>
-                <option value="DFL UNIT-6 (JPT-II)" ${row.productionPlant === 'DFL UNIT-6 (JPT-II)' ? 'selected' : ''}>DFL UNIT-6 (JPT-II)</option>
-                <option value="DFL UNIT-2 (KKD)" ${row.productionPlant === 'DFL UNIT-2 (KKD)' ? 'selected' : ''}>DFL UNIT-2 (KKD)</option>
-              </select>
+          <!-- 1. HEADER SPECIFICATION SECTION -->
+          <div class="bg-[#F8FAFC] p-4 rounded-xl border border-[#DFE1E6]">
+            <div class="flex items-center justify-between mb-3 border-b border-[#E2E8F0] pb-2">
+              <span class="text-xs font-extrabold text-[#172B4D] uppercase tracking-wider flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-[#00A4B7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                Edit De-Heading Registry Details
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E0F2FE] text-[#0284C7] border border-[#BAE6FD]">
+                ${row.trackId}
+              </span>
             </div>
 
-            <!-- 2. ARRIVAL DATE * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">ARRIVAL DATE <span class="text-[#DE350B]">*</span></label>
-              <div class="erp-date-wrapper">
-                <input type="date" id="edht-arrival-date" value="${row.arrivalDate || '2026-10-06'}" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()" />
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs">
+              <!-- 1. PRODUCTION PLANT * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">PRODUCTION PLANT <span class="text-[#DE350B]">*</span></label>
+                <select id="edht-plant" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-semibold text-[#172B4D] focus:outline-none focus:border-[#0284C7]">
+                  <option value="DFL UNIT-5 (JPT)" ${row.productionPlant === 'DFL UNIT-5 (JPT)' ? 'selected' : ''}>DFL UNIT-5 (JPT)</option>
+                  <option value="DFL UNIT-3 (PSP)" ${row.productionPlant === 'DFL UNIT-3 (PSP)' ? 'selected' : ''}>DFL UNIT-3 (PSP)</option>
+                  <option value="DFL UNIT-4 (PND)" ${row.productionPlant === 'DFL UNIT-4 (PND)' ? 'selected' : ''}>DFL UNIT-4 (PND)</option>
+                  <option value="DFL UNIT-1 (VSP)" ${row.productionPlant === 'DFL UNIT-1 (VSP)' ? 'selected' : ''}>DFL UNIT-1 (VSP)</option>
+                  <option value="DFL UNIT-6 (JPT-II)" ${row.productionPlant === 'DFL UNIT-6 (JPT-II)' ? 'selected' : ''}>DFL UNIT-6 (JPT-II)</option>
+                  <option value="DFL UNIT-2 (KKD)" ${row.productionPlant === 'DFL UNIT-2 (KKD)' ? 'selected' : ''}>DFL UNIT-2 (KKD)</option>
+                </select>
+              </div>
+
+              <!-- 2. ARRIVAL DATE * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">ARRIVAL DATE <span class="text-[#DE350B]">*</span></label>
+                <div class="erp-date-wrapper">
+                  <input type="date" id="edht-arrival-date" value="${row.arrivalDate || '2026-10-06'}" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()" />
+                </div>
+              </div>
+
+              <!-- 3. TRACK ID * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">TRACK ID <span class="text-[#DE350B]">*</span></label>
+                <input type="text" id="edht-trackid" value="${row.trackId || ''}" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono font-bold text-[#00A4B7] focus:outline-none focus:border-[#0284C7]" />
+              </div>
+
+              <!-- 4. DE HEADING DATE * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">DE HEADING DATE <span class="text-[#DE350B]">*</span></label>
+                <div class="erp-date-wrapper">
+                  <input type="date" id="edht-dehead-date" value="${row.deheadingDate || '2026-10-06'}" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()" />
+                </div>
+              </div>
+
+              <!-- 5. SHIFT * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SHIFT <span class="text-[#DE350B]">*</span></label>
+                <select id="edht-shift" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
+                  <option value="Shift A (Day)" ${row.shift === 'Shift A (Day)' ? 'selected' : ''}>Shift A (Day)</option>
+                  <option value="Shift B (Evening)" ${row.shift === 'Shift B (Evening)' ? 'selected' : ''}>Shift B (Evening)</option>
+                  <option value="Shift C (Night)" ${row.shift === 'Shift C (Night)' ? 'selected' : ''}>Shift C (Night)</option>
+                </select>
+              </div>
+
+              <!-- 6. SUPERVISOR * -->
+              <div>
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SUPERVISOR <span class="text-[#DE350B]">*</span></label>
+                <select id="edht-supervisor" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
+                  <option value="Laxmi Narayana" ${row.supervisor === 'Laxmi Narayana' ? 'selected' : ''}>Laxmi Narayana</option>
+                  <option value="K. Subba Rao" ${row.supervisor === 'K. Subba Rao' ? 'selected' : ''}>K. Subba Rao</option>
+                  <option value="Ch. Prasad" ${row.supervisor === 'Ch. Prasad' ? 'selected' : ''}>Ch. Prasad</option>
+                  <option value="Mallesh" ${row.supervisor === 'Mallesh' ? 'selected' : ''}>Mallesh</option>
+                  <option value="D. Rambabu" ${row.supervisor === 'D. Rambabu' ? 'selected' : ''}>D. Rambabu</option>
+                  <option value="G. Suribabu" ${row.supervisor === 'G. Suribabu' ? 'selected' : ''}>G. Suribabu</option>
+                </select>
+              </div>
+
+              <!-- 7. REMARKS -->
+              <div class="sm:col-span-2">
+                <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">REMARKS</label>
+                <input type="text" id="edht-remarks" value="${row.remarks || ''}" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" placeholder="Deheading yield verification & cutting line pass..." />
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. ITEMIZED BILLS & LOTS TABLE SECTION -->
+          <div class="space-y-2 mt-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider">De-Heading Cutting Table Lots & Yield Table</h4>
+                <p class="text-[11px] text-[#5E6C84]">Itemized weights, count/no of pcs, sample HL recovery, and automatic body yield calculation</p>
+              </div>
+              <div>
+                <button type="button" id="btn-add-edh-lot" class="btn-primary border-0 px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer shadow-xs bg-[#00A4B7] hover:bg-[#008F9F] text-white">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                  <span>Add Bill / Lot</span>
+                </button>
               </div>
             </div>
 
-            <!-- 3. TRACK ID * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">TRACK ID <span class="text-[#DE350B]">*</span></label>
-              <input type="text" id="edht-trackid" value="${row.trackId || ''}" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded font-mono font-bold text-[#00A4B7] focus:outline-none focus:border-[#0284C7]" />
-            </div>
-
-            <!-- 4. DE HEADING DATE * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">DE HEADING DATE <span class="text-[#DE350B]">*</span></label>
-              <div class="erp-date-wrapper">
-                <input type="date" id="edht-dehead-date" value="${row.deheadingDate || '2026-10-06'}" class="erp-date-input w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]" onclick="this.showPicker ? this.showPicker() : this.focus()" />
-              </div>
-            </div>
-
-            <!-- 5. SHIFT * -->
-            <div>
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SHIFT <span class="text-[#DE350B]">*</span></label>
-              <select id="edht-shift" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
-                <option value="Shift A (Day)" ${row.shift === 'Shift A (Day)' ? 'selected' : ''}>Shift A (Day)</option>
-                <option value="Shift B (Evening)" ${row.shift === 'Shift B (Evening)' ? 'selected' : ''}>Shift B (Evening)</option>
-                <option value="Shift C (Night)" ${row.shift === 'Shift C (Night)' ? 'selected' : ''}>Shift C (Night)</option>
-              </select>
-            </div>
-
-            <!-- 6. SUPERVISOR * -->
-            <div class="sm:col-span-2">
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">SUPERVISOR <span class="text-[#DE350B]">*</span></label>
-              <select id="edht-supervisor" class="w-full text-xs px-2.5 py-1.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">
-                <option value="Laxmi Narayana" ${row.supervisor === 'Laxmi Narayana' ? 'selected' : ''}>Laxmi Narayana</option>
-                <option value="K. Subba Rao" ${row.supervisor === 'K. Subba Rao' ? 'selected' : ''}>K. Subba Rao</option>
-                <option value="Ch. Prasad" ${row.supervisor === 'Ch. Prasad' ? 'selected' : ''}>Ch. Prasad</option>
-                <option value="Mallesh" ${row.supervisor === 'Mallesh' ? 'selected' : ''}>Mallesh</option>
-                <option value="D. Rambabu" ${row.supervisor === 'D. Rambabu' ? 'selected' : ''}>D. Rambabu</option>
-                <option value="G. Suribabu" ${row.supervisor === 'G. Suribabu' ? 'selected' : ''}>G. Suribabu</option>
-              </select>
-            </div>
-
-            <!-- 7. REMARKS -->
-            <div class="sm:col-span-2">
-              <label class="block text-[11px] font-bold text-[#5E6C84] uppercase tracking-wider mb-0">REMARKS</label>
-              <textarea id="edht-remarks" rows="2" class="w-full text-xs p-2.5 bg-white border border-[#DFE1E6] rounded focus:outline-none focus:border-[#0284C7]">${row.remarks || ''}</textarea>
+            <!-- Dynamic Table Container -->
+            <div id="edh-lots-table-wrapper">
+              ${buildEditDhLotsTableHtml()}
             </div>
           </div>
         </form>
@@ -21014,9 +21596,35 @@ const PreprocessingView = {
             const sup = document.getElementById('edht-supervisor')?.value || row.supervisor;
             const rem = document.getElementById('edht-remarks')?.value || row.remarks;
 
+            // Extract table lot inputs
+            const currentLots = [];
+            const rows = document.querySelectorAll('#edh-lots-tbody tr.edh-lot-row');
+            rows.forEach((r, idx) => {
+              const billNo = r.querySelector('.edh-lot-bill')?.value || `BILL-2026-089${idx + 1}`;
+              const variety = r.querySelector('.edh-lot-variety')?.value || 'Vannamei (White Shrimp)';
+              const count = parseFloat(r.querySelector('.edh-lot-count')?.value) || 0;
+              const weight = parseFloat(r.querySelector('.edh-lot-weight')?.value) || 0;
+              const sampleHoQty = parseFloat(r.querySelector('.edh-lot-sample-ho')?.value) || 0;
+              const noOfPcs = parseInt(r.querySelector('.edh-lot-pcs')?.value, 10) || 0;
+              const sampleHlQty = parseFloat(r.querySelector('.edh-lot-sample-hl')?.value) || 0;
+              const yieldPct = sampleHoQty > 0 ? Number(((sampleHlQty / sampleHoQty) * 100).toFixed(1)) : 0;
+
+              currentLots.push({
+                sNo: idx + 1,
+                billNo,
+                variety,
+                count,
+                weight,
+                sampleHoQty,
+                noOfPcs,
+                sampleHlQty,
+                yield: yieldPct
+              });
+            });
+
             Modal.confirm({
               title: 'Confirm Modifications',
-              message: `Are you sure you want to update De-Heading Track ID <strong class="text-[#00A4B7]">${trackId}</strong>?`,
+              message: `Are you sure you want to update De-Heading Track ID <strong class="text-[#00A4B7]">${trackId}</strong> with ${currentLots.length} verified cutting lots?`,
               confirmText: 'Save Changes',
               cancelText: 'Cancel',
               isDestructive: false,
@@ -21029,6 +21637,7 @@ const PreprocessingView = {
                 row.shift = shift;
                 row.supervisor = sup;
                 row.remarks = rem;
+                row.lots = currentLots;
 
                 Toast.show(`De-Heading Track ID ${row.trackId} updated successfully`, 'success');
                 this.renderDeheadingTrackIdScreen(container);
@@ -21038,9 +21647,130 @@ const PreprocessingView = {
         }
       ]
     });
+
+    const modalEl = document.getElementById('erp-modal-root');
+    if (!modalEl) return;
+
+    const bindEditDhTableEvents = () => {
+      const tableWrapper = modalEl.querySelector('#edh-lots-table-wrapper');
+      if (!tableWrapper) return;
+
+      const recalculateEditDhAll = () => {
+        let totalWeight = 0;
+        let totalSampleHoQty = 0;
+        let totalPcs = 0;
+        let totalSampleHlQty = 0;
+
+        tableWrapper.querySelectorAll('tr.edh-lot-row').forEach(r => {
+          const idx = parseInt(r.dataset.index, 10);
+          const weight = parseFloat(r.querySelector('.edh-lot-weight')?.value) || 0;
+          const sampleHoQty = parseFloat(r.querySelector('.edh-lot-sample-ho')?.value) || 0;
+          const noOfPcs = parseInt(r.querySelector('.edh-lot-pcs')?.value, 10) || 0;
+          const sampleHlQty = parseFloat(r.querySelector('.edh-lot-sample-hl')?.value) || 0;
+
+          const yieldPct = sampleHoQty > 0 ? Number(((sampleHlQty / sampleHoQty) * 100).toFixed(1)) : 0;
+
+          totalWeight += weight;
+          totalSampleHoQty += sampleHoQty;
+          totalPcs += noOfPcs;
+          totalSampleHlQty += sampleHlQty;
+
+          const yieldEl = r.querySelector('.edh-row-yield');
+          if (yieldEl) {
+            yieldEl.textContent = `${yieldPct.toFixed(1)}%`;
+            yieldEl.className = `py-2.5 px-3 text-right font-mono font-bold text-xs edh-row-yield ${yieldPct >= 65 ? 'text-[#00875A]' : yieldPct >= 60 ? 'text-[#0284C7]' : 'text-[#DE350B]'}`;
+          }
+
+          if (!isNaN(idx) && lotRows[idx]) {
+            lotRows[idx].billNo = r.querySelector('.edh-lot-bill')?.value || '';
+            lotRows[idx].count = parseFloat(r.querySelector('.edh-lot-count')?.value) || 0;
+            lotRows[idx].weight = weight;
+            lotRows[idx].sampleHoQty = sampleHoQty;
+            lotRows[idx].noOfPcs = noOfPcs;
+            lotRows[idx].sampleHlQty = sampleHlQty;
+          }
+        });
+
+        const totWeightEl = tableWrapper.querySelector('#edh-tot-weight');
+        if (totWeightEl) totWeightEl.textContent = `${totalWeight.toFixed(2)} Kgs`;
+
+        const totHoQtyEl = tableWrapper.querySelector('#edh-tot-ho-qty');
+        if (totHoQtyEl) totHoQtyEl.textContent = `${totalSampleHoQty.toFixed(2)} Kgs`;
+
+        const totPcsEl = tableWrapper.querySelector('#edh-tot-pcs');
+        if (totPcsEl) totPcsEl.textContent = `${totalPcs}`;
+
+        const totHlQtyEl = tableWrapper.querySelector('#edh-tot-hl-qty');
+        if (totHlQtyEl) totHlQtyEl.textContent = `${totalSampleHlQty.toFixed(2)} Kgs`;
+
+        const avgYield = totalSampleHoQty > 0 ? Number(((totalSampleHlQty / totalSampleHoQty) * 100).toFixed(1)) : 0;
+        const totYieldEl = tableWrapper.querySelector('#edh-tot-yield');
+        if (totYieldEl) {
+          totYieldEl.textContent = `${avgYield.toFixed(1)}%`;
+          totYieldEl.className = `py-3 px-3 text-right font-mono text-sm ${avgYield >= 65 ? 'text-[#00875A]' : 'text-[#0284C7]'}`;
+        }
+      };
+
+      // Realtime input recalculation handler without losing focus
+      tableWrapper.querySelectorAll('input').forEach(inp => {
+        inp.addEventListener('input', recalculateEditDhAll);
+      });
+
+      // Variety select change handler
+      tableWrapper.querySelectorAll('.edh-lot-variety').forEach(sel => {
+        sel.addEventListener('change', () => {
+          const r = sel.closest('tr.edh-lot-row');
+          if (!r) return;
+          const idx = parseInt(r.dataset.index, 10);
+          if (!isNaN(idx) && lotRows[idx]) {
+            lotRows[idx].variety = sel.value;
+          }
+        });
+      });
+
+      // Delete Row Button
+      tableWrapper.querySelectorAll('.btn-del-edh-row').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.index, 10);
+          if (lotRows.length <= 1) {
+            Toast.show('At least one lot row is required for De-Heading Track ID registration', 'warning');
+            return;
+          }
+          lotRows.splice(idx, 1);
+          lotRows.forEach((item, i) => { item.sNo = i + 1; });
+          tableWrapper.innerHTML = buildEditDhLotsTableHtml();
+          bindEditDhTableEvents();
+          Toast.show('De-heading lot row removed', 'info');
+        });
+      });
+    };
+
+    bindEditDhTableEvents();
+
+    // Add New Lot Row Button
+    const addLotBtn = modalEl.querySelector('#btn-add-edh-lot');
+    addLotBtn?.addEventListener('click', () => {
+      const nextNum = 890 + lotRows.length + 1;
+      lotRows.push({
+        sNo: lotRows.length + 1,
+        billNo: `BILL-2026-0${nextNum}`,
+        variety: 'Vannamei (White Shrimp)',
+        count: 40,
+        weight: 1000.00,
+        sampleHoQty: 2.00,
+        noOfPcs: 80,
+        sampleHlQty: 1.32
+      });
+      const tableWrapper = modalEl.querySelector('#edh-lots-table-wrapper');
+      if (tableWrapper) {
+        tableWrapper.innerHTML = buildEditDhLotsTableHtml();
+        bindEditDhTableEvents();
+        Toast.show('New cutting table lot added', 'success');
+      }
+    });
   },
 
-  // Show De-Heading Track Details Modal (Triggered on row click)
+    // Show De-Heading Track Details Modal (Triggered on row click)
   showDeheadingTrackDetailsModal(row) {
     const lots = row.lots || [
       {
