@@ -29,6 +29,7 @@ export const App = {
       document.documentElement.classList.add('theme-dark');
     }
     Toast.init();
+    Modal.init();
     UIEnhancements.init();
     this.bindHashChange();
     this.bindDatePickerHelper();

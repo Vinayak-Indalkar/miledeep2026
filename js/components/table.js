@@ -997,10 +997,20 @@ export class DataTable {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         const actIdx = parseInt(btn.dataset.actionIdx, 10);
-        const key = btn.dataset.key;
-        const row = this.originalData.find((r, i) => (r[this.keyField] || `row-${i}`) === key);
-        if (this.actions[actIdx] && this.actions[actIdx].onClick) {
-          this.actions[actIdx].onClick(row, this);
+        const row = this.filteredData[Number(btn.closest('tr').dataset.rowIndex)];
+        const action = this.actions[actIdx];
+        if (action && action.onClick && row) {
+          const execute = () => action.onClick(row, this);
+          if (/^(delete|remove|approve|reject|activate|deactivate|enable|disable|publish)\b/i.test(action.label || '')) {
+            Modal.confirm({
+              title: 'Confirm Action',
+              message: 'Are you sure you want to apply this action to the selected record?',
+              isDestructive: /^(delete|remove|reject)\b/i.test(action.label),
+              onConfirm: execute
+            });
+          } else {
+            execute();
+          }
         }
       });
     });

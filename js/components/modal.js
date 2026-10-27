@@ -2,8 +2,48 @@
 
 export const Modal = {
   activeModal: null,
+  confirmedActionDepth: 0,
+  initialized: false,
+  onDismiss: null,
 
-  open({ title, content, footerButtons = [], size = 'md' }) {
+  isMutationAction(label) {
+    return /^(save|update|create|add|delete|remove|record|register|generate|log|submit|approve|reject|confirm|launch|start|transfer|receive|pay|publish|assign|activate|deactivate|enable|disable|reset password)\b/i.test(label.trim());
+  },
+
+  init() {
+    if (this.initialized) return;
+    this.initialized = true;
+    document.addEventListener('submit', event => {
+      const form = event.target;
+      if (this.confirmedActionDepth || !(form instanceof HTMLFormElement) || form.closest('#login-view-container')) return;
+      const submitter = event.submitter || form.querySelector('button[type="submit"], input[type="submit"]');
+      const label = submitter?.textContent?.trim() || submitter?.value || '';
+      if (!this.isMutationAction(label) || !form.reportValidity()) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      this.confirm({
+        title: 'Confirm Action',
+        message: 'Are you sure you want to submit these changes?',
+        onConfirm: () => form.requestSubmit(submitter || undefined),
+        context: form
+      });
+    }, true);
+  },
+
+  completeAction(action, context) {
+    this.confirmedActionDepth += 1;
+    try {
+      action();
+    } finally {
+      this.confirmedActionDepth -= 1;
+    }
+    if (context?.isConnected) return;
+    if (!document.querySelector('#erp-modal-root, #erp-drawer-root, [id^="modal-"].fixed, [role="dialog"]')) {
+      this.success({});
+    }
+  },
+
+  open({ title, content, footerButtons = [], size = 'md', confirmActions = true, onClose = null }) {
     this.close();
 
     const sizeClasses = {
@@ -54,6 +94,7 @@ export const Modal = {
 
     document.body.appendChild(modalEl);
     this.activeModal = modalEl;
+    this.onDismiss = onClose;
 
     // Attach Close Handler
     modalEl.querySelector('#erp-modal-close-btn').addEventListener('click', () => this.close());
@@ -65,7 +106,22 @@ export const Modal = {
     footerButtons.forEach((btn, idx) => {
       const btnEl = modalEl.querySelector(`#modal-btn-${idx}`);
       if (btnEl && btn.onClick) {
-        btnEl.addEventListener('click', () => btn.onClick(this));
+        btnEl.addEventListener('click', () => {
+          const action = () => btn.onClick(this);
+          if (!confirmActions || this.confirmedActionDepth || !this.isMutationAction(btn.label)) {
+            action();
+            return;
+          }
+          const form = modalEl.querySelector('form');
+          if (form && !form.reportValidity()) return;
+          this.confirm({
+            title: 'Confirm Action',
+            message: 'Are you sure you want to apply these changes?',
+            isDestructive: btn.type === 'danger',
+            onConfirm: action,
+            context: modalEl
+          });
+        });
       }
     });
 
@@ -87,6 +143,9 @@ export const Modal = {
     const existing = document.getElementById('erp-modal-root');
     if (existing) existing.remove();
     this.activeModal = null;
+    const dismiss = this.onDismiss;
+    this.onDismiss = null;
+    if (dismiss) dismiss();
   },
 
   // Slide-in Drawer from Right (e.g. for Lot Traceability, Batch Audit, Shipment Details)
@@ -142,10 +201,27 @@ export const Modal = {
   },
 
   // Confirmation Dialog
-  confirm({ title = 'Confirm Action', message, confirmText = 'Confirm', cancelText = 'Cancel', isDestructive = false, onConfirm }) {
+  confirm({ title = 'Confirm Action', message, confirmText = 'Confirm', cancelText = 'Cancel', isDestructive = false, onConfirm, context = null }) {
+    if (this.confirmedActionDepth) {
+      if (onConfirm) onConfirm();
+      return;
+    }
+    const previous = document.getElementById('erp-modal-root');
+    const previousDismiss = this.onDismiss;
+    if (previous) previous.remove();
+    this.activeModal = null;
+    this.onDismiss = null;
+    const restore = () => {
+      if (!previous) return;
+      document.body.appendChild(previous);
+      this.activeModal = previous;
+      this.onDismiss = previousDismiss;
+    };
     this.open({
       title,
       content: `<div class="py-2 text-[#42526E]">${message}</div>`,
+      confirmActions: false,
+      onClose: restore,
       footerButtons: [
         {
           label: cancelText,
@@ -156,8 +232,10 @@ export const Modal = {
           label: confirmText,
           type: isDestructive ? 'danger' : 'primary',
           onClick: (modal) => {
+            this.onDismiss = null;
             modal.close();
-            if (onConfirm) onConfirm();
+            restore();
+            if (onConfirm) this.completeAction(onConfirm, context || previous);
           }
         }
       ]
