@@ -24191,17 +24191,22 @@ const PreprocessingView = {
             </div>
           </div>
 
+          <!-- Action Buttons Bar above Value Addition Lots & Yield Breakdown -->
+          <div class="flex items-center justify-end gap-2">
+            <button type="button" id="btn-transfer-va-plant" class="btn-secondary rounded-full px-4 py-1.5 text-xs font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border border-[#CBD5E1] bg-white text-[#334155] hover:bg-[#F0F9FF] hover:border-[#0284C7] hover:text-[#0284C7]">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+              <span>Transfer to Another Plant</span>
+            </button>
+            <button type="button" id="btn-save-va-track" class="btn-primary rounded-full px-5 py-1.5 text-xs font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border-0">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <span>Save</span>
+            </button>
+          </div>
+
           <!-- 2. ITEMIZED VALUE ADDITION TABLE SECTION -->
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <div>
-                <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider mb-0">Value Addition Lots &amp; Yield Breakdown</h4>
-                
-              </div>
-              <button type="button" id="btn-add-va-lot-row" class="btn-primary px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer border-0 shadow-2xs hover:shadow-xs transition-all">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                <span>Add Lot</span>
-              </button>
+          <div class="space-y-2 mt-2">
+            <div class="mb-2">
+              <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider mb-0">Value Addition Lots &amp; Yield Breakdown</h4>
             </div>
 
             <div id="va-lots-table-container">
@@ -24216,78 +24221,6 @@ const PreprocessingView = {
           type: 'secondary',
           class: 'btn btn-secondary rounded-full px-5 py-2 font-semibold',
           onClick: (m) => m.close()
-        },
-        {
-          label: 'Transfer to Another Plant',
-          type: 'secondary',
-          class: 'btn btn-outline rounded-full px-5 py-2 font-semibold',
-          onClick: (m) => {
-            const trackId = document.getElementById('nvat-trackid')?.value || nextTrackId;
-            const totVaOut = lotRows.reduce((sum, r) => sum + (Number(r.vaOutQuantity) || 0), 0) || 880;
-            this.showTransferPlantModal(trackId, totVaOut);
-          }
-        },
-        {
-          label: 'Generate & Register',
-          type: 'primary',
-          class: 'btn btn-primary rounded-full px-5 py-2 font-semibold',
-          onClick: (m) => {
-            const plant = document.getElementById('nvat-plant')?.value || 'DFL UNIT-5 (JPT)';
-            const trackId = document.getElementById('nvat-trackid')?.value || nextTrackId;
-            const vaDate = document.getElementById('nvat-va-date')?.value || '2026-10-07';
-            const shift = document.getElementById('nvat-shift')?.value || 'Shift A (Day)';
-            const supervisor = document.getElementById('nvat-supervisor')?.value || 'Laxmi Narayana';
-
-            readTableInputs();
-
-            if (lotRows.length === 0) {
-              Toast.show('Please add at least one lot entry before saving', 'warning');
-              return;
-            }
-
-            const totalHlWt = lotRows.reduce((sum, r) => sum + (Number(r.hlWtKgs) || 0), 0);
-            const totalVaOut = lotRows.reduce((sum, r) => sum + (Number(r.vaOutQuantity) || 0), 0);
-            const totalCrates = lotRows.reduce((sum, r) => sum + (Number(r.noOfCrates) || 0), 0);
-            const avgYield = totalHlWt > 0 ? Number(((totalVaOut / totalHlWt) * 100).toFixed(1)) : 0;
-            const primaryVariety = lotRows[0]?.variety || 'Vannamei (VM)';
-            const primaryHlCount = lotRows[0]?.hlCount || '21/25';
-            const primaryArrivalDate = lotRows[0]?.transactionDate || '2026-10-07';
-
-            Modal.confirm({
-              title: 'Confirm VA Track ID Generation',
-              message: `Are you sure you want to generate Value Addition Track ID <strong class="text-[#00A4B7]">${trackId}</strong> for <strong>${plant}</strong> (${lotRows.length} lots, ${totalVaOut.toFixed(2)} KG total out)?`,
-              confirmText: 'Yes, Generate Track ID',
-              cancelText: 'Cancel',
-              isDestructive: false,
-              onConfirm: () => {
-                const newEntry = {
-                  sNo: 1,
-                  id: trackId,
-                  trackId: trackId,
-                  productionPlant: plant,
-                  arrivalDate: primaryArrivalDate,
-                  valueAdditionDate: vaDate,
-                  shift: shift,
-                  supervisor: supervisor,
-                  variety: primaryVariety,
-                  hlCount: primaryHlCount,
-                  crates: totalCrates,
-                  hlWtKgs: totalHlWt,
-                  vaOutQuantity: totalVaOut,
-                  totals: `${avgYield}%`,
-                  lotItems: JSON.parse(JSON.stringify(lotRows)),
-                  status: 'IN_PROGRESS'
-                };
-
-                this.state.vaTrackIds.forEach(r => { if (r.sNo) r.sNo += 1; });
-                this.state.vaTrackIds.unshift(newEntry);
-
-                m.close();
-                Toast.show(`Value Addition Track ID ${trackId} generated successfully with ${lotRows.length} lot(s)`, 'success', 'Track ID Registered');
-                this.renderValueAdditionTrackIdScreen(container);
-              }
-            });
-          }
         }
       ]
     });
@@ -24391,29 +24324,64 @@ const PreprocessingView = {
     setTimeout(() => {
       attachVaTableEvents();
 
-      const addBtn = document.getElementById('btn-add-va-lot-row');
-      addBtn?.addEventListener('click', () => {
+      // Transfer to Another Plant Button Handler
+      const transferBtn = document.getElementById('btn-transfer-va-plant');
+      transferBtn?.addEventListener('click', () => {
+        const trackId = document.getElementById('nvat-trackid')?.value || nextTrackId;
         readTableInputs();
-        const nextIdx = lotRows.length + 1;
-        lotRows.push({
-          sNo: nextIdx,
-          arrivalCode: `LOT-2026-00${130 + nextIdx}`,
-          productionPlant: document.getElementById('nvat-plant')?.value || 'DFL UNIT-5 (JPT)',
-          soakingPlant: 'Soaking Line #1',
-          transactionDate: '2026-10-07',
-          shift: 'Shift A (Day)',
-          variety: 'Vannamei (White Shrimp)',
-          hlWtKgs: 1000.00,
-          hlCount: '21/25',
-          noOfCrates: 30,
-          vaOutQuantity: 920.00,
-          rejectionWeight: 15.00
-        });
-        const containerEl = document.getElementById('va-lots-table-container');
-        if (containerEl) {
-          containerEl.innerHTML = buildVaLotsTableHtml();
-          attachVaTableEvents();
+        const totVaOut = lotRows.reduce((sum, r) => sum + (Number(r.vaOutQuantity) || 0), 0) || 880;
+        this.showTransferPlantModal(trackId, totVaOut);
+      });
+
+      // Save Button Handler
+      const saveBtn = document.getElementById('btn-save-va-track');
+      saveBtn?.addEventListener('click', () => {
+        const plant = document.getElementById('nvat-plant')?.value || 'DFL UNIT-5 (JPT)';
+        const trackId = document.getElementById('nvat-trackid')?.value || nextTrackId;
+        const vaDate = document.getElementById('nvat-va-date')?.value || '2026-10-07';
+        const shift = document.getElementById('nvat-shift')?.value || 'Shift A (Day)';
+        const supervisor = document.getElementById('nvat-supervisor')?.value || 'Laxmi Narayana';
+
+        readTableInputs();
+
+        if (lotRows.length === 0) {
+          Toast.show('Please keep at least one lot entry before saving', 'warning');
+          return;
         }
+
+        const totalHlWt = lotRows.reduce((sum, r) => sum + (Number(r.hlWtKgs) || 0), 0);
+        const totalVaOut = lotRows.reduce((sum, r) => sum + (Number(r.vaOutQuantity) || 0), 0);
+        const totalCrates = lotRows.reduce((sum, r) => sum + (Number(r.noOfCrates) || 0), 0);
+        const avgYield = totalHlWt > 0 ? Number(((totalVaOut / totalHlWt) * 100).toFixed(1)) : 0;
+        const primaryVariety = lotRows[0]?.variety || 'Vannamei (VM)';
+        const primaryHlCount = lotRows[0]?.hlCount || '21/25';
+        const primaryArrivalDate = lotRows[0]?.transactionDate || '2026-10-07';
+
+        const newEntry = {
+          sNo: 1,
+          id: trackId,
+          trackId: trackId,
+          productionPlant: plant,
+          arrivalDate: primaryArrivalDate,
+          valueAdditionDate: vaDate,
+          shift: shift,
+          supervisor: supervisor,
+          variety: primaryVariety,
+          hlCount: primaryHlCount,
+          crates: totalCrates,
+          hlWtKgs: totalHlWt,
+          vaOutQuantity: totalVaOut,
+          totals: `${avgYield}%`,
+          lotItems: JSON.parse(JSON.stringify(lotRows)),
+          status: 'IN_PROGRESS'
+        };
+
+        this.state.vaTrackIds.forEach(r => { if (r.sNo) r.sNo += 1; });
+        this.state.vaTrackIds.unshift(newEntry);
+
+        Modal.close();
+        Toast.show(`Value Addition Track ID ${trackId} saved successfully with ${lotRows.length} lot(s)`, 'success', 'Track ID Saved');
+        this.renderValueAdditionTrackIdScreen(container);
       });
     }, 50);
   },
@@ -24701,17 +24669,22 @@ const PreprocessingView = {
             </div>
           </div>
 
+          <!-- Action Buttons Bar above Value Addition Lots & Yield Breakdown -->
+          <div class="flex items-center justify-end gap-2">
+            <button type="button" id="btn-transfer-edit-va-plant" class="btn-secondary rounded-full px-4 py-1.5 text-xs font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border border-[#CBD5E1] bg-white text-[#334155] hover:bg-[#F0F9FF] hover:border-[#0284C7] hover:text-[#0284C7]">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+              <span>Transfer to Another Plant</span>
+            </button>
+            <button type="button" id="btn-save-edit-va-track" class="btn-primary rounded-full px-5 py-1.5 text-xs font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border-0">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <span>Save</span>
+            </button>
+          </div>
+
           <!-- 2. ITEMIZED VALUE ADDITION TABLE SECTION -->
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <div>
-                <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider mb-0">Value Addition Lots &amp; Yield Breakdown</h4>
-                
-              </div>
-              <button type="button" id="btn-edit-add-va-lot-row" class="btn-primary px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer border-0 shadow-2xs hover:shadow-xs transition-all">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                <span>Add Lot</span>
-              </button>
+          <div class="space-y-2 mt-2">
+            <div class="mb-2">
+              <h4 class="text-xs font-bold text-[#172B4D] uppercase tracking-wider mb-0">Value Addition Lots &amp; Yield Breakdown</h4>
             </div>
 
             <div id="va-edit-lots-table-container">
@@ -24726,49 +24699,6 @@ const PreprocessingView = {
           type: 'secondary',
           class: 'btn btn-secondary rounded-full px-5 py-2 font-semibold',
           onClick: (m) => m.close()
-        },
-        {
-          label: 'Save Changes',
-          type: 'primary',
-          class: 'btn btn-primary rounded-full px-5 py-2 font-semibold',
-          onClick: (m) => {
-            const plant = document.getElementById('evat-plant')?.value || row.productionPlant;
-            const vaDate = document.getElementById('evat-va-date')?.value || row.valueAdditionDate;
-            const shift = document.getElementById('evat-shift')?.value || row.shift;
-            const supervisor = document.getElementById('evat-supervisor')?.value || row.supervisor;
-            const remarks = document.getElementById('evat-remarks')?.value || '';
-
-            readTableInputs();
-
-            if (lotRows.length === 0) {
-              Toast.show('Please keep at least one lot entry', 'warning');
-              return;
-            }
-
-            const totalHlWt = lotRows.reduce((sum, r) => sum + (Number(r.hlWtKgs) || 0), 0);
-            const totalVaOut = lotRows.reduce((sum, r) => sum + (Number(r.vaOutQuantity) || 0), 0);
-            const totalCrates = lotRows.reduce((sum, r) => sum + (Number(r.noOfCrates) || 0), 0);
-            const avgYield = totalHlWt > 0 ? Number(((totalVaOut / totalHlWt) * 100).toFixed(1)) : 0;
-            const primaryVariety = lotRows[0]?.variety || row.variety;
-            const primaryHlCount = lotRows[0]?.hlCount || row.hlCount;
-
-            row.productionPlant = plant;
-            row.valueAdditionDate = vaDate;
-            row.shift = shift;
-            row.supervisor = supervisor;
-            row.variety = primaryVariety;
-            row.hlCount = primaryHlCount;
-            row.crates = totalCrates;
-            row.hlWtKgs = totalHlWt;
-            row.vaOutQuantity = totalVaOut;
-            row.totals = `${avgYield}%`;
-            row.remarks = remarks;
-            row.lotItems = JSON.parse(JSON.stringify(lotRows));
-
-            m.close();
-            Toast.show(`Value Addition Track ID ${row.trackId} updated successfully`, 'success');
-            this.renderValueAdditionTrackIdScreen(container);
-          }
         }
       ]
     });
@@ -24872,29 +24802,54 @@ const PreprocessingView = {
     setTimeout(() => {
       attachVaTableEvents();
 
-      const addBtn = document.getElementById('btn-edit-add-va-lot-row');
-      addBtn?.addEventListener('click', () => {
+      // Transfer to Another Plant Button Handler
+      const transferBtn = document.getElementById('btn-transfer-edit-va-plant');
+      transferBtn?.addEventListener('click', () => {
+        const trackId = document.getElementById('evat-trackid')?.value || row.trackId;
         readTableInputs();
-        const nextIdx = lotRows.length + 1;
-        lotRows.push({
-          sNo: nextIdx,
-          arrivalCode: `LOT-2026-00${130 + nextIdx}`,
-          productionPlant: document.getElementById('evat-plant')?.value || 'DFL UNIT-5 (JPT)',
-          soakingPlant: 'Soaking Line #1',
-          transactionDate: '2026-10-07',
-          shift: 'Shift A (Day)',
-          variety: 'Vannamei (White Shrimp)',
-          hlWtKgs: 1000.00,
-          hlCount: '21/25',
-          noOfCrates: 30,
-          vaOutQuantity: 920.00,
-          rejectionWeight: 15.00
-        });
-        const containerEl = document.getElementById('va-edit-lots-table-container');
-        if (containerEl) {
-          containerEl.innerHTML = buildVaLotsTableHtml();
-          attachVaTableEvents();
+        const totVaOut = lotRows.reduce((sum, r) => sum + (Number(r.vaOutQuantity) || 0), 0) || 880;
+        this.showTransferPlantModal(trackId, totVaOut);
+      });
+
+      // Save Button Handler
+      const saveBtn = document.getElementById('btn-save-edit-va-track');
+      saveBtn?.addEventListener('click', () => {
+        const plant = document.getElementById('evat-plant')?.value || row.productionPlant;
+        const vaDate = document.getElementById('evat-va-date')?.value || row.valueAdditionDate;
+        const shift = document.getElementById('evat-shift')?.value || row.shift;
+        const supervisor = document.getElementById('evat-supervisor')?.value || row.supervisor;
+        const remarks = document.getElementById('evat-remarks')?.value || '';
+
+        readTableInputs();
+
+        if (lotRows.length === 0) {
+          Toast.show('Please keep at least one lot entry', 'warning');
+          return;
         }
+
+        const totalHlWt = lotRows.reduce((sum, r) => sum + (Number(r.hlWtKgs) || 0), 0);
+        const totalVaOut = lotRows.reduce((sum, r) => sum + (Number(r.vaOutQuantity) || 0), 0);
+        const totalCrates = lotRows.reduce((sum, r) => sum + (Number(r.noOfCrates) || 0), 0);
+        const avgYield = totalHlWt > 0 ? Number(((totalVaOut / totalHlWt) * 100).toFixed(1)) : 0;
+        const primaryVariety = lotRows[0]?.variety || row.variety;
+        const primaryHlCount = lotRows[0]?.hlCount || row.hlCount;
+
+        row.productionPlant = plant;
+        row.valueAdditionDate = vaDate;
+        row.shift = shift;
+        row.supervisor = supervisor;
+        row.variety = primaryVariety;
+        row.hlCount = primaryHlCount;
+        row.crates = totalCrates;
+        row.hlWtKgs = totalHlWt;
+        row.vaOutQuantity = totalVaOut;
+        row.totals = `${avgYield}%`;
+        row.remarks = remarks;
+        row.lotItems = JSON.parse(JSON.stringify(lotRows));
+
+        Modal.close();
+        Toast.show(`Value Addition Track ID ${row.trackId} updated successfully`, 'success');
+        this.renderValueAdditionTrackIdScreen(container);
       });
     }, 50);
   },
